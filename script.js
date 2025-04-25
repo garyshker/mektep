@@ -12,6 +12,7 @@
       document.getElementById('mode-select').style.display = 'none';
       document.getElementById('game-area').style.display = 'block';
       document.getElementById('restart-button').style.display = 'none';
+      document.getElementById('title-heading').style.display = 'none';
       generateQuestion();
     }
 
@@ -27,6 +28,7 @@
     function returnToMenu() {
       document.getElementById('mode-select').style.display = 'block';
       document.getElementById('game-area').style.display = 'none';
+      document.getElementById('title-heading').style.display = 'block';
     }
 
     function generateQuestion() {
