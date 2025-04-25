@@ -96,7 +96,7 @@ oldButtons.forEach(btn => {
         // Генерация неправильных ответов для режима "Теңге" из фиксированного набора
         if (mode === 'money') {
           const sums = [];
-          const coins = [5, 10, 20, 50, 100, 200];
+          const coins = [1, 2, 5, 10, 20, 50, 100, 200];
           for (let i = 0; i < coins.length; i++) {
             for (let j = i; j < coins.length; j++) {
               let sum = coins[i] + coins[j];
@@ -161,6 +161,8 @@ oldButtons.forEach(btn => {
           document.getElementById('math-problem').innerHTML = `Сен ${totalQuestions} сұрақтың ${correctAnswers} дұрыс жауап бердің. Жарайсың! 🎉`;
           document.getElementById('options').innerHTML = '';
           document.getElementById('restart-button').style.display = 'inline-block';
+          document.getElementById('result').textContent = '';
+          document.getElementById('result').style.color = '';
         }, delay + 300);
       }
     }
