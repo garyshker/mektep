@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Қызықты математика</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Қызықты математика</h1>
+    <div id="mode-select">
+      <button class="mode-button" onclick="startGame('basic')">0 - 10</button>
+      <button class="mode-button" onclick="startGame('tens')">10 - 100</button>
+      <!-- Кнопка для режима "Теңге" -->
+      <button class="mode-button" onclick="startGame('money')">Теңге</button>
+    </div>
+    <div id="game-area">
+      <div id="question-label"></div>
+      <div id="math-problem"></div>
+      <div id="options"></div>
+      <div id="result"></div>
+      <button id="restart-button" class="restart-button" onclick="restartGame()" style="display: none;">Тағы да!</button>
+      <button class="back-button" onclick="returnToMenu()">Артқа</button>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
