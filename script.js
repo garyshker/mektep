@@ -69,9 +69,9 @@ oldButtons.forEach(btn => {
       if (mode === 'money') {
         const imagePath = 'img/'; // Папка, где находятся изображения монет
         document.getElementById('math-problem').innerHTML = `
-          <img src="${imagePath}${num1}.png" alt="${num1} теңге" class="coin-img">
+          <img src="${imagePath}${num1}.webp" alt="${num1} теңге" class="coin-img">
           ${operator}
-          <img src="${imagePath}${num2}.png" alt="${num2} теңге" class="coin-img">
+          <img src="${imagePath}${num2}.webp" alt="${num2} теңге" class="coin-img">
           = ?
         `;
       } else {
