@@ -32,6 +32,11 @@
 
     function generateQuestion() {
       answered = false;
+
+      // Очистка текста и стиля результата перед новым вопросом
+document.getElementById('result').textContent = '';
+document.getElementById('result').style.color = '';
+
       // Очистка предыдущих стилей кнопок
 const oldButtons = document.querySelectorAll('.option-button');
 oldButtons.forEach(btn => {
