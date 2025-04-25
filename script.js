@@ -60,6 +60,37 @@
         const moneyOptions = [1, 2, 5, 10, 20, 50, 100, 200];
         num1 = moneyOptions[Math.floor(Math.random() * moneyOptions.length)];
         num2 = moneyOptions[Math.floor(Math.random() * moneyOptions.length)];
+        // Mode "Compare" Yes/No
+      } else if (mode === 'compare') {
+        num1 = Math.floor(Math.random() * 100) + 1;
+  num2 = Math.floor(Math.random() * 100) + 1;
+
+  // Показываем вопрос: "X > Y ?"
+  document.getElementById('question-label').textContent = `Сұрақ ${currentQuestion + 1}:`;
+  document.getElementById('math-problem').textContent = `${num1} > ${num2} ?`;
+
+  correctAnswer = num1 > num2 ? 'Иә' : 'Жоқ';
+
+  const optionsDiv = document.getElementById('options');
+  optionsDiv.innerHTML = '';
+
+  const answerOptions = ['Иә', 'Жоқ'];
+  answerOptions.sort(() => Math.random() - 0.5); // Перемешаем
+
+  answerOptions.forEach(ans => {
+    const btn = document.createElement('button');
+    btn.textContent = ans;
+    btn.className = 'option-button';
+    btn.onclick = () => {
+      if (!answered) {
+        answered = true;
+        handleAnswer(ans, btn);
+      }
+    };
+    optionsDiv.appendChild(btn);
+  });
+
+  return; // Остановим дальше выполнение
       }
 
       if (!isAddition && num1 < num2) [num1, num2] = [num2, num1];
@@ -133,6 +164,7 @@
     function handleAnswer(selected, buttonEl) {
       const result = document.getElementById('result');
       const buttons = document.querySelectorAll('.option-button');
+      const isCorrect = (mode === 'compare') ? (selected === correctAnswer) : (selected === correctAnswer);
       let delay = 1200;
 
       buttons.forEach(btn => {
