@@ -1,16 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="kk">
 <head>
   <meta charset="UTF-8" />
   <title>Қызықты математика</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: "Quicksand", sans-serif;
+      font-family: sans-serif;
       background: linear-gradient(to bottom right, #f6f9fc, #e0f7fa);
       margin: 0;
       padding: 0;
@@ -19,7 +15,6 @@
       align-items: center;
       min-height: 100vh;
     }
-
     .container {
       background: white;
       padding: 40px 20px;
@@ -29,64 +24,14 @@
       width: 95%;
       max-width: 500px;
     }
-
     h1 {
       color: #00796b;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
-
-    #question-label {
-      font-size: 18px;
-      color: #888;
-      margin-bottom: 5px;
-    }
-
-    #math-problem {
-      font-size: 48px;
-      color: #333;
-    }
-
-    #result {
-      height: 32px;
-      margin: 20px 0;
-      font-weight: bold;
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: opacity 0.3s ease;
-    }
-
-    .option-button {
-      font-size: 24px;
-      padding: 15px 30px;
-      margin: 10px;
-      border: none;
-      border-radius: 15px;
-      background-color: #81d4fa;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    .option-button:hover {
-      background-color: #4fc3f7;
-      transform: scale(1.05);
-    }
-
-    #options {
-      margin-top: 20px;
-    }
-
-    #game-area, #restart-button {
-      display: none;
-    }
-
-    #start-button, #restart-button {
+    .mode-button, .option-button, .restart-button, .back-button {
       font-size: 20px;
       padding: 12px 25px;
-      margin-top: 20px;
+      margin: 10px;
       background-color: #4db6ac;
       color: white;
       border: none;
@@ -94,21 +39,45 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-
-    #start-button:hover, #restart-button:hover {
+    .mode-button:hover, .option-button:hover, .restart-button:hover, .back-button:hover {
       background-color: #00897b;
+    }
+    #math-problem {
+      font-size: 48px;
+      color: #333;
+      margin-top: 20px;
+    }
+    #result {
+      height: 32px;
+      margin: 20px 0;
+      font-weight: bold;
+      font-size: 20px;
+    }
+    .option-button {
+      padding: 15px 30px;
+      font-size: 24px;
+      border-radius: 15px;
+      background-color: #81d4fa;
+    }
+    #game-area {
+      display: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Қызықты математика</h1>
-    <button id="start-button">Бастау</button>
-    <button id="restart-button">Тағы да!</button>
+    <div id="mode-select">
+      <button class="mode-button" onclick="startGame('basic')">0 - 10</button>
+      <button class="mode-button" onclick="startGame('tens')">10 - 100</button>
+    </div>
     <div id="game-area">
-      <div id="question"></div>
+      <div id="question-label"></div>
+      <div id="math-problem"></div>
       <div id="options"></div>
       <div id="result"></div>
+      <button id="restart-button" class="restart-button" onclick="restartGame()" style="display: none;">Тағы да!</button>
+      <button class="back-button" onclick="returnToMenu()">Артқа</button>
     </div>
   </div>
 
@@ -117,24 +86,52 @@
     let currentQuestion = 0;
     let correctAnswers = 0;
     const totalQuestions = 10;
+    let mode = 'basic';
+    let answered = false;
+
+    function startGame(selectedMode) {
+      mode = selectedMode;
+      currentQuestion = 0;
+      correctAnswers = 0;
+      document.getElementById('mode-select').style.display = 'none';
+      document.getElementById('game-area').style.display = 'block';
+      document.getElementById('restart-button').style.display = 'none';
+      generateQuestion();
+    }
+
+    function restartGame() {
+      currentQuestion = 0;
+      correctAnswers = 0;
+      document.getElementById('restart-button').style.display = 'none';
+      document.getElementById('options').innerHTML = '';
+      document.getElementById('result').innerHTML = '';
+      generateQuestion();
+    }
+
+    function returnToMenu() {
+      document.getElementById('mode-select').style.display = 'block';
+      document.getElementById('game-area').style.display = 'none';
+    }
 
     function generateQuestion() {
+      answered = false;
       const isAddition = Math.random() < 0.5;
       operator = isAddition ? '+' : '-';
 
-      num1 = Math.floor(Math.random() * 10);
-      num2 = Math.floor(Math.random() * 10);
-
-      if (!isAddition && num1 < num2) {
-        [num1, num2] = [num2, num1];
+      if (mode === 'basic') {
+        num1 = Math.floor(Math.random() * 11);
+        num2 = Math.floor(Math.random() * 11);
+      } else {
+        const tens = [10,20,30,40,50,60,70,80,90,100];
+        num1 = tens[Math.floor(Math.random() * tens.length)];
+        num2 = tens[Math.floor(Math.random() * tens.length)];
       }
 
+      if (!isAddition && num1 < num2) [num1, num2] = [num2, num1];
       correctAnswer = operator === '+' ? num1 + num2 : num1 - num2;
 
-      document.getElementById('question').innerHTML = `
-        <div id="question-label">Сұрақ ${currentQuestion + 1}:</div>
-        <div id="math-problem">${num1} ${operator} ${num2} = ?</div>
-      `;
+      document.getElementById('question-label').textContent = `Сұрақ ${currentQuestion + 1}:`;
+      document.getElementById('math-problem').textContent = `${num1} ${operator} ${num2} = ?`;
       document.getElementById('result').textContent = '';
       generateOptions();
     }
@@ -144,7 +141,13 @@
       optionsDiv.innerHTML = '';
       let answers = [correctAnswer];
       while (answers.length < 3) {
-        let wrongAnswer = correctAnswer + Math.floor(Math.random() * 5 - 2);
+        let wrongAnswer;
+        if (mode === 'tens') {
+          const tensOptions = [10,20,30,40,50,60,70,80,90,100];
+          wrongAnswer = tensOptions[Math.floor(Math.random() * tensOptions.length)];
+        } else {
+          wrongAnswer = correctAnswer + Math.floor(Math.random() * 11 - 5);
+        }
         if (!answers.includes(wrongAnswer) && wrongAnswer >= 0) {
           answers.push(wrongAnswer);
         }
@@ -154,7 +157,12 @@
         let btn = document.createElement('button');
         btn.textContent = ans;
         btn.className = 'option-button';
-        btn.onclick = () => checkAnswer(ans);
+        btn.onclick = () => {
+          if (!answered) {
+            answered = true;
+            checkAnswer(ans);
+          }
+        };
         optionsDiv.appendChild(btn);
       }
     }
@@ -175,37 +183,14 @@
       if (currentQuestion < totalQuestions) {
         setTimeout(generateQuestion, delay);
       } else {
-        setTimeout(showFinalResult, delay + 300);
+        setTimeout(() => {
+          document.getElementById('question-label').textContent = '';
+          document.getElementById('math-problem').innerHTML = `Сен ${totalQuestions} сұрақтың ${correctAnswers} дұрыс жауап бердің. Жарайсың! 🎉`;
+          document.getElementById('options').innerHTML = '';
+          document.getElementById('restart-button').style.display = 'inline-block';
+        }, delay + 300);
       }
     }
-
-    function showFinalResult() {
-      document.getElementById('game-area').innerHTML = `
-        <h2>Сен ${totalQuestions} сұрақтың ${correctAnswers} дұрыс жауап бердің. Жарайсың!</h2>
-      `;
-      document.getElementById('restart-button').style.display = 'inline-block';
-    }
-
-    document.getElementById("start-button").addEventListener("click", () => {
-      currentQuestion = 0;
-      correctAnswers = 0;
-      document.getElementById('start-button').style.display = 'none';
-      document.getElementById('restart-button').style.display = 'none';
-      document.getElementById('game-area').style.display = 'block';
-      generateQuestion();
-    });
-
-    document.getElementById("restart-button").addEventListener("click", () => {
-      currentQuestion = 0;
-      correctAnswers = 0;
-      document.getElementById('restart-button').style.display = 'none';
-      document.getElementById('game-area').innerHTML = `
-        <div id="question"></div>
-        <div id="options"></div>
-        <div id="result"></div>
-      `;
-      generateQuestion();
-    });
   </script>
 </body>
 </html>
