@@ -71,3 +71,10 @@ body {
     margin: 0 10px;
     vertical-align: middle;
   }
+  .logo {
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px;
+  }
