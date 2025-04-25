@@ -32,6 +32,11 @@
 
     function generateQuestion() {
       answered = false;
+      // Очистка предыдущих стилей кнопок
+const oldButtons = document.querySelectorAll('.option-button');
+oldButtons.forEach(btn => {
+  btn.classList.remove('correct', 'wrong', 'disabled');
+});
       const isAddition = Math.random() < 0.5;
       operator = isAddition ? '+' : '-';
 
