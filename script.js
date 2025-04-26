@@ -7,12 +7,18 @@
 
     function startGame(selectedMode) {
       mode = selectedMode;
+      document.getElementById('back-button').style.display = 'block'; // Жабшы батырмасы
       currentQuestion = 0;
       correctAnswers = 0;
+      
       document.getElementById('mode-select').style.display = 'none';
       document.getElementById('game-area').style.display = 'block';
-      document.getElementById('restart-button').style.display = 'none';
-      document.getElementById('title-heading').style.display = 'none';
+    
+      // Бұл жолды соңына қарай қой немесе тексер:
+      if (document.getElementById('restart-button')) {
+        document.getElementById('restart-button').style.display = 'none';
+      }
+    
       generateQuestion();
     }
 
@@ -27,6 +33,7 @@
 
     function returnToMenu() {
       document.getElementById('mode-select').style.display = 'block';
+      document.getElementById('back-button').style.display = 'none';
       document.getElementById('game-area').style.display = 'none';
       document.getElementById('title-heading').style.display = 'block';
     }
@@ -63,7 +70,10 @@
         // Mode "Compare" Yes/No
       } else if (mode === 'compare') {
         num1 = Math.floor(Math.random() * 100) + 1;
-  num2 = Math.floor(Math.random() * 100) + 1;
+        num2 = Math.floor(Math.random() * 100) + 1;
+        if (num1 === num2) {
+          num2 = (num2 % 100) + 1;
+        }
 
   // Показываем вопрос: "X > Y ?"
   document.getElementById('question-label').textContent = `Сұрақ ${currentQuestion + 1}:`;
