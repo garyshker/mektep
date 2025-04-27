@@ -102,6 +102,47 @@
 
   return; // Остановим дальше выполнение
       }
+      else if (mode === 'word') {
+        const names = ["Али", "Мадина", "Айша", "Дамир"];
+        const objects = ["алма", "кітап", "доп", "қалам"];
+
+        let name = names[Math.floor(Math.random() * names.length)];
+        let object = objects[Math.floor(Math.random() * objects.length)];
+        let start = Math.floor(Math.random() * 5) + 1;
+        let added = Math.floor(Math.random() * 5) + 1;
+
+        correctAnswer = start + added;
+
+        document.getElementById('question-label').textContent = `Сұрақ ${currentQuestion + 1}:`;
+        document.getElementById('math-problem').textContent = `${name}де ${start} ${object} бар еді. Ол тағы ${added} ${object} алды. Қанша ${object} болды?`;
+
+        const optionsDiv = document.getElementById('options');
+        optionsDiv.innerHTML = '';
+
+        let answers = [correctAnswer];
+        while (answers.length < 3) {
+          let wrongAnswer = correctAnswer + Math.floor(Math.random() * 5) - 2;
+          if (wrongAnswer >= 0 && !answers.includes(wrongAnswer)) {
+            answers.push(wrongAnswer);
+          }
+        }
+        answers.sort(() => Math.random() - 0.5);
+
+        answers.forEach(ans => {
+          const btn = document.createElement('button');
+          btn.textContent = ans;
+          btn.className = 'option-button';
+          btn.onclick = () => {
+            if (!answered) {
+              answered = true;
+              handleAnswer(ans, btn);
+            }
+          };
+          optionsDiv.appendChild(btn);
+        });
+
+        return;
+      }
 
       if (!isAddition && num1 < num2) [num1, num2] = [num2, num1];
       // Добавим режим money без изменения других структур
@@ -203,9 +244,17 @@
           document.getElementById('question-label').textContent = '';
           document.getElementById('math-problem').innerHTML = `Сен ${totalQuestions} сұрақтың ${correctAnswers} дұрыс жауап бердің. Жарайсың! 🎉`;
           document.getElementById('options').innerHTML = '';
-          document.getElementById('restart-button').style.display = 'inline-block';
-          document.getElementById('result').textContent = '';
-          document.getElementById('result').style.color = '';
+        
+          // Финал кезінде нәтижені тазалау
+          const resultEl = document.getElementById('result');
+          if (resultEl) {
+            resultEl.textContent = '';
+            resultEl.style.color = '';
+          }
+        
+          if (document.getElementById('restart-button')) {
+            document.getElementById('restart-button').style.display = 'inline-block';
+          }
         }, delay + 300);
       }
     }
