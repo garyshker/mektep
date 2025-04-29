@@ -277,12 +277,15 @@ function getCorrectEnding(name) {
   const lastTwoChars = name.slice(-2).toLowerCase();
   const vowels = ['а', 'ә', 'ө', 'і', 'ү', 'ұ', 'ы', 'о', 'и', 'у', 'э', 'я', 'ю'];
 
-  if (lastTwoChars === 'ей') {
+  if (lastTwoChars === 'ей' || lastTwoChars === 'ре' || lastTwoChars === 'ли') {
     return name + 'де';
-  } else if (lastChar === 'е' || lastChar === 'н' || lastChar === 'р') {
-    return name + 'де';
-  } else if (vowels.includes(lastChar)) {
+  } else if (lastTwoChars === 'ым' || lastTwoChars === 'ар' || lastTwoChars === 'ша' || lastTwoChars === 'на') {
     return name + 'да';
+  
+  } else if (lastChar === 'е' || lastChar === 'н' || lastChar === 'р' || lastChar === 'и') {
+    return name + 'да';
+  } else if (vowels.includes(lastChar)) {
+    return name + 'де';
   } else {
     return name + 'та';
   }
