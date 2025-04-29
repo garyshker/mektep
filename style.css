@@ -41,10 +41,19 @@ body {
     margin-top: 20px;
   }
   #result {
-    height: 32px;
+    min-height: 50px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
     margin: 20px 0;
     font-weight: bold;
     font-size: 20px;
+    display: none;
+  }
+
+  /* Когда результат показывается */
+  #result.show {
+    display: block;
+    opacity: 1;
   }
   .option-button {
     padding: 15px 30px;

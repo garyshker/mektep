@@ -1,4 +1,4 @@
-let num1, num2, operator, correctAnswer;
+let num1, num2, num3, operator, correctAnswer;
 let currentQuestion = 0;
 let correctAnswers = 0;
 const totalQuestions = 10;
@@ -22,6 +22,14 @@ function startGame(selectedMode) {
   generateQuestion();
 }
 
+function clearResult() {
+  const result = document.getElementById('result');
+  result.innerHTML = '';
+  result.style.color = '';
+  result.style.display = 'none'; // Добавлено скрытие результата
+  result.classList.remove('show');
+}
+
 function restartGame() {
   currentQuestion = 0;
   correctAnswers = 0;
@@ -39,11 +47,8 @@ function returnToMenu() {
 }
 
 function generateQuestion() {
+  clearResult();
   answered = false;
-
-  // Очистка текста и стиля результата перед новым вопросом
-  document.getElementById('result').textContent = '';
-  document.getElementById('result').style.color = '';
 
   // Очистка предыдущих стилей кнопок
   const oldButtons = document.querySelectorAll('.option-button');
@@ -157,6 +162,19 @@ return; // Остановим дальше выполнение
     return;
   }
 
+  else if (mode === 'triple') {
+    num1 = Math.floor(Math.random() * 11);
+    num2 = Math.floor(Math.random() * 11);
+    num3 = Math.floor(Math.random() * 11);
+    correctAnswer = num1 + num2 + num3;
+
+    document.getElementById('question-label').textContent = `Сұрақ ${currentQuestion + 1}:`;
+    document.getElementById('math-problem').textContent = `${num1} + ${num2} + ${num3} = ?`;
+
+    generateOptions();
+    return;
+  }
+
   if (!isAddition && num1 < num2) [num1, num2] = [num2, num1];
   // Добавим режим money без изменения других структур
   correctAnswer = operator === '+' ? num1 + num2 : num1 - num2;
@@ -210,10 +228,11 @@ function generateOptions() {
   }
   answers.sort(() => Math.random() - 0.5);
   // Отображение вариантов ответа в виде кнопок
-  for (let ans of answers) {
-    let btn = document.createElement('button');
+  answers.forEach((ans, index) => {
+    const btn = document.createElement('button');
     btn.textContent = ans;
     btn.className = 'option-button';
+    btn.style.animationDelay = `${index * 0.1}s`; // Плавная задержка для кнопок
     btn.onclick = () => {
       if (!answered) {
         answered = true;
@@ -221,7 +240,7 @@ function generateOptions() {
       }
     };
     optionsDiv.appendChild(btn);
-  }
+  });
 }
 
 // Обработка ответа и отображение результата
@@ -242,16 +261,23 @@ function handleAnswer(selected, buttonEl) {
     correctAnswers++;
     result.innerHTML = 'Тамаша! <span style="font-size: 24px;">😊</span>';
     result.style.color = 'green';
+    result.style.display = 'block';
+    result.classList.add('show');
   } else {
     result.innerHTML = `Талпын! <span style="font-size: 24px;">😕</span> Дұрыс жауап: ${correctAnswer}`;
     result.style.color = 'red';
+    result.style.display = 'block';
+    result.classList.add('show');
     buttonEl.classList.add('wrong');
     delay = 2000;
   }
 
   currentQuestion++;
   if (currentQuestion < totalQuestions) {
-    setTimeout(generateQuestion, delay);
+    setTimeout(() => {
+      clearResult();
+      generateQuestion();
+    }, delay);
   } else {
     setTimeout(() => {
       document.getElementById('question-label').textContent = '';
