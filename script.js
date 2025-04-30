@@ -219,6 +219,10 @@ function generateOptions() {
     };
     newOptionsDiv.appendChild(btn);
   });
+  setTimeout(() => {
+    const all = document.querySelectorAll('.option-button');
+    all.forEach(btn => btn.blur());
+  }, 10);
 }
 
 function handleAnswer(selected, buttonEl) {

@@ -241,3 +241,14 @@ h1 {
     width: 40px;
   }
 }
+
+button:focus {
+  outline: none;
+}
+
+.option-button:focus,
+.option-button:active {
+  outline: none;
+  box-shadow: none;
+  background-color: initial;
+}
