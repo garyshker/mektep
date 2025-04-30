@@ -179,7 +179,7 @@ function generateOptions() {
     btn.classList.remove('correct', 'wrong', 'disabled');
   });
   const optionsDiv = document.getElementById('options');
-  optionsDiv.innerHTML = '';
+  optionsDiv.replaceChildren();
   let answers = [correctAnswer];
   while (answers.length < 3) {
     let wrongAnswer;
