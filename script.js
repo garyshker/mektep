@@ -40,10 +40,10 @@ function restartGame() {
 }
 
 function returnToMenu() {
-  document.getElementById('mode-select').style.display = 'block';
+ // document.getElementById('mode-select').style.display = 'block';
   document.getElementById('back-button').style.display = 'none';
   document.getElementById('game-area').style.display = 'none';
-  document.getElementById('intro').style.display = 'block';
+  document.getElementById('intro').style.display = 'grid';
   document.querySelector('.mascot').style.transform = 'none';
   document.getElementById('intro').style.display = 'grid';
 document.getElementById('mode-select').style.display = 'grid';
