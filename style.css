@@ -252,3 +252,19 @@ button:focus {
   box-shadow: none;
   background-color: initial;
 }
+
+.option-button.neutral {
+  background-color: #81d4fa !important;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.option-button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.option-button:hover:active {
+  background-color: #81d4fa;
+}

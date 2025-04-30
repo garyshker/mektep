@@ -173,14 +173,15 @@ function generateQuestion() {
 }
 
 function generateOptions() {
-  // Сброс классов для старых кнопок, чтобы предыдущие стили не сохранялись
-  const oldButtons = document.querySelectorAll('.option-button');
-  oldButtons.forEach(btn => {
-    btn.classList.remove('correct', 'wrong', 'disabled');
-  });
   const oldOptionsDiv = document.getElementById('options');
   const newOptionsDiv = oldOptionsDiv.cloneNode(false);
   oldOptionsDiv.parentNode.replaceChild(newOptionsDiv, oldOptionsDiv);
+
+  // Принудительно перерисовать DOM (важно для iOS Safari)
+  newOptionsDiv.style.display = 'none';
+  void newOptionsDiv.offsetHeight; // trigger reflow
+  newOptionsDiv.style.display = 'flex';
+
   let answers = [correctAnswer];
   while (answers.length < 3) {
     let wrongAnswer;
@@ -209,7 +210,7 @@ function generateOptions() {
   answers.forEach((ans, index) => {
     const btn = document.createElement('button');
     btn.textContent = ans;
-    btn.className = 'option-button';
+    btn.className = 'option-button neutral';
     btn.style.animationDelay = `${index * 0.1}s`;
     btn.onclick = () => {
       if (!answered) {
@@ -221,7 +222,10 @@ function generateOptions() {
   });
   setTimeout(() => {
     const all = document.querySelectorAll('.option-button');
-    all.forEach(btn => btn.blur());
+    all.forEach(btn => {
+      btn.classList.remove('correct', 'wrong', 'disabled');
+      btn.blur(); // Принудительный сброс фокуса
+    });
   }, 10);
 }
 
