@@ -145,6 +145,8 @@ function generateQuestion() {
     correctAnswer = num1 + num2 + num3;
     document.getElementById('question-label').textContent = `Сұрақ ${currentQuestion + 1}:`;
     document.getElementById('math-problem').textContent = `${num1} + ${num2} + ${num3} = ?`;
+    const optionsDiv = document.getElementById('options');
+    optionsDiv.innerHTML = '';
     generateOptions();
     return;
   }
@@ -165,6 +167,8 @@ function generateQuestion() {
     document.getElementById('math-problem').textContent = `${num1} ${operator} ${num2} = ?`;
   }
 
+  const optionsDiv = document.getElementById('options');
+  optionsDiv.innerHTML = '';
   generateOptions();
 }
 
@@ -265,6 +269,10 @@ function handleAnswer(selected, buttonEl) {
       }
     }, delay + 300);
   }
+  const buttonsAfter = document.querySelectorAll('.option-button');
+  buttonsAfter.forEach(btn => {
+    btn.blur(); // сброс активного фокуса (особенно важно для Safari на iOS)
+  });
 }
 
 function getCorrectEnding(name) {
