@@ -1,43 +1,71 @@
-
 <!DOCTYPE html>
 <html lang="kk">
 <head>
-  <meta charset="UTF-8" />
-  <title>Қызықты математика</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fun Math</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="./style.css">
 
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+
 </head>
 
 <body>
-  <div class="container">
-   
-    <img src="./img/logo.png" alt="Қызықты математика логотипі" class="logo">
-    <h1 id="title-heading">Қызықты математика</h1>
-    <div id="mode-select">
-      <button class="mode-button" onclick="startGame('basic')">0 - 10</button>
-      <button class="mode-button" onclick="startGame('tens')">10 - 100</button>
-      <!-- Triple numbers-->
-      <button class="mode-button" onclick="startGame('triple')">Үш санды қосу</button>
-      <!-- Кнопка для режима "Теңге" -->
-      <button class="mode-button" onclick="startGame('money')">Теңге</button>
-      <!-- Compare button -->
-      <button class="mode-button" onclick="startGame('compare')">Салыстыр</button>
-      <!-- Word Problems mode button -->
-      <button class="mode-button" onclick="startGame('word')">Сөздік есеп</button>
+    <div id="intro" class="intro">
+      <div class="intro-text">
+        <h1>Сәлем досым!</h1>
+        <p>Кел, менімен бірге Математикаға қызығушылық таныт!</p>
+        <p>Қызықты тапсырмалар арқылы</p>
+        <p>ойыңды дамытып, білім әлемін аш!</p>
+      </div>
+      <img src="./img/otter-mascot.png" alt="Mascot" class="mascot">
     </div>
-    <div id="game-area">
-      <div id="question-label"></div>
-      <div id="math-problem"></div>
-      <div id="options"></div>
-      <div id="result"></div>
-    <button id="back-button" class="back-button" onclick="returnToMenu()" style="display: none;">❌</button>
-      
-    </div>
+
+  <div id="mode-select" class="grid container">
+
+    <button class="mode-button card" onclick="startGame('basic')">
+      <img src="./img/numbers-1-10.png" alt="1...10 сандар">
+      <div class="label">1...10 сандар</div>
+    </button>
+
+    <button class="mode-button card" onclick="startGame('tens')">
+      <img src="./img/tens-numbers.png" alt="Ондық сандар">
+      <div class="label">Ондық сандар</div>
+    </button>
+    
+    <button class="mode-button card" onclick="startGame('triple')">
+      <img src="./img/abc-numbers.png" alt="a+b+c сандар">
+      <div class="label">a+b+c сандар</div>
+    </button>
+
+    <button class="mode-button card" onclick="startGame('money')">
+      <img src="./img/tenge-counting.png" alt="Теңге санау">
+      <div class="label">Теңге санау</div>
+    </button>
+
+    <button class="mode-button card" onclick="startGame('compare')">
+      <img src="./img/comparison.png" alt="Салыстыру">
+      <div class="label">Салыстыру</div>
+    </button>
+
+    <button class="mode-button card" onclick="startGame('word')">
+      <img src="./img/word-problem.png" alt="Сөздік есеп">
+      <div class="label">Сөздік есеп</div>
+    </button>
   </div>
+  <div id="game-area" class="game-box" style="display: none;">
+    <div id="question-label"></div>
+    <div id="math-problem"></div>
+    <div id="options"></div>
+    <div id="result"></div>
+  <button id="back-button" class="back-button" onclick="returnToMenu()" style="display: none;">❌</button>
+    
+  </div>
+
 
   <script src="./script.js"></script>
 </body>
