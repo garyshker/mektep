@@ -178,8 +178,9 @@ function generateOptions() {
   oldButtons.forEach(btn => {
     btn.classList.remove('correct', 'wrong', 'disabled');
   });
-  const optionsDiv = document.getElementById('options');
-  optionsDiv.replaceChildren();
+  const oldOptionsDiv = document.getElementById('options');
+  const newOptionsDiv = oldOptionsDiv.cloneNode(false);
+  oldOptionsDiv.parentNode.replaceChild(newOptionsDiv, oldOptionsDiv);
   let answers = [correctAnswer];
   while (answers.length < 3) {
     let wrongAnswer;
@@ -216,7 +217,7 @@ function generateOptions() {
         handleAnswer(ans, btn);
       }
     };
-    optionsDiv.appendChild(btn);
+    newOptionsDiv.appendChild(btn);
   });
 }
 
