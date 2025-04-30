@@ -169,6 +169,11 @@ function generateQuestion() {
 }
 
 function generateOptions() {
+  // Сброс классов для старых кнопок, чтобы предыдущие стили не сохранялись
+  const oldButtons = document.querySelectorAll('.option-button');
+  oldButtons.forEach(btn => {
+    btn.classList.remove('correct', 'wrong', 'disabled');
+  });
   const optionsDiv = document.getElementById('options');
   optionsDiv.innerHTML = '';
   let answers = [correctAnswer];
