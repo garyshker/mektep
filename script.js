@@ -237,8 +237,11 @@ function handleAnswer(selected, buttonEl) {
 
   buttons.forEach(btn => {
     btn.classList.add('disabled');
-    if (parseInt(btn.textContent) === correctAnswer) {
+    if (parseInt(btn.textContent) == correctAnswer) {
       btn.classList.add('correct');
+    }
+    if (btn === buttonEl && selected != correctAnswer) {
+      btn.classList.add('wrong');
     }
   });
 
