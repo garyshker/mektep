@@ -15,8 +15,9 @@ function startGame(selectedMode) {
   document.getElementById('game-area').style.display = 'block';
   document.getElementById('intro').style.display = 'none';
 
-  if (document.getElementById('restart-button')) {
-    document.getElementById('restart-button').style.display = 'none';
+  const restartBtn = document.getElementById('restart-button');
+  if (restartBtn) {
+    restartBtn.style.display = 'none';
   }
 
   generateQuestion();
@@ -33,7 +34,10 @@ function clearResult() {
 function restartGame() {
   currentQuestion = 0;
   correctAnswers = 0;
-  document.getElementById('restart-button').style.display = 'none';
+  const restartBtn = document.getElementById('restart-button');
+  if (restartBtn) {
+    restartBtn.style.display = 'none';
+  }
   document.getElementById('options').innerHTML = '';
   document.getElementById('result').innerHTML = '';
   generateQuestion();
@@ -59,7 +63,6 @@ function generateQuestion() {
   });
 
   const isAddition = Math.random() < 0.5;
-  operator = isAddition ? '+' : '-';
 
   if (mode === 'basic') {
     num1 = Math.floor(Math.random() * 11);
@@ -276,8 +279,9 @@ function handleAnswer(selected, buttonEl) {
         resultEl.textContent = '';
         resultEl.style.color = '';
       }
-      if (document.getElementById('restart-button')) {
-        document.getElementById('restart-button').style.display = 'inline-block';
+      const restartBtn = document.getElementById('restart-button');
+      if (restartBtn) {
+        restartBtn.style.display = 'inline-block';
       }
     }, delay + 300);
   }
