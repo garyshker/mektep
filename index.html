@@ -13,7 +13,7 @@
   <title>Математика</title>
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
 <link rel="icon" href="./img/logo.ico">
-  <link rel="stylesheet" href="./style.css">
+ <link rel="stylesheet" href="./style.css">
 
   <link rel="icon" href="./img/favicon.ico">
   
@@ -22,10 +22,13 @@
 <body>
     <div id="intro" class="intro">
       <div class="intro-text">
-        <a href="#"><img src="./img/flag_UK.png" alt="flag-UK"></a>
-        <a href="#"><img src="./img/flag_RU.png" alt="flag-RU"></a>
-        <h1>Сәлем досым!</h1>
-        <p>Кел, менімен бірге Математикаға қызығушылық таныт!</p>
+        <div class="flags">
+          <img src="./img/flag_KZ.png" alt="Қазақша" data-lang="kz" style="width: 30px; cursor: pointer; margin-right: 5px;">
+          <img src="./img/flag_RU.png" alt="Русский" data-lang="ru" style="width: 30px; cursor: pointer; margin-right: 5px;">
+          <img src="./img/flag_UK.png" alt="English" data-lang="en" style="width: 30px; cursor: pointer;">
+        </div>
+        <h1 data-i18n="greeting_title"></h1>
+        <p data-i18n="greeting_text"></p>
       </div>
       <img src="./img/otter-mascot.png" alt="Mascot" class="mascot">
     </div>
@@ -34,32 +37,32 @@
 
     <button class="mode-button card" onclick="startGame('basic')">
       <img src="./img/basic.jpg" alt="1...10 сандар">
-      <div class="label">1...10 сандар</div>
+      <div class="label" data-i18n="mode_basic"></div>
     </button>
 
     <button class="mode-button card" onclick="startGame('tens')">
       <img src="./img/tens.png" alt="Ондық сандар">
-      <div class="label">Ондық сандар</div>
+      <div class="label" data-i18n="mode_tens"></div>
     </button>
     
     <button class="mode-button card" onclick="startGame('triple')">
       <img src="./img/triple.png" alt="a+b+c сандар">
-      <div class="label">a+b+c сандар</div>
+      <div class="label" data-i18n="mode_triple"></div>
     </button>
 
     <button class="mode-button card" onclick="startGame('money')">
       <img src="./img/tenge.png" alt="Теңге санау">
-      <div class="label">Теңге санау</div>
+      <div class="label" data-i18n="mode_money"></div>
     </button>
 
     <button class="mode-button card" onclick="startGame('compare')">
       <img src="./img/compare.png" alt="Салыстыру">
-      <div class="label">Салыстыру</div>
+      <div class="label" data-i18n="mode_compare"></div>
     </button>
 
     <button class="mode-button card" onclick="startGame('word')">
       <img src="./img/word.jpg" alt="Сөздік есеп">
-      <div class="label">Сөздік есеп</div>
+      <div class="label" data-i18n="mode_word"></div>
     </button>
   </div>
   <div id="game-area" class="game-box" style="display: none;">
@@ -72,6 +75,6 @@
   </div>
 
 
-  <script src="./script.js"></script>
+ <script src="./script.js"></script>
 </body>
 </html>

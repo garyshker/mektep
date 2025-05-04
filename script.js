@@ -1,309 +1,343 @@
-let num1, num2, num3, operator, correctAnswer;
-let currentQuestion = 0;
-let correctAnswers = 0;
-const totalQuestions = 10;
-let mode = 'basic';
-let answered = false;
 
-function startGame(selectedMode) {
-  mode = selectedMode;
-  document.getElementById('back-button').style.display = 'block';
-  currentQuestion = 0;
-  correctAnswers = 0;
+const translations = {
+  kz: {
+    greeting_title: "Сәлем досым!",
+    greeting_text: "Кел, менімен бірге Математикаға қызығушылық таныт!",
+    mode_basic: "1...10 сандар",
+    mode_tens: "Ондық сандар",
+    mode_triple: "a+b+c сандар",
+    mode_money: "Теңге санау",
+    mode_compare: "Салыстыру",
+    mode_word: "Сөздік есеп"
+  },
+  ru: {
+    greeting_title: "Привет, друг!",
+    greeting_text: "Давай вместе увлечёмся математикой!",
+    mode_basic: "Числа от 1 до 10",
+    mode_tens: "Десятки",
+    mode_triple: "a+b+c числа",
+    mode_money: "Подсчёт тенге",
+    mode_compare: "Сравнение",
+    mode_word: "Текстовые задачи"
+  },
+  en: {
+    greeting_title: "Hello friend!",
+    greeting_text: "Let's get excited about math together!",
+    mode_basic: "Numbers 1...10",
+    mode_tens: "Tens",
+    mode_triple: "a+b+c numbers",
+    mode_money: "Count the money",
+    mode_compare: "Compare",
+    mode_word: "Word problems"
+  }
+};
 
+function setLanguage(lang) {
+  localStorage.setItem('lang', lang);
+  location.reload();
+}
+function applyTranslations() {
+  const lang = localStorage.getItem('lang') || 'kz';
+  const dict = translations[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) el.textContent = dict[key];
+  });
+}
+
+let currentMode = null;
+let currentQuestion = null;
+let score = 0;
+let questionCount = 0;
+const maxQuestions = 10;
+
+const modeDescriptions = {
+  basic: "1...10 сандар",
+  tens: "Ондық сандар",
+  triple: "a+b+c сандар",
+  money: "Теңге санау",
+  compare: "Салыстыру",
+  word: "Сөздік есеп"
+};
+
+function startGame(mode) {
+  currentMode = mode;
+  score = 0;
+  questionCount = 0;
   document.getElementById('mode-select').style.display = 'none';
-  document.getElementById('game-area').style.display = 'block';
   document.getElementById('intro').style.display = 'none';
-
-  const restartBtn = document.getElementById('restart-button');
-  if (restartBtn) {
-    restartBtn.style.display = 'none';
-  }
-
-  generateQuestion();
-}
-
-function clearResult() {
-  const result = document.getElementById('result');
-  result.innerHTML = '';
-  result.style.color = '';
-  result.style.display = 'none';
-  result.classList.remove('show');
-}
-
-function restartGame() {
-  currentQuestion = 0;
-  correctAnswers = 0;
-  const restartBtn = document.getElementById('restart-button');
-  if (restartBtn) {
-    restartBtn.style.display = 'none';
-  }
-  document.getElementById('options').innerHTML = '';
-  document.getElementById('result').innerHTML = '';
-  generateQuestion();
+  document.getElementById('game-area').style.display = 'block';
+  document.getElementById('restart-button').style.display = 'none';
+  document.getElementById('back-button').style.display = 'inline-block';
+  document.getElementById('result').textContent = '';
+  loadNextQuestion();
 }
 
 function returnToMenu() {
- // document.getElementById('mode-select').style.display = 'block';
-  document.getElementById('back-button').style.display = 'none';
+  currentMode = null;
+  currentQuestion = null;
+  score = 0;
+  questionCount = 0;
+  document.getElementById('mode-select').style.display = 'grid';
+  document.getElementById('intro').style.display = 'block';
   document.getElementById('game-area').style.display = 'none';
-  document.getElementById('intro').style.display = 'grid';
-  document.querySelector('.mascot').style.transform = 'none';
-  document.getElementById('intro').style.display = 'grid';
-document.getElementById('mode-select').style.display = 'grid';
+  document.getElementById('restart-button').style.display = 'none';
+  document.getElementById('back-button').style.display = 'none';
+  document.getElementById('result').textContent = '';
 }
 
-function generateQuestion() {
-  clearResult();
-  answered = false;
+function restartGame() {
+  score = 0;
+  questionCount = 0;
+  document.getElementById('restart-button').style.display = 'none';
+  document.getElementById('result').textContent = '';
+  loadNextQuestion();
+}
 
-  const oldButtons = document.querySelectorAll('.option-button');
-  oldButtons.forEach(btn => {
-    btn.classList.remove('correct', 'wrong', 'disabled');
-  });
-
-  const isAddition = Math.random() < 0.5;
-
-  if (mode === 'basic') {
-    num1 = Math.floor(Math.random() * 11);
-    num2 = Math.floor(Math.random() * 11);
-  } else if (mode === 'tens') {
-    const tens = [10,20,30,40,50,60,70,80,90,100];
-    num1 = tens[Math.floor(Math.random() * tens.length)];
-    num2 = tens[Math.floor(Math.random() * tens.length)];
-  } else if (mode === 'money') {
-    const moneyOptions = [1, 2, 5, 10, 20, 50, 100, 200];
-    num1 = moneyOptions[Math.floor(Math.random() * moneyOptions.length)];
-    num2 = moneyOptions[Math.floor(Math.random() * moneyOptions.length)];
-  } else if (mode === 'compare') {
-    num1 = Math.floor(Math.random() * 100) + 1;
-    num2 = Math.floor(Math.random() * 100) + 1;
-    if (num1 === num2) num2 = (num2 % 100) + 1;
-
-    document.getElementById('question-label').textContent = `Сұрақ ${currentQuestion + 1}:`;
-    document.getElementById('math-problem').textContent = `${num1} > ${num2} ?`;
-
-    correctAnswer = num1 > num2 ? 'Иә' : 'Жоқ';
-
-    const optionsDiv = document.getElementById('options');
-    optionsDiv.innerHTML = '';
-    const answerOptions = ['Иә', 'Жоқ'];
-    answerOptions.sort(() => Math.random() - 0.5);
-    answerOptions.forEach(ans => {
-      const btn = document.createElement('button');
-      btn.textContent = ans;
-      btn.className = 'option-button';
-      btn.onclick = () => {
-        if (!answered) {
-          answered = true;
-          handleAnswer(ans, btn);
-        }
-      };
-      optionsDiv.appendChild(btn);
-    });
+function loadNextQuestion() {
+  if (questionCount >= maxQuestions) {
+    endGame();
     return;
-  } else if (mode === 'word') {
-    const names = ["Али", "Мадина", "Айша", "Дамир", "Зере", "Алмас", "Алан", "Мерей", "Сұңқар", "Қасым", "Жетпісбай", "Қанат", "Жансая"];
-    const objects = ["алма", "кітап", "доп", "қалам", "сәбіз", "банан", "доллар", "қызанақ", "қасық", "сағыз", "құлпынай", "түйме"];
-    const name = names[Math.floor(Math.random() * names.length)];
-    const object = objects[Math.floor(Math.random() * objects.length)];
-    let start = Math.floor(Math.random() * 10) + 1;
-    let change = Math.floor(Math.random() * 10) + 1;
-    let nameWithEnding = getCorrectEnding(name);
-    if (!isAddition && start < change) [start, change] = [change, start];
-
-    correctAnswer = isAddition ? start + change : start - change;
-
-    document.getElementById('question-label').textContent = `Сұрақ ${currentQuestion + 1}:`;
-    let sentence = isAddition
-      ? `${nameWithEnding} ${start} ${object} бар еді. Ол тағы ${change} ${object} сатып алды. ${nameWithEnding} қанша ${object} болды?`
-      : `${nameWithEnding} ${start} ${object} бар еді. Ол ${change} ${object} досына берді. ${nameWithEnding} қанша ${object} қалды?`;
-
-    document.getElementById('math-problem').textContent = sentence;
-    const optionsDiv = document.getElementById('options');
-    optionsDiv.innerHTML = '';
-    let answers = [correctAnswer];
-    while (answers.length < 3) {
-      let wrongAnswer = correctAnswer + Math.floor(Math.random() * 5) - 2;
-      if (wrongAnswer >= 0 && !answers.includes(wrongAnswer)) answers.push(wrongAnswer);
+  }
+  questionCount++;
+  const lang = localStorage.getItem('lang') || 'kz';
+  const modeNames = {
+    kz: {
+      basic: "1...10 сандар",
+      tens: "Ондық сандар",
+      triple: "a+b+c сандар",
+      money: "Теңге санау",
+      compare: "Салыстыру",
+      word: "Сөздік есеп"
+    },
+    ru: {
+      basic: "Числа от 1 до 10",
+      tens: "Десятки",
+      triple: "a+b+c числа",
+      money: "Подсчёт тенге",
+      compare: "Сравнение",
+      word: "Текстовые задачи"
+    },
+    en: {
+      basic: "Numbers 1...10",
+      tens: "Tens",
+      triple: "a+b+c numbers",
+      money: "Count the money",
+      compare: "Compare",
+      word: "Word problems"
     }
-    answers.sort(() => Math.random() - 0.5);
-    answers.forEach(ans => {
-      const btn = document.createElement('button');
-      btn.className = 'option-button';
-      btn.textContent = ans;
-      btn.onclick = () => {
-        if (!answered) {
-          answered = true;
-          handleAnswer(ans, btn);
-        }
-      };
-      optionsDiv.appendChild(btn);
-    });
-    return;
-  } else if (mode === 'triple') {
-    num1 = Math.floor(Math.random() * 11);
-    num2 = Math.floor(Math.random() * 11);
-    num3 = Math.floor(Math.random() * 11);
-    correctAnswer = num1 + num2 + num3;
-    document.getElementById('question-label').textContent = `Сұрақ ${currentQuestion + 1}:`;
-    document.getElementById('math-problem').textContent = `${num1} + ${num2} + ${num3} = ?`;
-    const optionsDiv = document.getElementById('options');
-    optionsDiv.innerHTML = '';
-    generateOptions();
-    return;
+  };
+  document.getElementById('question-label').textContent =
+    `${modeNames[lang][currentMode]} - ${lang === 'ru' ? 'вопрос' : lang === 'en' ? 'question' : 'сұрақ'} ${questionCount} / ${maxQuestions}`;
+  document.getElementById('result').textContent = '';
+  currentQuestion = generateQuestion(currentMode);
+  displayQuestion(currentQuestion);
+}
+
+function generateQuestion(mode) {
+  switch (mode) {
+    case 'basic':
+      return generateBasicQuestion();
+    case 'tens':
+      return generateTensQuestion();
+    case 'triple':
+      return generateTripleQuestion();
+    case 'money':
+      return generateMoneyQuestion();
+    case 'compare':
+      return generateCompareQuestion();
+    case 'word':
+      return generateWordProblem();
+    default:
+      return null;
   }
+}
 
-  if (!isAddition && num1 < num2) [num1, num2] = [num2, num1];
-  correctAnswer = operator === '+' ? num1 + num2 : num1 - num2;
-  document.getElementById('question-label').textContent = `Сұрақ ${currentQuestion + 1}:`;
+function generateBasicQuestion() {
+  const a = Math.floor(Math.random() * 10) + 1;
+  const b = Math.floor(Math.random() * 10) + 1;
+  const sum = a + b;
+  const options = generateOptions(sum, 10);
+  return {
+    problem: `${a} + ${b} = ?`,
+    answer: sum,
+    options
+  };
+}
 
-  if (mode === 'money') {
-    const imagePath = 'img/';
-    document.getElementById('math-problem').innerHTML = `
-      <img src="${imagePath}${num1}.webp" alt="${num1} теңге" class="coin-img">
-      ${operator}
-      <img src="${imagePath}${num2}.webp" alt="${num2} теңге" class="coin-img">
-      = ?
-    `;
+function generateTensQuestion() {
+  const a = (Math.floor(Math.random() * 9) + 1) * 10;
+  const b = (Math.floor(Math.random() * 9) + 1) * 10;
+  const sum = a + b;
+  const options = generateOptions(sum, 100, 10);
+  return {
+    problem: `${a} + ${b} = ?`,
+    answer: sum,
+    options
+  };
+}
+
+function generateTripleQuestion() {
+  const a = Math.floor(Math.random() * 10) + 1;
+  const b = Math.floor(Math.random() * 10) + 1;
+  const c = Math.floor(Math.random() * 10) + 1;
+  const sum = a + b + c;
+  const options = generateOptions(sum, 20);
+  return {
+    problem: `${a} + ${b} + ${c} = ?`,
+    answer: sum,
+    options
+  };
+}
+
+function generateMoneyQuestion() {
+  const coins = [1, 2, 5, 10, 20, 50, 100, 200, 500];
+  const a = coins[Math.floor(Math.random() * coins.length)];
+  const b = coins[Math.floor(Math.random() * coins.length)];
+  const sum = a + b;
+  const options = generateOptions(sum, 1000, 50);
+  return {
+    problem: `${a} теңге + ${b} теңге = ?`,
+    answer: sum,
+    options
+  };
+}
+
+function generateCompareQuestion() {
+  const a = Math.floor(Math.random() * 50) + 1;
+  const b = Math.floor(Math.random() * 50) + 1;
+  const expression = `${a} > ${b}`;
+  const lang = localStorage.getItem('lang') || 'kz';
+  const answer = a > b
+    ? (lang === 'ru' ? 'Да' : lang === 'en' ? 'Yes' : 'Иә')
+    : (lang === 'ru' ? 'Нет' : lang === 'en' ? 'No' : 'Жоқ');
+  const options =
+    lang === 'ru' ? ['Да', 'Нет'] :
+    lang === 'en' ? ['Yes', 'No'] :
+    ['Иә', 'Жоқ'];
+  return {
+    problem: expression,
+    answer,
+    options
+  };
+}
+
+function generateWordProblem() {
+  const lang = localStorage.getItem('lang') || 'kz';
+  const a = Math.floor(Math.random() * 10) + 1;
+  const b = Math.floor(Math.random() * 10) + 1;
+  const sum = a + b;
+
+  let problem;
+  if (lang === 'ru') {
+    problem = `Если у тебя есть ${a} яблок и друг дал тебе ещё ${b}, сколько у тебя будет?`;
+  } else if (lang === 'en') {
+    problem = `If you have ${a} apples and your friend gives you ${b} more, how many will you have?`;
   } else {
-    document.getElementById('math-problem').textContent = `${num1} ${operator} ${num2} = ?`;
+    problem = `Егер сенде ${a} алма бар болса, және досың саған тағы ${b} алма берсе, сенде неше алма болады?`;
   }
 
+  const options = generateOptions(sum, 20);
+  return {
+    problem,
+    answer: sum,
+    options
+  };
+}
+
+function generateOptions(correctAnswer, maxOption, step=1) {
+  let options = new Set();
+  options.add(correctAnswer);
+  while (options.size < 4) {
+    let option = correctAnswer + (Math.floor(Math.random() * 10) - 5) * step;
+    if (option > 0 && option <= maxOption) {
+      options.add(option);
+    }
+  }
+  let optionsArray = Array.from(options);
+  return shuffleArray(optionsArray);
+}
+
+function shuffleArray(array) {
+  for (let i = array.length -1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function displayQuestion(question) {
+  const problemDiv = document.getElementById('math-problem');
   const optionsDiv = document.getElementById('options');
+  problemDiv.innerHTML = question.problem;
   optionsDiv.innerHTML = '';
-  generateOptions();
-}
-
-function generateOptions() {
-  const oldOptionsDiv = document.getElementById('options');
-  const newOptionsDiv = oldOptionsDiv.cloneNode(false);
-  oldOptionsDiv.parentNode.replaceChild(newOptionsDiv, oldOptionsDiv);
-
-  // Принудительно перерисовать DOM (важно для iOS Safari)
-  newOptionsDiv.style.display = 'none';
-  void newOptionsDiv.offsetHeight; // trigger reflow
-  newOptionsDiv.style.display = 'flex';
-
-  let answers = [correctAnswer];
-  while (answers.length < 3) {
-    let wrongAnswer;
-    if (mode === 'tens') {
-      const tensOptions = [10,20,30,40,50,60,70,80,90,100];
-      wrongAnswer = tensOptions[Math.floor(Math.random() * tensOptions.length)];
-    } else {
-      wrongAnswer = correctAnswer + Math.floor(Math.random() * 11 - 5);
-      if (mode === 'money') {
-        const sums = [];
-        const coins = [1, 2, 5, 10, 20, 50, 100, 200];
-        for (let i = 0; i < coins.length; i++) {
-          for (let j = i; j < coins.length; j++) {
-            let sum = coins[i] + coins[j];
-            if (sum !== correctAnswer && !sums.includes(sum)) sums.push(sum);
-          }
-        }
-        wrongAnswer = sums[Math.floor(Math.random() * sums.length)];
-      }
-    }
-    if (!answers.includes(wrongAnswer) && wrongAnswer >= 0) {
-      answers.push(wrongAnswer);
-    }
-  }
-  answers.sort(() => Math.random() - 0.5);
-  answers.forEach((ans, index) => {
+  question.options.forEach(option => {
     const btn = document.createElement('button');
-    btn.textContent = ans;
-    btn.className = 'option-button neutral';
-    btn.style.animationDelay = `${index * 0.1}s`;
-    btn.onclick = () => {
-      if (!answered) {
-        answered = true;
-        handleAnswer(ans, btn);
-      }
-    };
-    newOptionsDiv.appendChild(btn);
+    btn.className = 'option-button';
+    btn.textContent = option;
+    btn.onclick = () => checkAnswer(option);
+    optionsDiv.appendChild(btn);
   });
-  setTimeout(() => {
-    const all = document.querySelectorAll('.option-button');
-    all.forEach(btn => {
-      btn.classList.remove('correct', 'wrong', 'disabled');
-      btn.blur(); // Принудительный сброс фокуса
-    });
-  }, 10);
 }
 
-function handleAnswer(selected, buttonEl) {
-  const result = document.getElementById('result');
-  const buttons = document.querySelectorAll('.option-button');
-  const isCorrect = (mode === 'compare') ? (selected === correctAnswer) : (selected === correctAnswer);
-  let delay = 1200;
-
-  buttons.forEach(btn => {
-    btn.classList.add('disabled');
-    if (parseInt(btn.textContent) == correctAnswer) {
-      btn.classList.add('correct');
+function checkAnswer(selected) {
+  const lang = localStorage.getItem('lang') || 'kz';
+  if (currentMode === 'compare') {
+    if (selected === currentQuestion.answer) {
+      score++;
+      document.getElementById('result').textContent = lang === 'ru' ? 'Верно!' : lang === 'en' ? 'Correct!' : 'Дұрыс!';
+    } else {
+      document.getElementById('result').textContent = lang === 'ru'
+        ? `Неверно! Правильный ответ: ${currentQuestion.answer}`
+        : lang === 'en'
+        ? `Wrong! Correct answer: ${currentQuestion.answer}`
+        : `Қате! Дұрыс жауап: ${currentQuestion.answer}`;
     }
-    if (btn === buttonEl && selected != correctAnswer) {
-      btn.classList.add('wrong');
+  } else {
+    if (selected === currentQuestion.answer) {
+      score++;
+      document.getElementById('result').textContent = lang === 'ru' ? 'Верно!' : lang === 'en' ? 'Correct!' : 'Дұрыс!';
+    } else {
+      document.getElementById('result').textContent = lang === 'ru'
+        ? `Неверно! Правильный ответ: ${currentQuestion.answer}`
+        : lang === 'en'
+        ? `Wrong! Correct answer: ${currentQuestion.answer}`
+        : `Қате! Дұрыс жауап: ${currentQuestion.answer}`;
     }
-  });
-
-  if (selected === correctAnswer) {
-    correctAnswers++;
-    result.innerHTML = 'Тамаша! <span style="font-size: 24px;">😊</span>';
-    result.style.color = 'green';
-    result.style.display = 'block';
-    result.classList.add('show');
-  } else {
-    result.innerHTML = `Талпын! <span style="font-size: 24px;">😕</span> Дұрыс жауап: ${correctAnswer}`;
-    result.style.color = 'red';
-    result.style.display = 'block';
-    result.classList.add('show');
-    buttonEl.classList.add('wrong');
-    delay = 2000;
   }
-
-  currentQuestion++;
-  if (currentQuestion < totalQuestions) {
-    setTimeout(() => {
-      clearResult();
-      generateQuestion();
-    }, delay);
+  disableOptions();
+  if (questionCount < maxQuestions) {
+    setTimeout(loadNextQuestion, 1500);
   } else {
-    setTimeout(() => {
-      document.getElementById('question-label').textContent = '';
-      document.getElementById('math-problem').innerHTML = `Сен ${totalQuestions} сұрақтың ${correctAnswers} дұрыс жауап бердің. Жарайсың! 🎉`;
-      document.getElementById('options').innerHTML = '';
-      const resultEl = document.getElementById('result');
-      if (resultEl) {
-        resultEl.textContent = '';
-        resultEl.style.color = '';
-      }
-      const restartBtn = document.getElementById('restart-button');
-      if (restartBtn) {
-        restartBtn.style.display = 'inline-block';
-      }
-    }, delay + 300);
-  }
-  const buttonsAfter = document.querySelectorAll('.option-button');
-  buttonsAfter.forEach(btn => {
-    btn.blur(); // сброс активного фокуса (особенно важно для Safari на iOS)
-  });
-}
-
-function getCorrectEnding(name) {
-  const lastChar = name.slice(-1).toLowerCase();
-  const lastTwoChars = name.slice(-2).toLowerCase();
-  const vowels = ['а', 'ә', 'ө', 'і', 'ү', 'ұ', 'ы', 'о', 'и', 'у', 'э', 'я', 'ю'];
-  if (lastTwoChars === 'ей' || lastTwoChars === 'ре' || lastTwoChars === 'ли') {
-    return name + 'де';
-  } else if (['ым', 'ар', 'ша', 'на', 'ая', 'ай'].includes(lastTwoChars)) {
-    return name + 'да';
-  } else if (['е', 'н', 'р', 'и'].includes(lastChar)) {
-    return name + 'да';
-  } else if (vowels.includes(lastChar)) {
-    return name + 'де';
-  } else {
-    return name + 'та';
+    setTimeout(endGame, 1500);
   }
 }
+
+function disableOptions() {
+  const buttons = document.querySelectorAll('#options button');
+  buttons.forEach(btn => btn.disabled = true);
+}
+
+function endGame() {
+  const lang = localStorage.getItem('lang') || 'kz';
+  document.getElementById('question-label').textContent =
+    lang === 'ru' ? 'Игра окончена!' : lang === 'en' ? 'Game over!' : 'Ойын аяқталды!';
+  document.getElementById('math-problem').textContent =
+    lang === 'ru'
+    ? `Ваш счёт: ${score} / ${maxQuestions}`
+    : lang === 'en'
+    ? `Your score: ${score} / ${maxQuestions}`
+    : `Сіздің ұпайыңыз: ${score} / ${maxQuestions}`;
+  document.getElementById('options').innerHTML = '';
+  document.getElementById('restart-button').style.display = 'inline-block';
+  document.getElementById('back-button').style.display = 'inline-block';
+  document.getElementById('result').textContent = '';
+}
+
+document.querySelectorAll('.flags img').forEach(flag => {
+  flag.addEventListener('click', () => {
+    const lang = flag.getAttribute('data-lang');
+    setLanguage(lang);
+  });
+});
+applyTranslations();
