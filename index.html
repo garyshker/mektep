@@ -696,7 +696,7 @@
     flex:1; max-width: 720px; width:100%; margin: 0 auto;
     padding: 24px 28px 140px;
     display:flex; flex-direction:column;
-    overflow-y:auto;
+    overflow-y:auto; overflow-x:hidden;
   }
   .lesson-title-row{
     display:flex; justify-content:space-between; align-items:center;
@@ -760,7 +760,8 @@
 
   .type-wrap{
     display:flex; align-items:center; gap: 10px;
-    max-width: 360px; margin: 0 auto;
+    width: 100%; max-width: 360px; margin: 0 auto;
+    box-sizing: border-box;
   }
   .type-input{
     flex:1; font-family: inherit;
@@ -1003,12 +1004,12 @@ const Star = ({on}) => (
 // ---- localization for the demo (just the few visible strings) ----
 const L = {
   kk: {
-    welcome: "Сәлем, Айдана!",
+    welcome: "Сәлем, Али!",
     welcomeSub: "Бүгін не үйренеміз?",
     eyebrowPick: "ПӘНДІ ТАҢДА",
     title: "Бастауыш сыныптарға арналған сабақтар",
     continueEyebrow: "Жалғастыр",
-    continueTitle: "Көбейту кестесі · 7-сабақ",
+    continueTitle: "Қосу · 100 ішінде · 1-сабақ",
     continueSub: "Сен бұл сабаққа кеше уақыт бөлдің. Енді 5 минут қалды.",
     continueBtn: "Сабақты жалғастыру",
     quests: "Бүгінгі тапсырмалар",
@@ -1031,12 +1032,12 @@ const L = {
     level: "Деңгей",
   },
   ru: {
-    welcome: "Привет, Айдана!",
+    welcome: "Привет, Али!",
     welcomeSub: "Что изучим сегодня?",
     eyebrowPick: "ВЫБЕРИ ПРЕДМЕТ",
     title: "Уроки для начальной школы",
     continueEyebrow: "Продолжить",
-    continueTitle: "Таблица умножения · урок 7",
+    continueTitle: "Сложение · до 100 · урок 1",
     continueSub: "Ты занималась этим вчера. Осталось 5 минут.",
     continueBtn: "Продолжить урок",
     quests: "Задания на сегодня",
@@ -1059,12 +1060,12 @@ const L = {
     level: "Уровень",
   },
   en: {
-    welcome: "Hi, Aidana!",
+    welcome: "Hi, Ali!",
     welcomeSub: "What shall we learn today?",
     eyebrowPick: "PICK A SUBJECT",
     title: "Lessons for primary school",
     continueEyebrow: "Continue",
-    continueTitle: "Times Tables · Lesson 7",
+    continueTitle: "Addition · within 100 · Lesson 1",
     continueSub: "You spent time on this yesterday. Just 5 minutes left.",
     continueBtn: "Resume lesson",
     quests: "Today's quests",
@@ -1091,24 +1092,24 @@ const L = {
 // subject content (per language) — merged with stateful progress at render time
 const SUB_CONTENT = {
   kk: [
-    { id:"math", name:"Математика", tag:"Сандар, есептер, теңгелер", color:"math", icon: IconMath, ready:true,
-      lessonTitles:{ 7:"Көбейту кестесі · 2-ге", 8:"Мәтінді есептер (100-ге дейін)", 9:"Уақыт. Сағат" } },
+    { id:"math", name:"Математика", tag:"Қосу, алу, көбейту", color:"math", icon: IconMath, ready:true,
+      lessonTitles:{ 1:"Қосу · 100 ішінде", 2:"Алу · 100 ішінде", 3:"Көбейту кестесі · 2-ге", 4:"Көбейту кестесі · 3-ке" } },
     { id:"kaz", name:"Қазақ тілі", tag:"Әліпби, дыбыстар, сөздер", color:"kaz", icon: IconKaz, ready:true,
       lessonTitles:{ 4:"Жуан және жіңішке дыбыстар", 5:"Сөз құрастыру" } },
     { id:"world", name:"Әлем тану", tag:"Табиғат, жануарлар", color:"world", icon: IconWorld, ready:false, days:12 },
     { id:"eng", name:"English", tag:"Сөздер мен сөйлемдер", color:"eng", icon: IconEng, ready:false, days:24 },
   ],
   ru: [
-    { id:"math", name:"Математика", tag:"Числа, задачи, уравнения", color:"math", icon: IconMath, ready:true,
-      lessonTitles:{ 7:"Таблица умножения · на 2", 8:"Текстовые задачи (до 100)", 9:"Время. Часы" } },
+    { id:"math", name:"Математика", tag:"Сложение, вычитание, умножение", color:"math", icon: IconMath, ready:true,
+      lessonTitles:{ 1:"Сложение · до 100", 2:"Вычитание · до 100", 3:"Таблица умножения · на 2", 4:"Таблица умножения · на 3" } },
     { id:"kaz", name:"Казахский", tag:"Алфавит, звуки, слова", color:"kaz", icon: IconKaz, ready:true,
       lessonTitles:{ 4:"Твёрдые и мягкие звуки", 5:"Составь слово" } },
     { id:"world", name:"Познание мира", tag:"Природа, животные", color:"world", icon: IconWorld, ready:false, days:12 },
     { id:"eng", name:"English", tag:"Слова и предложения", color:"eng", icon: IconEng, ready:false, days:24 },
   ],
   en: [
-    { id:"math", name:"Math", tag:"Numbers, puzzles, equations", color:"math", icon: IconMath, ready:true,
-      lessonTitles:{ 7:"Times tables · ×2", 8:"Word problems (within 100)", 9:"Time. Reading a clock" } },
+    { id:"math", name:"Math", tag:"Addition, subtraction, times tables", color:"math", icon: IconMath, ready:true,
+      lessonTitles:{ 1:"Addition · within 100", 2:"Subtraction · within 100", 3:"Times tables · ×2", 4:"Times tables · ×3" } },
     { id:"kaz", name:"Kazakh", tag:"Alphabet, sounds, words", color:"kaz", icon: IconKaz, ready:true,
       lessonTitles:{ 4:"Hard & soft vowels", 5:"Build a word" } },
     { id:"world", name:"World Studies", tag:"Nature, animals", color:"world", icon: IconWorld, ready:false, days:12 },
@@ -1125,7 +1126,7 @@ const LESSON_FOR = (subjectId, lessonNum) => {
 
 // progress shape: { math:{lesson, stars, of}, kaz:{lesson, stars, of}, totalXP, level, streak, lastPlayed, questsDone:[bool x4] }
 const DEFAULT_PROGRESS = {
-  math: { lesson: 7, stars: 2, of: 24 },
+  math: { lesson: 1, stars: 0, of: 4 },
   kaz:  { lesson: 4, stars: 1, of: 18 },
   totalXP: 310,
   level: 7,
@@ -1543,16 +1544,9 @@ function App() {
 
   return (
     <>
-      <div className="compare">
-        <button className={tweaks.view==='original' ? 'on' : ''} onClick={()=>setTweak('view', 'original')}>Original sketch</button>
-        <button className={tweaks.view==='improved' ? 'on' : ''} onClick={()=>setTweak('view', 'improved')}>Improved</button>
-      </div>
-
-      {tweaks.view === 'original'
-        ? <OriginalView lang={tweaks.language} />
-        : <ImprovedView tweaks={tweaks} setTweak={setTweak}
-            progress={progress} setProgress={setProgress}
-            onStartLesson={startLesson} />}
+      <ImprovedView tweaks={tweaks} setTweak={setTweak}
+          progress={progress} setProgress={setProgress}
+          onStartLesson={startLesson} />
 
       {toast && (
         <div className="toast">
@@ -1561,7 +1555,7 @@ function App() {
         </div>
       )}
 
-      {tweaks.view === 'improved' && showCallouts && (
+      {showCallouts && (
         <div className="callouts">
           <span className="x" onClick={()=>setShowCallouts(false)}>✕</span>
           <h4>Try it</h4>

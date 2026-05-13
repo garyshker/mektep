@@ -16,9 +16,105 @@ const { useState, useEffect, useRef, useMemo } = React;
 //   word     { kind:'word', story, prompt, options:[...], answer:idx }
 
 const LESSONS = {
-  // ───── Math · Lesson 7 — ×2 times table (2 сынып) ─────
-  "math-7": {
-    id: "math-7",
+  // ───── Math · Lesson 1 — Addition within 100 (2 сынып) ─────
+  "math-1": {
+    id: "math-1",
+    subjectId: "math",
+    icon: "math",
+    titleByLang: {
+      kk: "Қосу · 100 ішінде",
+      ru: "Сложение · в пределах 100",
+      en: "Addition · within 100",
+    },
+    introByLang: {
+      kk: "100-ге дейінгі сандарды қосуды үйренеміз!",
+      ru: "Учимся складывать числа в пределах 100!",
+      en: "Let's practise adding numbers within 100!",
+    },
+    questions: [
+      { kind:"mc", big:true, prompt:"36 + 24", options:["58","60","62","64"], answer:1 },
+      { kind:"type", prompt:"45 + 18 = ?", answer:63 },
+      { kind:"mc", big:true, prompt:"27 + 35", options:["58","60","62","64"], answer:2 },
+      { kind:"type", prompt:"54 + 27 = ?", answer:81 },
+      { kind:"tap",
+        promptByLang:{
+          kk:"Жауабы 10-нан үлкен болатын мысалдарды тап",
+          ru:"Найди примеры, где сумма больше 10",
+          en:"Tap the sums that are greater than 10"
+        },
+        words:["3+5","4+8","2+6","7+9","1+3","6+7","2+2","5+3"],
+        correctIdxs:[1,3,5] },
+      { kind:"type", prompt:"63 + 19 = ?", answer:82 },
+      { kind:"word",
+        storyByLang:{
+          kk:"Дүкенде 45 алма мен 38 алмұрт бар. Барлығы қанша жеміс?",
+          ru:"В магазине 45 яблок и 38 груш. Сколько всего фруктов?",
+          en:"A shop has 45 apples and 38 pears. How many fruits in total?"
+        },
+        options:["73","83","85","87"], answer:1 },
+      { kind:"type", prompt:"48 + 36 = ?", answer:84 },
+      { kind:"mc", big:true, prompt:"57 + 25", options:["78","80","82","84"], answer:2 },
+      { kind:"word",
+        storyByLang:{
+          kk:"Аружанда 32 теңге, Болатта 46 теңге бар. Екеуінің ақшасы барлығы қанша?",
+          ru:"У Аружан 32 тенге, у Болата 46 тенге. Сколько денег у них вместе?",
+          en:"Aruzhan has 32 tenge, Bolat has 46 tenge. How much do they have together?"
+        },
+        options:["72 ₸","76 ₸","78 ₸","82 ₸"], answer:2 },
+    ]
+  },
+
+  // ───── Math · Lesson 2 — Subtraction within 100 (2 сынып) ─────
+  "math-2": {
+    id: "math-2",
+    subjectId: "math",
+    icon: "math",
+    titleByLang: {
+      kk: "Алу · 100 ішінде",
+      ru: "Вычитание · в пределах 100",
+      en: "Subtraction · within 100",
+    },
+    introByLang: {
+      kk: "100-ге дейінгі сандарды алуды үйренеміз!",
+      ru: "Учимся вычитать числа в пределах 100!",
+      en: "Let's practise subtraction within 100!",
+    },
+    questions: [
+      { kind:"mc", big:true, prompt:"45 − 18", options:["23","25","27","29"], answer:2 },
+      { kind:"type", prompt:"80 − 37 = ?", answer:43 },
+      { kind:"mc", big:true, prompt:"73 − 29", options:["40","42","44","46"], answer:2 },
+      { kind:"type", prompt:"91 − 54 = ?", answer:37 },
+      { kind:"tap",
+        promptByLang:{
+          kk:"Жауабы жұп болатын мысалдарды тап",
+          ru:"Найди примеры с чётным ответом",
+          en:"Tap examples with an even answer"
+        },
+        words:["50−17","60−22","80−45","40−16","70−31","90−64"],
+        correctIdxs:[1,3,5] },
+      { kind:"type", prompt:"64 − 28 = ?", answer:36 },
+      { kind:"word",
+        storyByLang:{
+          kk:"Айданада 50 теңге болды. Ол нанға 23 теңге жұмсады. Қанша теңге қалды?",
+          ru:"У Айданы было 50 тенге. Она купила хлеб за 23 тенге. Сколько тенге осталось?",
+          en:"Aidana had 50 tenge. She bought bread for 23 tenge. How much is left?"
+        },
+        options:["21 ₸","23 ₸","27 ₸","29 ₸"], answer:2 },
+      { kind:"type", prompt:"100 − 63 = ?", answer:37 },
+      { kind:"mc", big:true, prompt:"82 − 47", options:["31","33","35","37"], answer:2 },
+      { kind:"word",
+        storyByLang:{
+          kk:"Сыныпта 32 оқушы болды. 15 оқушы ауырып үйде қалды. Сыныпта қанша оқушы қалды?",
+          ru:"В классе было 32 ученика. 15 заболели и остались дома. Сколько учеников в классе?",
+          en:"There were 32 pupils in class. 15 were sick and stayed home. How many are in class?"
+        },
+        options:["13","15","17","19"], answer:2 },
+    ]
+  },
+
+  // ───── Math · Lesson 3 — ×2 times table (2 сынып) ─────
+  "math-3": {
+    id: "math-3",
     subjectId: "math",
     icon: "math",
     titleByLang: {
@@ -48,7 +144,7 @@ const LESSONS = {
       { kind:"mc", big:true, prompt:"2 × 8", options:["14","15","16","18"], answer:2 },
       { kind:"word",
         storyByLang:{
-          kk:"Айдардың 2 дөңгелегі бар. Әр дөңгелекте 7 дөңгелектің дөңгеліктері бар. Барлығы қанша дөңгелек?",
+          kk:"Айдардың 2 велосипеді бар. Әр велосипедтің 2 дөңгелегі бар. Барлығы қанша дөңгелек?",
           ru:"У Айдара 2 велосипеда. У каждого по 2 колеса. Сколько всего колёс?",
           en:"Aidar has 2 bicycles. Each has 2 wheels. How many wheels in total?"
         },
@@ -58,49 +154,45 @@ const LESSONS = {
     ]
   },
 
-  // ───── Math · Lesson 8 — Word problems within 100 (2 сынып) ─────
-  "math-8": {
-    id: "math-8",
+  // ───── Math · Lesson 4 — ×3 times table (2 сынып) ─────
+  "math-4": {
+    id: "math-4",
     subjectId: "math",
     icon: "math",
     titleByLang: {
-      kk: "Мәтінді есептер · 100 көлемінде",
-      ru: "Текстовые задачи · в пределах 100",
-      en: "Word Problems within 100",
+      kk: "Көбейту кестесі · 3-ке",
+      ru: "Таблица умножения · на 3",
+      en: "Times Tables · ×3",
+    },
+    introByLang: {
+      kk: "3-ке көбейтуді үйренеміз!",
+      ru: "Учим умножение на 3!",
+      en: "Let's learn the 3 times table!",
     },
     questions: [
+      { kind:"mc", big:true, prompt:"3 × 3", options:["7","8","9","12"], answer:2 },
+      { kind:"mc", big:true, prompt:"3 × 4", options:["9","10","12","15"], answer:2 },
+      { kind:"type", prompt:"3 × 5 = ?", answer:15 },
+      { kind:"mc", big:true, prompt:"3 × 6", options:["15","16","18","21"], answer:2 },
+      { kind:"tap",
+        promptByLang:{
+          kk:"3-тің көбейтінділерін тап",
+          ru:"Найди произведения числа 3",
+          en:"Tap all multiples of 3"
+        },
+        words:["4","6","7","9","11","12","14","15"],
+        correctIdxs:[1,3,5,7] },
+      { kind:"type", prompt:"3 × 7 = ?", answer:21 },
+      { kind:"mc", big:true, prompt:"3 × 8", options:["20","22","24","27"], answer:2 },
       { kind:"word",
         storyByLang:{
-          kk:"Дүкенде бұлка 50 теңге тұрады. Айдана 2 бұлка сатып алды. Қанша теңге төлейді?",
-          ru:"Булка в магазине стоит 50 тенге. Айдана купила 2 булки. Сколько тенге она заплатит?",
-          en:"A bun costs 50 tenge. Aidana buys 2 buns. How much does she pay?"
+          kk:"Үйде 3 қатар терезе бар. Әр қатарда 4 терезе. Барлығы қанша терезе?",
+          ru:"В доме 3 ряда окон. В каждом ряду по 4 окна. Сколько окон всего?",
+          en:"A house has 3 rows of windows. Each row has 4 windows. How many windows total?"
         },
-        options:["50 ₸","75 ₸","100 ₸","150 ₸"], answer:2 },
-      { kind:"type", prompt:"35 + 24 = ?", answer:59 },
-      { kind:"type", prompt:"80 - 27 = ?", answer:53 },
-      { kind:"word",
-        storyByLang:{
-          kk:"Сабақ 9:00-де басталады және 40 минут жүреді. Қашан аяқталады?",
-          ru:"Урок начинается в 9:00 и идёт 40 минут. Когда закончится?",
-          en:"Class starts at 9:00 and lasts 40 minutes. When does it end?"
-        },
-        options:["9:30","9:40","10:00","10:40"], answer:1 },
-      { kind:"mc", big:true, prompt:"4 × 5", options:["15","18","20","25"], answer:2 },
-      { kind:"word",
-        storyByLang:{
-          kk:"2-сыныпта 16 қыз бен 14 ұл бар. Барлығы қанша оқушы?",
-          ru:"Во 2 классе 16 девочек и 14 мальчиков. Сколько всего учеников?",
-          en:"There are 16 girls and 14 boys in 2nd grade. How many pupils?"
-        },
-        options:["24","28","30","32"], answer:2 },
-      { kind:"type", prompt:"100 - 45 = ?", answer:55 },
-      { kind:"word",
-        storyByLang:{
-          kk:"Аружанда 100 теңге бар. Ол 35 теңгеге сусын және 25 теңгеге алма алды. Қанша теңге қалды?",
-          ru:"У Аружан 100 тенге. Он купил сок за 35 тенге и яблоко за 25 тенге. Сколько осталось?",
-          en:"Aruzhan has 100 tenge. She buys juice for 35 ₸ and an apple for 25 ₸. How much is left?"
-        },
-        options:["30 ₸","40 ₸","50 ₸","60 ₸"], answer:1 },
+        options:["8","10","12","15"], answer:2 },
+      { kind:"type", prompt:"3 × 9 = ?", answer:27 },
+      { kind:"mc", big:true, prompt:"3 × 10", options:["27","28","30","33"], answer:2 },
     ]
   },
 
@@ -275,8 +367,9 @@ function QType({ q, lang, locked, value, onChange, correct }) {
           placeholder={pickLang(RT, lang).typeHere}
           value={value ?? ""}
           disabled={locked}
-          onChange={(e)=>onChange(e.target.value)}
+          onChange={(e)=>onChange(e.target.value.replace(/\D/g,''))}
           inputMode="numeric"
+          pattern="[0-9]*"
         />
         {q.units && <span className="units">{q.units}</span>}
       </div>
@@ -454,6 +547,16 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
     }
   };
 
+  // For mc/word: auto-check immediately when option is picked
+  const pickAndCheck = (v) => {
+    setAns(v);
+    const right = (q.kind === 'mc' || q.kind === 'word') ? v === q.answer : false;
+    setLocked(true);
+    setFeedback(right ? 'right' : 'wrong');
+    if (right) setCorrectCount(c => c+1);
+    else setHearts(h => Math.max(0, h-1));
+  };
+
   const advance = () => {
     if (idx + 1 >= total || hearts === 0) {
       setDone(true);
@@ -525,8 +628,8 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
           <div className="lt-counter">{idx+1} / {total}</div>
         </div>
 
-        {q.kind === 'mc' && <QMC q={q} lang={lang} locked={locked} picked={current} onPick={setAns} />}
-        {q.kind === 'word' && <QWord q={q} lang={lang} locked={locked} picked={current} onPick={setAns} />}
+        {q.kind === 'mc' && <QMC q={q} lang={lang} locked={locked} picked={current} onPick={pickAndCheck} />}
+        {q.kind === 'word' && <QWord q={q} lang={lang} locked={locked} picked={current} onPick={pickAndCheck} />}
         {q.kind === 'type' && <QType q={q} lang={lang} locked={locked} value={current} onChange={setAns} correct={feedback==='right'} />}
         {q.kind === 'tap' && <QTap q={q} lang={lang} locked={locked}
           picked={current || []}
@@ -565,9 +668,11 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
         {!feedback && (
           <div className="fb-inner">
             <button className="fb-btn ghost" onClick={advance}>{rt.skip}</button>
-            <button className={"fb-btn primary " + (canCheck ? "" : "disabled")} disabled={!canCheck} onClick={check}>
-              {rt.check}
-            </button>
+            {(q.kind !== 'mc' && q.kind !== 'word') && (
+              <button className={"fb-btn primary " + (canCheck ? "" : "disabled")} disabled={!canCheck} onClick={check}>
+                {rt.check}
+              </button>
+            )}
           </div>
         )}
       </div>
