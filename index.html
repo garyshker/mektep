@@ -1,80 +1,1409 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="kk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="description" content="Балаларға арналған қызықты математика тапсырмалары. Fun Math — ойнау арқылы үйрену. iMektep бастауыш сынып оқушыларына арналған.">
-  <meta name="keywords" content="математика, iMektep, Қазақстан, бастауыш сынып, онлайн оқу, балаларға арналған математика">
-  <meta property="og:title" content="Fun Math - Қызықты Математика iMektep жобасынан">
-  <meta property="og:description" content="Математикамен ойнап үйрен! Бастауыш сынып оқушыларына арналған онлайн тапсырмалар.">
-  <meta property="og:image" content="https://mektep.kz/img/logo.png">
-  <meta property="og:url" content="https://mektep.kz">
-  <meta property="og:type" content="website">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Математика</title>
-  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+<meta charset="utf-8" />
+<title>Мектеп — Redesigned</title>
+<meta name="viewport" content="width=1280" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #E6F3EC;
+    --bg-2: #F2FAF5;
+    --ink: #0F2A22;
+    --ink-soft: #4A6A60;
+    --ink-mute: #8AA39A;
+    --line: rgba(15, 42, 34, 0.08);
+    --card: #FFFFFF;
+    --card-soft: #F5FBF7;
+    --brand: #0E8C6B;
+    --brand-deep: #0a6e54;
+    --brand-tint: #C6EAD8;
+    --shadow: 0 1px 0 rgba(15,42,34,.04), 0 10px 28px rgba(15,80,60,.07);
+    --shadow-lg: 0 2px 0 rgba(15,42,34,.04), 0 22px 50px rgba(15,80,60,.12);
+    --radius: 22px;
+    --radius-sm: 14px;
+    /* subject palettes */
+    --math-bg: #FFE9C8; --math-ic: #E88912;
+    --kaz-bg: #FFD8E1;  --kaz-ic: #E14B73;
+    --world-bg: #CDEBD3; --world-ic: #2D9D5C;
+    --eng-bg: #DEE3FB;   --eng-ic: #5764D8;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background:
+      radial-gradient(1200px 600px at 85% -10%, #D5EFE0 0%, transparent 60%),
+      radial-gradient(900px 600px at -10% 100%, #DAEFEA 0%, transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  button{font-family:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0}
+  #app{min-height:100vh}
 
- <link rel="stylesheet" href="./style.css">
+  /* ----- view switcher pill ----- */
+  .compare {
+    position: fixed; top: 18px; left: 50%; transform: translateX(-50%);
+    z-index: 40;
+    display:flex; align-items:center; gap:6px;
+    background: rgba(15, 42, 34, 0.85); color:#fff;
+    padding:6px; border-radius: 999px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,.18);
+    font-weight:700; font-size:13px;
+  }
+  .compare button{
+    color:rgba(255,255,255,.75); padding: 8px 16px; border-radius:999px;
+    transition: all .18s;
+  }
+  .compare button.on { background: #fff; color: var(--brand-deep); }
+  .compare button:hover:not(.on){ color:#fff }
 
-  <link rel="icon" href="./img/favicon.ico">
-  
+  /* ============ ORIGINAL VIEW (recreated for comparison) ============ */
+  .orig {
+    max-width: 1100px; margin: 0 auto; padding: 28px 32px 80px;
+  }
+  .orig-shell{
+    background:#D6F2E5; border-radius: 28px; padding: 22px 28px 36px;
+    min-height: 880px;
+  }
+  .orig-top{ display:flex; align-items:center; justify-content:space-between; }
+  .orig-logo{ display:flex; gap:10px; align-items:center; font-weight:800; font-size:20px;}
+  .orig-logo .ic{ width:40px;height:40px;border-radius:12px;background:#11A07A;display:grid;place-items:center;color:#fff;font-size:18px}
+  .orig-pill{display:flex;align-items:center;gap:8px;background:#fff;padding:10px 16px;border-radius:999px;font-weight:700;font-size:14px}
+  .orig-lang{display:flex;background:#fff;border-radius:999px;padding:4px;font-weight:700;font-size:14px}
+  .orig-lang span{padding:8px 14px;border-radius:999px;color:#3a5a51;display:flex;gap:6px;align-items:center}
+  .orig-lang span.on{background:#11A07A;color:#fff}
+  .orig h1{font-size: 56px; font-weight: 900; line-height:1.05; margin: 40px 0 24px; letter-spacing:-.02em}
+  .orig .eyebrow{font-size:13px;letter-spacing:.18em;font-weight:800;color:#0E8C6B;margin-top:30px}
+  .orig-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+  .orig-card{background:#fff;border-radius:22px;padding:24px;min-height:170px;display:flex;flex-direction:column;justify-content:space-between}
+  .orig-card.soon{background:#E2F3EA}
+  .orig-card .ico{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;font-size:24px}
+  .orig-card h3{margin:0;font-weight:800;font-size:22px}
+  .orig-card p{margin:4px 0 0;color:#7C9389;font-weight:600;font-size:14px}
+  .orig-card .bar{height:4px;width:54px;border-radius:99px;margin-top:14px}
+  .orig-soon-pill{position:absolute;top:18px;right:18px;background:#D5E7DC;color:#688679;font-size:11px;font-weight:800;letter-spacing:.1em;padding:5px 10px;border-radius:99px}
+  .orig-card{position:relative}
+
+  /* ============ IMPROVED VIEW ============ */
+  .v2 {
+    max-width: 1280px; margin: 0 auto; padding: 28px 36px 80px;
+  }
+  /* top bar */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom: 28px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px;
+  }
+  .brand-mark{
+    width:46px; height:46px; border-radius: 14px;
+    background: linear-gradient(155deg, #18B187 0%, #0E8C6B 60%, #0A6F55 100%);
+    box-shadow: 0 8px 18px rgba(14,140,107,.32), inset 0 1px 0 rgba(255,255,255,.4);
+    display:grid; place-items:center; position:relative; overflow:hidden;
+  }
+  .brand-mark svg{width:24px;height:24px}
+  .brand-name{font-weight:900; font-size: 22px; letter-spacing:-.01em}
+  .brand-sub{font-size: 11px; color: var(--ink-mute); font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-top: -2px}
+
+  .topbar-right{display:flex; align-items:center; gap: 10px;}
+
+  .chip{
+    display:flex; align-items:center; gap:8px;
+    background:#fff; padding: 9px 14px; border-radius: 999px;
+    font-weight:800; font-size: 14px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+  }
+  .chip.streak{ color:#C9420B }
+  .chip.streak .flame{
+    width:22px;height:22px;display:grid;place-items:center;
+    background: linear-gradient(180deg,#FFB347,#FF6B2B);
+    border-radius: 8px; color:#fff; font-size:12px;
+    box-shadow: 0 2px 0 rgba(180,60,0,.25);
+  }
+  .chip.xp{ padding-right: 6px; }
+  .xp-ring{
+    --pct: 62;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: conic-gradient(var(--brand) calc(var(--pct) * 1%), #E8F0EC 0);
+    display:grid; place-items:center; position:relative;
+  }
+  .xp-ring::before{content:"";position:absolute;inset:3px;background:#fff;border-radius:50%}
+  .xp-ring span{position:relative;font-size:10px;font-weight:900;color:var(--brand-deep)}
+
+  .lang-chip{
+    display:flex; align-items:center; gap:8px;
+    background:#fff; padding: 9px 8px 9px 14px; border-radius: 999px;
+    font-weight:800; font-size: 14px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+    position:relative;
+  }
+  .lang-flag{
+    width:22px;height:22px;border-radius:6px;
+    background: linear-gradient(180deg,#00AFCA 50%,#FFD400 50%);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+    display:grid;place-items:center;color:#fff;font-size:10px;font-weight:900;
+  }
+  .lang-chip .caret{font-size:10px;color:var(--ink-mute);margin: 0 4px}
+
+  .avatar{
+    width: 46px; height:46px; border-radius:14px; background: linear-gradient(145deg,#FFE1B0,#FFC68A);
+    display:grid; place-items:center; font-weight:900; color:#7E4310; font-size: 17px;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    position:relative;
+  }
+  .avatar::after{
+    content:""; position:absolute; right:-2px; bottom:-2px;
+    width:14px;height:14px;border-radius:50%; background:#3FCB80; border:2px solid #fff;
+  }
+
+  /* hero row: continue card + daily quests */
+  .hero{
+    display:grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .continue{
+    position:relative; overflow:hidden;
+    background:
+      radial-gradient(600px 280px at 90% 110%, rgba(255,180,71,.18), transparent 60%),
+      linear-gradient(135deg, #0E8C6B 0%, #0a6e54 100%);
+    color:#fff; border-radius: 26px; padding: 28px 30px;
+    box-shadow: var(--shadow-lg);
+    display:flex; flex-direction:column; justify-content:space-between;
+    min-height: 220px;
+  }
+  .continue::before{
+    content:""; position:absolute; right:-40px; top:-40px; width:240px;height:240px;
+    background: radial-gradient(circle, rgba(255,255,255,.10), transparent 65%);
+    border-radius:50%;
+  }
+  .continue-eyebrow{font-size:11px; letter-spacing:.2em; font-weight:800; opacity:.7; text-transform:uppercase}
+  .continue h2{
+    margin: 8px 0 4px; font-size: 32px; font-weight: 900; letter-spacing:-.02em; line-height:1.1;
+  }
+  .continue .sub{ opacity:.85; font-weight:600; font-size:15px }
+  .continue-row{display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-top: 22px; position:relative; z-index:1}
+  .continue-meta{flex:1; min-width:0}
+  .continue-bar{
+    height: 10px; background: rgba(255,255,255,.18); border-radius:99px; margin-top: 12px; overflow:hidden;
+  }
+  .continue-bar > div{height:100%; width: 58%; background: linear-gradient(90deg,#FFB75E,#FFCE6F); border-radius:99px}
+  .continue-bar-text{display:flex;justify-content:space-between;font-size:12px;font-weight:700;opacity:.85;margin-top:8px}
+  .play-btn{
+    display:flex; align-items:center; gap:10px;
+    background:#fff; color: var(--brand-deep); border-radius: 999px;
+    padding: 14px 22px 14px 18px; font-weight:900; font-size:15px;
+    box-shadow: 0 8px 22px rgba(0,0,0,.18);
+    transition: transform .15s;
+  }
+  .play-btn:hover{ transform: translateY(-1px) }
+  .play-btn .ic{
+    width: 24px; height:24px; border-radius:50%; background: var(--brand);
+    color:#fff; display:grid; place-items:center; font-size:12px;
+  }
+
+  /* daily quests */
+  .quests{
+    background: #fff; border-radius: 26px; padding: 22px 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+    display:flex; flex-direction:column;
+  }
+  .quests-head{display:flex; align-items:center; justify-content:space-between; margin-bottom: 12px}
+  .quests h3{margin:0; font-size: 16px; font-weight:900; letter-spacing:-.01em}
+  .quests-pill{
+    font-size:11px; font-weight:800; color: var(--brand-deep);
+    background: var(--brand-tint); padding: 4px 9px; border-radius:99px;
+    letter-spacing:.04em;
+  }
+  .quest{
+    display:flex; align-items:center; gap: 12px;
+    padding: 10px 0;
+  }
+  .quest + .quest{ border-top: 1px dashed var(--line) }
+  .quest-check{
+    width: 28px;height:28px; border-radius:9px;
+    border: 2px solid var(--line); flex:none;
+    display:grid; place-items:center; color: transparent;
+    transition: all .15s;
+  }
+  .quest.done .quest-check{
+    background: var(--brand); border-color: var(--brand); color:#fff;
+  }
+  .quest-body{flex:1; min-width:0}
+  .quest-title{font-weight:800; font-size:14.5px; line-height:1.2}
+  .quest.done .quest-title{ text-decoration: line-through; color: var(--ink-mute) }
+  .quest-meta{font-size:12px; font-weight:700; color: var(--ink-mute); margin-top:2px}
+  .quest-reward{ font-size:12px; font-weight:900; color:#C9420B; background:#FFEDD8; padding: 4px 8px; border-radius:99px; flex:none }
+
+  /* section header */
+  .section-head{display:flex; align-items:flex-end; justify-content:space-between; margin: 6px 0 16px}
+  .section-head h2{ font-size: 30px; font-weight:900; letter-spacing:-.02em; margin: 0 }
+  .section-head .eyebrow{font-size:11px;letter-spacing:.2em;font-weight:800;color:var(--brand);text-transform:uppercase; margin-bottom:6px}
+  .section-head .more{font-weight:800; color: var(--ink-soft); font-size: 14px; display:flex; align-items:center; gap:6px}
+
+  /* subject grid */
+  .grid{
+    display:grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+  .subject{
+    position:relative; overflow:hidden;
+    background:#fff; border-radius: 24px;
+    padding: 22px 22px 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+    min-height: 268px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    transition: transform .18s, box-shadow .18s;
+    cursor:pointer;
+  }
+  .subject:hover{ transform: translateY(-3px); box-shadow: var(--shadow-lg) }
+  .subject.locked{ background: var(--card-soft); cursor: default; }
+  .subject.locked:hover{ transform: none; box-shadow: var(--shadow) }
+
+  .subj-top{display:flex; align-items:flex-start; justify-content:space-between}
+  .subj-ic{
+    width: 56px; height:56px; border-radius:18px; display:grid; place-items:center;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,.06);
+  }
+  .subj-ic svg{ width: 28px; height:28px }
+  .subj-stars{display:flex; gap:2px}
+  .subj-stars .s{width:14px;height:14px;color:#E8B43A}
+  .subj-stars .s.off{color:#E5EAE7}
+  .soon-pill{
+    background:#fff; border:1px solid var(--line);
+    color: var(--ink-mute); font-size:10px; font-weight:900;
+    letter-spacing:.12em; padding: 5px 10px; border-radius:99px;
+  }
+  .subj-name{
+    font-size: 22px; font-weight:900; margin: 18px 0 2px; letter-spacing:-.01em;
+  }
+  .subj-tag{ font-size: 13px; color: var(--ink-soft); font-weight: 700; line-height:1.35; }
+
+  .subj-prog{ margin-top: 14px; }
+  .subj-prog-row{display:flex; justify-content:space-between; font-size: 11.5px; font-weight:800; color: var(--ink-soft); margin-bottom: 7px; letter-spacing:.02em}
+  .subj-bar{ height:8px; background: var(--card-soft); border-radius:99px; overflow:hidden; border:1px solid var(--line) }
+  .subj-bar > div{ height:100%; border-radius:99px; }
+
+  .subj-cta{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top: 14px;
+  }
+  .subj-cta .next{
+    font-size: 12.5px; font-weight:800; color: var(--ink); display:flex; align-items:center; gap:6px;
+  }
+  .subj-cta .next .dot{width:6px;height:6px;border-radius:50%}
+  .subj-go{
+    width: 36px; height:36px; border-radius:50%;
+    background: var(--ink); color:#fff; display:grid; place-items:center;
+    font-size: 14px;
+    transition: transform .15s;
+  }
+  .subject:hover .subj-go{ transform: translateX(2px) }
+
+  /* locked-card content */
+  .locked-cnt{ text-align:left }
+  .locked-cnt .subj-name{ color: var(--ink-soft) }
+  .locked-cnt .subj-tag{ color: var(--ink-mute) }
+  .countdown{
+    display:flex; gap:6px; margin-top: 14px;
+  }
+  .countdown .seg{
+    background:#fff; border:1px solid var(--line); border-radius: 12px;
+    padding: 8px 0; text-align:center; flex:1; min-width: 0;
+  }
+  .countdown .seg b{display:block; font-size: 18px; font-weight:900; color: var(--ink); letter-spacing:-.02em; font-family:'JetBrains Mono', monospace}
+  .countdown .seg span{font-size: 9px; color: var(--ink-mute); font-weight:800; letter-spacing:.12em; text-transform:uppercase}
+  .notify-btn{
+    margin-top: 14px;
+    background: var(--brand-tint); color: var(--brand-deep);
+    font-weight:900; font-size:12.5px; padding: 9px 14px; border-radius:99px;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+
+  /* friends strip */
+  .friends{
+    margin-top: 28px;
+    background: #fff; border-radius: 24px; padding: 18px 22px;
+    box-shadow: var(--shadow); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; gap: 20px;
+  }
+  .friends-l{display:flex; align-items:center; gap:14px}
+  .friends-title{font-weight:900; font-size: 15px}
+  .friends-sub{font-size:12.5px; color:var(--ink-mute); font-weight:700; margin-top:2px}
+  .stack{display:flex}
+  .stack .a{
+    width:36px;height:36px;border-radius:50%; border:2.5px solid #fff;
+    margin-left:-10px; display:grid; place-items:center; font-weight:900; font-size: 13px; color:#fff;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04);
+  }
+  .stack .a:first-child{margin-left:0}
+  .friends-r{display:flex; align-items:center; gap: 10px}
+  .leaderboard-btn{
+    display:flex; align-items:center; gap:8px; background: var(--ink); color:#fff;
+    padding: 10px 16px; border-radius: 99px; font-weight:800; font-size:13px;
+  }
+
+  /* mascot */
+  .mascot{
+    position: fixed; right: 28px; bottom: 28px; z-index: 20;
+    display:flex; align-items:flex-end; gap: 10px;
+    pointer-events: none;
+  }
+  .mascot-bubble{
+    background:#fff; border:1px solid var(--line); border-radius: 18px 18px 4px 18px;
+    padding: 10px 14px; font-weight:800; font-size: 13px; max-width: 220px;
+    box-shadow: var(--shadow);
+    line-height: 1.3;
+  }
+  .mascot-body{
+    width: 76px; height: 76px; border-radius: 50%;
+    background: linear-gradient(155deg,#FFE0AE,#FFB664);
+    border: 3px solid #fff; box-shadow: var(--shadow-lg);
+    display:grid; place-items:center; font-size: 36px;
+    animation: bob 3.4s ease-in-out infinite;
+  }
+  @keyframes bob{
+    0%,100%{ transform: translateY(0) rotate(-3deg) }
+    50%{ transform: translateY(-6px) rotate(3deg) }
+  }
+
+  /* lesson modal */
+  .modal-back{
+    position:fixed; inset:0; background: rgba(15,42,34,.4); backdrop-filter: blur(4px);
+    z-index: 50; display:grid; place-items:center;
+    animation: fade .18s ease both;
+  }
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .modal{
+    width: 560px; max-width: calc(100vw - 40px);
+    background:#fff; border-radius: 28px; padding: 28px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.25);
+    animation: pop .22s cubic-bezier(.2,1.2,.4,1) both;
+  }
+  @keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal-head{display:flex;align-items:center;gap:14px;margin-bottom: 6px}
+  .modal-ic{width:52px;height:52px;border-radius:16px;display:grid;place-items:center}
+  .modal h3{margin:0; font-size: 24px; font-weight:900; letter-spacing:-.01em}
+  .modal-sub{color:var(--ink-soft); font-weight:700; font-size: 14px; margin-top:2px}
+  .modal-list{margin-top: 18px; display:flex; flex-direction:column; gap:8px}
+  .les{
+    display:flex; align-items:center; gap:12px; padding: 12px 14px;
+    border: 1px solid var(--line); border-radius: 16px;
+    font-weight:800; font-size: 14.5px;
+    background: #fff;
+  }
+  .les.done{ background: var(--card-soft); color: var(--ink-mute) }
+  .les.cur{ border-color: var(--brand); background: #F1FAF5 }
+  .les-n{
+    width:30px;height:30px;border-radius:50%; display:grid; place-items:center;
+    background: var(--card-soft); border:1px solid var(--line); font-size: 12px; font-weight:900;
+  }
+  .les.done .les-n{ background: var(--brand); border-color: var(--brand); color:#fff }
+  .les.cur .les-n{ background: var(--brand); border-color: var(--brand); color:#fff }
+  .les-name{flex:1}
+  .les-min{color: var(--ink-mute); font-size: 12px; font-weight:700}
+  .modal-foot{display:flex; gap:10px; margin-top: 18px}
+  .btn{padding: 14px 18px; border-radius: 14px; font-weight:900; font-size:14px}
+  .btn.prim{background: var(--ink); color:#fff; flex:1}
+  .btn.ghost{background: var(--card-soft); color: var(--ink)}
+
+  /* tweaks overrides */
+  body.dense .v2{ padding: 18px 28px 60px }
+  body.dense .hero{ margin-bottom: 18px }
+  body.dense .subject{ min-height: 240px; padding: 18px }
+  body.dense .continue{ padding: 22px 24px; min-height: 0 }
+  body.dense .continue h2{ font-size: 26px }
+
+  body.no-mascot .mascot{ display:none }
+
+  /* improvements callouts */
+  .callouts{
+    position: fixed; left: 18px; bottom: 18px; z-index: 30;
+    background: rgba(15,42,34,.92); color:#fff;
+    padding: 14px 16px; border-radius: 18px;
+    max-width: 280px; font-size: 12.5px; line-height:1.4;
+    box-shadow: 0 14px 36px rgba(0,0,0,.25);
+  }
+  .callouts h4{margin:0 0 8px; font-size:11px; letter-spacing:.16em; text-transform:uppercase; opacity:.7; font-weight:800}
+  .callouts ul{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px}
+  .callouts li{display:flex; align-items:flex-start; gap:8px; font-weight:600}
+  .callouts li::before{
+    content:"+"; flex:none; width:18px; height:18px; border-radius:50%;
+    background: #FFB75E; color:#3A1E00; display:grid; place-items:center;
+    font-weight:900; font-size:12px; margin-top: 1px;
+  }
+  .callouts .x{ font-size:11px; opacity:.55; font-weight:800; cursor:pointer; position:absolute; top:8px; right:12px }
+  .callouts{ position: fixed }
+
+  @media (max-width: 1100px){
+    .grid{ grid-template-columns: repeat(2, 1fr) }
+    .hero{ grid-template-columns: 1fr }
+  }
+
+  /* ========== LESSON RUNNER ========== */
+  .lesson-shell{
+    position:fixed; inset:0; z-index:100;
+    background:
+      radial-gradient(900px 500px at 80% -10%, #D8EFE0, transparent 60%),
+      radial-gradient(700px 500px at -10% 100%, #DAEFEA, transparent 60%),
+      #EAF5EE;
+    display:flex; flex-direction:column;
+    animation: lessonIn .22s ease both;
+  }
+  @keyframes lessonIn{from{opacity:0; transform:scale(.98)}to{opacity:1; transform:scale(1)}}
+
+  .lesson-top{
+    display:flex; align-items:center; gap: 16px;
+    padding: 20px 28px;
+    max-width: 920px; width:100%; margin: 0 auto;
+  }
+  .lt-close{
+    width:40px; height:40px; border-radius: 12px;
+    background:#fff; border:1px solid var(--line);
+    font-size:18px; color: var(--ink-soft); font-weight:900;
+    flex:none;
+    box-shadow: 0 2px 0 rgba(0,0,0,.03);
+  }
+  .lt-close:hover{ color: var(--ink) }
+  .lt-bar{
+    flex:1; height: 14px; border-radius:99px; background: #D8E8DD;
+    overflow:hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+  }
+  .lt-bar-fill{
+    height:100%; background: linear-gradient(90deg, #18B187, var(--brand));
+    border-radius:99px; transition: width .4s cubic-bezier(.2,.8,.2,1);
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,.08), inset 0 2px 0 rgba(255,255,255,.3);
+  }
+  .lt-hearts{display:flex; gap:4px; flex:none}
+  .heart{font-size: 22px; line-height:1; transition: all .2s}
+  .heart.on{ color:#E14B73; text-shadow: 0 1px 0 rgba(0,0,0,.05) }
+  .heart.off{ color:#D8E0DA }
+
+  .lesson-stage{
+    flex:1; max-width: 720px; width:100%; margin: 0 auto;
+    padding: 24px 28px 140px;
+    display:flex; flex-direction:column;
+    overflow-y:auto;
+  }
+  .lesson-title-row{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom: 18px;
+  }
+  .lt-eyebrow{font-size: 13px; letter-spacing:.14em; text-transform:uppercase; font-weight:900; color: var(--brand-deep)}
+  .lt-counter{font-size: 12px; font-weight:900; color: var(--ink-mute); letter-spacing:.04em;
+    background:#fff; padding:5px 10px; border-radius:99px; border:1px solid var(--line)}
+
+  .qbody{
+    animation: qIn .22s cubic-bezier(.2,.8,.2,1) both;
+  }
+  @keyframes qIn{from{opacity:0; transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .big-prompt{
+    font-size: clamp(48px, 9vw, 96px); font-weight: 900;
+    letter-spacing:-.04em; text-align:center;
+    color: var(--ink); padding: 28px 0 36px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .text-prompt{
+    font-size: 24px; font-weight:800; color: var(--ink);
+    text-align:center; padding: 12px 0 24px; line-height:1.25;
+  }
+  .story{
+    background:#fff; border:1px solid var(--line); border-radius: 22px;
+    padding: 22px 24px; display:flex; gap: 16px; align-items:flex-start;
+    box-shadow: var(--shadow); margin-bottom: 22px;
+  }
+  .story-ic{font-size: 32px; line-height:1; flex:none}
+  .story-text{font-size: 18px; font-weight:700; color: var(--ink); line-height:1.45}
+
+  .opts.stack{ display:flex; flex-direction:column; gap: 10px }
+  .opts.grid-2{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 12px }
+  .opt{
+    background:#fff; border: 2px solid var(--line); border-bottom: 4px solid #D8E0DA;
+    border-radius: 16px;
+    padding: 18px 18px;
+    display:flex; align-items:center; gap: 14px;
+    font-size: 20px; font-weight:800; color: var(--ink);
+    text-align:left;
+    transition: transform .1s, border-color .15s, background .15s;
+  }
+  .opt:hover{ border-color: var(--brand-tint); transform: translateY(-1px) }
+  .opt:active{ transform: translateY(1px); border-bottom-width: 2px }
+  .opt-key{
+    width: 32px; height:32px; border-radius:10px;
+    background: var(--card-soft); display:grid; place-items:center;
+    font-size: 13px; font-weight:900; color: var(--ink-soft);
+    border:1px solid var(--line); flex:none;
+  }
+  .opt-text{flex:1}
+  .opt.sel{ border-color: var(--brand); background: #ECF8F2; border-bottom-color: var(--brand) }
+  .opt.sel .opt-key{ background: var(--brand); color:#fff; border-color: var(--brand) }
+  .opt.right{ border-color: var(--brand); background: #DCF3E5; border-bottom-color: var(--brand-deep); color: var(--brand-deep) }
+  .opt.right .opt-key{ background: var(--brand); color:#fff; border-color: var(--brand) }
+  .opt.wrong{ border-color:#E14B73; background:#FFE9EE; border-bottom-color:#B5375A; color:#B5375A }
+  .opt.wrong .opt-key{ background:#E14B73; color:#fff; border-color:#E14B73 }
+  .opt.dim{ opacity:.45 }
+
+  .type-wrap{
+    display:flex; align-items:center; gap: 10px;
+    max-width: 360px; margin: 0 auto;
+  }
+  .type-input{
+    flex:1; font-family: inherit;
+    font-size: 44px; font-weight: 900; letter-spacing:-.02em;
+    text-align:center;
+    background:#fff; border: 2px solid var(--line); border-bottom: 4px solid #D8E0DA;
+    border-radius: 18px; padding: 18px 16px;
+    color: var(--ink);
+    outline:none;
+    font-variant-numeric: tabular-nums;
+  }
+  .type-input:focus{ border-color: var(--brand); border-bottom-color: var(--brand) }
+  .type-input.right{ border-color: var(--brand); background: #DCF3E5; color: var(--brand-deep) }
+  .type-input.wrong{ border-color:#E14B73; background:#FFE9EE; color:#B5375A }
+  .units{font-size:24px; font-weight:900; color: var(--ink-soft)}
+
+  .tap-grid{
+    display:grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    max-width: 540px; margin: 0 auto;
+  }
+  .tap-w{
+    background:#fff; border:2px solid var(--line); border-bottom:4px solid #D8E0DA;
+    border-radius: 14px; padding: 18px 0;
+    font-size: 24px; font-weight:900; color: var(--ink);
+    text-align:center;
+    transition: transform .1s, border-color .15s;
+  }
+  .tap-w:hover{ border-color: var(--brand-tint) }
+  .tap-w.sel{ background: #ECF8F2; border-color: var(--brand); border-bottom-color: var(--brand) }
+  .tap-w.right{ background: #DCF3E5; border-color: var(--brand); color: var(--brand-deep) }
+  .tap-w.wrong{ background:#FFE9EE; border-color:#E14B73; color:#B5375A }
+  .tap-w.missed{ background:#FFF6E0; border-color:#E8B43A; color:#7A5A0E }
+  .tap-w.dim{ opacity:.45 }
+
+  /* match */
+  .match-wrap{ display:grid; grid-template-columns: 1.4fr 1fr; gap: 16px; max-width: 640px; margin: 0 auto }
+  .match-items{ display:flex; flex-direction:column; gap: 8px }
+  .match-item{
+    background:#fff; border:2px solid var(--line); border-bottom:4px solid #D8E0DA;
+    border-radius: 14px; padding: 14px 16px;
+    display:flex; align-items:center; justify-content:space-between; gap: 10px;
+    font-size: 18px; font-weight:800; color: var(--ink); text-align:left;
+  }
+  .match-item.active{ border-color: var(--brand); background:#ECF8F2 }
+  .match-item.placed{ background:#F5FBF7; color: var(--ink-soft) }
+  .match-item.right{ background:#DCF3E5; border-color: var(--brand); color: var(--brand-deep) }
+  .match-item.wrong{ background:#FFE9EE; border-color:#E14B73; color:#B5375A }
+  .match-item .badge{
+    font-size:11px; font-weight:900; padding: 4px 8px; border-radius:99px;
+    background: var(--ink); color:#fff; letter-spacing:.04em;
+  }
+  .match-groups{ display:flex; flex-direction:column; gap: 8px }
+  .match-group{
+    background:#fff; border:2px dashed var(--line);
+    border-radius: 14px; padding: 16px;
+    display:flex; align-items:center; justify-content:space-between;
+    font-size: 16px; font-weight:900; color: var(--ink);
+  }
+  .match-group.ready{ border-color: var(--brand); background:#ECF8F2; border-style:solid }
+  .g-count{
+    background: var(--ink); color:#fff; min-width: 28px; height:28px;
+    border-radius:99px; display:grid; place-items:center; font-size:12px;
+  }
+
+  /* feedback bar */
+  .feedback{
+    position:fixed; left:0; right:0; bottom:0; z-index: 102;
+    background: transparent; padding: 16px 0;
+    border-top: 1px solid var(--line);
+    background: #fff;
+    box-shadow: 0 -8px 28px rgba(15,80,60,.06);
+    transition: background .2s;
+  }
+  .feedback.right{ background: #DCF3E5; border-top-color: #98D8B5 }
+  .feedback.wrong{ background: #FFE9EE; border-top-color: #F2B7C6 }
+  .fb-inner{
+    max-width: 920px; margin: 0 auto; padding: 0 28px;
+    display:flex; align-items:center; gap: 16px;
+  }
+  .fb-ic{
+    width: 50px; height:50px; border-radius: 50%;
+    display:grid; place-items:center; font-size: 22px; font-weight:900; color:#fff;
+    flex:none; box-shadow: 0 4px 0 rgba(0,0,0,.08);
+  }
+  .fb-ic.ok{ background: var(--brand) }
+  .fb-ic.no{ background:#E14B73 }
+  .fb-msg{ flex:1 }
+  .fb-title{ font-size: 18px; font-weight:900; color: var(--ink) }
+  .feedback.right .fb-title{ color: var(--brand-deep) }
+  .feedback.wrong .fb-title{ color:#B5375A }
+  .fb-sub{ font-size: 13px; font-weight:700; color: var(--ink-soft); margin-top: 2px }
+  .fb-btn{
+    background: var(--ink); color:#fff; font-weight:900; font-size: 15px;
+    padding: 14px 22px; border-radius: 14px;
+    border-bottom: 4px solid rgba(0,0,0,.25);
+    transition: transform .1s;
+  }
+  .fb-btn:active{ transform: translateY(2px); border-bottom-width:2px }
+  .fb-btn.ghost{ background:#fff; color: var(--ink-soft); border:2px solid var(--line); border-bottom:4px solid #D8E0DA }
+  .fb-btn.primary{ background: var(--brand); border-bottom-color: var(--brand-deep) }
+  .feedback.right .fb-btn{ background: var(--brand); border-bottom-color: var(--brand-deep) }
+  .feedback.wrong .fb-btn{ background:#E14B73; border-bottom-color:#B5375A }
+  .fb-btn.disabled, .fb-btn:disabled{ opacity:.4; cursor:not-allowed }
+
+  /* quit modal */
+  .qmodal-back{ position:fixed; inset:0; background:rgba(15,42,34,.45); z-index:103; display:grid; place-items:center }
+  .qmodal{ background:#fff; border-radius:24px; padding:24px; max-width:380px; width:calc(100% - 40px); text-align:center }
+  .qmodal h3{ margin: 8px 0 18px; font-size:18px; font-weight:800 }
+  .qmodal-foot{ display:flex; gap: 10px }
+  .qmodal-foot .btn{ flex:1 }
+
+  /* complete screen */
+  .lesson-shell.complete{
+    background:
+      radial-gradient(900px 500px at 50% -10%, #FFE0AE, transparent 60%),
+      radial-gradient(700px 500px at -10% 100%, #DAEFEA, transparent 60%),
+      #FFF8EC;
+  }
+  .complete-card{
+    margin: auto; background:#fff; border-radius: 28px; padding: 36px 36px 30px;
+    max-width: 460px; width: calc(100% - 40px); text-align:center;
+    box-shadow: var(--shadow-lg);
+    border:1px solid var(--line);
+    position:relative; z-index:2;
+    animation: pop .35s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  .celebrate{ margin-top:-80px; margin-bottom: 4px }
+  .celebrate-emoji{
+    width: 96px; height:96px; border-radius: 50%;
+    background: linear-gradient(155deg,#FFD787,#FFA94D);
+    border: 4px solid #fff; box-shadow: 0 12px 30px rgba(255,140,0,.3);
+    margin: 0 auto; display:grid; place-items:center; font-size: 44px;
+    animation: pop .5s cubic-bezier(.2,1.6,.4,1) both;
+  }
+  .comp-stars{ display:flex; gap: 6px; justify-content:center; margin: 14px 0 4px }
+  .big-star{ font-size: 40px; line-height:1; transition: all .3s }
+  .big-star.on{ color:#FFB547; text-shadow: 0 2px 0 rgba(220,140,0,.2); animation: starPop .5s cubic-bezier(.2,1.6,.4,1) both }
+  .big-star.on:nth-child(2){ animation-delay:.12s }
+  .big-star.on:nth-child(3){ animation-delay:.24s }
+  .big-star.off{ color:#E5EAE7 }
+  @keyframes starPop{from{transform:scale(0) rotate(-180deg); opacity:0}to{transform:scale(1) rotate(0); opacity:1}}
+  .comp-banner{ font-size: 32px; font-weight:900; letter-spacing:-.02em; margin: 6px 0 0; color: var(--brand-deep) }
+  .comp-sub{ font-size: 13px; color: var(--ink-soft); font-weight:700; margin-top: 4px }
+  .comp-stats{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    margin: 24px 0;
+  }
+  .cs{ background: var(--card-soft); border-radius: 16px; padding: 14px 6px; border:1px solid var(--line) }
+  .cs-v{ font-size: 22px; font-weight:900; color: var(--brand-deep); font-variant-numeric: tabular-nums }
+  .cs-l{ font-size: 11px; font-weight:800; color: var(--ink-mute); letter-spacing:.08em; text-transform:uppercase; margin-top: 2px }
+  .btn.prim.big{ width: 100%; padding: 18px; font-size: 16px; border-radius: 16px; border-bottom: 4px solid #000; background: var(--ink) }
+
+  /* confetti */
+  .confetti-host{ position:absolute; inset:0; overflow:hidden; pointer-events:none }
+  .confetti{
+    position:absolute; top:-20px; width: 10px; height: 14px;
+    border-radius: 2px;
+    animation: confettiFall 2.4s linear forwards;
+  }
+  @keyframes confettiFall{
+    0%{ transform: translateY(0) rotate(0deg); opacity:1 }
+    100%{ transform: translateY(110vh) rotate(720deg); opacity:.6 }
+  }
+
+  /* toast — XP gained */
+  .toast{
+    position:fixed; top: 70px; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color:#fff; padding: 12px 18px; border-radius:99px;
+    font-weight:900; font-size: 14px; z-index: 200;
+    box-shadow: 0 12px 30px rgba(0,0,0,.2);
+    animation: toastIn .25s ease both, toastOut .3s ease 2.4s forwards;
+    display:flex; align-items:center; gap: 10px;
+  }
+  @keyframes toastIn{from{opacity:0; transform:translate(-50%,-10px)}to{opacity:1;transform:translate(-50%,0)}}
+  @keyframes toastOut{to{opacity:0; transform:translate(-50%,-10px)}}
+  .toast .ic{
+    width: 24px; height:24px; border-radius: 8px;
+    background: linear-gradient(180deg,#FFB347,#FF6B2B); display:grid; place-items:center;
+  }
+</style>
 </head>
-
 <body>
-    <div id="intro" class="intro">
-      <div class="intro-text">
-        <div class="flags">
-          <img src="./img/flag_KZ.png" alt="Қазақша" data-lang="kz" style="width: 30px; cursor: pointer; margin-right: 5px;">
-          <img src="./img/flag_RU.png" alt="Русский" data-lang="ru" style="width: 30px; cursor: pointer; margin-right: 5px;">
-          <img src="./img/flag_UK.png" alt="English" data-lang="en" style="width: 30px; cursor: pointer;">
+<div id="app"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="lesson-runner.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "view": "improved",
+  "mascot": true,
+  "density": "comfortable",
+  "showCallouts": true,
+  "language": "kk"
+}/*EDITMODE-END*/;
+
+// ----- icons (subject) -----
+const IconMath = (p) => (
+  <svg viewBox="0 0 24 24" fill="none" {...p}>
+    <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="2"/>
+    <path d="M7 8h10M9 12h6M7 16h4M14 16l3 3M17 16l-3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+);
+const IconKaz = (p) => (
+  <svg viewBox="0 0 24 24" fill="none" {...p}>
+    <path d="M4 5.5C7 4 10 4 12 5.5C14 4 17 4 20 5.5V19c-3-1.5-6-1.5-8 0c-2-1.5-5-1.5-8 0V5.5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+    <path d="M12 5.5V19" stroke="currentColor" strokeWidth="2"/>
+  </svg>
+);
+const IconWorld = (p) => (
+  <svg viewBox="0 0 24 24" fill="none" {...p}>
+    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
+    <path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18" stroke="currentColor" strokeWidth="2"/>
+  </svg>
+);
+const IconEng = (p) => (
+  <svg viewBox="0 0 24 24" fill="none" {...p}>
+    <path d="M4 18l4-10 4 10M5.5 14h5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M14 12c1.5-2 4-2 5 0c1 2-2 3-2.5 5h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M14 18h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+);
+const Sparkle = (p) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...p}>
+    <path d="M12 2l1.6 4.7L18 8l-4.4 1.3L12 14l-1.6-4.7L6 8l4.4-1.3L12 2zM18 14l.9 2.6L21 17.5l-2.1.9L18 21l-.9-2.6L15 17.5l2.1-.9L18 14z"/>
+  </svg>
+);
+
+const Star = ({on}) => (
+  <svg className={"s " + (on ? "" : "off")} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/>
+  </svg>
+);
+
+// ---- localization for the demo (just the few visible strings) ----
+const L = {
+  kk: {
+    welcome: "Сәлем, Айдана!",
+    welcomeSub: "Бүгін не үйренеміз?",
+    eyebrowPick: "ПӘНДІ ТАҢДА",
+    title: "Бастауыш сыныптарға арналған сабақтар",
+    continueEyebrow: "Жалғастыр",
+    continueTitle: "Көбейту кестесі · 7-сабақ",
+    continueSub: "Сен бұл сабаққа кеше уақыт бөлдің. Енді 5 минут қалды.",
+    continueBtn: "Сабақты жалғастыру",
+    quests: "Бүгінгі тапсырмалар",
+    questsPill: "3 / 4",
+    q1: "Бір сабақты аяқта", q1m: "≈ 8 мин",
+    q2: "20 карточкамен жатта", q2m: "Қазақ тілі",
+    q3: "Бір викторинаны өт", q3m: "Математика",
+    q4: "Достарыңмен ойна", q4m: "Жаңа!",
+    eyebrowAll: "БАРЛЫҚ ПӘНДЕР",
+    all: "Барлық пәндер",
+    seeAll: "Барлығын көру",
+    soon: "ЖАҚЫНДА",
+    notify: "Хабарласам",
+    lessonOf: (a,b)=>`${a}-сабақ / ${b}`,
+    next: "Келесі:",
+    friends: "Сыныптастарың онлайн",
+    friendsSub: "5 дос қазір сабақ оқып жатыр",
+    leaderboard: "Көшбасшылар",
+    mascotMsg: "Қайта оралғаныңа қуаныштымын! Бүгін көбейту кестесін бітірейік 🚀",
+    level: "Деңгей",
+  },
+  ru: {
+    welcome: "Привет, Айдана!",
+    welcomeSub: "Что изучим сегодня?",
+    eyebrowPick: "ВЫБЕРИ ПРЕДМЕТ",
+    title: "Уроки для начальной школы",
+    continueEyebrow: "Продолжить",
+    continueTitle: "Таблица умножения · урок 7",
+    continueSub: "Ты занималась этим вчера. Осталось 5 минут.",
+    continueBtn: "Продолжить урок",
+    quests: "Задания на сегодня",
+    questsPill: "3 / 4",
+    q1: "Закончи один урок", q1m: "≈ 8 мин",
+    q2: "Повтори 20 карточек", q2m: "Казахский",
+    q3: "Пройди викторину", q3m: "Математика",
+    q4: "Играй с друзьями", q4m: "Новое!",
+    eyebrowAll: "ВСЕ ПРЕДМЕТЫ",
+    all: "Все предметы",
+    seeAll: "Смотреть всё",
+    soon: "СКОРО",
+    notify: "Сообщить",
+    lessonOf: (a,b)=>`Урок ${a} из ${b}`,
+    next: "Далее:",
+    friends: "Одноклассники онлайн",
+    friendsSub: "5 друзей сейчас учатся",
+    leaderboard: "Рейтинг",
+    mascotMsg: "С возвращением! Давай добьём таблицу умножения 🚀",
+    level: "Уровень",
+  },
+  en: {
+    welcome: "Hi, Aidana!",
+    welcomeSub: "What shall we learn today?",
+    eyebrowPick: "PICK A SUBJECT",
+    title: "Lessons for primary school",
+    continueEyebrow: "Continue",
+    continueTitle: "Times Tables · Lesson 7",
+    continueSub: "You spent time on this yesterday. Just 5 minutes left.",
+    continueBtn: "Resume lesson",
+    quests: "Today's quests",
+    questsPill: "3 / 4",
+    q1: "Finish a lesson", q1m: "≈ 8 min",
+    q2: "Review 20 cards", q2m: "Kazakh",
+    q3: "Take one quiz", q3m: "Math",
+    q4: "Play with friends", q4m: "New!",
+    eyebrowAll: "ALL SUBJECTS",
+    all: "All subjects",
+    seeAll: "See all",
+    soon: "SOON",
+    notify: "Notify me",
+    lessonOf: (a,b)=>`Lesson ${a} of ${b}`,
+    next: "Next:",
+    friends: "Classmates online",
+    friendsSub: "5 friends are learning right now",
+    leaderboard: "Leaderboard",
+    mascotMsg: "Welcome back! Let's finish times tables today 🚀",
+    level: "Level",
+  }
+};
+
+// subject content (per language) — merged with stateful progress at render time
+const SUB_CONTENT = {
+  kk: [
+    { id:"math", name:"Математика", tag:"Сандар, есептер, теңгелер", color:"math", icon: IconMath, ready:true,
+      lessonTitles:{ 7:"Көбейту кестесі (7-бөлім)", 8:"Мәтінді есептер", 9:"Бөлу" } },
+    { id:"kaz", name:"Қазақ тілі", tag:"Әліпби, дыбыстар, сөздер", color:"kaz", icon: IconKaz, ready:true,
+      lessonTitles:{ 4:"Жуан және жіңішке дыбыстар", 5:"Сөз құрастыру" } },
+    { id:"world", name:"Әлем тану", tag:"Табиғат, жануарлар", color:"world", icon: IconWorld, ready:false, days:12 },
+    { id:"eng", name:"English", tag:"Сөздер мен сөйлемдер", color:"eng", icon: IconEng, ready:false, days:24 },
+  ],
+  ru: [
+    { id:"math", name:"Математика", tag:"Числа, задачи, уравнения", color:"math", icon: IconMath, ready:true,
+      lessonTitles:{ 7:"Таблица умножения (часть 7)", 8:"Текстовые задачи", 9:"Деление" } },
+    { id:"kaz", name:"Казахский", tag:"Алфавит, звуки, слова", color:"kaz", icon: IconKaz, ready:true,
+      lessonTitles:{ 4:"Твёрдые и мягкие звуки", 5:"Составь слово" } },
+    { id:"world", name:"Познание мира", tag:"Природа, животные", color:"world", icon: IconWorld, ready:false, days:12 },
+    { id:"eng", name:"English", tag:"Слова и предложения", color:"eng", icon: IconEng, ready:false, days:24 },
+  ],
+  en: [
+    { id:"math", name:"Math", tag:"Numbers, puzzles, equations", color:"math", icon: IconMath, ready:true,
+      lessonTitles:{ 7:"Times tables (part 7)", 8:"Word problems", 9:"Division" } },
+    { id:"kaz", name:"Kazakh", tag:"Alphabet, sounds, words", color:"kaz", icon: IconKaz, ready:true,
+      lessonTitles:{ 4:"Hard & soft vowels", 5:"Build a word" } },
+    { id:"world", name:"World Studies", tag:"Nature, animals", color:"world", icon: IconWorld, ready:false, days:12 },
+    { id:"eng", name:"English", tag:"Words and sentences", color:"eng", icon: IconEng, ready:false, days:24 },
+  ],
+};
+
+// Maps subject id → which lesson id to launch given current progress
+const LESSON_FOR = (subjectId, lessonNum) => {
+  if (subjectId === 'math') return `math-${lessonNum}`;
+  if (subjectId === 'kaz') return `kaz-${lessonNum}`;
+  return null;
+};
+
+// progress shape: { math:{lesson, stars, of}, kaz:{lesson, stars, of}, totalXP, level, streak, lastPlayed, questsDone:[bool x4] }
+const DEFAULT_PROGRESS = {
+  math: { lesson: 7, stars: 2, of: 24 },
+  kaz:  { lesson: 4, stars: 1, of: 18 },
+  totalXP: 310,
+  level: 7,
+  streak: 12,
+  lastPlayed: null,
+  questsDone: [true, true, true, false],
+};
+
+const subjectsFor = (lang, progress) => {
+  const prog = progress || DEFAULT_PROGRESS;
+  return SUB_CONTENT[lang].map(s => {
+    const p = prog[s.id];
+    if (!s.ready) return s;
+    const lessonNum = p?.lesson ?? 1;
+    const nextTitle = s.lessonTitles[lessonNum] || s.lessonTitles[Object.keys(s.lessonTitles)[0]];
+    return { ...s, lesson: lessonNum, of: p.of, stars: p.stars, next: nextTitle, lessonId: LESSON_FOR(s.id, lessonNum) };
+  });
+};
+
+// ----- ORIGINAL render (for compare) -----
+function OriginalView({ lang }) {
+  const t = L[lang];
+  return (
+    <div className="orig">
+      <div className="orig-shell">
+        <div className="orig-top">
+          <div className="orig-logo">
+            <div className="ic"><Sparkle style={{width:18, height:18, color:'#fff'}} /></div>
+            <div>Мектеп</div>
+          </div>
+          <div style={{display:'flex', gap:10, alignItems:'center'}}>
+            <div className="orig-pill">🏆 {t.level} 7 · 310 <span style={{color:'#E8B43A'}}>★</span></div>
+            <div className="orig-lang">
+              <span className="on"><b style={{background:'#fff',color:'#11A07A',padding:'2px 6px',borderRadius:6,fontSize:11}}>KZ</b> Қазақша</span>
+              <span><b style={{background:'#eee',color:'#777',padding:'2px 6px',borderRadius:6,fontSize:11}}>RU</b> Русский</span>
+              <span><b style={{background:'#eee',color:'#777',padding:'2px 6px',borderRadius:6,fontSize:11}}>GB</b> English</span>
+            </div>
+          </div>
         </div>
-        <h1 data-i18n="greeting_title"></h1>
-        <p data-i18n="greeting_text"></p>
+        <div className="eyebrow">{t.eyebrowPick}</div>
+        <h1>{t.title}</h1>
+        <div className="orig-grid">
+          <div className="orig-card">
+            <div className="ico" style={{background:'#FFE9C8', color:'#E88912'}}><IconMath /></div>
+            <div>
+              <h3>{subjectsFor(lang)[0].name}</h3>
+              <p>{subjectsFor(lang)[0].tag}</p>
+              <div className="bar" style={{background:'#FFB547'}}></div>
+            </div>
+          </div>
+          <div className="orig-card">
+            <div className="ico" style={{background:'#FFD8E1', color:'#E14B73'}}><IconKaz /></div>
+            <div>
+              <h3>{subjectsFor(lang)[1].name}</h3>
+              <p>{subjectsFor(lang)[1].tag}</p>
+              <div className="bar" style={{background:'#E14B73'}}></div>
+            </div>
+          </div>
+          <div className="orig-card soon">
+            <div className="orig-soon-pill">{t.soon}</div>
+            <div className="ico" style={{background:'#CDEBD3', color:'#2D9D5C'}}><IconWorld /></div>
+            <div>
+              <h3 style={{color:'#88a298'}}>{subjectsFor(lang)[2].name}</h3>
+              <p>{subjectsFor(lang)[2].tag}</p>
+            </div>
+          </div>
+          <div className="orig-card soon">
+            <div className="orig-soon-pill">{t.soon}</div>
+            <div className="ico" style={{background:'#DEE3FB', color:'#5764D8'}}><IconEng /></div>
+            <div>
+              <h3 style={{color:'#88a298'}}>{subjectsFor(lang)[3].name}</h3>
+              <p>{subjectsFor(lang)[3].tag}</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <img src="./img/otter-mascot.png" alt="Mascot" class="mascot">
     </div>
+  );
+}
 
-  <div id="mode-select" class="grid container">
+// ----- IMPROVED render -----
+function ImprovedView({ tweaks, setTweak, progress, setProgress, onStartLesson, toast }) {
+  const t = L[tweaks.language];
+  const subs = subjectsFor(tweaks.language, progress);
+  const [open, setOpen] = useState(null);
+  const quests = progress.questsDone;
+  const setQuests = (q) => setProgress(p => ({ ...p, questsDone: q }));
+  const subject = (id) => subs.find(s=>s.id===id);
 
-    <button class="mode-button card" onclick="startGame('basic')">
-      <img src="./img/basic.jpg" alt="1...10 сандар">
-      <div class="label" data-i18n="mode_basic"></div>
-    </button>
+  return (
+    <div className="v2">
+      <div className="topbar">
+        <div className="brand">
+          <div className="brand-mark"><Sparkle style={{color:'#fff'}} /></div>
+          <div>
+            <div className="brand-sub">{t.welcomeSub}</div>
+            <div className="brand-name">{t.welcome}</div>
+          </div>
+        </div>
+        <div className="topbar-right">
+          <div className="chip streak"><div className="flame">🔥</div>{progress.streak}</div>
+          <div className="chip xp">
+            <div style={{display:'flex',flexDirection:'column',lineHeight:1.1,alignItems:'flex-start'}}>
+              <span style={{fontSize:10,letterSpacing:'.1em',color:'var(--ink-mute)',fontWeight:800}}>{t.level} {progress.level}</span>
+              <span style={{fontSize:13,color:'var(--ink)'}}>{progress.totalXP} XP</span>
+            </div>
+            <div className="xp-ring" style={{'--pct': progress.totalXP % 100}}><span>{progress.totalXP % 100}</span></div>
+          </div>
+          <LangChip lang={tweaks.language} onChange={(v)=>setTweak('language', v)} />
+          <div className="avatar">А</div>
+        </div>
+      </div>
 
-    <button class="mode-button card" onclick="startGame('tens')">
-      <img src="./img/tens.png" alt="Ондық сандар">
-      <div class="label" data-i18n="mode_tens"></div>
-    </button>
-    
-    <button class="mode-button card" onclick="startGame('triple')">
-      <img src="./img/triple.png" alt="a+b+c сандар">
-      <div class="label" data-i18n="mode_triple"></div>
-    </button>
+      {/* hero row */}
+      <div className="hero">
+        <div className="continue" onClick={()=>{
+          const mathSub = subs.find(s=>s.id==='math');
+          if (mathSub?.lessonId) onStartLesson(mathSub.lessonId);
+        }}>
+          <div>
+            <div className="continue-eyebrow">{t.continueEyebrow}</div>
+            <h2>{(()=>{ const m=subs.find(s=>s.id==='math'); return m?.next || t.continueTitle; })()}</h2>
+            <div className="sub">{t.continueSub}</div>
+          </div>
+          <div className="continue-row">
+            <div className="continue-meta">
+              <div className="continue-bar"><div style={{width: ((progress.math.lesson / progress.math.of) * 100) + '%'}}></div></div>
+              <div className="continue-bar-text">
+                <span>{t.lessonOf(progress.math.lesson, progress.math.of)}</span>
+                <span>+45 XP</span>
+              </div>
+            </div>
+            <button className="play-btn"><div className="ic">▶</div>{t.continueBtn}</button>
+          </div>
+        </div>
 
-    <button class="mode-button card" onclick="startGame('money')">
-      <img src="./img/tenge.png" alt="Теңге санау">
-      <div class="label" data-i18n="mode_money"></div>
-    </button>
+        <div className="quests">
+          <div className="quests-head">
+            <h3>{t.quests}</h3>
+            <div className="quests-pill">{t.questsPill}</div>
+          </div>
+          {[
+            {title:t.q1, meta:t.q1m, xp:"+10"},
+            {title:t.q2, meta:t.q2m, xp:"+15"},
+            {title:t.q3, meta:t.q3m, xp:"+20"},
+            {title:t.q4, meta:t.q4m, xp:"+25"},
+          ].map((q,i)=>(
+            <div key={i} className={"quest " + (quests[i] ? "done":"")} onClick={()=>{
+              const c=[...quests]; c[i]=!c[i]; setQuests(c);
+            }} style={{cursor:'pointer'}}>
+              <div className="quest-check">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </div>
+              <div className="quest-body">
+                <div className="quest-title">{q.title}</div>
+                <div className="quest-meta">{q.meta}</div>
+              </div>
+              <div className="quest-reward">{q.xp} XP</div>
+            </div>
+          ))}
+        </div>
+      </div>
 
-    <button class="mode-button card" onclick="startGame('compare')">
-      <img src="./img/compare.png" alt="Салыстыру">
-      <div class="label" data-i18n="mode_compare"></div>
-    </button>
+      <div className="section-head">
+        <div>
+          <div className="eyebrow" style={{fontSize:11, letterSpacing:'.2em', fontWeight:800, color:'var(--brand)', textTransform:'uppercase', marginBottom:6}}>{t.eyebrowAll}</div>
+          <h2>{t.all}</h2>
+        </div>
+        <button className="more">{t.seeAll} →</button>
+      </div>
 
-    <button class="mode-button card" onclick="startGame('word')">
-      <img src="./img/word.jpg" alt="Сөздік есеп">
-      <div class="label" data-i18n="mode_word"></div>
-    </button>
-  </div>
-  <div id="game-area" class="game-box" style="display: none;">
-    <div id="question-label"></div>
-    <div id="math-problem"></div>
-    <div id="options"></div>
-    <div id="result"></div>
-    <button id="restart-button" class="restart-button" onclick="restartGame()" style="display: none;">Қайта бастау</button>
-    <button id="back-button" class="back-button" onclick="returnToMenu()" style="display: none;">❌</button>
-  </div>
+      <div className="grid">
+        {subs.map(s => <SubjectCard key={s.id} s={s} t={t}
+          onOpen={()=> s.ready && s.lessonId && onStartLesson(s.lessonId)} />)}
+      </div>
 
+      <div className="friends">
+        <div className="friends-l">
+          <div className="stack">
+            {[
+              {bg:'#FFB547', tx:'Б'},
+              {bg:'#5764D8', tx:'А'},
+              {bg:'#E14B73', tx:'Д'},
+              {bg:'#2D9D5C', tx:'М'},
+              {bg:'#ink', tx:'+1'},
+            ].map((a,i)=>(
+              <div key={i} className="a" style={{background: a.bg==='#ink' ? 'var(--ink)' : a.bg}}>{a.tx}</div>
+            ))}
+          </div>
+          <div>
+            <div className="friends-title">{t.friends}</div>
+            <div className="friends-sub">{t.friendsSub}</div>
+          </div>
+        </div>
+        <div className="friends-r">
+          <button className="leaderboard-btn">🏆 {t.leaderboard}</button>
+        </div>
+      </div>
 
- <script src="./script.js"></script>
+      {tweaks.mascot && (
+        <div className="mascot">
+          <div className="mascot-bubble">{t.mascotMsg}</div>
+          <div className="mascot-body">🦊</div>
+        </div>
+      )}
+
+      {open && <LessonModal s={subject(open)} t={t} onClose={()=>setOpen(null)} />}
+    </div>
+  );
+}
+
+function SubjectCard({ s, t, onOpen }){
+  const Icon = s.icon;
+  if (!s.ready) {
+    return (
+      <div className="subject locked">
+        <div className="subj-top">
+          <div className="subj-ic" style={{background:`var(--${s.color}-bg)`, color:`var(--${s.color}-ic)`, opacity:.7}}><Icon /></div>
+          <div className="soon-pill">{t.soon}</div>
+        </div>
+        <div className="locked-cnt">
+          <div className="subj-name">{s.name}</div>
+          <div className="subj-tag">{s.tag}</div>
+          <div className="countdown">
+            <div className="seg"><b>{s.days}</b><span>day</span></div>
+            <div className="seg"><b>04</b><span>hr</span></div>
+            <div className="seg"><b>22</b><span>min</span></div>
+          </div>
+          <button className="notify-btn">🔔 {t.notify}</button>
+        </div>
+      </div>
+    );
+  }
+  const pct = Math.round((s.lesson / s.of) * 100);
+  return (
+    <div className="subject" onClick={onOpen}>
+      <div className="subj-top">
+        <div className="subj-ic" style={{background:`var(--${s.color}-bg)`, color:`var(--${s.color}-ic)`}}><Icon /></div>
+        <div className="subj-stars">
+          {[0,1,2].map(i => <Star key={i} on={i < s.stars} />)}
+        </div>
+      </div>
+      <div>
+        <div className="subj-name">{s.name}</div>
+        <div className="subj-tag">{s.tag}</div>
+      </div>
+      <div>
+        <div className="subj-prog">
+          <div className="subj-prog-row"><span>{t.lessonOf(s.lesson, s.of)}</span><span>{pct}%</span></div>
+          <div className="subj-bar"><div style={{width: pct+'%', background:`var(--${s.color}-ic)`}}></div></div>
+        </div>
+        <div className="subj-cta">
+          <div className="next"><span className="dot" style={{background:`var(--${s.color}-ic)`}}></span>{t.next} {s.next}</div>
+          <div className="subj-go">→</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LangChip({ lang, onChange }) {
+  const [open, setOpen] = useState(false);
+  const labels = { kk:'KZ', ru:'RU', en:'EN' };
+  const names = { kk:'Қазақша', ru:'Русский', en:'English' };
+  return (
+    <div className="lang-chip" onClick={()=>setOpen(!open)} style={{cursor:'pointer', position:'relative'}}>
+      <div className="lang-flag">{labels[lang]}</div>
+      <span>{names[lang]}</span>
+      <span className="caret">▼</span>
+      {open && (
+        <div style={{position:'absolute', top:'calc(100% + 6px)', right:0, background:'#fff', borderRadius:14, padding:6, boxShadow:'0 10px 30px rgba(0,0,0,.12)', border:'1px solid var(--line)', minWidth:160, zIndex:10}}>
+          {Object.keys(names).map(k => (
+            <div key={k} onClick={(e)=>{e.stopPropagation(); onChange(k); setOpen(false);}}
+              style={{padding:'10px 12px', borderRadius:10, display:'flex', alignItems:'center', gap:8, background: k===lang?'var(--card-soft)':'transparent', cursor:'pointer'}}>
+              <div className="lang-flag" style={{width:22,height:22}}>{labels[k]}</div>
+              <span>{names[k]}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function LessonModal({ s, t, onClose }){
+  if (!s) return null;
+  const Icon = s.icon;
+  const lessons = Array.from({length: s.of}, (_,i)=>({
+    n: i+1,
+    name: `${s.name} · ${t.next.replace(":","")} ${i+1}`,
+    min: 6 + (i%4)*2,
+    done: i+1 < s.lesson, cur: i+1 === s.lesson,
+  })).slice(s.lesson-2, s.lesson+3);
+  return (
+    <div className="modal-back" onClick={onClose}>
+      <div className="modal" onClick={(e)=>e.stopPropagation()}>
+        <div className="modal-head">
+          <div className="modal-ic" style={{background:`var(--${s.color}-bg)`, color:`var(--${s.color}-ic)`}}><Icon /></div>
+          <div>
+            <h3>{s.name}</h3>
+            <div className="modal-sub">{t.lessonOf(s.lesson, s.of)} · {Math.round((s.lesson/s.of)*100)}% complete</div>
+          </div>
+        </div>
+        <div className="modal-list">
+          {lessons.map(l => (
+            <div key={l.n} className={"les " + (l.done?"done":"") + (l.cur?" cur":"")}>
+              <div className="les-n">{l.done ? "✓" : l.n}</div>
+              <div className="les-name">{l.cur ? s.next : l.name}</div>
+              <div className="les-min">{l.min} min</div>
+            </div>
+          ))}
+        </div>
+        <div className="modal-foot">
+          <button className="btn ghost" onClick={onClose}>Close</button>
+          <button className="btn prim">▶ {t.continueBtn}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ----- localStorage progress -----
+const PROGRESS_KEY = 'mektep_progress_v1';
+function loadProgress(){
+  try {
+    const raw = localStorage.getItem(PROGRESS_KEY);
+    if (raw) return { ...DEFAULT_PROGRESS, ...JSON.parse(raw) };
+  } catch(e){}
+  return DEFAULT_PROGRESS;
+}
+function saveProgress(p){
+  try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); } catch(e){}
+}
+
+// ----- root -----
+function App() {
+  const hook = window.useTweaks ? window.useTweaks(TWEAK_DEFAULTS) : [TWEAK_DEFAULTS, ()=>{}];
+  const tweaks = hook[0];
+  const setTweak = hook[1];
+
+  useEffect(()=>{
+    document.body.classList.toggle('dense', tweaks.density === 'dense');
+    document.body.classList.toggle('no-mascot', !tweaks.mascot);
+  }, [tweaks.density, tweaks.mascot]);
+
+  const [showCallouts, setShowCallouts] = useState(true);
+  const [progress, setProgressRaw] = useState(loadProgress);
+  const setProgress = (updater) => {
+    setProgressRaw(prev => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      saveProgress(next);
+      return next;
+    });
+  };
+  const [activeLesson, setActiveLesson] = useState(null); // lessonId or null
+  const [toast, setToast] = useState(null);
+
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(()=>setToast(null), 2800);
+  };
+
+  const startLesson = (lessonId) => {
+    setActiveLesson(lessonId);
+  };
+
+  const handleLessonComplete = ({ lessonId, correct, total, stars, xp }) => {
+    // Parse subject id + lesson number from lessonId, e.g. "math-7"
+    const [subjectId, lessonNumStr] = lessonId.split('-');
+    const lessonNum = parseInt(lessonNumStr, 10);
+    setProgress(prev => {
+      const subj = prev[subjectId] || { lesson: lessonNum, stars: 0, of: 24 };
+      const completed = lessonNum >= subj.lesson; // moving forward only
+      const newLesson = completed ? Math.min(subj.of, lessonNum + 1) : subj.lesson;
+      const newStars = completed ? Math.max(subj.stars, stars) : subj.stars;
+      const newXP = prev.totalXP + xp;
+      const newLevel = Math.floor(newXP / 100) + 1;
+      // Mark "finish a lesson" quest done
+      const newQuests = [...prev.questsDone];
+      newQuests[0] = true;
+      // Subject-specific quest auto-complete
+      if (subjectId === 'kaz' && !newQuests[1]) newQuests[1] = true;
+      if (subjectId === 'math' && !newQuests[2]) newQuests[2] = true;
+      return {
+        ...prev,
+        [subjectId]: { ...subj, lesson: newLesson, stars: newStars },
+        totalXP: newXP,
+        level: newLevel,
+        lastPlayed: new Date().toISOString(),
+        questsDone: newQuests,
+      };
+    });
+    showToast(`+${xp} XP`);
+  };
+
+  // If a lesson is active, show the runner instead of the home view
+  if (activeLesson) {
+    return (
+      <>
+        <window.LessonRunner
+          lessonId={activeLesson}
+          lang={tweaks.language}
+          onClose={()=>setActiveLesson(null)}
+          onComplete={handleLessonComplete}
+        />
+        {toast && (
+          <div className="toast">
+            <div className="ic">⚡</div>
+            <span>{toast}</span>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  return (
+    <>
+      <div className="compare">
+        <button className={tweaks.view==='original' ? 'on' : ''} onClick={()=>setTweak('view', 'original')}>Original sketch</button>
+        <button className={tweaks.view==='improved' ? 'on' : ''} onClick={()=>setTweak('view', 'improved')}>Improved</button>
+      </div>
+
+      {tweaks.view === 'original'
+        ? <OriginalView lang={tweaks.language} />
+        : <ImprovedView tweaks={tweaks} setTweak={setTweak}
+            progress={progress} setProgress={setProgress}
+            onStartLesson={startLesson} />}
+
+      {toast && (
+        <div className="toast">
+          <div className="ic">⚡</div>
+          <span>{toast}</span>
+        </div>
+      )}
+
+      {tweaks.view === 'improved' && showCallouts && (
+        <div className="callouts">
+          <span className="x" onClick={()=>setShowCallouts(false)}>✕</span>
+          <h4>Try it</h4>
+          <ul>
+            <li>Tap the green "Continue" card</li>
+            <li>Or tap Математика / Қазақ тілі</li>
+            <li>Solve 6–10 problems · earn ★ + XP</li>
+            <li>Progress saves automatically</li>
+          </ul>
+        </div>
+      )}
+
+      {window.TweaksPanel && (
+        <window.TweaksPanel title="Tweaks">
+          <window.TweakSection title="View">
+            <window.TweakRadio label="Mode" value={tweaks.view} onChange={(v)=>setTweak('view', v)}
+              options={[{value:'original', label:'Original'}, {value:'improved', label:'Improved'}]} />
+          </window.TweakSection>
+          <window.TweakSection title="Language">
+            <window.TweakSelect label="UI language" value={tweaks.language} onChange={(v)=>setTweak('language', v)}
+              options={[{value:'kk', label:'Қазақша'}, {value:'ru', label:'Русский'}, {value:'en', label:'English'}]} />
+          </window.TweakSection>
+          <window.TweakSection title="Personality">
+            <window.TweakToggle label="Mascot" value={tweaks.mascot} onChange={(v)=>setTweak('mascot', v)} />
+            <window.TweakRadio label="Density" value={tweaks.density} onChange={(v)=>setTweak('density', v)}
+              options={[{value:'comfortable', label:'Comfortable'}, {value:'dense', label:'Dense'}]} />
+            <window.TweakToggle label="Show callouts" value={showCallouts} onChange={(v)=>setShowCallouts(v)} />
+          </window.TweakSection>
+          <window.TweakSection title="Progress">
+            <window.TweakButton label="Reset progress" onClick={()=>{
+              localStorage.removeItem(PROGRESS_KEY);
+              setProgressRaw(DEFAULT_PROGRESS);
+              showToast('Progress reset');
+            }} />
+          </window.TweakSection>
+        </window.TweaksPanel>
+      )}
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('app')).render(<App />);
+</script>
 </body>
 </html>
