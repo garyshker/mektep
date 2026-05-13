@@ -160,46 +160,56 @@ const L = {
 const SUB_CONTENT = {
   kk: [
     { id:"math", name:"Математика", tag:"Қосу, алу, көбейту", color:"math", icon: IconMath, ready:true,
-      lessonTitles:{ 1:"Қосу · 100 ішінде", 2:"Алу · 100 ішінде", 3:"Көбейту кестесі · 2-ге", 4:"Көбейту кестесі · 3-ке" } },
+      lessonTitles:{ 1:"Қосу · 100 ішінде", 2:"Алу · 100 ішінде", 3:"Көбейту кестесі · 2-ге", 4:"Көбейту кестесі · 3-ке", 5:"Көбейту кестесі · 4-ке", 6:"Көбейту кестесі · 5-ке", 7:"Көбейту кестесі · 6-ға", 8:"Бөлу · 2-ге" } },
     { id:"kaz",  name:"Қазақ тілі", tag:"Әліпби, дыбыстар, сөздер", color:"kaz", icon: IconKaz, ready:true,
-      lessonTitles:{ 4:"Жуан және жіңішке дыбыстар", 5:"Сөз құрастыру" } },
-    { id:"world", name:"Дүниетану", tag:"Табиғат, жануарлар", color:"world", icon: IconWorld, ready:false, days:12 },
-    { id:"eng",   name:"English",   tag:"Сөздер мен сөйлемдер", color:"eng", icon: IconEng, ready:false, days:24 },
+      lessonTitles:{ 1:"Қазақ әліпбиі · ерекше әріптер", 2:"Буын · сөзді бөлу", 3:"Жануарлар · сөздік", 4:"Жуан және жіңішке дыбыстар", 5:"Сөз құрастыру", 6:"Түстер" } },
+    { id:"world", name:"Дүниетану", tag:"Табиғат, жануарлар", color:"world", icon: IconWorld, ready:true,
+      lessonTitles:{ 1:"Жыл мезгілдері", 2:"Жабайы жануарлар" } },
+    { id:"eng",   name:"English",   tag:"Сөздер мен сөйлемдер", color:"eng", icon: IconEng, ready:true,
+      lessonTitles:{ 1:"Ағылшынша сандар · 1-10", 2:"Ағылшынша түстер" } },
   ],
   ru: [
     { id:"math", name:"Математика", tag:"Сложение, вычитание, умножение", color:"math", icon: IconMath, ready:true,
-      lessonTitles:{ 1:"Сложение · до 100", 2:"Вычитание · до 100", 3:"Таблица умножения · на 2", 4:"Таблица умножения · на 3" } },
+      lessonTitles:{ 1:"Сложение · до 100", 2:"Вычитание · до 100", 3:"Таблица умножения · на 2", 4:"Таблица умножения · на 3", 5:"Таблица умножения · на 4", 6:"Таблица умножения · на 5", 7:"Таблица умножения · на 6", 8:"Деление · на 2" } },
     { id:"kaz",  name:"Казахский",  tag:"Алфавит, звуки, слова", color:"kaz", icon: IconKaz, ready:true,
-      lessonTitles:{ 4:"Твёрдые и мягкие звуки", 5:"Составь слово" } },
-    { id:"world", name:"Познание мира", tag:"Природа, животные", color:"world", icon: IconWorld, ready:false, days:12 },
-    { id:"eng",   name:"English",       tag:"Слова и предложения", color:"eng", icon: IconEng, ready:false, days:24 },
+      lessonTitles:{ 1:"Казахский алфавит · особые буквы", 2:"Слог · деление слова", 3:"Животные · словарь", 4:"Твёрдые и мягкие звуки", 5:"Составь слово", 6:"Цвета" } },
+    { id:"world", name:"Дүниетану", tag:"Природа, животные", color:"world", icon: IconWorld, ready:true,
+      lessonTitles:{ 1:"Времена года", 2:"Дикие животные" } },
+    { id:"eng",   name:"English",   tag:"Слова и предложения", color:"eng", icon: IconEng, ready:true,
+      lessonTitles:{ 1:"Числа по-английски · 1–10", 2:"Цвета по-английски" } },
   ],
   en: [
     { id:"math", name:"Math",   tag:"Addition, subtraction, times tables", color:"math", icon: IconMath, ready:true,
-      lessonTitles:{ 1:"Addition · within 100", 2:"Subtraction · within 100", 3:"Times tables · ×2", 4:"Times tables · ×3" } },
+      lessonTitles:{ 1:"Addition · within 100", 2:"Subtraction · within 100", 3:"Times tables · ×2", 4:"Times tables · ×3", 5:"Times tables · ×4", 6:"Times tables · ×5", 7:"Times tables · ×6", 8:"Division · ÷2" } },
     { id:"kaz",  name:"Kazakh", tag:"Alphabet, sounds, words", color:"kaz", icon: IconKaz, ready:true,
-      lessonTitles:{ 4:"Hard & soft vowels", 5:"Build a word" } },
-    { id:"world", name:"World Studies", tag:"Nature, animals", color:"world", icon: IconWorld, ready:false, days:12 },
-    { id:"eng",   name:"English",       tag:"Words and sentences", color:"eng", icon: IconEng, ready:false, days:24 },
+      lessonTitles:{ 1:"Kazakh Alphabet · special letters", 2:"Syllables · splitting words", 3:"Animals · vocabulary", 4:"Hard & soft vowels", 5:"Build a word", 6:"Colors" } },
+    { id:"world", name:"World Studies", tag:"Nature, animals", color:"world", icon: IconWorld, ready:true,
+      lessonTitles:{ 1:"Seasons of the Year", 2:"Wild Animals" } },
+    { id:"eng",   name:"English",       tag:"Words and sentences", color:"eng", icon: IconEng, ready:true,
+      lessonTitles:{ 1:"Numbers in English · 1–10", 2:"Colors in English" } },
   ],
 };
 
 const LESSON_FOR = (subjectId, lessonNum) => {
-  if (subjectId === 'math') return `math-${lessonNum}`;
-  if (subjectId === 'kaz')  return `kaz-${lessonNum}`;
+  if (subjectId === 'math')  return `math-${lessonNum}`;
+  if (subjectId === 'kaz')   return `kaz-${lessonNum}`;
+  if (subjectId === 'world') return `world-${lessonNum}`;
+  if (subjectId === 'eng')   return `eng-${lessonNum}`;
   return null;
 };
 
 // ─── Progress ──────────────────────────────────────────────────────
 
 const DEFAULT_PROGRESS = {
-  math: { lesson: 1, stars: 0, of: 4 },
-  kaz:  { lesson: 4, stars: 1, of: 18 },
-  totalXP: 310,
-  level: 7,
-  streak: 12,
+  math:  { lesson: 1, stars: 0, of: 8 },
+  kaz:   { lesson: 1, stars: 0, of: 6 },
+  world: { lesson: 1, stars: 0, of: 2 },
+  eng:   { lesson: 1, stars: 0, of: 2 },
+  totalXP: 0,
+  level: 1,
+  streak: 0,
   lastPlayed: null,
-  questsDone: [true, true, true, false],
+  questsDone: [false, false, false, false],
 };
 
 const PROGRESS_KEY = 'mektep_progress_v1';
@@ -207,7 +217,17 @@ const PROGRESS_KEY = 'mektep_progress_v1';
 function loadProgress() {
   try {
     const raw = localStorage.getItem(PROGRESS_KEY);
-    if (raw) return { ...DEFAULT_PROGRESS, ...JSON.parse(raw) };
+    if (raw) {
+      const saved = JSON.parse(raw);
+      return {
+        ...DEFAULT_PROGRESS,
+        ...saved,
+        math:  { ...DEFAULT_PROGRESS.math,  ...(saved.math  || {}) },
+        kaz:   { ...DEFAULT_PROGRESS.kaz,   ...(saved.kaz   || {}) },
+        world: { ...DEFAULT_PROGRESS.world, ...(saved.world || {}) },
+        eng:   { ...DEFAULT_PROGRESS.eng,   ...(saved.eng   || {}) },
+      };
+    }
   } catch (e) {}
   return DEFAULT_PROGRESS;
 }
@@ -307,16 +327,16 @@ function SubjectCard({ s, t, onOpen }) {
 
 // ─── Lesson modal ──────────────────────────────────────────────────
 
-function LessonModal({ s, t, onClose }) {
+function LessonModal({ s, t, onClose, onStart }) {
   if (!s) return null;
   const Icon = s.icon;
   const lessons = Array.from({ length: s.of }, (_, i) => ({
     n: i + 1,
-    name: `${s.name} · ${t.next.replace(":", "")} ${i + 1}`,
+    name: s.lessonTitles?.[i + 1] || `${s.name} · ${i + 1}`,
     min: 6 + (i % 4) * 2,
     done: i + 1 < s.lesson,
     cur:  i + 1 === s.lesson,
-  })).slice(s.lesson - 2, s.lesson + 3);
+  })).slice(Math.max(0, s.lesson - 2), s.lesson + 3);
   return (
     <div className="modal-back" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -331,14 +351,14 @@ function LessonModal({ s, t, onClose }) {
           {lessons.map(l => (
             <div key={l.n} className={"les " + (l.done ? "done " : "") + (l.cur ? "cur" : "")}>
               <div className="les-n">{l.done ? "✓" : l.n}</div>
-              <div className="les-name">{l.cur ? s.next : l.name}</div>
+              <div className="les-name">{l.name}</div>
               <div className="les-min">{l.min} min</div>
             </div>
           ))}
         </div>
         <div className="modal-foot">
           <button className="btn ghost" onClick={onClose}>Close</button>
-          <button className="btn prim">▶ {t.continueBtn}</button>
+          <button className="btn prim" onClick={() => { onClose(); onStart(s.lessonId); }}>▶ {t.continueBtn}</button>
         </div>
       </div>
     </div>
@@ -347,7 +367,7 @@ function LessonModal({ s, t, onClose }) {
 
 // ─── Home screen ───────────────────────────────────────────────────
 
-function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson }) {
+function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, showToast }) {
   const t = L[tweaks.language];
   const subs = subjectsFor(tweaks.language, progress);
   const [open, setOpen] = useState(null);
@@ -441,13 +461,13 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson }) {
           <div className="eyebrow" style={{ fontSize: 11, letterSpacing: '.2em', fontWeight: 800, color: 'var(--brand)', textTransform: 'uppercase', marginBottom: 6 }}>{t.eyebrowAll}</div>
           <h2>{t.all}</h2>
         </div>
-        <button className="more">{t.seeAll} →</button>
+        <button className="more" onClick={() => showToast?.('Барлық пәндер — жақында!')}>{t.seeAll} →</button>
       </div>
 
       <div className="grid">
         {subs.map(s => (
           <SubjectCard key={s.id} s={s} t={t}
-            onOpen={() => s.ready && s.lessonId && onStartLesson(s.lessonId)} />
+            onOpen={() => s.ready && setOpen(s.id)} />
         ))}
       </div>
 
@@ -464,7 +484,7 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson }) {
           </div>
         </div>
         <div className="friends-r">
-          <button className="leaderboard-btn">🏆 {t.leaderboard}</button>
+          <button className="leaderboard-btn" onClick={() => showToast?.('Рейтинг — жақында!')}>🏆 {t.leaderboard}</button>
         </div>
       </div>
 
@@ -475,7 +495,7 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson }) {
         </div>
       )}
 
-      {open && <LessonModal s={subject(open)} t={t} onClose={() => setOpen(null)} />}
+      {open && <LessonModal s={subject(open)} t={t} onClose={() => setOpen(null)} onStart={onStartLesson} />}
     </div>
   );
 }
@@ -510,24 +530,42 @@ function App() {
   };
 
   const handleLessonComplete = ({ lessonId, correct, total, stars, xp }) => {
-    const [subjectId, lessonNumStr] = lessonId.split('-');
-    const lessonNum = parseInt(lessonNumStr, 10);
+    const parts = lessonId.split('-');
+    const subjectId = parts[0];
+    const lessonNum = parseInt(parts[1], 10);
     setProgress(prev => {
-      const subj = prev[subjectId] || { lesson: lessonNum, stars: 0, of: 24 };
+      const subj = prev[subjectId] || { lesson: lessonNum, stars: 0, of: 8 };
       const advancing = lessonNum >= subj.lesson;
       const newLesson = advancing ? Math.min(subj.of, lessonNum + 1) : subj.lesson;
       const newStars  = advancing ? Math.max(subj.stars, stars) : subj.stars;
       const newXP     = prev.totalXP + xp;
       const newQuests = [...prev.questsDone];
       newQuests[0] = true;
-      if (subjectId === 'kaz'  && !newQuests[1]) newQuests[1] = true;
-      if (subjectId === 'math' && !newQuests[2]) newQuests[2] = true;
+      if (subjectId === 'kaz'   && !newQuests[1]) newQuests[1] = true;
+      if (subjectId === 'math'  && !newQuests[2]) newQuests[2] = true;
+
+      // Real streak calculation
+      const now = new Date();
+      const todayStr = now.toDateString();
+      const yesterday = new Date(now); yesterday.setDate(now.getDate() - 1);
+      const yesterdayStr = yesterday.toDateString();
+      const lastStr = prev.lastPlayed ? new Date(prev.lastPlayed).toDateString() : null;
+      let newStreak = prev.streak || 0;
+      if (lastStr === todayStr) {
+        // already played today, streak unchanged
+      } else if (lastStr === yesterdayStr) {
+        newStreak += 1;
+      } else {
+        newStreak = 1;
+      }
+
       return {
         ...prev,
         [subjectId]: { ...subj, lesson: newLesson, stars: newStars },
         totalXP: newXP,
         level: Math.floor(newXP / 100) + 1,
-        lastPlayed: new Date().toISOString(),
+        streak: newStreak,
+        lastPlayed: now.toISOString(),
         questsDone: newQuests,
       };
     });
@@ -556,6 +594,7 @@ function App() {
         tweaks={tweaks} setTweak={setTweak}
         progress={progress} setProgress={setProgress}
         onStartLesson={(id) => setActiveLesson(id)}
+        showToast={showToast}
       />
       {toast && <div className="toast"><div className="ic">⚡</div><span>{toast}</span></div>}
 
