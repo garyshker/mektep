@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <title>Мектеп — Redesigned</title>
-<meta name="viewport" content="width=1280" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0E8C6B" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -453,6 +456,203 @@
     .hero{ grid-template-columns: 1fr }
   }
 
+  /* ========= MOBILE (≤ 720px) ========= */
+  @media (max-width: 720px) {
+    body{
+      background:
+        radial-gradient(700px 400px at 90% -10%, #D5EFE0 0%, transparent 60%),
+        var(--bg);
+    }
+    .v2{ padding: 14px 14px 100px; }
+    /* compare pill — smaller, below status bar */
+    .compare{
+      top: max(8px, env(safe-area-inset-top));
+      font-size: 11px;
+      padding: 4px;
+    }
+    .compare button{ padding: 6px 10px; }
+
+    /* topbar — compact */
+    .topbar{ margin-bottom: 16px; gap: 8px; }
+    .brand{ gap: 8px; flex-shrink: 1; min-width: 0; }
+    .brand-mark{ width: 38px; height: 38px; border-radius: 11px; }
+    .brand-mark svg{ width: 18px; height: 18px; }
+    .brand-name{ font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .brand-sub{ font-size: 9px; letter-spacing: .1em; }
+    .topbar-right{ gap: 6px; flex-shrink: 0; }
+    .chip{ padding: 7px 10px; font-size: 13px; }
+    .chip.streak .flame{ width: 18px; height: 18px; border-radius: 6px; font-size: 10px; }
+    /* hide level chip on phone — XP chip is enough */
+    .chip.xp{ display: none; }
+    .lang-chip{ padding: 7px 6px 7px 10px; font-size: 12px; }
+    .lang-chip span:not(.caret):not(.lang-flag){ display: none; }
+    .lang-chip .caret{ display: none; }
+    .lang-flag{ width: 20px; height: 20px; font-size: 9px; }
+    .avatar{ width: 38px; height: 38px; border-radius: 11px; font-size: 14px; }
+
+    /* hero — stack */
+    .hero{ gap: 12px; margin-bottom: 18px; }
+    .continue{ padding: 20px 20px; min-height: 0; border-radius: 22px; }
+    .continue h2{ font-size: 24px; margin: 6px 0 4px; }
+    .continue .sub{ font-size: 13px; }
+    .continue-row{ flex-direction: column; align-items: stretch; gap: 14px; margin-top: 16px; }
+    .play-btn{ justify-content: center; padding: 12px 18px; font-size: 14px; }
+    .continue-bar{ height: 8px; }
+
+    /* quests */
+    .quests{ padding: 16px 18px; border-radius: 22px; }
+    .quests h3{ font-size: 14px; }
+    .quest{ padding: 8px 0; gap: 10px; }
+    .quest-check{ width: 24px; height: 24px; border-radius: 8px; border-width: 2px; }
+    .quest-title{ font-size: 13.5px; }
+    .quest-meta{ font-size: 11px; }
+    .quest-reward{ font-size: 11px; padding: 3px 7px; }
+
+    /* section head */
+    .section-head{ margin: 4px 0 12px; }
+    .section-head h2{ font-size: 22px; }
+    .section-head .eyebrow{ font-size: 10px; margin-bottom: 4px; }
+    .section-head .more{ font-size: 12px; }
+
+    /* subject grid — 1 column on tiny screens, 2 col on phones */
+    .grid{ grid-template-columns: 1fr 1fr; gap: 10px; }
+    .subject{ padding: 14px 14px 14px; min-height: 200px; border-radius: 18px; }
+    .subj-ic{ width: 42px; height: 42px; border-radius: 12px; }
+    .subj-ic svg{ width: 22px; height: 22px; }
+    .subj-stars .s{ width: 11px; height: 11px; }
+    .subj-name{ font-size: 16px; margin: 12px 0 2px; }
+    .subj-tag{ font-size: 11px; line-height: 1.3; }
+    .subj-prog-row{ font-size: 10px; margin-bottom: 5px; }
+    .subj-bar{ height: 6px; }
+    .subj-cta .next{ font-size: 10.5px; gap: 4px; line-height: 1.25; }
+    .subj-cta .next .dot{ width: 4px; height: 4px; }
+    .subj-go{ width: 28px; height: 28px; font-size: 12px; flex: none; }
+    .soon-pill{ font-size: 8px; padding: 4px 8px; letter-spacing: .1em; }
+    .countdown{ gap: 4px; margin-top: 10px; }
+    .countdown .seg{ padding: 6px 0; border-radius: 9px; }
+    .countdown .seg b{ font-size: 14px; }
+    .countdown .seg span{ font-size: 8px; }
+    .notify-btn{ font-size: 11px; padding: 7px 11px; }
+
+    /* friends — stack */
+    .friends{ flex-direction: column; gap: 14px; padding: 14px 16px; align-items: stretch; }
+    .friends-l{ gap: 10px; }
+    .friends-title{ font-size: 13px; }
+    .friends-sub{ font-size: 11px; }
+    .stack .a{ width: 30px; height: 30px; font-size: 11px; border-width: 2px; margin-left: -8px; }
+    .leaderboard-btn{ justify-content: center; padding: 12px; font-size: 13px; }
+
+    /* mascot — smaller, no bubble */
+    .mascot{ right: 12px; bottom: 12px; }
+    .mascot-body{ width: 56px; height: 56px; font-size: 26px; border-width: 2px; }
+    .mascot-bubble{ display: none; }
+
+    /* callouts — hide on mobile */
+    .callouts{ display: none; }
+  }
+
+  /* very small phones (iPhone SE) */
+  @media (max-width: 380px) {
+    .grid{ grid-template-columns: 1fr; }
+    .subject{ min-height: 0; }
+    .brand-sub{ display: none; }
+  }
+
+  /* ========= MOBILE — LESSON RUNNER ========= */
+  @media (max-width: 720px) {
+    .lesson-top{
+      padding: max(14px, env(safe-area-inset-top)) 16px 12px;
+      gap: 10px;
+    }
+    .lt-close{ width: 36px; height: 36px; border-radius: 10px; font-size: 16px; }
+    .lt-bar{ height: 12px; }
+    .heart{ font-size: 18px; }
+
+    .lesson-stage{
+      padding: 16px 16px calc(150px + env(safe-area-inset-bottom));
+    }
+    .lesson-title-row{ margin-bottom: 12px; }
+    .lt-eyebrow{ font-size: 11px; letter-spacing: .1em; max-width: 60%; line-height: 1.2; }
+    .lt-counter{ font-size: 11px; padding: 4px 8px; }
+
+    /* big prompt — already uses clamp, but ensure breathing room */
+    .big-prompt{ padding: 12px 0 20px; }
+    .text-prompt{ font-size: 19px; padding: 8px 0 18px; }
+
+    .story{ padding: 16px 18px; gap: 12px; border-radius: 18px; margin-bottom: 16px; }
+    .story-ic{ font-size: 24px; }
+    .story-text{ font-size: 15px; line-height: 1.45; }
+
+    /* options — keep 2 col but compact */
+    .opts.grid-2{ gap: 8px; }
+    .opt{ padding: 14px 14px; font-size: 17px; gap: 10px; border-radius: 14px; }
+    .opt-key{ width: 26px; height: 26px; font-size: 11px; border-radius: 8px; }
+
+    /* type input */
+    .type-input{ font-size: 36px; padding: 16px 12px; border-radius: 16px; }
+
+    /* tap grid — 4 → 3 cols on phone */
+    .tap-grid{ grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .tap-w{ font-size: 20px; padding: 14px 0; border-radius: 12px; }
+
+    /* match — single column with groups underneath */
+    .match-wrap{ grid-template-columns: 1fr; gap: 12px; }
+    .match-items{ gap: 6px; }
+    .match-item{ padding: 12px 14px; font-size: 15px; border-radius: 12px; }
+    .match-item .badge{ font-size: 10px; padding: 3px 6px; }
+    .match-groups{
+      position: sticky; bottom: 92px; z-index: 5;
+      flex-direction: row; gap: 8px;
+      background: rgba(234,245,238,.95); backdrop-filter: blur(8px);
+      padding: 8px; border-radius: 16px;
+      margin-top: 6px;
+    }
+    .match-group{ flex: 1; padding: 12px; font-size: 13px; }
+    .g-count{ min-width: 22px; height: 22px; font-size: 11px; }
+
+    /* feedback bar */
+    .fb-inner{ padding: 0 16px; gap: 12px; }
+    .fb-ic{ width: 40px; height: 40px; font-size: 18px; }
+    .fb-title{ font-size: 15px; }
+    .fb-sub{ font-size: 12px; }
+    .fb-btn{ padding: 12px 16px; font-size: 14px; border-radius: 12px; }
+    .feedback{
+      padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
+    }
+
+    /* complete screen */
+    .complete-card{ padding: 30px 24px 24px; max-width: none; }
+    .celebrate{ margin-top: -60px; }
+    .celebrate-emoji{ width: 76px; height: 76px; font-size: 36px; border-width: 3px; }
+    .big-star{ font-size: 32px; }
+    .comp-banner{ font-size: 26px; }
+    .comp-stats{ margin: 18px 0; }
+    .cs{ padding: 12px 4px; border-radius: 14px; }
+    .cs-v{ font-size: 18px; }
+    .cs-l{ font-size: 9px; }
+    .btn.prim.big{ padding: 16px; font-size: 15px; }
+
+    /* toast */
+    .toast{
+      top: calc(60px + env(safe-area-inset-top));
+      font-size: 13px; padding: 10px 14px;
+    }
+
+    /* hide ORIGINAL view scaling chaos on mobile — show a notice instead via the toggle being smaller; the orig view will simply scroll */
+    .orig{ padding: 16px 12px 60px; }
+    .orig-shell{ padding: 16px 16px 24px; min-height: 0; border-radius: 20px; }
+    .orig h1{ font-size: 32px; margin: 24px 0 16px; }
+    .orig-top{ flex-wrap: wrap; gap: 10px; }
+    .orig-grid{ gap: 10px; }
+    .orig-card{ padding: 14px; min-height: 140px; border-radius: 16px; }
+    .orig-card h3{ font-size: 16px; }
+    .orig-card p{ font-size: 11px; }
+    .orig-card .ico{ width: 40px; height: 40px; border-radius: 11px; font-size: 18px; }
+    .orig-lang{ font-size: 11px; }
+    .orig-lang span{ padding: 6px 8px; }
+    .orig-pill{ font-size: 11px; padding: 7px 11px; }
+  }
+
   /* ========== LESSON RUNNER ========== */
   .lesson-shell{
     position:fixed; inset:0; z-index:100;
@@ -892,7 +1092,7 @@ const L = {
 const SUB_CONTENT = {
   kk: [
     { id:"math", name:"Математика", tag:"Сандар, есептер, теңгелер", color:"math", icon: IconMath, ready:true,
-      lessonTitles:{ 7:"Көбейту кестесі (7-бөлім)", 8:"Мәтінді есептер", 9:"Бөлу" } },
+      lessonTitles:{ 7:"Көбейту кестесі · 2-ге", 8:"Мәтінді есептер (100-ге дейін)", 9:"Уақыт. Сағат" } },
     { id:"kaz", name:"Қазақ тілі", tag:"Әліпби, дыбыстар, сөздер", color:"kaz", icon: IconKaz, ready:true,
       lessonTitles:{ 4:"Жуан және жіңішке дыбыстар", 5:"Сөз құрастыру" } },
     { id:"world", name:"Әлем тану", tag:"Табиғат, жануарлар", color:"world", icon: IconWorld, ready:false, days:12 },
@@ -900,7 +1100,7 @@ const SUB_CONTENT = {
   ],
   ru: [
     { id:"math", name:"Математика", tag:"Числа, задачи, уравнения", color:"math", icon: IconMath, ready:true,
-      lessonTitles:{ 7:"Таблица умножения (часть 7)", 8:"Текстовые задачи", 9:"Деление" } },
+      lessonTitles:{ 7:"Таблица умножения · на 2", 8:"Текстовые задачи (до 100)", 9:"Время. Часы" } },
     { id:"kaz", name:"Казахский", tag:"Алфавит, звуки, слова", color:"kaz", icon: IconKaz, ready:true,
       lessonTitles:{ 4:"Твёрдые и мягкие звуки", 5:"Составь слово" } },
     { id:"world", name:"Познание мира", tag:"Природа, животные", color:"world", icon: IconWorld, ready:false, days:12 },
@@ -908,7 +1108,7 @@ const SUB_CONTENT = {
   ],
   en: [
     { id:"math", name:"Math", tag:"Numbers, puzzles, equations", color:"math", icon: IconMath, ready:true,
-      lessonTitles:{ 7:"Times tables (part 7)", 8:"Word problems", 9:"Division" } },
+      lessonTitles:{ 7:"Times tables · ×2", 8:"Word problems (within 100)", 9:"Time. Reading a clock" } },
     { id:"kaz", name:"Kazakh", tag:"Alphabet, sounds, words", color:"kaz", icon: IconKaz, ready:true,
       lessonTitles:{ 4:"Hard & soft vowels", 5:"Build a word" } },
     { id:"world", name:"World Studies", tag:"Nature, animals", color:"world", icon: IconWorld, ready:false, days:12 },

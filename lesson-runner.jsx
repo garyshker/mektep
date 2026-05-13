@@ -16,77 +16,91 @@ const { useState, useEffect, useRef, useMemo } = React;
 //   word     { kind:'word', story, prompt, options:[...], answer:idx }
 
 const LESSONS = {
-  // ───── Math · Lesson 7 — Times tables ×7 ─────
+  // ───── Math · Lesson 7 — ×2 times table (2 сынып) ─────
   "math-7": {
     id: "math-7",
     subjectId: "math",
     icon: "math",
     titleByLang: {
-      kk: "Көбейту кестесі · 7",
-      ru: "Таблица умножения · 7",
-      en: "Times Tables · 7",
+      kk: "Көбейту кестесі · 2-ге",
+      ru: "Таблица умножения · на 2",
+      en: "Times Tables · ×2",
     },
     introByLang: {
-      kk: "Бүгін 7-ге көбейтуді үйренеміз. Дайынсың ба?",
-      ru: "Сегодня учим умножение на 7. Готова?",
-      en: "Today we learn the 7 times table. Ready?",
+      kk: "2-ге көбейтуді үйренеміз. Бул өте оңай!",
+      ru: "Учим умножение на 2. Это легко!",
+      en: "Today we learn the 2 times table. Easy!",
     },
     questions: [
-      { kind:"mc", big:true, prompt:"7 × 2", options:["12","14","16","21"], answer:1 },
-      { kind:"mc", big:true, prompt:"7 × 3", options:["18","20","21","24"], answer:2 },
-      { kind:"type", prompt:"7 × 4 = ?", answer:28 },
-      { kind:"mc", big:true, prompt:"7 × 5", options:["28","35","42","45"], answer:1 },
+      { kind:"mc", big:true, prompt:"2 × 3", options:["4","5","6","8"], answer:2 },
+      { kind:"mc", big:true, prompt:"2 × 4", options:["6","8","10","12"], answer:1 },
+      { kind:"type", prompt:"2 × 5 = ?", answer:10 },
+      { kind:"mc", big:true, prompt:"2 × 6", options:["10","11","12","14"], answer:2 },
       { kind:"tap",
         promptByLang:{
-          kk:"7-нің көбейтінділерін тап",
-          ru:"Найди произведения числа 7",
-          en:"Tap all multiples of 7"
+          kk:"2-нің көбейтінділерін тап (жұп сандар)",
+          ru:"Найди произведения числа 2 (чётные)",
+          en:"Tap all multiples of 2 (even numbers)"
         },
-        words:["14","18","21","24","28","30","35","40"],
+        words:["4","7","8","11","12","15","16","19"],
         correctIdxs:[0,2,4,6] },
-      { kind:"type", prompt:"7 × 6 = ?", answer:42 },
-      { kind:"mc", big:true, prompt:"7 × 7", options:["42","48","49","56"], answer:2 },
+      { kind:"type", prompt:"2 × 7 = ?", answer:14 },
+      { kind:"mc", big:true, prompt:"2 × 8", options:["14","15","16","18"], answer:2 },
       { kind:"word",
         storyByLang:{
-          kk:"Алмада 7 қалта бар. Әр қалтада 8 алма. Барлығы қанша алма?",
-          ru:"У Алмы 7 пакетов. В каждом по 8 яблок. Сколько всего яблок?",
-          en:"Alma has 7 bags. Each bag has 8 apples. How many apples in total?"
+          kk:"Айдардың 2 дөңгелегі бар. Әр дөңгелекте 7 дөңгелектің дөңгеліктері бар. Барлығы қанша дөңгелек?",
+          ru:"У Айдара 2 велосипеда. У каждого по 2 колеса. Сколько всего колёс?",
+          en:"Aidar has 2 bicycles. Each has 2 wheels. How many wheels in total?"
         },
-        options:["49","54","56","64"], answer:2 },
-      { kind:"type", prompt:"7 × 9 = ?", answer:63 },
-      { kind:"mc", big:true, prompt:"7 × 10", options:["60","70","77","100"], answer:1 },
+        options:["2","3","4","6"], answer:2 },
+      { kind:"type", prompt:"2 × 9 = ?", answer:18 },
+      { kind:"mc", big:true, prompt:"2 × 10", options:["18","20","22","100"], answer:1 },
     ]
   },
 
-  // ───── Math · Lesson 8 — Word problems ─────
+  // ───── Math · Lesson 8 — Word problems within 100 (2 сынып) ─────
   "math-8": {
     id: "math-8",
     subjectId: "math",
     icon: "math",
     titleByLang: {
-      kk: "Мәтінді есептер · 8",
-      ru: "Текстовые задачи · 8",
-      en: "Word Problems · 8",
+      kk: "Мәтінді есептер · 100 көлемінде",
+      ru: "Текстовые задачи · в пределах 100",
+      en: "Word Problems within 100",
     },
     questions: [
       { kind:"word",
         storyByLang:{
-          kk:"Дүкенде 24 теңге тұратын қалам бар. Айдана 3 қалам сатып алды. Қанша теңге төлейді?",
-          ru:"В магазине ручка стоит 24 тенге. Айдана купила 3 ручки. Сколько тенге она заплатит?",
-          en:"A pen costs 24 tenge. Aidana buys 3 pens. How much does she pay?"
+          kk:"Дүкенде бұлка 50 теңге тұрады. Айдана 2 бұлка сатып алды. Қанша теңге төлейді?",
+          ru:"Булка в магазине стоит 50 тенге. Айдана купила 2 булки. Сколько тенге она заплатит?",
+          en:"A bun costs 50 tenge. Aidana buys 2 buns. How much does she pay?"
         },
-        options:["48 ₸","56 ₸","72 ₸","84 ₸"], answer:2 },
-      { kind:"type", prompt:"45 + 28 = ?", answer:73 },
-      { kind:"type", prompt:"100 - 37 = ?", answer:63 },
-      { kind:"mc", big:true, prompt:"6 × 8", options:["42","46","48","54"], answer:2 },
+        options:["50 ₸","75 ₸","100 ₸","150 ₸"], answer:2 },
+      { kind:"type", prompt:"35 + 24 = ?", answer:59 },
+      { kind:"type", prompt:"80 - 27 = ?", answer:53 },
       { kind:"word",
         storyByLang:{
-          kk:"Сыныпта 18 қыз бен 14 ұл бар. Барлығы қанша оқушы?",
-          ru:"В классе 18 девочек и 14 мальчиков. Сколько всего учеников?",
-          en:"There are 18 girls and 14 boys in the class. How many pupils in total?"
+          kk:"Сабақ 9:00-де басталады және 40 минут жүреді. Қашан аяқталады?",
+          ru:"Урок начинается в 9:00 и идёт 40 минут. Когда закончится?",
+          en:"Class starts at 9:00 and lasts 40 minutes. When does it end?"
         },
-        options:["28","30","32","34"], answer:2 },
-      { kind:"type", prompt:"81 ÷ 9 = ?", answer:9 },
+        options:["9:30","9:40","10:00","10:40"], answer:1 },
+      { kind:"mc", big:true, prompt:"4 × 5", options:["15","18","20","25"], answer:2 },
+      { kind:"word",
+        storyByLang:{
+          kk:"2-сыныпта 16 қыз бен 14 ұл бар. Барлығы қанша оқушы?",
+          ru:"Во 2 классе 16 девочек и 14 мальчиков. Сколько всего учеников?",
+          en:"There are 16 girls and 14 boys in 2nd grade. How many pupils?"
+        },
+        options:["24","28","30","32"], answer:2 },
+      { kind:"type", prompt:"100 - 45 = ?", answer:55 },
+      { kind:"word",
+        storyByLang:{
+          kk:"Аружанда 100 теңге бар. Ол 35 теңгеге сусын және 25 теңгеге алма алды. Қанша теңге қалды?",
+          ru:"У Аружан 100 тенге. Он купил сок за 35 тенге и яблоко за 25 тенге. Сколько осталось?",
+          en:"Aruzhan has 100 tenge. She buys juice for 35 ₸ and an apple for 25 ₸. How much is left?"
+        },
+        options:["30 ₸","40 ₸","50 ₸","60 ₸"], answer:1 },
     ]
   },
 
