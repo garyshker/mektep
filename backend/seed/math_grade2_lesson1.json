@@ -1,0 +1,103 @@
+{
+  "subject": "math",
+  "grade_level": 2,
+  "difficulty_tier": 1,
+  "sort_order": 1,
+  "title": {
+    "kk": "Қосу: 10-нан 50-ге дейін",
+    "ru": "Сложение: от 10 до 50",
+    "en": "Addition: 10 to 50"
+  },
+  "description": {
+    "kk": "Екі таңбалы сандарды қосуды үйреніңіз",
+    "ru": "Научитесь складывать двузначные числа",
+    "en": "Learn to add two-digit numbers"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "12 + 15 = ?", "ru": "12 + 15 = ?", "en": "12 + 15 = ?" },
+      "options": [
+        [{"kk":"25","ru":"25","en":"25"}],
+        [{"kk":"27","ru":"27","en":"27"}],
+        [{"kk":"30","ru":"30","en":"30"}],
+        [{"kk":"22","ru":"22","en":"22"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "18 + 7 = ?", "ru": "18 + 7 = ?", "en": "18 + 7 = ?" },
+      "correct_answer": "25",
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "23 + 14 = ?", "ru": "23 + 14 = ?", "en": "23 + 14 = ?" },
+      "options": [
+        [{"kk":"35","ru":"35","en":"35"}],
+        [{"kk":"37","ru":"37","en":"37"}],
+        [{"kk":"38","ru":"38","en":"38"}],
+        [{"kk":"36","ru":"36","en":"36"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "30 + 19 = ?", "ru": "30 + 19 = ?", "en": "30 + 19 = ?" },
+      "correct_answer": "49",
+      "difficulty_score": 2,
+      "time_limit_seconds": 25
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Сәйкестендіріңіз", "ru": "Сопоставьте", "en": "Match the sums" },
+      "pairs": [
+        { "left": "11 + 11", "right": "22" },
+        { "left": "15 + 20", "right": "35" },
+        { "left": "24 + 16", "right": "40" },
+        { "left": "13 + 25", "right": "38" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 3
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "25 + 25 = ?", "ru": "25 + 25 = ?", "en": "25 + 25 = ?" },
+      "correct_answer": "50",
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "word",
+      "prompt": { "kk": "Сыныпта 18 оқушы бар. Тағы 12 оқушы келді. Барлығы қанша?", "ru": "В классе 18 учеников. Пришли ещё 12. Сколько всего?", "en": "There are 18 students in class. 12 more arrived. How many total?" },
+      "options": [
+        [{"kk":"28","ru":"28","en":"28"}],
+        [{"kk":"30","ru":"30","en":"30"}],
+        [{"kk":"32","ru":"32","en":"32"}],
+        [{"kk":"26","ru":"26","en":"26"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 3,
+      "time_limit_seconds": 45
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "17 + 33 = ?", "ru": "17 + 33 = ?", "en": "17 + 33 = ?" },
+      "options": [
+        [{"kk":"48","ru":"48","en":"48"}],
+        [{"kk":"50","ru":"50","en":"50"}],
+        [{"kk":"40","ru":"40","en":"40"}],
+        [{"kk":"45","ru":"45","en":"45"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    }
+  ]
+}

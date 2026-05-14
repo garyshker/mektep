@@ -1,0 +1,103 @@
+{
+  "subject": "math",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 1,
+  "title": {
+    "kk": "Қосу: 1-ден 10-ға дейін",
+    "ru": "Сложение: от 1 до 10",
+    "en": "Addition: 1 to 10"
+  },
+  "description": {
+    "kk": "Қарапайым сандарды қосуды үйреніңіз",
+    "ru": "Научитесь складывать простые числа",
+    "en": "Learn to add simple numbers"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "2 + 3 = ?", "ru": "2 + 3 = ?", "en": "2 + 3 = ?" },
+      "options": [
+        [{ "kk": "4", "ru": "4", "en": "4" }],
+        [{ "kk": "5", "ru": "5", "en": "5" }],
+        [{ "kk": "6", "ru": "6", "en": "6" }],
+        [{ "kk": "3", "ru": "3", "en": "3" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "1 + 4 = ?", "ru": "1 + 4 = ?", "en": "1 + 4 = ?" },
+      "correct_answer": "5",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "3 + 3 = ?", "ru": "3 + 3 = ?", "en": "3 + 3 = ?" },
+      "options": [
+        [{ "kk": "5", "ru": "5", "en": "5" }],
+        [{ "kk": "6", "ru": "6", "en": "6" }],
+        [{ "kk": "7", "ru": "7", "en": "7" }],
+        [{ "kk": "9", "ru": "9", "en": "9" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "5 + 2 = ?", "ru": "5 + 2 = ?", "en": "5 + 2 = ?" },
+      "correct_answer": "7",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "4 + 4 = ?", "ru": "4 + 4 = ?", "en": "4 + 4 = ?" },
+      "options": [
+        [{ "kk": "6", "ru": "6", "en": "6" }],
+        [{ "kk": "7", "ru": "7", "en": "7" }],
+        [{ "kk": "8", "ru": "8", "en": "8" }],
+        [{ "kk": "9", "ru": "9", "en": "9" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Сәйкестендіріңіз", "ru": "Сопоставьте", "en": "Match the sums" },
+      "pairs": [
+        { "left": "1 + 1", "right": "2" },
+        { "left": "2 + 3", "right": "5" },
+        { "left": "4 + 4", "right": "8" },
+        { "left": "3 + 7", "right": "10" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "6 + 3 = ?", "ru": "6 + 3 = ?", "en": "6 + 3 = ?" },
+      "correct_answer": "9",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "5 + 5 = ?", "ru": "5 + 5 = ?", "en": "5 + 5 = ?" },
+      "options": [
+        [{ "kk": "8", "ru": "8", "en": "8" }],
+        [{ "kk": "9", "ru": "9", "en": "9" }],
+        [{ "kk": "10", "ru": "10", "en": "10" }],
+        [{ "kk": "11", "ru": "11", "en": "11" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    }
+  ]
+}

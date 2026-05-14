@@ -1,0 +1,103 @@
+{
+  "subject": "math",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 2,
+  "title": {
+    "kk": "Азайту: 1-ден 10-ға дейін",
+    "ru": "Вычитание: от 1 до 10",
+    "en": "Subtraction: 1 to 10"
+  },
+  "description": {
+    "kk": "Қарапайым сандарды азайтуды үйреніңіз",
+    "ru": "Научитесь вычитать простые числа",
+    "en": "Learn to subtract simple numbers"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "5 - 2 = ?", "ru": "5 - 2 = ?", "en": "5 - 2 = ?" },
+      "options": [
+        [{"kk":"2","ru":"2","en":"2"}],
+        [{"kk":"3","ru":"3","en":"3"}],
+        [{"kk":"4","ru":"4","en":"4"}],
+        [{"kk":"1","ru":"1","en":"1"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "7 - 3 = ?", "ru": "7 - 3 = ?", "en": "7 - 3 = ?" },
+      "correct_answer": "4",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "9 - 4 = ?", "ru": "9 - 4 = ?", "en": "9 - 4 = ?" },
+      "options": [
+        [{"kk":"3","ru":"3","en":"3"}],
+        [{"kk":"4","ru":"4","en":"4"}],
+        [{"kk":"5","ru":"5","en":"5"}],
+        [{"kk":"6","ru":"6","en":"6"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "10 - 6 = ?", "ru": "10 - 6 = ?", "en": "10 - 6 = ?" },
+      "correct_answer": "4",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "8 - 5 = ?", "ru": "8 - 5 = ?", "en": "8 - 5 = ?" },
+      "options": [
+        [{"kk":"2","ru":"2","en":"2"}],
+        [{"kk":"3","ru":"3","en":"3"}],
+        [{"kk":"4","ru":"4","en":"4"}],
+        [{"kk":"5","ru":"5","en":"5"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Сәйкестендіріңіз", "ru": "Сопоставьте", "en": "Match the differences" },
+      "pairs": [
+        { "left": "5 - 1", "right": "4" },
+        { "left": "8 - 2", "right": "6" },
+        { "left": "10 - 3", "right": "7" },
+        { "left": "9 - 9", "right": "0" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "6 - 1 = ?", "ru": "6 - 1 = ?", "en": "6 - 1 = ?" },
+      "correct_answer": "5",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "word",
+      "prompt": { "kk": "Алмада 8 алма бар. Ол 3 алманы берді. Қанша қалды?", "ru": "У Алмы было 8 яблок. Она отдала 3. Сколько осталось?", "en": "Alma had 8 apples. She gave away 3. How many are left?" },
+      "options": [
+        [{"kk":"4","ru":"4","en":"4"}],
+        [{"kk":"5","ru":"5","en":"5"}],
+        [{"kk":"6","ru":"6","en":"6"}],
+        [{"kk":"3","ru":"3","en":"3"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 2,
+      "time_limit_seconds": 45
+    }
+  ]
+}
