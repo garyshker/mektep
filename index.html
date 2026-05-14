@@ -32,6 +32,8 @@
     --kaz-bg: #FFD8E1;  --kaz-ic: #E14B73;
     --world-bg: #CDEBD3; --world-ic: #2D9D5C;
     --eng-bg: #DEE3FB;   --eng-ic: #5764D8;
+    --logic-bg: #EDE9FB; --logic-ic: #7C3AED;
+    --music-bg: #FCE7F3; --music-ic: #DB2777;
   }
   *{box-sizing:border-box}
   html{overflow-x:hidden; max-width:100%}
@@ -158,6 +160,7 @@
     display:inline-flex;align-items:center;
   }
   .lang-chip .caret{font-size:10px;color:var(--ink-mute);margin: 0 4px}
+  .lang-short{ display: none; }
 
   .avatar{
     width: 46px; height:46px; border-radius:14px; background: linear-gradient(145deg,#FFE1B0,#FFC68A);
@@ -485,10 +488,11 @@
     .chip.streak .flame{ width: 18px; height: 18px; border-radius: 6px; font-size: 10px; }
     /* hide level chip on phone — XP chip is enough */
     .chip.xp{ display: none; }
-    .lang-chip{ padding: 7px 6px 7px 10px; font-size: 12px; }
-    .lang-chip span:not(.caret):not(.lang-flag){ display: none; }
+    .lang-chip{ padding: 7px 8px; font-size: 12px; gap: 4px; }
+    .lang-full{ display: none; }
     .lang-chip .caret{ display: none; }
-    .lang-flag{ font-size: 18px; }
+    .lang-flag{ font-size: 16px; }
+    .lang-short{ font-size: 11px; font-weight: 800; letter-spacing: .04em; }
     .avatar{ width: 38px; height: 38px; border-radius: 11px; font-size: 14px; }
 
     /* hero — stack */
@@ -1054,6 +1058,7 @@
   body.dark .match-group.ready{ background:var(--brand-tint) }
   body.dark .li-text{ background:var(--card-soft) }
   body.dark .ob-input{ background:var(--card) }
+  .q-image{ text-align:center; font-size:44px; padding:4px 0 16px; line-height:1.4; letter-spacing:3px }
 </style>
 </head>
 <body>

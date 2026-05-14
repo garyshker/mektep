@@ -56,6 +56,21 @@ const IconEng = (p) => (
     <path d="M14 18h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
   </svg>
 );
+const IconLogic = (p) => (
+  <svg viewBox="0 0 24 24" fill="none" {...p}>
+    <rect x="3" y="3" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="2"/>
+    <rect x="14" y="3" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="2"/>
+    <rect x="3" y="14" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="2"/>
+    <path d="M17.5 14v7M14 17.5h7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+);
+const IconMusic = (p) => (
+  <svg viewBox="0 0 24 24" fill="none" {...p}>
+    <path d="M9 18V6l12-2v12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <circle cx="6" cy="18" r="3" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="18" cy="16" r="3" stroke="currentColor" strokeWidth="2"/>
+  </svg>
+);
 const Sparkle = (p) => (
   <svg viewBox="0 0 24 24" fill="currentColor" {...p}>
     <path d="M12 2l1.6 4.7L18 8l-4.4 1.3L12 14l-1.6-4.7L6 8l4.4-1.3L12 2zM18 14l.9 2.6L21 17.5l-2.1.9L18 21l-.9-2.6L15 17.5l2.1-.9L18 14z"/>
@@ -101,6 +116,8 @@ const L = {
     obPlaceholder: "Атыңды жаз",
     obStart: "Бастайық →",
     darkMode: "Күңгірт тақырып",
+    seeAllToast: "Барлық пәндер — жақында!",
+    leaderboardToast: "Рейтинг — жақында!",
   },
   ru: {
     welcome: (n) => `Привет, ${n || 'Ученик'}!`,
@@ -133,6 +150,8 @@ const L = {
     obPlaceholder: "Твоё имя",
     obStart: "Начнём →",
     darkMode: "Тёмная тема",
+    seeAllToast: "Все предметы — скоро!",
+    leaderboardToast: "Рейтинг — скоро!",
   },
   en: {
     welcome: (n) => `Hi, ${n || 'Student'}!`,
@@ -165,6 +184,8 @@ const L = {
     obPlaceholder: "Your name",
     obStart: "Let's go →",
     darkMode: "Dark mode",
+    seeAllToast: "All subjects — coming soon!",
+    leaderboardToast: "Leaderboard — coming soon!",
   },
 };
 
@@ -180,6 +201,8 @@ const SUB_CONTENT = {
       lessonTitles:{ 1:"Жыл мезгілдері", 2:"Жабайы жануарлар" } },
     { id:"eng",   name:"English",   tag:"Сөздер мен сөйлемдер", color:"eng", icon: IconEng, ready:true,
       lessonTitles:{ 1:"Ағылшынша сандар · 1-10", 2:"Ағылшынша түстер" } },
+    { id:"logic", name:"Логикалық есептер", tag:"Ойын, жұмбақ, логика", color:"logic", icon: IconLogic, ready:false },
+    { id:"music", name:"Музыка",  tag:"Ноталар, ырғақ, ән", color:"music", icon: IconMusic, ready:false },
   ],
   ru: [
     { id:"math", name:"Математика", tag:"Сложение, вычитание, умножение", color:"math", icon: IconMath, ready:true,
@@ -190,6 +213,8 @@ const SUB_CONTENT = {
       lessonTitles:{ 1:"Времена года", 2:"Дикие животные" } },
     { id:"eng",   name:"English",   tag:"Слова и предложения", color:"eng", icon: IconEng, ready:true,
       lessonTitles:{ 1:"Числа по-английски · 1–10", 2:"Цвета по-английски" } },
+    { id:"logic", name:"Логические задачи", tag:"Игры, загадки, логика", color:"logic", icon: IconLogic, ready:false },
+    { id:"music", name:"Музыка",  tag:"Ноты, ритм, пение", color:"music", icon: IconMusic, ready:false },
   ],
   en: [
     { id:"math", name:"Math",   tag:"Addition, subtraction, times tables", color:"math", icon: IconMath, ready:true,
@@ -200,6 +225,8 @@ const SUB_CONTENT = {
       lessonTitles:{ 1:"Seasons of the Year", 2:"Wild Animals" } },
     { id:"eng",   name:"English",       tag:"Words and sentences", color:"eng", icon: IconEng, ready:true,
       lessonTitles:{ 1:"Numbers in English · 1–10", 2:"Colors in English" } },
+    { id:"logic", name:"Logic Puzzles", tag:"Games, riddles & logic", color:"logic", icon: IconLogic, ready:false },
+    { id:"music", name:"Music",  tag:"Notes, rhythm & songs", color:"music", icon: IconMusic, ready:false },
   ],
 };
 
@@ -266,12 +293,14 @@ function subjectsFor(lang, progress) {
 
 function LangChip({ lang, onChange }) {
   const [open, setOpen] = useState(false);
-  const flags = { kk: '🇰🇿', ru: '🇷🇺', en: '🇬🇧' };
-  const names = { kk: 'Қазақша', ru: 'Русский', en: 'English' };
+  const flags  = { kk: '🇰🇿', ru: '🇷🇺', en: '🇬🇧' };
+  const names  = { kk: 'Қазақша', ru: 'Русский', en: 'English' };
+  const shorts = { kk: 'ҚАЗ', ru: 'РУС', en: 'ENG' };
   return (
     <div className="lang-chip" onClick={() => setOpen(!open)} style={{ cursor: 'pointer', position: 'relative' }}>
       <span className="lang-flag">{flags[lang]}</span>
-      <span>{names[lang]}</span>
+      <span className="lang-full">{names[lang]}</span>
+      <span className="lang-short">{shorts[lang]}</span>
       <span className="caret">▼</span>
       {open && (
         <div style={{ position: 'absolute', top: 'calc(100% + 6px)', right: 0, background: '#fff',
@@ -528,7 +557,7 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
           <div className="eyebrow" style={{ fontSize: 11, letterSpacing: '.2em', fontWeight: 800, color: 'var(--brand)', textTransform: 'uppercase', marginBottom: 6 }}>{t.eyebrowAll}</div>
           <h2>{t.all}</h2>
         </div>
-        <button className="more" onClick={() => showToast?.('Барлық пәндер — жақында!')}>{t.seeAll} →</button>
+        <button className="more" onClick={() => showToast?.(t.seeAllToast)}>{t.seeAll} →</button>
       </div>
 
       <div className="grid">
@@ -551,7 +580,7 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
           </div>
         </div>
         <div className="friends-r">
-          <button className="leaderboard-btn" onClick={() => showToast?.('Рейтинг — жақында!')}>🏆 {t.leaderboard}</button>
+          <button className="leaderboard-btn" onClick={() => showToast?.(t.leaderboardToast)}>🏆 {t.leaderboard}</button>
         </div>
       </div>
 

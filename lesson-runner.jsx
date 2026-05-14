@@ -1,5 +1,5 @@
 // Lesson Runner — interactive lesson player for Mektep
-const { useState, useEffect, useRef } = React;
+const { useState, useEffect, useRef, useMemo } = React;
 
 // ────────────────────────────────────────────────────────────────────
 // SOUND SYSTEM  (Web Audio API — no external files)
@@ -85,7 +85,7 @@ const LESSONS = {
         promptByLang:{ kk:"Жауабы 10-нан үлкен болатын мысалдарды тап", ru:"Найди примеры, где сумма больше 10", en:"Tap the sums greater than 10" },
         words:["3+5","4+8","2+6","7+9","1+3","6+7","2+2","5+3"], correctIdxs:[1,3,5] },
       { kind:"type", prompt:"63 + 19 = ?", answer:82 },
-      { kind:"word",
+      { kind:"word", image:"🍎🍐",
         storyByLang:{ kk:"Дүкенде 45 алма мен 38 алмұрт бар. Барлығы қанша жеміс?", ru:"В магазине 45 яблок и 38 груш. Сколько всего фруктов?", en:"A shop has 45 apples and 38 pears. How many fruits total?" },
         options:["73","83","85","87"], answer:1 },
       { kind:"type", prompt:"48 + 36 = ?", answer:84 },
@@ -136,7 +136,7 @@ const LESSONS = {
         words:["4","7","8","11","12","15","16","19"], correctIdxs:[0,2,4,6] },
       { kind:"type", prompt:"2 × 7 = ?", answer:14 },
       { kind:"mc", big:true, prompt:"2 × 8", options:["14","15","16","18"], answer:2 },
-      { kind:"word",
+      { kind:"word", image:"🚲🚲",
         storyByLang:{ kk:"Айдардың 2 велосипеді бар. Әр велосипедтің 2 дөңгелегі. Барлығы қанша дөңгелек?", ru:"У Айдара 2 велосипеда. У каждого по 2 колеса. Сколько колёс?", en:"Aidar has 2 bicycles, each with 2 wheels. How many wheels?" },
         options:["2","3","4","6"], answer:2 },
       { kind:"type", prompt:"2 × 9 = ?", answer:18 },
@@ -159,7 +159,7 @@ const LESSONS = {
         words:["4","6","7","9","11","12","14","15"], correctIdxs:[1,3,5,7] },
       { kind:"type", prompt:"3 × 7 = ?", answer:21 },
       { kind:"mc", big:true, prompt:"3 × 8", options:["20","22","24","27"], answer:2 },
-      { kind:"word",
+      { kind:"word", image:"🏠🪟",
         storyByLang:{ kk:"Үйде 3 қатар терезе. Әр қатарда 4 терезе. Барлығы қанша терезе?", ru:"В доме 3 ряда окон, в каждом по 4. Сколько окон?", en:"A house has 3 rows of 4 windows each. How many windows?" },
         options:["8","10","12","15"], answer:2 },
       { kind:"type", prompt:"3 × 9 = ?", answer:27 },
@@ -184,7 +184,7 @@ const LESSONS = {
       { kind:"mc", big:true, prompt:"4 × 7", options:["24","26","28","30"], answer:2 },
       { kind:"type", prompt:"4 × 8 = ?", answer:32 },
       { kind:"mc", big:true, prompt:"4 × 9", options:["32","34","36","40"], answer:2 },
-      { kind:"word",
+      { kind:"word", image:"🍪🍪🍪🍪",
         storyByLang:{ kk:"Столда 4 кесе тұр. Әр кеседе 4 печенье. Барлығы қанша печенье?", ru:"На столе 4 чашки, в каждой по 4 печенья. Сколько всего?", en:"There are 4 cups with 4 cookies each. How many cookies total?" },
         options:["12","14","16","18"], answer:2 },
     ]
@@ -207,7 +207,7 @@ const LESSONS = {
       { kind:"mc", big:true, prompt:"5 × 7", options:["30","33","35","40"], answer:2 },
       { kind:"type", prompt:"5 × 8 = ?", answer:40 },
       { kind:"mc", big:true, prompt:"5 × 9", options:["40","43","45","50"], answer:2 },
-      { kind:"word",
+      { kind:"word", image:"✏️✏️✏️✏️✏️",
         storyByLang:{ kk:"Партада 5 бала отыр. Әр баланың 5 қаламы бар. Барлығы қанша қалам?", ru:"За партой 5 детей, у каждого 5 карандашей. Сколько карандашей?", en:"5 children each have 5 pencils. How many pencils in total?" },
         options:["20","25","30","35"], answer:1 },
     ]
@@ -230,7 +230,7 @@ const LESSONS = {
       { kind:"mc", big:true, prompt:"6 × 7", options:["36","40","42","45"], answer:2 },
       { kind:"type", prompt:"6 × 8 = ?", answer:48 },
       { kind:"mc", big:true, prompt:"6 × 9", options:["48","52","54","60"], answer:2 },
-      { kind:"word",
+      { kind:"word", image:"🥚🥚🥚🥚🥚🥚",
         storyByLang:{ kk:"Алты қорапта тауықтың жұмыртқасы бар. Әр қорапта 6 жұмыртқа. Барлығы қанша?", ru:"В 6 коробках по 6 яиц. Сколько всего яиц?", en:"6 boxes each hold 6 eggs. How many eggs altogether?" },
         options:["30","34","36","40"], answer:2 },
     ]
@@ -250,7 +250,7 @@ const LESSONS = {
         promptByLang:{ kk:"2-ге тең бөлінетін сандарды тап", ru:"Найди числа, которые делятся на 2 ровно", en:"Tap numbers divisible by 2" },
         words:["8","9","12","13","18","19","22","25"], correctIdxs:[0,2,4,6] },
       { kind:"type", prompt:"18 ÷ 2 = ?", answer:9 },
-      { kind:"word",
+      { kind:"word", image:"🍬🍬🍬🍬🍬🍬  🍬🍬🍬🍬🍬🍬",
         storyByLang:{ kk:"Асыл 12 конфет тапты. Ол Ерланмен тең бөлісті. Асылда қанша конфет қалды?", ru:"Асыл нашёл 12 конфет и поровну поделился с Ерланом. Сколько у Асыла?", en:"Asyl found 12 sweets and shared equally with Erlan. How many does Asyl keep?" },
         options:["4","5","6","7"], answer:2 },
       { kind:"type", prompt:"24 ÷ 2 = ?", answer:12 },
@@ -461,17 +461,17 @@ const LESSONS = {
     titleByLang:{ kk:"Жыл мезгілдері", ru:"Времена года", en:"Seasons of the Year" },
     introByLang:{ kk:"Жылдың 4 мезгілі бар. Олар қандай?", ru:"В году 4 сезона. Какие они?", en:"There are 4 seasons in a year. What are they?" },
     questions:[
-      { kind:"mc",
+      { kind:"mc", image:"🌸 ☀️ 🍂 ❄️",
         promptByLang:{ kk:"Жылдың нешінші мезгілі бар?", ru:"Сколько времён года?", en:"How many seasons are there in a year?" },
         options:["2","3","4","6"], answer:2 },
-      { kind:"tap",
+      { kind:"tap", image:"🗓️",
         promptByLang:{ kk:"Барлық жыл мезгілдерін тап", ru:"Найди все времена года", en:"Tap all four seasons" },
         words:["Көктем","Қар","Жаз","Жел","Күз","Жауын","Қыс","Ай"],
         correctIdxs:[0,2,4,6] },
-      { kind:"mc",
+      { kind:"mc", image:"☀️🌊🏖️",
         promptByLang:{ kk:"«Жаздың» белгісі қандай?", ru:"Что характерно для лета («Жаз»)?", en:"What is a sign of summer («Жаз»)?" },
         options:["Қар жауады","Жапырақ түседі","Ыстық, күн ұзақ","Суық, жел соғады"], answer:2 },
-      { kind:"match",
+      { kind:"match", image:"🌡️",
         promptByLang:{ kk:"Мезгілді оның белгісімен жұптастыр", ru:"Сопоставь сезон с его признаком", en:"Match each season to its sign" },
         groupsByLang:{ kk:["Жылы мезгілдер","Суық мезгілдер"], ru:["Тёплые сезоны","Холодные сезоны"], en:["Warm seasons","Cold seasons"] },
         items:[
@@ -480,10 +480,10 @@ const LESSONS = {
           { text:"Көктем",group:0 },
           { text:"Күз",   group:1 },
         ] },
-      { kind:"mc",
+      { kind:"mc", image:"❄️⛄🌨️",
         promptByLang:{ kk:"Қыста не болады?", ru:"Что происходит зимой?", en:"What happens in winter?" },
         options:["Гүлдер өседі","Жапырақтар жасарады","Қар жауады","Жемістер піседі"], answer:2 },
-      { kind:"word",
+      { kind:"word", image:"🌺🎊",
         storyByLang:{ kk:"Наурыз ай — Қазақстанда Жаңа жыл мерекесі. Ол қай мезгілде болады?", ru:"Наурыз — казахский Новый год. В каком сезоне он отмечается?", en:"Nauryz is Kazakhstan's New Year. In which season does it fall?" },
         options:["Қыс","Көктем","Жаз","Күз"], answer:1 },
     ]
@@ -495,17 +495,17 @@ const LESSONS = {
     titleByLang:{ kk:"Жабайы жануарлар", ru:"Дикие животные", en:"Wild Animals" },
     introByLang:{ kk:"Табиғаттағы жабайы жануарларды танып білейік!", ru:"Познакомимся с дикими животными!", en:"Let's discover wild animals in nature!" },
     questions:[
-      { kind:"mc",
+      { kind:"mc", image:"🌲🏔️🌿",
         promptByLang:{ kk:"Жабайы жануарлар қайда тұрады?", ru:"Где живут дикие животные?", en:"Where do wild animals live?" },
         options:["Үйде","Ормандарда, далада","Мектепте","Дүкенде"], answer:1 },
-      { kind:"tap",
+      { kind:"tap", image:"🐾",
         promptByLang:{ kk:"Жабайы жануарларды тап", ru:"Найди диких животных", en:"Tap the wild animals" },
         words:["бөрі","ит","аю","мысық","жолбарыс","сиыр","түлкі","қой"],
         correctIdxs:[0,2,4,6] },
-      { kind:"mc",
+      { kind:"mc", image:"🐻",
         promptByLang:{ kk:"Қазақстанда орман патшасы деп аталатын жануар?", ru:"Какое животное называют королём леса в Казахстане?", en:"Which animal is called the king of the forest in Kazakhstan?" },
         options:["Аю","Түлкі","Бөрі","Жолбарыс"], answer:0 },
-      { kind:"match",
+      { kind:"match", image:"🗺️",
         promptByLang:{ kk:"Жануарды оның тіршілік ортасымен жұптастыр", ru:"Сопоставь животное со средой обитания", en:"Match the animal to its habitat" },
         groupsByLang:{ kk:["Орман","Дала/Шөл"], ru:["Лес","Степь/Пустыня"], en:["Forest","Steppe/Desert"] },
         items:[
@@ -514,10 +514,10 @@ const LESSONS = {
           { text:"бөрі",  group:0 },
           { text:"түйе",  group:1 },
         ] },
-      { kind:"mc",
+      { kind:"mc", image:"🐯",
         promptByLang:{ kk:"Жолбарыстың аяғы нешеу?", ru:"Сколько лап у тигра?", en:"How many legs does a tiger have?" },
         options:["2","4","6","8"], answer:1 },
-      { kind:"word",
+      { kind:"word", image:"🦁🐻🐯",
         storyByLang:{ kk:"Мектепте зоопаркқа барды. Балалар аю мен жолбарысты көрді. Олар қандай жануарлар?", ru:"Класс поехал в зоопарк. Дети увидели аю и жолбарыс. Какие это животные?", en:"The class visited a zoo and saw аю and жолбарыс. What kind of animals are they?" },
         options:["Үй жануарлары","Жабайы жануарлар","Құстар","Балықтар"], answer:1 },
     ]
@@ -529,17 +529,17 @@ const LESSONS = {
     titleByLang:{ kk:"Ағылшынша сандар · 1-10", ru:"Числа по-английски · 1–10", en:"Numbers in English · 1–10" },
     introByLang:{ kk:"Ағылшынша 1-ден 10-ға дейін санауды үйренейік!", ru:"Выучим счёт от 1 до 10 по-английски!", en:"Let's learn to count from 1 to 10 in English!" },
     questions:[
-      { kind:"mc",
+      { kind:"mc", image:"🔵🔵🔵",
         promptByLang:{ kk:"«Three» нешені білдіреді?", ru:"Что означает «Three»?", en:"What number is «Three»?" },
         options:["1","2","3","4"], answer:2 },
-      { kind:"mc",
+      { kind:"mc", image:"⭐⭐⭐⭐⭐⭐⭐",
         promptByLang:{ kk:"«7» ағылшынша қалай жазылады?", ru:"Как по-английски пишется «7»?", en:"How do you write «7» in English?" },
         options:["six","seven","eight","nine"], answer:1 },
-      { kind:"tap",
+      { kind:"tap", image:"🔢",
         promptByLang:{ kk:"1-ден 5-ке дейінгі сандарды ағылшынша тап", ru:"Найди числа от 1 до 5 по-английски", en:"Tap the English words for numbers 1–5" },
         words:["one","six","two","seven","three","eight","four","nine","five","ten"],
         correctIdxs:[0,2,4,6,8] },
-      { kind:"match",
+      { kind:"match", image:"🔢",
         promptByLang:{ kk:"Санды оның ағылшынша атауымен жұптастыр", ru:"Сопоставь число с английским словом", en:"Match the number to its English word" },
         groupsByLang:{ kk:["1–5","6–10"], ru:["1–5","6–10"], en:["1–5","6–10"] },
         items:[
@@ -550,10 +550,10 @@ const LESSONS = {
           { text:"two",   group:0 },
           { text:"nine",  group:1 },
         ] },
-      { kind:"mc",
+      { kind:"mc", image:"🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵",
         promptByLang:{ kk:"«Ten» нешені білдіреді?", ru:"Что означает «Ten»?", en:"What number is «Ten»?" },
         options:["8","9","10","11"], answer:2 },
-      { kind:"word",
+      { kind:"word", image:"🧮",
         storyByLang:{ kk:"Мұғалім 3+4 есебін берді. Жауап ағылшынша қандай?", ru:"Учитель дал задание 3+4. Как ответ по-английски?", en:"The teacher set the sum 3+4. What is the answer in English?" },
         options:["six","seven","eight","nine"], answer:1 },
     ]
@@ -565,17 +565,17 @@ const LESSONS = {
     titleByLang:{ kk:"Ағылшынша түстер", ru:"Цвета по-английски", en:"Colors in English" },
     introByLang:{ kk:"Ағылшынша түстерді үйренейік!", ru:"Выучим названия цветов по-английски!", en:"Let's learn color names in English!" },
     questions:[
-      { kind:"mc",
+      { kind:"mc", image:"🟥",
         promptByLang:{ kk:"«Red» нені білдіреді?", ru:"Что означает «Red»?", en:"What does «Red» mean?" },
         options:["Жасыл / Green","Сары / Yellow","Қызыл / Red","Көк / Blue"], answer:2 },
-      { kind:"mc",
+      { kind:"mc", image:"🟩",
         promptByLang:{ kk:"«Жасыл» ағылшынша қалай?", ru:"Как «зелёный» по-английски?", en:"How do you say 'green' in English?" },
         options:["blue","red","yellow","green"], answer:3 },
-      { kind:"tap",
+      { kind:"tap", image:"🎨",
         promptByLang:{ kk:"Ағылшынша түс атауларын тап", ru:"Найди английские названия цветов", en:"Tap the English color words" },
         words:["red","gul","blue","qyzyl","green","kok","yellow","zhashyl"],
         correctIdxs:[0,2,4,6] },
-      { kind:"match",
+      { kind:"match", image:"🌈",
         promptByLang:{ kk:"Ағылшынша түсті қазақшасымен жұптастыр", ru:"Сопоставь цвет на английском с казахским", en:"Match the English color to its Kazakh translation" },
         groupsByLang:{ kk:["Негізгі түстер","Қосымша түстер"], ru:["Основные цвета","Дополнительные цвета"], en:["Primary colors","Secondary colors"] },
         items:[
@@ -586,10 +586,10 @@ const LESSONS = {
           { text:"yellow", group:0 },
           { text:"green",  group:1 },
         ] },
-      { kind:"mc",
+      { kind:"mc", image:"🌤️",
         promptByLang:{ kk:"Аспан ағылшынша қандай түс?", ru:"Какого цвета небо по-английски?", en:"What color is the sky in English?" },
         options:["red","green","yellow","blue"], answer:3 },
-      { kind:"word",
+      { kind:"word", image:"🟨",
         storyByLang:{ kk:"Астананың байрағы — зеңгір мен сары. «Сары» ағылшынша қалай?", ru:"Флаг Астаны — голубой и жёлтый. Как «сары» по-английски?", en:"Astana's flag is blue and yellow. What is «сары» in English?" },
         options:["blue","red","yellow","green"], answer:2 },
     ]
@@ -657,6 +657,7 @@ function QMC({ q, lang, locked, picked, onPick }) {
   const prompt = q.promptByLang ? pickLang(q.promptByLang, lang) : q.prompt;
   return (
     <div className="qbody">
+      {q.image && <div className="q-image">{q.image}</div>}
       {q.big ? <div className="big-prompt">{prompt}</div> : <div className="text-prompt">{prompt}</div>}
       <div className={"opts " + (q.big ? "grid-2" : "stack")}>
         {q.options.map((o, i) => {
@@ -684,6 +685,7 @@ function QType({ q, lang, locked, value, onChange, correct }) {
   useEffect(()=>{ if (!locked) setTimeout(()=>inputRef.current?.focus(), 80); }, [q, locked]);
   return (
     <div className="qbody">
+      {q.image && <div className="q-image">{q.image}</div>}
       <div className="big-prompt">{prompt}</div>
       <div className="type-wrap">
         <input
@@ -704,13 +706,25 @@ function QType({ q, lang, locked, value, onChange, correct }) {
 
 function QTap({ q, lang, locked, picked, onToggle }) {
   const prompt = q.promptByLang ? pickLang(q.promptByLang, lang) : q.prompt;
+  // Shuffle display order once per question mount so correct answers
+  // aren't always at predictable even positions (0,2,4,6…)
+  const shuffled = useMemo(() => {
+    const arr = q.words.map((_, i) => i);
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr; // shuffled[displayPos] = originalIndex
+  }, [q]);
   return (
     <div className="qbody">
+      {q.image && <div className="q-image">{q.image}</div>}
       <div className="text-prompt">{prompt}</div>
       <div className="tap-grid">
-        {q.words.map((w,i)=>{
-          const isCorrectAns = q.correctIdxs.includes(i);
-          const isPicked = picked.includes(i);
+        {shuffled.map((origIdx) => {
+          const w = q.words[origIdx];
+          const isCorrectAns = q.correctIdxs.includes(origIdx);
+          const isPicked = picked.includes(origIdx);
           let cls = "tap-w";
           if (locked) {
             if (isCorrectAns && isPicked) cls += " right";
@@ -718,7 +732,7 @@ function QTap({ q, lang, locked, picked, onToggle }) {
             else if (!isCorrectAns && isPicked) cls += " wrong";
             else cls += " dim";
           } else if (isPicked) cls += " sel";
-          return <button key={i} className={cls} onClick={()=>!locked && onToggle(i)}>{w}</button>;
+          return <button key={origIdx} className={cls} onClick={()=>!locked && onToggle(origIdx)}>{w}</button>;
         })}
       </div>
     </div>
@@ -729,6 +743,7 @@ function QWord({ q, lang, locked, picked, onPick }) {
   const story = pickLang(q.storyByLang, lang);
   return (
     <div className="qbody">
+      {q.image && <div className="q-image">{q.image}</div>}
       <div className="story">
         <div className="story-ic">📖</div>
         <div className="story-text">{story}</div>
