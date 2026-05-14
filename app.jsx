@@ -26,6 +26,7 @@ const TWEAK_DEFAULTS = {
   density: "comfortable",
   showCallouts: true,
   language: "kk",
+  darkMode: false,
 };
 
 // ─── Subject icons ─────────────────────────────────────────────────
@@ -70,7 +71,7 @@ const Star = ({ on }) => (
 
 const L = {
   kk: {
-    welcome: "Сәлем, Али!",
+    welcome: (n) => `Сәлем, ${n || 'Оқушы'}!`,
     welcomeSub: "Бүгін не үйренеміз?",
     eyebrowPick: "ПӘНДІ ТАҢДА",
     title: "Бастауыш сыныптарға арналған сабақтар",
@@ -96,9 +97,13 @@ const L = {
     leaderboard: "Көшбасшылар",
     mascotMsg: "Қайта оралғаныңа қуаныштымын! Бүгін көбейту кестесін бітірейік 🚀",
     level: "Деңгей",
+    obSub: "Атыңды жаз, оқуды бастайық!",
+    obPlaceholder: "Атыңды жаз",
+    obStart: "Бастайық →",
+    darkMode: "Күңгірт тақырып",
   },
   ru: {
-    welcome: "Привет, Али!",
+    welcome: (n) => `Привет, ${n || 'Ученик'}!`,
     welcomeSub: "Что изучим сегодня?",
     eyebrowPick: "ВЫБЕРИ ПРЕДМЕТ",
     title: "Уроки для начальной школы",
@@ -124,9 +129,13 @@ const L = {
     leaderboard: "Рейтинг",
     mascotMsg: "С возвращением! Давай добьём таблицу умножения 🚀",
     level: "Уровень",
+    obSub: "Напиши своё имя и начнём учиться!",
+    obPlaceholder: "Твоё имя",
+    obStart: "Начнём →",
+    darkMode: "Тёмная тема",
   },
   en: {
-    welcome: "Hi, Ali!",
+    welcome: (n) => `Hi, ${n || 'Student'}!`,
     welcomeSub: "What shall we learn today?",
     eyebrowPick: "PICK A SUBJECT",
     title: "Lessons for primary school",
@@ -152,6 +161,10 @@ const L = {
     leaderboard: "Leaderboard",
     mascotMsg: "Welcome back! Let's finish times tables today 🚀",
     level: "Level",
+    obSub: "Enter your name and let's start learning!",
+    obPlaceholder: "Your name",
+    obStart: "Let's go →",
+    darkMode: "Dark mode",
   },
 };
 
@@ -201,6 +214,7 @@ const LESSON_FOR = (subjectId, lessonNum) => {
 // ─── Progress ──────────────────────────────────────────────────────
 
 const DEFAULT_PROGRESS = {
+  name: '',
   math:  { lesson: 1, stars: 0, of: 8 },
   kaz:   { lesson: 1, stars: 0, of: 6 },
   world: { lesson: 1, stars: 0, of: 2 },
@@ -209,6 +223,7 @@ const DEFAULT_PROGRESS = {
   level: 1,
   streak: 0,
   lastPlayed: null,
+  lastSubjectId: 'math',
   questsDone: [false, false, false, false],
 };
 
@@ -365,6 +380,47 @@ function LessonModal({ s, t, onClose, onStart }) {
   );
 }
 
+// ─── Onboarding ────────────────────────────────────────────────────
+
+function OnboardingScreen({ onDone }) {
+  const [name, setName] = useState('');
+  const [lang, setLang] = useState('kk');
+  const t = L[lang];
+  const flags = { kk: '🇰🇿', ru: '🇷🇺', en: '🇬🇧' };
+  const labels = { kk: 'Қаз', ru: 'Рус', en: 'Eng' };
+
+  const submit = () => { if (name.trim()) onDone(name.trim(), lang); };
+
+  return (
+    <div className="onboarding">
+      <div className="ob-logo"><Sparkle style={{ color: '#fff', width: 36, height: 36 }} /></div>
+      <h1 className="ob-title">iМектеп</h1>
+      <p className="ob-sub">{t.obSub}</p>
+      <div className="ob-form">
+        <input
+          className="ob-input"
+          placeholder={t.obPlaceholder}
+          value={name}
+          onChange={e => setName(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && submit()}
+          autoFocus
+          maxLength={30}
+        />
+        <div className="ob-langs">
+          {['kk','ru','en'].map(k => (
+            <button key={k} className={"ob-lang " + (lang === k ? "on" : "")} onClick={() => setLang(k)}>
+              {flags[k]} {labels[k]}
+            </button>
+          ))}
+        </div>
+        <button className="ob-start" disabled={!name.trim()} onClick={submit}>
+          {t.obStart}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ─── Home screen ───────────────────────────────────────────────────
 
 function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, showToast }) {
@@ -383,7 +439,7 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
           <div className="brand-mark"><Sparkle style={{ color: '#fff' }} /></div>
           <div>
             <div className="brand-sub">{t.welcomeSub}</div>
-            <div className="brand-name">{t.welcome}</div>
+            <div className="brand-name">{t.welcome(progress.name)}</div>
           </div>
         </div>
         <div className="topbar-right">
@@ -397,35 +453,46 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
               <span>{progress.totalXP % 100}</span>
             </div>
           </div>
+          <button
+            className="chip"
+            style={{ fontSize: 18, padding: '7px 10px', lineHeight: 1 }}
+            onClick={() => setTweak('darkMode', !tweaks.darkMode)}
+            title={tweaks.darkMode ? 'Light mode' : 'Dark mode'}
+          >{tweaks.darkMode ? '☀️' : '🌙'}</button>
           <LangChip lang={tweaks.language} onChange={(v) => setTweak('language', v)} />
-          <div className="avatar">А</div>
+          <div className="avatar">{(progress.name || 'А')[0].toUpperCase()}</div>
         </div>
       </div>
 
       {/* ── hero: continue + quests ── */}
       <div className="hero">
-        <div className="continue" style={{ cursor: 'pointer' }} onClick={() => {
-          const m = subs.find(s => s.id === 'math');
-          if (m?.lessonId) onStartLesson(m.lessonId);
-        }}>
-          <div>
-            <div className="continue-eyebrow">{t.continueEyebrow}</div>
-            <h2>{subs.find(s => s.id === 'math')?.next || t.continueTitle}</h2>
-            <div className="sub">{t.continueSub}</div>
-          </div>
-          <div className="continue-row">
-            <div className="continue-meta">
-              <div className="continue-bar">
-                <div style={{ width: ((progress.math.lesson / progress.math.of) * 100) + '%' }}></div>
+        {(() => {
+          const lastSub = subs.find(s => s.id === (progress.lastSubjectId || 'math')) || subs.find(s => s.ready);
+          const subProg = progress[lastSub?.id] || { lesson: 1, of: 8 };
+          return (
+            <div className="continue" style={{ cursor: 'pointer' }} onClick={() => {
+              if (lastSub?.lessonId) onStartLesson(lastSub.lessonId);
+            }}>
+              <div>
+                <div className="continue-eyebrow">{t.continueEyebrow} · {lastSub?.name}</div>
+                <h2>{lastSub?.next || t.continueTitle}</h2>
+                <div className="sub">{t.continueSub}</div>
               </div>
-              <div className="continue-bar-text">
-                <span>{t.lessonOf(progress.math.lesson, progress.math.of)}</span>
-                <span>+45 XP</span>
+              <div className="continue-row">
+                <div className="continue-meta">
+                  <div className="continue-bar">
+                    <div style={{ width: ((subProg.lesson / subProg.of) * 100) + '%' }}></div>
+                  </div>
+                  <div className="continue-bar-text">
+                    <span>{t.lessonOf(subProg.lesson, subProg.of)}</span>
+                    <span>+45 XP</span>
+                  </div>
+                </div>
+                <button className="play-btn"><div className="ic">▶</div>{t.continueBtn}</button>
               </div>
             </div>
-            <button className="play-btn"><div className="ic">▶</div>{t.continueBtn}</button>
-          </div>
-        </div>
+          );
+        })()}
 
         <div className="quests">
           <div className="quests-head">
@@ -509,11 +576,12 @@ function App() {
   useEffect(() => {
     document.body.classList.toggle('dense', tweaks.density === 'dense');
     document.body.classList.toggle('no-mascot', !tweaks.mascot);
-  }, [tweaks.density, tweaks.mascot]);
+    document.body.classList.toggle('dark', !!tweaks.darkMode);
+  }, [tweaks.density, tweaks.mascot, tweaks.darkMode]);
 
   const [showCallouts, setShowCallouts] = useState(true);
   const [progress, setProgressRaw] = useState(loadProgress);
-  const [activeLesson, setActiveLesson]  = useState(null);
+  const [activeLesson, setActiveLesson] = useState(null);
   const [toast, setToast] = useState(null);
 
   const setProgress = (updater) => {
@@ -566,11 +634,22 @@ function App() {
         level: Math.floor(newXP / 100) + 1,
         streak: newStreak,
         lastPlayed: now.toISOString(),
+        lastSubjectId: subjectId,
         questsDone: newQuests,
       };
     });
     showToast(`+${xp} XP`);
   };
+
+  // ── Onboarding ──
+  if (!progress.name) {
+    return (
+      <OnboardingScreen onDone={(name, lang) => {
+        setProgress(p => ({ ...p, name }));
+        setTweak('language', lang);
+      }} />
+    );
+  }
 
   // ── Active lesson ──
   if (activeLesson) {
@@ -619,6 +698,7 @@ function App() {
           </TweakSection>
           <TweakSection title="Personality">
             <TweakToggle label="Mascot" value={tweaks.mascot} onChange={(v) => setTweak('mascot', v)} />
+            <TweakToggle label="Dark mode" value={tweaks.darkMode} onChange={(v) => setTweak('darkMode', v)} />
             <TweakRadio label="Density" value={tweaks.density} onChange={(v) => setTweak('density', v)}
               options={[{value:'comfortable',label:'Comfortable'},{value:'dense',label:'Dense'}]} />
             <TweakToggle label="Show callouts" value={showCallouts} onChange={(v) => setShowCallouts(v)} />
@@ -628,6 +708,9 @@ function App() {
               localStorage.removeItem(PROGRESS_KEY);
               setProgressRaw(DEFAULT_PROGRESS);
               showToast('Progress reset');
+            }} />
+            <TweakButton label="Change name" onClick={() => {
+              setProgress(p => ({ ...p, name: '' }));
             }} />
           </TweakSection>
         </TweaksPanel>

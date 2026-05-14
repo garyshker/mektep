@@ -613,6 +613,7 @@ const RT = {
     yes:"Иә", no:"Жоқ",
     matchPrompt:"Жұптарды тауып ал",
     streakBonus:"+10 күн қатарынан",
+    startLesson:"Бастайық!", questions:"сұрақ",
   },
   ru: {
     check:"Проверить", continue:"Продолжить", next:"Дальше",
@@ -627,6 +628,7 @@ const RT = {
     yes:"Да", no:"Нет",
     matchPrompt:"Найди пары",
     streakBonus:"+10 дней подряд",
+    startLesson:"Начнём!", questions:"вопросов",
   },
   en: {
     check:"Check", continue:"Continue", next:"Next",
@@ -641,6 +643,7 @@ const RT = {
     yes:"Yes", no:"No",
     matchPrompt:"Find the pairs",
     streakBonus:"+10 day streak",
+    startLesson:"Let's go!", questions:"questions",
   }
 };
 
@@ -801,12 +804,37 @@ function QMatch({ q, lang, locked, state, setState }) {
 // LessonRunner
 // ────────────────────────────────────────────────────────────────────
 
+function IntroScreen({ lesson, lang, rt, total, onStart, onClose }) {
+  const title = pickLang(lesson.titleByLang, lang);
+  const intro = pickLang(lesson.introByLang, lang);
+  return (
+    <div className="lesson-shell">
+      <div className="lesson-top">
+        <button className="lt-close" onClick={onClose} aria-label="Quit">✕</button>
+        <div className="lt-bar"><div className="lt-bar-fill" style={{width:'0%'}} /></div>
+        <div style={{width:40}} />
+      </div>
+      <div className="lesson-intro">
+        <div className="li-subject">{lesson.subjectId}</div>
+        <div className="li-title">{title}</div>
+        <div className="li-text">{intro}</div>
+        <div className="li-meta">
+          <div className="li-pill">📝 {total} {rt.questions}</div>
+          <div className="li-pill">⏱ ~{Math.ceil(total * 0.5)} min</div>
+        </div>
+        <button className="li-start" onClick={onStart}>{rt.startLesson} →</button>
+      </div>
+    </div>
+  );
+}
+
 function LessonRunner({ lessonId, lang, onClose, onComplete }) {
   const lesson = LESSONS[lessonId];
   const rt = RT[lang] || RT.en;
 
   const resume = loadResume(lessonId);
 
+  const [showIntro, setShowIntro] = useState(!resume && !!lesson.introByLang);
   const [idx, setIdx] = useState(resume?.idx ?? 0);
   const [hearts, setHearts] = useState(resume?.hearts ?? 3);
   const [answers, setAnswers] = useState(resume?.answers ?? {});
@@ -931,6 +959,16 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
   });
+
+  if (showIntro) {
+    return (
+      <IntroScreen
+        lesson={lesson} lang={lang} rt={rt} total={total}
+        onStart={() => setShowIntro(false)}
+        onClose={onClose}
+      />
+    );
+  }
 
   if (done) {
     const finalCorrect = correctRef.current;
