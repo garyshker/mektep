@@ -96,6 +96,19 @@ data class ScreenTimeLog(
     val timestamp: Long = System.currentTimeMillis()
 )
 
+// ── Daily quests ──
+
+@Entity(tableName = "daily_quest")
+data class DailyQuest(
+    @PrimaryKey val id: String, // e.g. "complete_1_lesson", "earn_50_xp"
+    val type: String, // LESSON_COUNT, XP_AMOUNT, QUICK_GAME, STREAK
+    val targetValue: Int, // target to reach
+    val currentValue: Int = 0,
+    val xpReward: Int = 10,
+    val completed: Boolean = false,
+    val date: String // "2026-05-15" — quests reset daily
+)
+
 // ── Parental control entities ──
 
 @Entity(tableName = "parental_config")

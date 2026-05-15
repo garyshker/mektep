@@ -24,6 +24,15 @@ object Strings {
         "level" to mapOf("en" to "Level", "ru" to "Уровень", "kk" to "Деңгей"),
         "start_child_mode" to mapOf("en" to "Start Child Mode", "ru" to "Детский режим", "kk" to "Балалар режимі"),
 
+        // ── Daily Quests ──
+        "daily_quests" to mapOf("en" to "Daily Quests", "ru" to "Ежедневные задания", "kk" to "Күнделікті тапсырмалар"),
+        "quest_complete_lessons" to mapOf("en" to "Complete %d lesson", "ru" to "Пройди %d урок", "kk" to "%d сабақ аяқта"),
+        "quest_earn_xp" to mapOf("en" to "Earn %d XP", "ru" to "Заработай %d XP", "kk" to "%d XP жина"),
+        "quest_play_quick_game" to mapOf("en" to "Play Quick Game", "ru" to "Сыграй в Быструю игру", "kk" to "Жылдам ойын ойна"),
+        "quest_streak" to mapOf("en" to "Keep your streak!", "ru" to "Сохрани серию!", "kk" to "Серияны сақта!"),
+        "quest_score_15" to mapOf("en" to "Score 15+ in Quick Game", "ru" to "Набери 15+ в Быстрой игре", "kk" to "Жылдам ойында 15+ ұпай жина"),
+        "claimed" to mapOf("en" to "Claimed!", "ru" to "Получено!", "kk" to "Алынды!"),
+
         // ── Quick Game ──
         "quick_game" to mapOf("en" to "Quick Game", "ru" to "Быстрая игра", "kk" to "Жылдам ойын"),
         "quick_game_desc" to mapOf("en" to "20 math problems, 5 sec each!", "ru" to "20 задач, 5 сек на каждую!", "kk" to "20 есеп, әрқайсысына 5 секунд!"),

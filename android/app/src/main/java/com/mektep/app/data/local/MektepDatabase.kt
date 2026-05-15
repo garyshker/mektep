@@ -11,11 +11,12 @@ import kotlinx.coroutines.flow.Flow
         UserProfile::class,
         LessonProgress::class,
         ScreenTimeLog::class,
+        DailyQuest::class,
         ParentalConfig::class,
         AllowedApp::class,
         ChildSession::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class MektepDatabase : RoomDatabase() {
@@ -25,6 +26,7 @@ abstract class MektepDatabase : RoomDatabase() {
     abstract fun parentalConfigDao(): ParentalConfigDao
     abstract fun allowedAppDao(): AllowedAppDao
     abstract fun childSessionDao(): ChildSessionDao
+    abstract fun questDao(): QuestDao
 
     companion object {
         val MIGRATION_1_2 = object : Migration(1, 2) {
@@ -63,6 +65,22 @@ abstract class MektepDatabase : RoomDatabase() {
                         initialBalanceSecs INTEGER NOT NULL DEFAULT 0,
                         consumedSecs INTEGER NOT NULL DEFAULT 0,
                         endReason TEXT
+                    )
+                """.trimIndent())
+            }
+        }
+
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("""
+                    CREATE TABLE IF NOT EXISTS daily_quest (
+                        id TEXT NOT NULL PRIMARY KEY,
+                        type TEXT NOT NULL,
+                        targetValue INTEGER NOT NULL,
+                        currentValue INTEGER NOT NULL DEFAULT 0,
+                        xpReward INTEGER NOT NULL DEFAULT 10,
+                        completed INTEGER NOT NULL DEFAULT 0,
+                        date TEXT NOT NULL
                     )
                 """.trimIndent())
             }
@@ -189,4 +207,28 @@ interface ChildSessionDao {
 
     @Query("SELECT * FROM child_session ORDER BY startedAt DESC LIMIT :limit")
     suspend fun getRecentSessions(limit: Int = 20): List<ChildSession>
+}
+
+@Dao
+interface QuestDao {
+    @Query("SELECT * FROM daily_quest WHERE date = :date ORDER BY id")
+    fun getQuestsForDate(date: String): Flow<List<DailyQuest>>
+
+    @Query("SELECT * FROM daily_quest WHERE date = :date ORDER BY id")
+    suspend fun getQuestsForDateOnce(date: String): List<DailyQuest>
+
+    @Upsert
+    suspend fun upsertQuest(quest: DailyQuest)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(quests: List<DailyQuest>)
+
+    @Query("UPDATE daily_quest SET currentValue = :value, completed = :completed WHERE id = :id")
+    suspend fun updateProgress(id: String, value: Int, completed: Boolean)
+
+    @Query("SELECT COUNT(*) FROM daily_quest WHERE date = :date AND completed = 1")
+    suspend fun getCompletedCount(date: String): Int
+
+    @Query("DELETE FROM daily_quest WHERE date < :date")
+    suspend fun clearOldQuests(date: String)
 }

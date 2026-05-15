@@ -112,6 +112,35 @@ fun DashboardScreen(
                 }
             }
 
+            // Daily Quests
+            if (state.quests.isNotEmpty()) {
+                Row(
+                    Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(tr("daily_quests", language), fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text(
+                        "${state.questsCompletedCount}/${state.quests.size}",
+                        fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                state.quests.forEachIndexed { idx, quest ->
+                    var questVisible by remember { mutableStateOf(false) }
+                    LaunchedEffect(Unit) {
+                        kotlinx.coroutines.delay(idx * 80L)
+                        questVisible = true
+                    }
+                    AnimatedVisibility(
+                        visible = questVisible,
+                        enter = slideInHorizontally(initialOffsetX = { it / 3 }) + fadeIn()
+                    ) {
+                        QuestRow(quest, language, onClaim = { viewModel.claimQuestReward(quest) })
+                    }
+                }
+                Spacer(Modifier.height(4.dp))
+            }
+
             // Parent controls (only show if mode is SAME_DEVICE or REMOTE_PARENT)
             val deviceMode by viewModel.deviceMode.collectAsState()
             if (deviceMode == "SAME_DEVICE") {
@@ -217,6 +246,65 @@ private fun SubjectCard(item: SubjectWithProgress, language: String, onClick: ()
                     )
                     Text("${item.completedLessons}/${item.totalLessons} ${tr("lessons", language)}", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun QuestRow(quest: com.mektep.app.data.models.DailyQuest, language: String, onClaim: () -> Unit) {
+    val questEmoji = when (quest.type) {
+        "LESSON_COUNT" -> "📚"
+        "XP_AMOUNT" -> "⭐"
+        "QUICK_GAME" -> "⚡"
+        "STREAK" -> "🔥"
+        else -> "🎯"
+    }
+    val questText = when (quest.type) {
+        "LESSON_COUNT" -> tr("quest_complete_lessons", language, quest.targetValue)
+        "XP_AMOUNT" -> tr("quest_earn_xp", language, quest.targetValue)
+        "QUICK_GAME" -> tr("quest_play_quick_game", language)
+        "STREAK" -> tr("quest_streak", language)
+        else -> quest.type
+    }
+
+    val isClaimed = quest.xpReward == 0
+
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = when {
+                isClaimed -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                quest.completed -> MektepGreen.copy(alpha = 0.1f)
+                else -> MaterialTheme.colorScheme.surface
+            }
+        )
+    ) {
+        Row(
+            Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(questEmoji, fontSize = 20.sp)
+            Spacer(Modifier.width(10.dp))
+            Column(Modifier.weight(1f)) {
+                Text(questText, fontSize = 14.sp, fontWeight = if (quest.completed) FontWeight.Bold else FontWeight.Normal)
+                if (!quest.completed && quest.targetValue > 1) {
+                    LinearProgressIndicator(
+                        progress = { (quest.currentValue.toFloat() / quest.targetValue).coerceIn(0f, 1f) },
+                        modifier = Modifier.fillMaxWidth().height(3.dp).clip(RoundedCornerShape(2.dp)),
+                        color = MektepGreen,
+                    )
+                }
+            }
+            Spacer(Modifier.width(8.dp))
+            if (isClaimed) {
+                Text("✅", fontSize = 18.sp)
+            } else if (quest.completed) {
+                TextButton(onClick = onClaim) {
+                    Text("+${quest.xpReward} XP", color = MektepGreen, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                }
+            } else {
+                Text("+${quest.xpReward} XP", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }
