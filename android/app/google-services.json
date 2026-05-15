@@ -1,26 +1,21 @@
 {
   "project_info": {
-    "project_number": "000000000000",
-    "project_id": "mektep-app",
-    "storage_bucket": "mektep-app.appspot.com"
+    "project_number": "508396820691",
+    "project_id": "bilimall-6ea76",
+    "storage_bucket": "bilimall-6ea76.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
+        "mobilesdk_app_id": "1:508396820691:android:292a7e5de347f0ea54dc26",
         "android_client_info": {
           "package_name": "app.tisimai.mektep"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "000000000000-placeholder.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "placeholder_key"
+          "current_key": "AIzaSyCk2lxe6qshjBeV6z9ZZEVpDdabqgn436I"
         }
       ],
       "services": {
