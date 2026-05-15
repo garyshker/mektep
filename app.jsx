@@ -512,6 +512,9 @@ function QuickGameRound({ t, onClose, onRestart }) {
     if (busy.current) return;
     busy.current = true;
     const ok = picked === curAns.current;
+    if (ok) window.soundCorrect?.();
+    else if (picked !== '__timeout__') window.soundWrong?.();
+    else window.soundWrong?.();
     if (ok) setScore(s => s + 1);
     setChosen(picked);
     setTimeout(() => {
@@ -528,9 +531,14 @@ function QuickGameRound({ t, onClose, onRestart }) {
   useEffect(() => {
     if (isDone || chosen !== null) return;
     if (tLeft <= 0) { goRef.current('__timeout__'); return; }
+    if (tLeft <= 3) window.soundTick?.();
     const id = setTimeout(() => setTLeft(n => n - 1), 1000);
     return () => clearTimeout(id);
   }, [tLeft, isDone, chosen]);
+
+  useEffect(() => {
+    if (isDone) window.soundComplete?.();
+  }, [isDone]);
 
   if (isDone) {
     const emoji = score >= 9 ? '🏆' : score >= 7 ? '🌟' : score >= 5 ? '👍' : '💪';
@@ -564,10 +572,11 @@ function QuickGameRound({ t, onClose, onRestart }) {
         <div className="qgame-ring-wrap">
           <svg viewBox="0 0 44 44" className="qgame-ring">
             <circle cx="22" cy="22" r="18" fill="none" stroke="var(--line)" strokeWidth="3"/>
-            <circle cx="22" cy="22" r="18" fill="none" stroke="var(--brand)" strokeWidth="3"
-              strokeDasharray={`${(tLeft / SECS) * circ} ${circ}`}
+            <circle key={idx} cx="22" cy="22" r="18" fill="none" stroke="var(--brand)" strokeWidth="3"
+              strokeDasharray={`${circ} ${circ}`}
               strokeLinecap="round"
-              style={{ transform:'rotate(-90deg)', transformOrigin:'center', transition:'stroke-dasharray .9s linear' }}
+              style={{ transform:'rotate(-90deg)', transformOrigin:'center',
+                       animation: `qgame-cd ${SECS}s linear forwards` }}
             />
           </svg>
           <span className="qgame-ring-num">{tLeft}</span>
@@ -577,8 +586,9 @@ function QuickGameRound({ t, onClose, onRestart }) {
           {cur.opts.map((opt, i) => {
             let cls = "qgame-opt";
             if (chosen !== null) {
-              if (opt === cur.ans) cls += " right";
-              else if (opt === chosen) cls += " wrong";
+              const timedOut = chosen === '__timeout__';
+              if (opt === cur.ans) cls += timedOut ? " reveal" : " right";
+              else if (!timedOut && opt === chosen) cls += " wrong";
             }
             return (
               <button key={i} className={cls} disabled={chosen !== null} onClick={() => go(opt)}>

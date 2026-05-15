@@ -1118,6 +1118,11 @@
   .qgame-opt:not(:disabled):active{ transform:scale(.95) }
   .qgame-opt.right{ background:#d4f5e2; border-color:#2D9D5C; color:#1a7a44 }
   .qgame-opt.wrong{ background:#ffe4e4; border-color:#e14b4b; color:#b83333 }
+  .qgame-opt.reveal{ background:#FFF4D6; border-color:#E88912; color:#7A3800 }
+  @keyframes qgame-cd{
+    from{ stroke-dasharray: 113 113; }
+    to  { stroke-dasharray: 0   113; }
+  }
   .qgame-opt:disabled{ cursor:default }
 
   .qgame-done{

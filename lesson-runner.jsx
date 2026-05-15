@@ -41,6 +41,13 @@ function soundComplete() {
   } catch(e) {}
 }
 
+function soundTick() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    _tone(1046, 'sine', 0.1, ctx.currentTime, 0.07, ctx);
+  } catch(e) {}
+}
+
 // ────────────────────────────────────────────────────────────────────
 // RESUME  (save/restore mid-lesson to localStorage)
 // ────────────────────────────────────────────────────────────────────
@@ -1309,4 +1316,5 @@ function CompleteScreen({ lesson, lang, rt, stars, xp, accuracy, elapsed, correc
 }
 
 // Expose to sequential loader
-Object.assign(window, { LessonRunner, LESSONS, RT_LESSON: RT, pickLang });
+Object.assign(window, { LessonRunner, LESSONS, RT_LESSON: RT, pickLang,
+  soundCorrect, soundWrong, soundComplete, soundTick });
