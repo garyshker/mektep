@@ -1,8 +1,8 @@
 package com.mektep.app.ui.lesson
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,12 +15,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.mektep.app.data.models.QuestionData
+import com.mektep.app.ui.components.ConfettiEffect
+import com.mektep.app.ui.components.SoundPlayer
 import com.mektep.app.ui.theme.MektepGreen
 import com.mektep.app.ui.theme.MektepRed
 
@@ -33,161 +38,204 @@ fun LessonRunnerScreen(
     val state by viewModel.uiState.collectAsState()
     val language by viewModel.language.collectAsState()
 
-    LaunchedEffect(lessonId) {
-        viewModel.loadLesson(lessonId)
+    LaunchedEffect(lessonId) { viewModel.loadLesson(lessonId) }
+
+    // Play sounds on feedback
+    LaunchedEffect(state.feedbackShown, state.lastAnswerCorrect) {
+        if (state.feedbackShown) {
+            if (state.lastAnswerCorrect) SoundPlayer.playCorrect() else SoundPlayer.playWrong()
+        }
     }
 
-    when {
-        state.isLoading -> {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    // Play complete sound
+    LaunchedEffect(state.isCompleted) {
+        if (state.isCompleted && state.starsEarned > 0) SoundPlayer.playComplete()
+    }
+
+    Box(Modifier.fillMaxSize()) {
+        when {
+            state.isLoading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
+            state.isCompleted -> {
+                CompletionScreen(state, onFinish)
+                ConfettiEffect(isActive = state.starsEarned > 0)
+            }
+            state.currentQuestion != null -> QuestionScreen(state, language, viewModel)
         }
-        state.isCompleted -> CompletionScreen(state, onFinish)
-        state.currentQuestion != null -> QuestionScreen(state, language, viewModel)
     }
 }
 
 @Composable
-private fun QuestionScreen(
-    state: LessonRunnerState,
-    language: String,
-    viewModel: LessonRunnerViewModel
-) {
+private fun QuestionScreen(state: LessonRunnerState, language: String, viewModel: LessonRunnerViewModel) {
     val question = state.currentQuestion ?: return
     val prompt = question.prompt[language] ?: question.prompt["en"] ?: ""
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // Progress bar
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            IconButton(onClick = { viewModel.quit() }) {
-                Icon(Icons.Default.Close, "Quit")
-            }
+    // Animated progress bar
+    val animatedProgress by animateFloatAsState(
+        targetValue = (state.questionIndex + 1).toFloat() / state.totalQuestions,
+        animationSpec = tween(500, easing = EaseOutCubic),
+        label = "progress"
+    )
+
+    // Heart shake when lost
+    val heartShake = remember { Animatable(0f) }
+    LaunchedEffect(state.hearts) {
+        if (state.feedbackShown && !state.lastAnswerCorrect) {
+            heartShake.animateTo(10f, tween(50))
+            heartShake.animateTo(-10f, tween(50))
+            heartShake.animateTo(6f, tween(50))
+            heartShake.animateTo(-6f, tween(50))
+            heartShake.animateTo(0f, tween(50))
+        }
+    }
+
+    Column(Modifier.fillMaxSize().padding(16.dp)) {
+        // Top bar
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            IconButton(onClick = { viewModel.quit() }) { Icon(Icons.Default.Close, "Quit") }
             LinearProgressIndicator(
-                progress = { (state.questionIndex + 1).toFloat() / state.totalQuestions },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(8.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+                progress = { animatedProgress },
+                modifier = Modifier.weight(1f).height(8.dp).clip(RoundedCornerShape(4.dp)),
                 color = MektepGreen,
             )
             Spacer(Modifier.width(8.dp))
-            // Hearts
-            Row {
-                repeat(state.hearts) {
-                    Icon(Icons.Default.Favorite, contentDescription = null, tint = MektepRed, modifier = Modifier.size(20.dp))
+            Row(Modifier.graphicsLayer { translationX = heartShake.value }) {
+                repeat(3) { i ->
+                    val isAlive = i < state.hearts
+                    val scale by animateFloatAsState(
+                        targetValue = if (isAlive) 1f else 0.6f,
+                        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+                        label = "heartScale$i"
+                    )
+                    Icon(
+                        if (isAlive) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        null,
+                        tint = if (isAlive) MektepRed else MektepRed.copy(alpha = 0.3f),
+                        modifier = Modifier.size(20.dp).scale(scale)
+                    )
                 }
             }
         }
 
-        Spacer(Modifier.height(8.dp))
-
         Text(
             "Question ${state.questionIndex + 1} of ${state.totalQuestions}",
-            fontSize = 14.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(Modifier.height(24.dp))
 
-        // Prompt
-        Text(
-            text = prompt,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
+        // Animated prompt entrance
+        AnimatedContent(
+            targetState = state.questionIndex,
+            transitionSpec = {
+                (slideInHorizontally { it } + fadeIn()) togetherWith (slideOutHorizontally { -it } + fadeOut())
+            },
+            label = "questionTransition"
+        ) { _ ->
+            Column {
+                Text(prompt, fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
 
-        Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(32.dp))
 
-        // Question type renderer
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-        ) {
-            when (question.type) {
-                "mc", "word" -> MultipleChoiceQuestion(state, language, viewModel)
-                "type" -> TypeAnswerQuestion(state, viewModel)
-                "tap" -> TapSelectQuestion(state, language, viewModel)
-                "match" -> MatchQuestion(state, language, viewModel)
-                else -> MultipleChoiceQuestion(state, language, viewModel)
-            }
-        }
-
-        // Feedback bar
-        AnimatedVisibility(visible = state.feedbackShown) {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = if (state.lastAnswerCorrect) Color(0xFFE8F5E9) else Color(0xFFFFEBEE)
-                )
-            ) {
-                Row(
-                    modifier = Modifier.padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        if (state.lastAnswerCorrect) Icons.Default.CheckCircle else Icons.Default.Cancel,
-                        contentDescription = null,
-                        tint = if (state.lastAnswerCorrect) MektepGreen else MektepRed
-                    )
-                    Spacer(Modifier.width(12.dp))
-                    Text(
-                        if (state.lastAnswerCorrect) "Correct!" else "Incorrect",
-                        fontWeight = FontWeight.Bold,
-                        color = if (state.lastAnswerCorrect) MektepGreen else MektepRed
-                    )
+                Column(Modifier.verticalScroll(rememberScrollState())) {
+                    when (question.type) {
+                        "mc", "word" -> McQuestion(state, language, viewModel)
+                        "type" -> TypeQuestion(state, viewModel)
+                        "tap" -> TapQuestion(state, language, viewModel)
+                        "match" -> MatchQuestion(state, viewModel)
+                        else -> McQuestion(state, language, viewModel)
+                    }
                 }
             }
         }
 
-        // Submit / Next button
-        Spacer(Modifier.height(8.dp))
-        Button(
-            onClick = {
-                if (state.feedbackShown) viewModel.nextQuestion()
-                else viewModel.submitCurrentAnswer()
-            },
-            enabled = state.selectedAnswer.isNotEmpty() || state.feedbackShown,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
+        Spacer(Modifier.weight(1f))
+
+        // Feedback card with slide-up animation
+        AnimatedVisibility(
+            visible = state.feedbackShown,
+            enter = slideInVertically(initialOffsetY = { it }) + fadeIn(tween(200)),
+            exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
         ) {
-            Text(
-                if (state.feedbackShown) "Continue" else "Check",
-                fontSize = 16.sp
-            )
+            val bgColor = if (state.lastAnswerCorrect) Color(0xFFE8F5E9) else Color(0xFFFFEBEE)
+            val fgColor = if (state.lastAnswerCorrect) MektepGreen else MektepRed
+
+            Card(
+                Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = bgColor),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    // Animated checkmark / X
+                    val iconScale by animateFloatAsState(
+                        targetValue = if (state.feedbackShown) 1f else 0f,
+                        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium),
+                        label = "feedbackIcon"
+                    )
+                    Icon(
+                        if (state.lastAnswerCorrect) Icons.Default.CheckCircle else Icons.Default.Cancel,
+                        null, tint = fgColor, modifier = Modifier.size(28.dp).scale(iconScale)
+                    )
+                    Spacer(Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            if (state.lastAnswerCorrect) "Correct!" else "Incorrect",
+                            fontWeight = FontWeight.Bold, color = fgColor, fontSize = 16.sp
+                        )
+                        if (state.lastAnswerCorrect) {
+                            Text("+5 XP", fontSize = 14.sp, color = fgColor.copy(alpha = 0.8f))
+                        }
+                    }
+                }
+            }
+        }
+
+        Spacer(Modifier.height(8.dp))
+
+        // Animated button
+        val buttonScale by animateFloatAsState(
+            targetValue = if (state.selectedAnswer.isNotEmpty() || state.feedbackShown) 1f else 0.95f,
+            animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+            label = "buttonScale"
+        )
+        Button(
+            onClick = { if (state.feedbackShown) viewModel.nextQuestion() else viewModel.submitCurrentAnswer() },
+            enabled = state.selectedAnswer.isNotEmpty() || state.feedbackShown,
+            modifier = Modifier.fillMaxWidth().height(50.dp).scale(buttonScale),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Text(if (state.feedbackShown) "Continue" else "Check", fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
 
 @Composable
-private fun MultipleChoiceQuestion(
-    state: LessonRunnerState,
-    language: String,
-    viewModel: LessonRunnerViewModel
-) {
-    val options = state.optionTexts
-
-    options.forEachIndexed { index, option ->
+private fun McQuestion(state: LessonRunnerState, language: String, viewModel: LessonRunnerViewModel) {
+    state.optionTexts.forEachIndexed { index, option ->
         val isSelected = state.selectedAnswer == index.toString()
-        val optionText = if (option is Map<*, *>) {
-            (option[language] ?: option["en"] ?: option.values.firstOrNull()) as? String ?: "Option ${index + 1}"
-        } else option.toString()
+        val optionText = when (option) {
+            is Map<*, *> -> (option[language] ?: option["en"] ?: option.values.firstOrNull()) as? String ?: "Option ${index + 1}"
+            else -> option.toString()
+        }
+
+        // Staggered entrance animation
+        val animatedAlpha by animateFloatAsState(
+            targetValue = 1f,
+            animationSpec = tween(300, delayMillis = index * 80),
+            label = "optionAlpha$index"
+        )
+        val animatedOffset by animateDpAsState(
+            targetValue = 0.dp,
+            animationSpec = tween(300, delayMillis = index * 80, easing = EaseOutCubic),
+            label = "optionOffset$index"
+        )
 
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)
+                .graphicsLayer { alpha = animatedAlpha; translationY = animatedOffset.value }
                 .clickable(enabled = !state.feedbackShown) { viewModel.selectAnswer(index.toString()) },
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(
@@ -196,29 +244,16 @@ private fun MultipleChoiceQuestion(
                     else -> MaterialTheme.colorScheme.surface
                 }
             ),
-            border = if (isSelected) {
-                androidx.compose.foundation.BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
-            } else {
-                androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-            }
+            border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
+            else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
         ) {
-            Text(
-                text = optionText,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                fontSize = 18.sp,
-                textAlign = TextAlign.Center
-            )
+            Text(optionText, Modifier.fillMaxWidth().padding(16.dp), fontSize = 18.sp, textAlign = TextAlign.Center)
         }
     }
 }
 
 @Composable
-private fun TypeAnswerQuestion(
-    state: LessonRunnerState,
-    viewModel: LessonRunnerViewModel
-) {
+private fun TypeQuestion(state: LessonRunnerState, viewModel: LessonRunnerViewModel) {
     OutlinedTextField(
         value = state.selectedAnswer,
         onValueChange = { viewModel.selectAnswer(it) },
@@ -226,33 +261,29 @@ private fun TypeAnswerQuestion(
         singleLine = true,
         enabled = !state.feedbackShown,
         modifier = Modifier.fillMaxWidth(),
-        textStyle = LocalTextStyle.current.copy(fontSize = 24.sp, textAlign = TextAlign.Center)
+        textStyle = LocalTextStyle.current.copy(fontSize = 24.sp, textAlign = TextAlign.Center),
+        shape = RoundedCornerShape(12.dp)
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun TapSelectQuestion(
-    state: LessonRunnerState,
-    language: String,
-    viewModel: LessonRunnerViewModel
-) {
-    val options = state.optionTexts
+private fun TapQuestion(state: LessonRunnerState, language: String, viewModel: LessonRunnerViewModel) {
     val selected = state.selectedAnswer.split(",").filter { it.isNotEmpty() }.toSet()
-
     Text("Tap all correct answers:", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Spacer(Modifier.height(8.dp))
-
-    FlowRow(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        options.forEachIndexed { index, option ->
+    FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        state.optionTexts.forEachIndexed { index, option ->
             val isSelected = index.toString() in selected
-            val optionText = if (option is Map<*, *>) {
-                (option[language] ?: option["en"] ?: option.values.firstOrNull()) as? String ?: ""
-            } else option.toString()
-
+            val text = when (option) {
+                is Map<*, *> -> (option[language] ?: option["en"] ?: option.values.firstOrNull()) as? String ?: ""
+                else -> option.toString()
+            }
+            val chipScale by animateFloatAsState(
+                targetValue = if (isSelected) 1.05f else 1f,
+                animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+                label = "chipScale$index"
+            )
             FilterChip(
                 selected = isSelected,
                 onClick = {
@@ -262,105 +293,127 @@ private fun TapSelectQuestion(
                         viewModel.selectAnswer(newSet.joinToString(","))
                     }
                 },
-                label = { Text(optionText, fontSize = 16.sp) }
+                label = { Text(text, fontSize = 16.sp) },
+                modifier = Modifier.scale(chipScale)
             )
         }
     }
 }
 
 @Composable
-private fun MatchQuestion(
-    state: LessonRunnerState,
-    language: String,
-    viewModel: LessonRunnerViewModel
-) {
-    Text("Match the pairs by tapping left then right:", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+private fun MatchQuestion(state: LessonRunnerState, viewModel: LessonRunnerViewModel) {
+    Text("Match the pairs:", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Spacer(Modifier.height(12.dp))
-
-    // Simplified match UI - show pairs as a list the user can review
-    state.matchPairs.forEachIndexed { index, pair ->
+    state.matchPairs.forEachIndexed { index, (left, right) ->
+        val animOffset by animateDpAsState(
+            targetValue = 0.dp,
+            animationSpec = tween(400, delayMillis = index * 100, easing = EaseOutCubic),
+            label = "matchOffset$index"
+        )
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
+            Modifier.fillMaxWidth().padding(vertical = 4.dp).graphicsLayer { translationX = animOffset.value },
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Card(
-                modifier = Modifier.weight(1f),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-            ) {
-                Text(pair.first, modifier = Modifier.padding(12.dp), textAlign = TextAlign.Center)
+            Card(Modifier.weight(1f), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), shape = RoundedCornerShape(8.dp)) {
+                Text(left, Modifier.padding(12.dp).fillMaxWidth(), textAlign = TextAlign.Center, fontWeight = FontWeight.Medium)
             }
-            Icon(Icons.Default.ArrowForward, null, modifier = Modifier.padding(horizontal = 8.dp).align(Alignment.CenterVertically))
-            Card(
-                modifier = Modifier.weight(1f),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
-            ) {
-                Text(pair.second, modifier = Modifier.padding(12.dp), textAlign = TextAlign.Center)
+            Icon(Icons.Default.ArrowForward, null, Modifier.padding(horizontal = 8.dp).align(Alignment.CenterVertically), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Card(Modifier.weight(1f), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer), shape = RoundedCornerShape(8.dp)) {
+                Text(right, Modifier.padding(12.dp).fillMaxWidth(), textAlign = TextAlign.Center, fontWeight = FontWeight.Medium)
             }
         }
     }
-
-    // Auto-mark as answered for match questions
-    LaunchedEffect(Unit) {
-        viewModel.selectAnswer("matched")
-    }
+    LaunchedEffect(Unit) { viewModel.selectAnswer("matched") }
 }
 
 @Composable
-private fun CompletionScreen(
-    state: LessonRunnerState,
-    onFinish: () -> Unit
-) {
+private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit) {
+    // Animated entrance
+    val titleScale by animateFloatAsState(
+        targetValue = 1f, animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
+        label = "titleScale"
+    )
+
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp),
+        Modifier.fillMaxSize().padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("🎉", fontSize = 64.sp)
+        Text("🎉", fontSize = 64.sp, modifier = Modifier.scale(titleScale))
         Spacer(Modifier.height(16.dp))
-        Text("Lesson Complete!", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        Text("Lesson Complete!", fontSize = 28.sp, fontWeight = FontWeight.Bold, modifier = Modifier.scale(titleScale))
         Spacer(Modifier.height(24.dp))
 
-        // Stars
+        // Animated stars
         Row {
             repeat(3) { i ->
-                Icon(
-                    Icons.Default.Star,
-                    contentDescription = null,
-                    tint = if (i < state.starsEarned) Color(0xFFFFD700) else Color(0xFFE0E0E0),
-                    modifier = Modifier.size(48.dp)
+                val starScale by animateFloatAsState(
+                    targetValue = if (i < state.starsEarned) 1.2f else 0.8f,
+                    animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
+                    label = "star$i"
                 )
+                val delay = i * 200
+                var visible by remember { mutableStateOf(false) }
+                LaunchedEffect(Unit) {
+                    kotlinx.coroutines.delay(delay.toLong())
+                    visible = true
+                }
+                AnimatedVisibility(visible = visible, enter = scaleIn(spring(dampingRatio = 0.4f)) + fadeIn()) {
+                    Icon(
+                        Icons.Default.Star, null,
+                        tint = if (i < state.starsEarned) Color(0xFFFFD700) else Color(0xFFE0E0E0),
+                        modifier = Modifier.size(52.dp).scale(starScale)
+                    )
+                }
             }
         }
 
         Spacer(Modifier.height(24.dp))
 
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        // Screen time earned — big highlight
+        var timeVisible by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) { kotlinx.coroutines.delay(500); timeVisible = true }
+        AnimatedVisibility(
+            visible = timeVisible,
+            enter = scaleIn(spring(dampingRatio = 0.5f)) + fadeIn()
         ) {
-            Column(
-                modifier = Modifier.padding(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Card(
+                Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MektepGreen.copy(alpha = 0.15f)),
+                shape = RoundedCornerShape(16.dp)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("${state.xpEarned}", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = MektepGreen)
-                        Text("XP Earned", fontSize = 14.sp)
-                    }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("${state.accuracyPct.toInt()}%", fontSize = 28.sp, fontWeight = FontWeight.Bold)
-                        Text("Accuracy", fontSize = 14.sp)
-                    }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("${state.score}/${state.totalQuestions}", fontSize = 28.sp, fontWeight = FontWeight.Bold)
-                        Text("Correct", fontSize = 14.sp)
+                Column(Modifier.padding(20.dp).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("⏱️", fontSize = 32.sp)
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        "+${state.earnedScreenTimeMinutes} min",
+                        fontSize = 36.sp, fontWeight = FontWeight.Bold, color = MektepGreen
+                    )
+                    Text("screen time earned", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        "${state.timeSpentMinutes} min learning × 1.5",
+                        fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        // Stats card with slide-up
+        var statsVisible by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) { kotlinx.coroutines.delay(700); statsVisible = true }
+        AnimatedVisibility(
+            visible = statsVisible,
+            enter = slideInVertically(initialOffsetY = { it / 2 }) + fadeIn(tween(400))
+        ) {
+            Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(16.dp)) {
+                Column(Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                        StatItem("${state.xpEarned}", "XP", MektepGreen)
+                        StatItem("${state.accuracyPct.toInt()}%", "Accuracy", MaterialTheme.colorScheme.onSurface)
+                        StatItem("${state.score}/${state.totalQuestions}", "Correct", MaterialTheme.colorScheme.onSurface)
                     }
                 }
             }
@@ -368,29 +421,20 @@ private fun CompletionScreen(
 
         Spacer(Modifier.height(32.dp))
 
-        Button(
-            onClick = onFinish,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-        ) {
-            Text("Continue", fontSize = 16.sp)
+        var btnVisible by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) { kotlinx.coroutines.delay(1000); btnVisible = true }
+        AnimatedVisibility(visible = btnVisible, enter = fadeIn(tween(300)) + scaleIn(spring(dampingRatio = 0.6f))) {
+            Button(onClick = onFinish, Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(12.dp)) {
+                Text("Continue", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            }
         }
     }
 }
 
 @Composable
-private fun FlowRow(
-    modifier: Modifier = Modifier,
-    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
-    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
-    content: @Composable () -> Unit
-) {
-    // Use built-in FlowRow from Compose Foundation
-    androidx.compose.foundation.layout.FlowRow(
-        modifier = modifier,
-        horizontalArrangement = horizontalArrangement,
-        verticalArrangement = verticalArrangement,
-        content = { content() }
-    )
+private fun StatItem(value: String, label: String, color: Color) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(value, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = color)
+        Text(label, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
 }

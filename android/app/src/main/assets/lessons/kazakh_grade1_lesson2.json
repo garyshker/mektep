@@ -1,0 +1,116 @@
+{
+  "subject": "kazakh",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 2,
+  "title": {
+    "kk": "Жануарлар",
+    "ru": "Животные",
+    "en": "Animals"
+  },
+  "description": {
+    "kk": "Жануарлардың атауларын үйреніңіз",
+    "ru": "Выучите названия животных",
+    "en": "Learn animal names in Kazakh"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Ит\" деген не?", "ru": "Что такое \"Ит\"?", "en": "What is \"Ит\"?" },
+      "options": [
+        [{"kk":"Мысық","ru":"Кошка","en":"Cat"}],
+        [{"kk":"Ит","ru":"Собака","en":"Dog"}],
+        [{"kk":"Құс","ru":"Птица","en":"Bird"}],
+        [{"kk":"Балық","ru":"Рыба","en":"Fish"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Жануарды аудармасымен сәйкестендіріңіз", "ru": "Сопоставьте животное и перевод", "en": "Match animal to translation" },
+      "pairs": [
+        { "left": "Ит", "right": "Dog" },
+        { "left": "Мысық", "right": "Cat" },
+        { "left": "Ат", "right": "Horse" },
+        { "left": "Түйе", "right": "Camel" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қазақстанның символы қай жануар?", "ru": "Какое животное — символ Казахстана?", "en": "Which animal is a symbol of Kazakhstan?" },
+      "options": [
+        [{"kk":"Аю","ru":"Медведь","en":"Bear"}],
+        [{"kk":"Барыс","ru":"Барс","en":"Snow leopard"}],
+        [{"kk":"Арыстан","ru":"Лев","en":"Lion"}],
+        [{"kk":"Бүркіт","ru":"Орёл","en":"Eagle"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "tap",
+      "prompt": { "kk": "Үй жануарларын таңдаңыз", "ru": "Выберите домашних животных", "en": "Select domestic animals" },
+      "options": [
+        [{"kk":"Ит","ru":"Собака","en":"Dog"}],
+        [{"kk":"Аю","ru":"Медведь","en":"Bear"}],
+        [{"kk":"Мысық","ru":"Кошка","en":"Cat"}],
+        [{"kk":"Қасқыр","ru":"Волк","en":"Wolf"}],
+        [{"kk":"Сиыр","ru":"Корова","en":"Cow"}],
+        [{"kk":"Барыс","ru":"Барс","en":"Snow leopard"}]
+      ],
+      "correct_answer": [0, 2, 4],
+      "difficulty_score": 2,
+      "time_limit_seconds": 25
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Horse\" қазақша қалай?", "ru": "Как будет \"лошадь\" по-казахски?", "en": "How do you say \"horse\" in Kazakh?" },
+      "correct_answer": "ат",
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Түйе\" деген не?", "ru": "Что такое \"Түйе\"?", "en": "What is \"Түйе\"?" },
+      "options": [
+        [{"kk":"Жылқы","ru":"Лошадь","en":"Horse"}],
+        [{"kk":"Түйе","ru":"Верблюд","en":"Camel"}],
+        [{"kk":"Қой","ru":"Овца","en":"Sheep"}],
+        [{"kk":"Ешкі","ru":"Коза","en":"Goat"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Жануарды дыбысымен сәйкестендіріңіз", "ru": "Сопоставьте животное и его звук", "en": "Match the animal to its sound" },
+      "pairs": [
+        { "left": "Ит", "right": "Хау-хау" },
+        { "left": "Мысық", "right": "Мяу" },
+        { "left": "Сиыр", "right": "Муу" },
+        { "left": "Қой", "right": "Мәә" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 1
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Бүркіт\" деген не?", "ru": "Что такое \"Бүркіт\"?", "en": "What is \"Бүркіт\"?" },
+      "options": [
+        [{"kk":"Бүркіт","ru":"Орёл","en":"Eagle"}],
+        [{"kk":"Қарға","ru":"Ворона","en":"Crow"}],
+        [{"kk":"Торғай","ru":"Воробей","en":"Sparrow"}],
+        [{"kk":"Аққу","ru":"Лебедь","en":"Swan"}]
+      ],
+      "correct_answer": 0,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    }
+  ]
+}

@@ -2,11 +2,9 @@ package com.mektep.app.ui.lesson
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mektep.app.data.local.TokenStore
-import com.mektep.app.data.models.Question
-import com.mektep.app.data.repository.LessonRepository
+import com.mektep.app.data.local.*
+import com.mektep.app.data.models.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.*
@@ -15,7 +13,7 @@ import javax.inject.Inject
 data class LessonRunnerState(
     val isLoading: Boolean = true,
     val lessonTitle: String = "",
-    val questions: List<Question> = emptyList(),
+    val questions: List<QuestionData> = emptyList(),
     val questionIndex: Int = 0,
     val totalQuestions: Int = 0,
     val hearts: Int = 3,
@@ -27,16 +25,21 @@ data class LessonRunnerState(
     val xpEarned: Int = 0,
     val starsEarned: Int = 0,
     val accuracyPct: Double = 0.0,
-    val attemptId: String = "",
     val optionTexts: List<Any> = emptyList(),
     val matchPairs: List<Pair<String, String>> = emptyList(),
-    val currentQuestion: Question? = null,
-    val startTimeMs: Long = 0L
+    val currentQuestion: QuestionData? = null,
+    val startTimeMs: Long = 0L,          // when current question started
+    val lessonStartTimeMs: Long = 0L,    // when entire lesson started
+    val timeSpentMinutes: Int = 0,       // total learning time
+    val earnedScreenTimeMinutes: Int = 0 // screen time earned
 )
 
 @HiltViewModel
 class LessonRunnerViewModel @Inject constructor(
-    private val lessonRepository: LessonRepository,
+    private val lessonLoader: LessonLoader,
+    private val userDao: UserDao,
+    private val progressDao: ProgressDao,
+    private val screenTimeDao: ScreenTimeDao,
     private val tokenStore: TokenStore
 ) : ViewModel() {
 
@@ -45,38 +48,35 @@ class LessonRunnerViewModel @Inject constructor(
 
     val language: StateFlow<String> = tokenStore.language.stateIn(viewModelScope, SharingStarted.Eagerly, "en")
 
+    private var currentLessonId: String = ""
+    private var currentSubjectId: String = ""
+
     fun loadLesson(lessonId: String) {
         viewModelScope.launch {
             _uiState.value = LessonRunnerState(isLoading = true)
-            try {
-                val lesson = lessonRepository.getLesson(lessonId)
-                val childId = tokenStore.childId.firstOrNull()
-
-                var attemptId = ""
-                if (childId != null) {
-                    try {
-                        val attempt = lessonRepository.startAttempt(lessonId, childId)
-                        attemptId = attempt.id
-                    } catch (_: Exception) { }
-                }
-
-                val lang = language.value
-                val title = lesson.title[lang] ?: lesson.title["en"] ?: "Lesson"
-
-                _uiState.value = LessonRunnerState(
-                    isLoading = false,
-                    lessonTitle = title,
-                    questions = lesson.questions,
-                    totalQuestions = lesson.questions.size,
-                    attemptId = attemptId,
-                    currentQuestion = lesson.questions.firstOrNull(),
-                    optionTexts = parseOptions(lesson.questions.firstOrNull()),
-                    matchPairs = parsePairs(lesson.questions.firstOrNull()),
-                    startTimeMs = System.currentTimeMillis()
-                )
-            } catch (e: Exception) {
+            val lesson = lessonLoader.getLesson(lessonId)
+            if (lesson == null) {
                 _uiState.value = LessonRunnerState(isLoading = false)
+                return@launch
             }
+
+            currentLessonId = lessonId
+            currentSubjectId = lesson.subjectId
+            val lang = language.value
+            val title = lesson.title[lang] ?: lesson.title["en"] ?: "Lesson"
+
+            val now = System.currentTimeMillis()
+            _uiState.value = LessonRunnerState(
+                isLoading = false,
+                lessonTitle = title,
+                questions = lesson.questions,
+                totalQuestions = lesson.questions.size,
+                currentQuestion = lesson.questions.firstOrNull(),
+                optionTexts = parseOptions(lesson.questions.firstOrNull()),
+                matchPairs = parsePairs(lesson.questions.firstOrNull()),
+                startTimeMs = now,
+                lessonStartTimeMs = now
+            )
         }
     }
 
@@ -87,32 +87,17 @@ class LessonRunnerViewModel @Inject constructor(
     fun submitCurrentAnswer() {
         val state = _uiState.value
         val question = state.currentQuestion ?: return
-        val timeMs = (System.currentTimeMillis() - state.startTimeMs).toInt()
 
-        viewModelScope.launch {
-            val isCorrect = try {
-                if (state.attemptId.isNotEmpty()) {
-                    val response = lessonRepository.submitAnswer(
-                        state.attemptId, question.id, state.selectedAnswer, timeMs
-                    )
-                    response.isCorrect
-                } else {
-                    checkAnswerLocally(question, state.selectedAnswer)
-                }
-            } catch (_: Exception) {
-                checkAnswerLocally(question, state.selectedAnswer)
-            }
+        val isCorrect = checkAnswer(question, state.selectedAnswer)
+        val newHearts = if (isCorrect) state.hearts else (state.hearts - 1).coerceAtLeast(0)
+        val newScore = if (isCorrect) state.score + 1 else state.score
 
-            val newHearts = if (isCorrect) state.hearts else (state.hearts - 1).coerceAtLeast(0)
-            val newScore = if (isCorrect) state.score + 1 else state.score
-
-            _uiState.value = state.copy(
-                feedbackShown = true,
-                lastAnswerCorrect = isCorrect,
-                hearts = newHearts,
-                score = newScore
-            )
-        }
+        _uiState.value = state.copy(
+            feedbackShown = true,
+            lastAnswerCorrect = isCorrect,
+            hearts = newHearts,
+            score = newScore
+        )
     }
 
     fun nextQuestion() {
@@ -124,15 +109,15 @@ class LessonRunnerViewModel @Inject constructor(
             return
         }
 
-        val nextQuestion = state.questions[nextIndex]
+        val nextQ = state.questions[nextIndex]
         _uiState.value = state.copy(
             questionIndex = nextIndex,
-            currentQuestion = nextQuestion,
+            currentQuestion = nextQ,
             selectedAnswer = "",
             feedbackShown = false,
             lastAnswerCorrect = false,
-            optionTexts = parseOptions(nextQuestion),
-            matchPairs = parsePairs(nextQuestion),
+            optionTexts = parseOptions(nextQ),
+            matchPairs = parsePairs(nextQ),
             startTimeMs = System.currentTimeMillis()
         )
     }
@@ -141,55 +126,98 @@ class LessonRunnerViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isCompleted = true, starsEarned = 0, xpEarned = 0)
     }
 
-    private fun completeLesson() {
-        val state = _uiState.value
-        viewModelScope.launch {
-            try {
-                if (state.attemptId.isNotEmpty()) {
-                    val result = lessonRepository.completeAttempt(state.attemptId)
-                    _uiState.value = state.copy(
-                        isCompleted = true,
-                        score = result.score,
-                        xpEarned = result.xpEarned,
-                        starsEarned = result.starsEarned,
-                        accuracyPct = result.accuracyPct
-                    )
-                    return@launch
-                }
-            } catch (_: Exception) { }
-
-            // Local fallback scoring
-            val accuracy = if (state.totalQuestions > 0) state.score.toDouble() / state.totalQuestions * 100 else 0.0
-            val stars = when {
-                accuracy >= 95 -> 3
-                accuracy >= 80 -> 2
-                else -> 1
-            }
-            val xp = state.score * 5 + when(stars) { 3 -> 20; 2 -> 10; else -> 0 }
-
-            _uiState.value = state.copy(
-                isCompleted = true,
-                xpEarned = xp,
-                starsEarned = stars,
-                accuracyPct = accuracy
-            )
-        }
+    companion object {
+        // Time-based screen time model:
+        // Every 1 minute of learning earns 1.5 minutes of screen time
+        // Minimum 1 minute earned per lesson (even if lesson takes < 40 seconds)
+        const val SCREEN_TIME_RATIO = 1.5
+        const val MIN_EARNED_MINUTES = 1
     }
 
-    private fun checkAnswerLocally(question: Question, answer: String): Boolean {
-        val correct = question.correctAnswer ?: return false
+    private fun completeLesson() {
+        val state = _uiState.value
+        val accuracy = if (state.totalQuestions > 0) state.score.toDouble() / state.totalQuestions * 100 else 0.0
+        val stars = when {
+            accuracy >= 95 -> 3
+            accuracy >= 80 -> 2
+            else -> 1
+        }
+        val xp = state.score * 5 + when (stars) { 3 -> 20; 2 -> 10; else -> 0 }
+
+        // Time-based screen time:
+        // Calculate how long the student actually spent learning
+        val elapsedMs = System.currentTimeMillis() - state.lessonStartTimeMs
+        val learningMinutes = (elapsedMs / 60_000.0).coerceAtLeast(0.0)
+        val earnedMinutes = maxOf(MIN_EARNED_MINUTES, (learningMinutes * SCREEN_TIME_RATIO).toInt())
+        val earnedSeconds = earnedMinutes * 60
+
+        viewModelScope.launch {
+            val profile = userDao.getProfileOnce()
+            if (profile != null) {
+                // Update XP (gamification — separate from screen time)
+                userDao.addXp(profile.id, xp)
+
+                // Update screen time balance (time-based)
+                userDao.updateScreenTimeBalance(profile.id, earnedSeconds)
+
+                // Log screen time earned
+                screenTimeDao.addLog(
+                    ScreenTimeLog(type = "EARNED", amountSeconds = earnedSeconds, source = currentLessonId)
+                )
+
+                // Update streak
+                val today = java.time.LocalDate.now().toString()
+                val newStreak = if (profile.lastActiveDate == today) {
+                    profile.currentStreak
+                } else if (profile.lastActiveDate == java.time.LocalDate.now().minusDays(1).toString()) {
+                    profile.currentStreak + 1
+                } else 1
+                userDao.updateStreak(profile.id, newStreak, today)
+            }
+
+            // Save lesson progress
+            val existing = progressDao.getForLesson(currentLessonId)
+            progressDao.upsert(
+                LessonProgress(
+                    lessonId = currentLessonId,
+                    subjectId = currentSubjectId,
+                    bestStars = maxOf(stars, existing?.bestStars ?: 0),
+                    bestAccuracy = maxOf(accuracy, existing?.bestAccuracy ?: 0.0),
+                    timesCompleted = (existing?.timesCompleted ?: 0) + 1,
+                    lastCompletedAt = System.currentTimeMillis()
+                )
+            )
+        }
+
+        val timeSpentMin = (elapsedMs / 60_000.0).toInt()
+
+        _uiState.value = state.copy(
+            isCompleted = true,
+            xpEarned = xp,
+            starsEarned = stars,
+            accuracyPct = accuracy,
+            timeSpentMinutes = maxOf(1, timeSpentMin),
+            earnedScreenTimeMinutes = earnedMinutes
+        )
+    }
+
+    private fun checkAnswer(q: QuestionData, answer: String): Boolean {
+        val correct = q.correctAnswer ?: return answer == "matched"
         return try {
-            when {
-                correct is JsonPrimitive && correct.isString ->
-                    correct.content.equals(answer.trim(), ignoreCase = true)
-                correct is JsonPrimitive ->
-                    correct.content == answer.trim()
-                else -> false
+            when (correct) {
+                is JsonPrimitive -> {
+                    if (correct.isString) {
+                        correct.content.equals(answer.trim(), ignoreCase = true)
+                    } else {
+                        correct.content == answer.trim()
+                    }
+                }
+                else -> answer == "matched" // match questions auto-pass
             }
         } catch (_: Exception) { false }
     }
 
-    private fun parseOptions(question: Question?): List<Any> {
+    private fun parseOptions(question: QuestionData?): List<Any> {
         question ?: return emptyList()
         val options = question.options ?: return emptyList()
         return try {
@@ -212,16 +240,14 @@ class LessonRunnerViewModel @Inject constructor(
         } catch (_: Exception) { emptyList() }
     }
 
-    private fun parsePairs(question: Question?): List<Pair<String, String>> {
+    private fun parsePairs(question: QuestionData?): List<Pair<String, String>> {
         question ?: return emptyList()
         val pairs = question.pairs ?: return emptyList()
         return try {
             when (pairs) {
                 is JsonArray -> pairs.map { element ->
                     val obj = element.jsonObject
-                    val left = obj["left"]?.jsonPrimitive?.content ?: ""
-                    val right = obj["right"]?.jsonPrimitive?.content ?: ""
-                    left to right
+                    (obj["left"]?.jsonPrimitive?.content ?: "") to (obj["right"]?.jsonPrimitive?.content ?: "")
                 }
                 else -> emptyList()
             }

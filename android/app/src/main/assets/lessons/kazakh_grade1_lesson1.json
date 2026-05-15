@@ -1,0 +1,118 @@
+{
+  "subject": "kazakh",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 1,
+  "title": {
+    "kk": "Қазақ әліпбиі: Ерекше әріптер",
+    "ru": "Казахский алфавит: Особые буквы",
+    "en": "Kazakh Alphabet: Special Letters"
+  },
+  "description": {
+    "kk": "Қазақ тіліне тән әріптерді үйреніңіз",
+    "ru": "Изучите буквы, характерные для казахского языка",
+    "en": "Learn letters unique to the Kazakh language"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қай әріп қазақ тіліне ғана тән?", "ru": "Какая буква есть только в казахском?", "en": "Which letter is unique to Kazakh?" },
+      "options": [
+        [{"kk":"А","ru":"А","en":"A"}],
+        [{"kk":"Ә","ru":"Ә","en":"Ä"}],
+        [{"kk":"Б","ru":"Б","en":"B"}],
+        [{"kk":"В","ru":"В","en":"V"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "tap",
+      "prompt": { "kk": "Қазақ тіліне тән әріптерді таңдаңыз", "ru": "Выберите буквы, характерные для казахского", "en": "Select letters unique to Kazakh" },
+      "options": [
+        [{"kk":"Ә","ru":"Ә","en":"Ä"}],
+        [{"kk":"Б","ru":"Б","en":"B"}],
+        [{"kk":"Ғ","ru":"Ғ","en":"Ğ"}],
+        [{"kk":"Д","ru":"Д","en":"D"}],
+        [{"kk":"Қ","ru":"Қ","en":"Q"}],
+        [{"kk":"М","ru":"М","en":"M"}],
+        [{"kk":"Ң","ru":"Ң","en":"Ñ"}],
+        [{"kk":"Р","ru":"Р","en":"R"}]
+      ],
+      "correct_answer": [0, 2, 4, 6],
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Әріп пен дыбысты сәйкестендіріңіз", "ru": "Сопоставьте букву и звук", "en": "Match the letter and its sound" },
+      "pairs": [
+        { "left": "Ә", "right": "a (жұмсақ / soft a)" },
+        { "left": "Ө", "right": "o (жұмсақ / soft o)" },
+        { "left": "Ү", "right": "u (жұмсақ / soft u)" },
+        { "left": "Ұ", "right": "u (қатты / hard u)" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 3
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Әже\" сөзінің бірінші әрпі қандай?", "ru": "Какая первая буква в слове \"Әже\"?", "en": "What is the first letter of \"Әже\" (grandmother)?" },
+      "options": [
+        [{"kk":"А","ru":"А","en":"A"}],
+        [{"kk":"Ә","ru":"Ә","en":"Ä"}],
+        [{"kk":"Е","ru":"Е","en":"E"}],
+        [{"kk":"О","ru":"О","en":"O"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Қала\" сөзінде қанша әріп бар?", "ru": "Сколько букв в слове \"Қала\"?", "en": "How many letters in the word \"Қала\" (city)?" },
+      "correct_answer": "4",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қай сөзде \"Ғ\" әрпі бар?", "ru": "В каком слове есть буква \"Ғ\"?", "en": "Which word contains the letter \"Ğ\"?" },
+      "options": [
+        [{"kk":"Мектеп","ru":"Мектеп","en":"Mektep"}],
+        [{"kk":"Ағаш","ru":"Ағаш","en":"Ağaş (tree)"}],
+        [{"kk":"Бала","ru":"Бала","en":"Bala"}],
+        [{"kk":"Кітап","ru":"Кітап","en":"Kitap"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Ң\" әрпі қай сөзде бар?", "ru": "В каком слове есть буква \"Ң\"?", "en": "Which word has \"Ñ\"?" },
+      "options": [
+        [{"kk":"Маңғыстау","ru":"Маңғыстау","en":"Mangystau"}],
+        [{"kk":"Алматы","ru":"Алматы","en":"Almaty"}],
+        [{"kk":"Астана","ru":"Астана","en":"Astana"}],
+        [{"kk":"Балқаш","ru":"Балқаш","en":"Balkhash"}]
+      ],
+      "correct_answer": 0,
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Сөз бен аудармасын сәйкестендіріңіз", "ru": "Сопоставьте слово и перевод", "en": "Match the word and translation" },
+      "pairs": [
+        { "left": "Әке", "right": "Father" },
+        { "left": "Әже", "right": "Grandmother" },
+        { "left": "Ағаш", "right": "Tree" },
+        { "left": "Қала", "right": "City" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    }
+  ]
+}

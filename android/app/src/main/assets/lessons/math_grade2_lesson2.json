@@ -1,0 +1,103 @@
+{
+  "subject": "math",
+  "grade_level": 2,
+  "difficulty_tier": 1,
+  "sort_order": 2,
+  "title": {
+    "kk": "Көбейту кестесі: 2-ге",
+    "ru": "Таблица умножения: на 2",
+    "en": "Multiplication table: x2"
+  },
+  "description": {
+    "kk": "2-ге көбейтуді үйреніңіз",
+    "ru": "Научитесь умножать на 2",
+    "en": "Learn to multiply by 2"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "2 × 3 = ?", "ru": "2 × 3 = ?", "en": "2 × 3 = ?" },
+      "options": [
+        [{"kk":"4","ru":"4","en":"4"}],
+        [{"kk":"5","ru":"5","en":"5"}],
+        [{"kk":"6","ru":"6","en":"6"}],
+        [{"kk":"8","ru":"8","en":"8"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "2 × 5 = ?", "ru": "2 × 5 = ?", "en": "2 × 5 = ?" },
+      "correct_answer": "10",
+      "difficulty_score": 2,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "2 × 7 = ?", "ru": "2 × 7 = ?", "en": "2 × 7 = ?" },
+      "options": [
+        [{"kk":"12","ru":"12","en":"12"}],
+        [{"kk":"14","ru":"14","en":"14"}],
+        [{"kk":"16","ru":"16","en":"16"}],
+        [{"kk":"9","ru":"9","en":"9"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "2 × 9 = ?", "ru": "2 × 9 = ?", "en": "2 × 9 = ?" },
+      "correct_answer": "18",
+      "difficulty_score": 2,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Сәйкестендіріңіз", "ru": "Сопоставьте", "en": "Match the products" },
+      "pairs": [
+        { "left": "2 × 1", "right": "2" },
+        { "left": "2 × 4", "right": "8" },
+        { "left": "2 × 6", "right": "12" },
+        { "left": "2 × 10", "right": "20" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 3
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "2 × 8 = ?", "ru": "2 × 8 = ?", "en": "2 × 8 = ?" },
+      "correct_answer": "16",
+      "difficulty_score": 2,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "2 × 2 = ?", "ru": "2 × 2 = ?", "en": "2 × 2 = ?" },
+      "options": [
+        [{"kk":"2","ru":"2","en":"2"}],
+        [{"kk":"4","ru":"4","en":"4"}],
+        [{"kk":"6","ru":"6","en":"6"}],
+        [{"kk":"8","ru":"8","en":"8"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "word",
+      "prompt": { "kk": "Әр баланың 2 алмасы бар. 6 бала бар. Барлығы қанша алма?", "ru": "У каждого ребёнка 2 яблока. Детей 6. Сколько всего яблок?", "en": "Each child has 2 apples. There are 6 children. How many apples total?" },
+      "options": [
+        [{"kk":"10","ru":"10","en":"10"}],
+        [{"kk":"12","ru":"12","en":"12"}],
+        [{"kk":"14","ru":"14","en":"14"}],
+        [{"kk":"8","ru":"8","en":"8"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 3,
+      "time_limit_seconds": 45
+    }
+  ]
+}

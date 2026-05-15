@@ -1,0 +1,110 @@
+{
+  "subject": "english",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 2,
+  "title": {
+    "kk": "Түстер",
+    "ru": "Цвета",
+    "en": "Colors"
+  },
+  "description": {
+    "kk": "Ағылшын тілінде түстерді үйреніңіз",
+    "ru": "Выучите цвета на английском",
+    "en": "Learn colors in English"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Аспанның түсі ағылшынша қалай?", "ru": "Как по-английски цвет неба?", "en": "What color is the sky?" },
+      "options": [
+        [{"kk":"Red","ru":"Red","en":"Red"}],
+        [{"kk":"Blue","ru":"Blue","en":"Blue"}],
+        [{"kk":"Green","ru":"Green","en":"Green"}],
+        [{"kk":"Yellow","ru":"Yellow","en":"Yellow"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Түсті аудармасымен сәйкестендіріңіз", "ru": "Сопоставьте цвет и перевод", "en": "Match color to translation" },
+      "pairs": [
+        { "left": "Red", "right": "Қызыл / Красный" },
+        { "left": "Green", "right": "Жасыл / Зелёный" },
+        { "left": "Yellow", "right": "Сары / Жёлтый" },
+        { "left": "White", "right": "Ақ / Белый" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "Қар қандай түсті? Ағылшынша жазыңыз", "ru": "Какого цвета снег? Напишите по-английски", "en": "What color is snow? Write in English" },
+      "correct_answer": "white",
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Orange\" — бұл қандай түс?", "ru": "\"Orange\" — это какой цвет?", "en": "What color is \"Orange\"?" },
+      "options": [
+        [{"kk":"Қызыл","ru":"Красный","en":"Red"}],
+        [{"kk":"Сары","ru":"Жёлтый","en":"Yellow"}],
+        [{"kk":"Қызғылт сары","ru":"Оранжевый","en":"Orange"}],
+        [{"kk":"Қоңыр","ru":"Коричневый","en":"Brown"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "tap",
+      "prompt": { "kk": "Жылы түстерді таңдаңыз", "ru": "Выберите тёплые цвета", "en": "Select warm colors" },
+      "options": [
+        [{"kk":"Red","ru":"Red","en":"Red"}],
+        [{"kk":"Blue","ru":"Blue","en":"Blue"}],
+        [{"kk":"Yellow","ru":"Yellow","en":"Yellow"}],
+        [{"kk":"Green","ru":"Green","en":"Green"}],
+        [{"kk":"Orange","ru":"Orange","en":"Orange"}],
+        [{"kk":"Purple","ru":"Purple","en":"Purple"}]
+      ],
+      "correct_answer": [0, 2, 4],
+      "difficulty_score": 2,
+      "time_limit_seconds": 25
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "Шөп қандай түсті? Ағылшынша жазыңыз", "ru": "Какого цвета трава? По-английски", "en": "What color is grass?" },
+      "correct_answer": "green",
+      "difficulty_score": 1,
+      "time_limit_seconds": 25
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Black\" — бұл қандай түс?", "ru": "\"Black\" — это?", "en": "\"Black\" is?" },
+      "options": [
+        [{"kk":"Ақ","ru":"Белый","en":"White"}],
+        [{"kk":"Қара","ru":"Чёрный","en":"Black"}],
+        [{"kk":"Сұр","ru":"Серый","en":"Gray"}],
+        [{"kk":"Көк","ru":"Синий","en":"Blue"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Түсті затпен сәйкестендіріңіз", "ru": "Сопоставьте цвет и предмет", "en": "Match color to object" },
+      "pairs": [
+        { "left": "Yellow", "right": "Sun / Күн" },
+        { "left": "Blue", "right": "Sky / Аспан" },
+        { "left": "Green", "right": "Grass / Шөп" },
+        { "left": "Red", "right": "Apple / Алма" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    }
+  ]
+}

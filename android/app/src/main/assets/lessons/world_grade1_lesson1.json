@@ -1,0 +1,117 @@
+{
+  "subject": "world",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 1,
+  "title": {
+    "kk": "Жыл мезгілдері",
+    "ru": "Времена года",
+    "en": "Seasons"
+  },
+  "description": {
+    "kk": "Төрт жыл мезгілін үйреніңіз",
+    "ru": "Изучите четыре времени года",
+    "en": "Learn the four seasons"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Жылда қанша мезгіл бар?", "ru": "Сколько времён года?", "en": "How many seasons are there?" },
+      "options": [
+        [{"kk":"2","ru":"2","en":"2"}],
+        [{"kk":"3","ru":"3","en":"3"}],
+        [{"kk":"4","ru":"4","en":"4"}],
+        [{"kk":"5","ru":"5","en":"5"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Мезгілді айымен сәйкестендіріңіз", "ru": "Сопоставьте сезон и месяц", "en": "Match season to month" },
+      "pairs": [
+        { "left": "Қыс / Зима / Winter", "right": "Қаңтар / Январь / January" },
+        { "left": "Көктем / Весна / Spring", "right": "Сәуір / Апрель / April" },
+        { "left": "Жаз / Лето / Summer", "right": "Шілде / Июль / July" },
+        { "left": "Күз / Осень / Autumn", "right": "Қазан / Октябрь / October" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қар қай мезгілде жауады?", "ru": "Когда идёт снег?", "en": "When does it snow?" },
+      "options": [
+        [{"kk":"Жаз","ru":"Лето","en":"Summer"}],
+        [{"kk":"Күз","ru":"Осень","en":"Autumn"}],
+        [{"kk":"Қыс","ru":"Зима","en":"Winter"}],
+        [{"kk":"Көктем","ru":"Весна","en":"Spring"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "tap",
+      "prompt": { "kk": "Жаз айларын таңдаңыз", "ru": "Выберите летние месяцы", "en": "Select summer months" },
+      "options": [
+        [{"kk":"Маусым","ru":"Июнь","en":"June"}],
+        [{"kk":"Қаңтар","ru":"Январь","en":"January"}],
+        [{"kk":"Шілде","ru":"Июль","en":"July"}],
+        [{"kk":"Наурыз","ru":"Март","en":"March"}],
+        [{"kk":"Тамыз","ru":"Август","en":"August"}],
+        [{"kk":"Қараша","ru":"Ноябрь","en":"November"}]
+      ],
+      "correct_answer": [0, 2, 4],
+      "difficulty_score": 2,
+      "time_limit_seconds": 25
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Гүлдер қай мезгілде ашылады?", "ru": "Когда расцветают цветы?", "en": "When do flowers bloom?" },
+      "options": [
+        [{"kk":"Қыс","ru":"Зима","en":"Winter"}],
+        [{"kk":"Көктем","ru":"Весна","en":"Spring"}],
+        [{"kk":"Жаз","ru":"Лето","en":"Summer"}],
+        [{"kk":"Күз","ru":"Осень","en":"Autumn"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "word",
+      "prompt": { "kk": "Жапырақтар сарғайып түседі. Жаңбыр жиі жауады. Бұл қай мезгіл?", "ru": "Листья желтеют и падают. Часто идёт дождь. Какое это время года?", "en": "Leaves turn yellow and fall. It rains often. What season is this?" },
+      "options": [
+        [{"kk":"Көктем","ru":"Весна","en":"Spring"}],
+        [{"kk":"Жаз","ru":"Лето","en":"Summer"}],
+        [{"kk":"Күз","ru":"Осень","en":"Autumn"}],
+        [{"kk":"Қыс","ru":"Зима","en":"Winter"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "Ең ыстық мезгіл қайсы? (қазақша)", "ru": "Самое жаркое время года? (на казахском)", "en": "The hottest season? (in Kazakh)" },
+      "correct_answer": "жаз",
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Наурыз мейрамы қай мезгілде тойланады?", "ru": "Когда празднуется Наурыз?", "en": "When is Nauryz celebrated?" },
+      "options": [
+        [{"kk":"Қыс","ru":"Зима","en":"Winter"}],
+        [{"kk":"Көктем","ru":"Весна","en":"Spring"}],
+        [{"kk":"Жаз","ru":"Лето","en":"Summer"}],
+        [{"kk":"Күз","ru":"Осень","en":"Autumn"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    }
+  ]
+}
