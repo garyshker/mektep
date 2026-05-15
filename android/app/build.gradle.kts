@@ -73,7 +73,12 @@ dependencies {
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
+
+    // WorkManager (periodic tasks)
+    implementation("androidx.work:work-runtime-ktx:2.10.0")
 
     // Room (local database)
     implementation("androidx.room:room-runtime:2.6.1")

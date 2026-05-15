@@ -17,7 +17,10 @@ import com.mektep.app.ui.dashboard.DashboardScreen
 import com.mektep.app.ui.lesson.LessonListScreen
 import com.mektep.app.ui.quickgame.QuickGameScreen
 import com.mektep.app.ui.lesson.LessonRunnerScreen
+import com.mektep.app.ui.pairing.ChildPairingScreen
+import com.mektep.app.ui.pairing.ParentPairingScreen
 import com.mektep.app.ui.parent.AppSelectorScreen
+import com.mektep.app.ui.parent.ParentRemoteDashboardScreen
 import com.mektep.app.ui.parent.ParentSettingsScreen
 import com.mektep.app.ui.screentime.ScreenTimeScreen
 import com.mektep.app.ui.setup.SetupScreen
@@ -82,16 +85,10 @@ fun MektepNavHost() {
                     navController.navigate(Routes.PIN_SETUP)
                 },
                 onRemoteParent = {
-                    // TODO Phase 3: navigate to pairing screen
-                    navController.navigate(Routes.DASHBOARD) {
-                        popUpTo(Routes.SETUP) { inclusive = true }
-                    }
+                    navController.navigate(Routes.PAIRING + "/parent")
                 },
                 onRemoteChild = {
-                    // TODO Phase 3: navigate to enter invite code
-                    navController.navigate(Routes.DASHBOARD) {
-                        popUpTo(Routes.SETUP) { inclusive = true }
-                    }
+                    navController.navigate(Routes.PAIRING + "/child")
                 },
                 viewModel = setupViewModel
             )
@@ -230,6 +227,38 @@ fun MektepNavHost() {
         composable(Routes.APP_SELECTOR) {
             AppSelectorScreen(
                 onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable("pairing/parent") {
+            ParentPairingScreen(
+                onDone = {
+                    navController.navigate(Routes.PARENT_DASHBOARD) {
+                        popUpTo(Routes.SETUP) { inclusive = true }
+                    }
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable("pairing/child") {
+            ChildPairingScreen(
+                onDone = {
+                    navController.navigate(Routes.DASHBOARD) {
+                        popUpTo(Routes.SETUP) { inclusive = true }
+                    }
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.PARENT_DASHBOARD) {
+            val authViewModel: AuthViewModel = hiltViewModel()
+            ParentRemoteDashboardScreen(
+                onLogout = {
+                    authViewModel.logout()
+                    navController.navigate(Routes.LOGIN) { popUpTo(0) { inclusive = true } }
+                }
             )
         }
     }

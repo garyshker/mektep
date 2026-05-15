@@ -109,6 +109,28 @@ object Strings {
         // ── App Selector ──
         "app_selector_title" to mapOf("en" to "Select Apps", "ru" to "Выбрать приложения", "kk" to "Қосымшаларды таңдау"),
         "app_selector_hint" to mapOf("en" to "Select which apps your child can use. ⏱️ = needs earned time, ✅ = always available.", "ru" to "Выберите, какие приложения может использовать ваш ребёнок. ⏱️ = нужно заработать, ✅ = всегда доступно.", "kk" to "Балаңыз қолдана алатын қосымшаларды таңдаңыз. ⏱️ = жинау керек, ✅ = әрқашан қолжетімді."),
+
+        // ── Pairing ──
+        "pairing_parent_title" to mapOf("en" to "Connect Child's Phone", "ru" to "Подключить телефон ребёнка", "kk" to "Баланың телефонын қосу"),
+        "pairing_child_title" to mapOf("en" to "Connect to Parent", "ru" to "Подключиться к родителю", "kk" to "Ата-анаға қосылу"),
+        "generating_code" to mapOf("en" to "Generating invite code...", "ru" to "Создаём код приглашения...", "kk" to "Шақыру коды жасалуда..."),
+        "share_code" to mapOf("en" to "Share this code with your child", "ru" to "Поделитесь этим кодом с ребёнком", "kk" to "Бұл кодты балаңызбен бөлісіңіз"),
+        "code_expires" to mapOf("en" to "Code expires in 24 hours", "ru" to "Код действует 24 часа", "kk" to "Код 24 сағат жарамды"),
+        "waiting_child" to mapOf("en" to "Waiting for child to connect", "ru" to "Ожидание подключения ребёнка", "kk" to "Баланың қосылуын күтуде"),
+        "enter_invite_code" to mapOf("en" to "Enter Invite Code", "ru" to "Введите код приглашения", "kk" to "Шақыру кодын енгізіңіз"),
+        "ask_parent_code" to mapOf("en" to "Ask your parent for the 6-letter code from their Mektep app", "ru" to "Спросите у родителя 6-значный код из их приложения Mektep", "kk" to "Ата-анаңыздан Mektep қосымшасындағы 6 таңбалы кодты сұраңыз"),
+        "invite_code" to mapOf("en" to "Invite Code", "ru" to "Код приглашения", "kk" to "Шақыру коды"),
+        "join_family" to mapOf("en" to "Join Family", "ru" to "Присоединиться", "kk" to "Қосылу"),
+
+        // ── Parent Remote Dashboard ──
+        "parent_dashboard" to mapOf("en" to "Parent Dashboard", "ru" to "Панель родителя", "kk" to "Ата-ана тақтасы"),
+        "connected_children" to mapOf("en" to "Connected Children", "ru" to "Подключённые дети", "kk" to "Қосылған балалар"),
+        "no_children_yet" to mapOf("en" to "No children connected yet", "ru" to "Пока нет подключённых детей", "kk" to "Әлі қосылған бала жоқ"),
+        "share_invite" to mapOf("en" to "Share the invite code above with your child", "ru" to "Поделитесь кодом с ребёнком", "kk" to "Жоғарыдағы кодты балаңызбен бөлісіңіз"),
+        "child_mode_active" to mapOf("en" to "Child mode active", "ru" to "Детский режим активен", "kk" to "Балалар режимі белсенді"),
+        "child_mode_inactive" to mapOf("en" to "Online", "ru" to "В сети", "kk" to "Желіде"),
+        "remaining" to mapOf("en" to "remaining", "ru" to "осталось", "kk" to "қалды"),
+        "bonus_granted" to mapOf("en" to "Bonus time sent!", "ru" to "Бонусное время отправлено!", "kk" to "Бонус уақыт жіберілді!"),
     )
 }
 
