@@ -38,6 +38,7 @@ class DashboardViewModel @Inject constructor(
 
     val language: StateFlow<String> = tokenStore.language.stateIn(viewModelScope, SharingStarted.Eagerly, "en")
     val deviceMode: StateFlow<String> = parentalPrefsStore.deviceMode.stateIn(viewModelScope, SharingStarted.Eagerly, "NONE")
+    val hasPinConfigured: StateFlow<Boolean> = parentalPrefsStore.pinHash.map { !it.isNullOrEmpty() }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     private val today = LocalDate.now().toString()
 

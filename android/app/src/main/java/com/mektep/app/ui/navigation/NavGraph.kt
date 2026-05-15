@@ -145,6 +145,9 @@ fun MektepNavHost() {
                 onParentSettings = { navController.navigate(Routes.PARENT_SETTINGS) },
                 onStartChildMode = {
                     navController.navigate(Routes.pinVerify("activate"))
+                },
+                onSetupPin = {
+                    navController.navigate(Routes.PIN_SETUP)
                 }
             )
         }

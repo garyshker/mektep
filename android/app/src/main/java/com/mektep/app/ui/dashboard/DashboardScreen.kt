@@ -37,6 +37,7 @@ fun DashboardScreen(
     onLogout: () -> Unit,
     onParentSettings: () -> Unit = {},
     onStartChildMode: () -> Unit = {},
+    onSetupPin: () -> Unit = {},
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -135,7 +136,20 @@ fun DashboardScreen(
                         visible = questVisible,
                         enter = slideInHorizontally(initialOffsetX = { it / 3 }) + fadeIn()
                     ) {
-                        QuestRow(quest, language, onClaim = { viewModel.claimQuestReward(quest) })
+                        QuestRow(
+                            quest = quest,
+                            language = language,
+                            onClaim = { viewModel.claimQuestReward(quest) },
+                            onTap = {
+                                // Navigate to the relevant activity for incomplete quests
+                                when (quest.type) {
+                                    "LESSON_COUNT" -> state.subjects.firstOrNull()?.let { onSubjectClick(it.subject.id) }
+                                    "QUICK_GAME" -> onQuickGame()
+                                    "XP_AMOUNT" -> state.subjects.firstOrNull()?.let { onSubjectClick(it.subject.id) }
+                                    "STREAK" -> state.subjects.firstOrNull()?.let { onSubjectClick(it.subject.id) }
+                                }
+                            }
+                        )
                     }
                 }
                 Spacer(Modifier.height(4.dp))
@@ -148,8 +162,9 @@ fun DashboardScreen(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+                    val hasPinConfigured by viewModel.hasPinConfigured.collectAsState()
                     Button(
-                        onClick = onStartChildMode,
+                        onClick = { if (hasPinConfigured) onStartChildMode() else onSetupPin() },
                         modifier = Modifier.weight(1f).height(44.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = MektepOrange)
                     ) {
@@ -252,7 +267,7 @@ private fun SubjectCard(item: SubjectWithProgress, language: String, onClick: ()
 }
 
 @Composable
-private fun QuestRow(quest: com.mektep.app.data.models.DailyQuest, language: String, onClaim: () -> Unit) {
+private fun QuestRow(quest: com.mektep.app.data.models.DailyQuest, language: String, onClaim: () -> Unit, onTap: () -> Unit = {}) {
     val questEmoji = when (quest.type) {
         "LESSON_COUNT" -> "📚"
         "XP_AMOUNT" -> "⭐"
@@ -271,7 +286,10 @@ private fun QuestRow(quest: com.mektep.app.data.models.DailyQuest, language: Str
     val isClaimed = quest.xpReward == 0
 
     Card(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp).clickable {
+            if (quest.completed && !isClaimed) onClaim()
+            else if (!quest.completed) onTap()
+        },
         colors = CardDefaults.cardColors(
             containerColor = when {
                 isClaimed -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
