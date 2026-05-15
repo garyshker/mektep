@@ -1,6 +1,8 @@
 package com.mektep.app.ui.navigation
 
+import android.content.Intent
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,9 +17,12 @@ import com.mektep.app.ui.dashboard.DashboardScreen
 import com.mektep.app.ui.lesson.LessonListScreen
 import com.mektep.app.ui.quickgame.QuickGameScreen
 import com.mektep.app.ui.lesson.LessonRunnerScreen
+import com.mektep.app.ui.parent.AppSelectorScreen
+import com.mektep.app.ui.parent.ParentSettingsScreen
 import com.mektep.app.ui.screentime.ScreenTimeScreen
 import com.mektep.app.ui.setup.SetupScreen
 import com.mektep.app.ui.setup.SetupViewModel
+import com.mektep.app.util.tr
 
 object Routes {
     const val LOGIN = "login"
@@ -155,17 +160,21 @@ fun MektepNavHost() {
             val setupViewModel: SetupViewModel = hiltViewModel()
             val pinError by setupViewModel.pinError.collectAsState()
 
+            val context = LocalContext.current
             PinEntryScreen(
                 title = when (purpose) {
-                    "activate" -> "Enter PIN to start Child Mode"
-                    "deactivate" -> "Enter PIN to exit Child Mode"
+                    "activate" -> tr("enter_pin_activate", "en")
+                    "deactivate" -> tr("enter_pin_deactivate", "en")
                     else -> "Enter your PIN"
                 },
                 onPinComplete = { pin ->
                     setupViewModel.verifyPin(pin) {
                         when (purpose) {
                             "activate" -> {
-                                // TODO Phase 2: launch ChildLauncherActivity
+                                // Launch the custom ChildLauncher as home screen
+                                val intent = Intent(context, com.mektep.app.ChildLauncherActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                context.startActivity(intent)
                                 navController.popBackStack()
                             }
                             "deactivate" -> {
@@ -212,12 +221,14 @@ fun MektepNavHost() {
         }
 
         composable(Routes.PARENT_SETTINGS) {
-            // TODO Phase 2: parent settings screen
-            // Placeholder for now
-            PinEntryScreen(
-                title = "Parent Settings",
-                subtitle = "Coming soon — app selector, limits, bedtime",
-                onPinComplete = {},
+            ParentSettingsScreen(
+                onBack = { navController.popBackStack() },
+                onSelectApps = { navController.navigate(Routes.APP_SELECTOR) }
+            )
+        }
+
+        composable(Routes.APP_SELECTOR) {
+            AppSelectorScreen(
                 onBack = { navController.popBackStack() }
             )
         }

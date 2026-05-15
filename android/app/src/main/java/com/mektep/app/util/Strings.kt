@@ -87,6 +87,28 @@ object Strings {
         "pins_dont_match" to mapOf("en" to "PINs don't match. Try again.", "ru" to "PIN-коды не совпадают. Попробуйте снова.", "kk" to "PIN-кодтар сәйкес келмейді. Қайталаңыз."),
         "enter_pin_activate" to mapOf("en" to "Enter PIN to start Child Mode", "ru" to "Введите PIN для детского режима", "kk" to "Балалар режимі үшін PIN енгізіңіз"),
         "enter_pin_deactivate" to mapOf("en" to "Enter PIN to exit Child Mode", "ru" to "Введите PIN для выхода", "kk" to "Шығу үшін PIN енгізіңіз"),
+
+        // ── Child Launcher ──
+        "your_apps" to mapOf("en" to "Your Apps", "ru" to "Твои приложения", "kk" to "Сенің қосымшаларың"),
+        "times_up" to mapOf("en" to "Time's Up!", "ru" to "Время вышло!", "kk" to "Уақыт бітті!"),
+        "times_up_desc" to mapOf("en" to "Complete a lesson to earn more screen time.", "ru" to "Пройди урок, чтобы заработать ещё экранного времени.", "kk" to "Экран уақытын жинау үшін сабақты орында."),
+
+        // ── Parent Settings ──
+        "parent_settings" to mapOf("en" to "Parent Settings", "ru" to "Настройки родителя", "kk" to "Ата-ана баптаулары"),
+        "allowed_apps" to mapOf("en" to "Allowed Apps", "ru" to "Разрешённые приложения", "kk" to "Рұқсат етілген қосымшалар"),
+        "apps_selected" to mapOf("en" to "%d apps selected", "ru" to "%d приложений выбрано", "kk" to "%d қосымша таңдалды"),
+        "daily_limit" to mapOf("en" to "Daily Screen Time Limit", "ru" to "Дневной лимит экранного времени", "kk" to "Күнделікті экран уақыты шектеуі"),
+        "minutes" to mapOf("en" to "minutes", "ru" to "минут", "kk" to "минут"),
+        "bedtime" to mapOf("en" to "Bedtime", "ru" to "Отбой", "kk" to "Ұйқы уақыты"),
+        "bedtime_desc" to mapOf("en" to "Block all apps during bedtime hours", "ru" to "Блокировать все приложения во время отбоя", "kk" to "Ұйқы уақытында барлық қосымшаларды бұғаттау"),
+        "not_set" to mapOf("en" to "Not set", "ru" to "Не задано", "kk" to "Орнатылмаған"),
+        "screen_time_ratio" to mapOf("en" to "Screen Time Ratio", "ru" to "Коэффициент экранного времени", "kk" to "Экран уақыты коэффициенті"),
+        "screen_time_ratio_desc" to mapOf("en" to "1 minute learning = 1.5 minutes screen time", "ru" to "1 минута учёбы = 1.5 минуты экранного времени", "kk" to "1 минут оқу = 1.5 минут экран уақыты"),
+        "save" to mapOf("en" to "Save", "ru" to "Сохранить", "kk" to "Сақтау"),
+
+        // ── App Selector ──
+        "app_selector_title" to mapOf("en" to "Select Apps", "ru" to "Выбрать приложения", "kk" to "Қосымшаларды таңдау"),
+        "app_selector_hint" to mapOf("en" to "Select which apps your child can use. ⏱️ = needs earned time, ✅ = always available.", "ru" to "Выберите, какие приложения может использовать ваш ребёнок. ⏱️ = нужно заработать, ✅ = всегда доступно.", "kk" to "Балаңыз қолдана алатын қосымшаларды таңдаңыз. ⏱️ = жинау керек, ✅ = әрқашан қолжетімді."),
     )
 }
 
