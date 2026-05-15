@@ -13,6 +13,7 @@ import com.mektep.app.ui.auth.LoginScreen
 import com.mektep.app.ui.components.PinEntryScreen
 import com.mektep.app.ui.dashboard.DashboardScreen
 import com.mektep.app.ui.lesson.LessonListScreen
+import com.mektep.app.ui.quickgame.QuickGameScreen
 import com.mektep.app.ui.lesson.LessonRunnerScreen
 import com.mektep.app.ui.screentime.ScreenTimeScreen
 import com.mektep.app.ui.setup.SetupScreen
@@ -26,6 +27,7 @@ object Routes {
     const val DASHBOARD = "dashboard"
     const val LESSON_LIST = "lesson_list/{subjectId}"
     const val LESSON_RUNNER = "lesson_runner/{lessonId}"
+    const val QUICK_GAME = "quick_game"
     const val SCREEN_TIME = "screen_time"
     const val PARENT_SETTINGS = "parent_settings"
     const val APP_SELECTOR = "app_selector"
@@ -133,6 +135,7 @@ fun MektepNavHost() {
             DashboardScreen(
                 onSubjectClick = { subjectId -> navController.navigate(Routes.lessonList(subjectId)) },
                 onScreenTimeClick = { navController.navigate(Routes.SCREEN_TIME) },
+                onQuickGame = { navController.navigate(Routes.QUICK_GAME) },
                 onLogout = {
                     authViewModel.logout()
                     navController.navigate(Routes.LOGIN) { popUpTo(0) { inclusive = true } }
@@ -198,6 +201,10 @@ fun MektepNavHost() {
                 lessonId = lessonId,
                 onFinish = { navController.popBackStack() }
             )
+        }
+
+        composable(Routes.QUICK_GAME) {
+            QuickGameScreen(onFinish = { navController.popBackStack() })
         }
 
         composable(Routes.SCREEN_TIME) {

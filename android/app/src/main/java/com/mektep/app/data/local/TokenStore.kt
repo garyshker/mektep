@@ -17,6 +17,9 @@ class TokenStore @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     companion object {
+        /** Quick static access to last known language for non-Compose contexts */
+        @Volatile var lastLanguage: String = "en"
+
         private val ACCESS_TOKEN = stringPreferencesKey("access_token")
         private val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
         private val USER_ID = stringPreferencesKey("user_id")
@@ -30,7 +33,7 @@ class TokenStore @Inject constructor(
     val userId: Flow<String?> = context.dataStore.data.map { it[USER_ID] }
     val userRole: Flow<String?> = context.dataStore.data.map { it[USER_ROLE] }
     val childId: Flow<String?> = context.dataStore.data.map { it[CHILD_ID] }
-    val language: Flow<String> = context.dataStore.data.map { it[LANGUAGE] ?: "en" }
+    val language: Flow<String> = context.dataStore.data.map { (it[LANGUAGE] ?: "en").also { lang -> lastLanguage = lang } }
 
     suspend fun saveAuth(accessToken: String, refreshToken: String, userId: String, role: String) {
         context.dataStore.edit {

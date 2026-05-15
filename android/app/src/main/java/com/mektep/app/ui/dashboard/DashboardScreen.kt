@@ -26,12 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mektep.app.ui.theme.*
+import com.mektep.app.util.tr
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
     onSubjectClick: (String) -> Unit,
     onScreenTimeClick: () -> Unit,
+    onQuickGame: () -> Unit = {},
     onLogout: () -> Unit,
     onParentSettings: () -> Unit = {},
     onStartChildMode: () -> Unit = {},
@@ -71,9 +73,9 @@ fun DashboardScreen(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    StatChip(Icons.Default.LocalFireDepartment, "${profile.currentStreak}", "Streak", MektepOrange)
+                    StatChip(Icons.Default.LocalFireDepartment, "${profile.currentStreak}", tr("streak", language), MektepOrange)
                     StatChip(Icons.Default.Star, "${profile.xpTotal}", "XP", MektepGreen)
-                    StatChip(Icons.Default.EmojiEvents, "Lv ${profile.xpTotal / 100 + 1}", "Level", MektepBlue)
+                    StatChip(Icons.Default.EmojiEvents, "Lv ${profile.xpTotal / 100 + 1}", tr("level", language), MektepBlue)
                 }
             }
 
@@ -86,10 +88,27 @@ fun DashboardScreen(
                     Icon(Icons.Default.Timer, null, Modifier.size(40.dp), tint = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.width(16.dp))
                     Column(Modifier.weight(1f)) {
-                        Text("Screen Time", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        Text("${state.screenTimeMinutes} minutes available", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text(tr("screen_time", language), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Text("${state.screenTimeMinutes} ${tr("minutes_available", language)}", color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
                     Icon(Icons.Default.ChevronRight, null)
+                }
+            }
+
+            // Quick Game card
+            Card(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp).clickable { onQuickGame() },
+                colors = CardDefaults.cardColors(containerColor = MektepOrange.copy(alpha = 0.15f)),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text("⚡", fontSize = 28.sp)
+                    Spacer(Modifier.width(12.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(tr("quick_game", language), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Text(tr("quick_game_desc", language), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    Icon(Icons.Default.ChevronRight, null, tint = MektepOrange)
                 }
             }
 
@@ -107,7 +126,7 @@ fun DashboardScreen(
                     ) {
                         Icon(Icons.Default.Lock, null, Modifier.size(18.dp))
                         Spacer(Modifier.width(8.dp))
-                        Text("Start Child Mode", fontSize = 14.sp)
+                        Text(tr("start_child_mode", language), fontSize = 14.sp)
                     }
                     OutlinedButton(
                         onClick = onParentSettings,
@@ -118,7 +137,7 @@ fun DashboardScreen(
                 }
             }
 
-            Text("Subjects", fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.padding(vertical = 12.dp))
+            Text(tr("subjects", language), fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.padding(vertical = 12.dp))
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
@@ -168,12 +187,25 @@ private fun SubjectCard(item: SubjectWithProgress, language: String, onClick: ()
     }
 
     Card(
-        modifier = Modifier.fillMaxWidth().height(140.dp).clickable { onClick() },
+        modifier = Modifier.fillMaxWidth().height(150.dp).clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = subjectColor.copy(alpha = 0.1f))
     ) {
         Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.SpaceBetween) {
-            Text(item.subject.emoji, fontSize = 28.sp)
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text(item.subject.emoji, fontSize = 28.sp)
+                // Star rating
+                if (item.bestStars > 0) {
+                    Row {
+                        repeat(3) { i ->
+                            Text(
+                                if (i < item.bestStars) "⭐" else "☆",
+                                fontSize = if (i < item.bestStars) 14.sp else 12.sp
+                            )
+                        }
+                    }
+                }
+            }
             Column {
                 Text(item.subject.name[language] ?: item.subject.name["en"] ?: "", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 if (item.totalLessons > 0) {
@@ -183,7 +215,7 @@ private fun SubjectCard(item: SubjectWithProgress, language: String, onClick: ()
                         modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(2.dp)),
                         color = subjectColor,
                     )
-                    Text("${item.completedLessons}/${item.totalLessons} lessons", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("${item.completedLessons}/${item.totalLessons} ${tr("lessons", language)}", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
