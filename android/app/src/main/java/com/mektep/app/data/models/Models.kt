@@ -95,3 +95,41 @@ data class ScreenTimeLog(
     val source: String, // lesson ID or app name
     val timestamp: Long = System.currentTimeMillis()
 )
+
+// ── Parental control entities ──
+
+@Entity(tableName = "parental_config")
+data class ParentalConfig(
+    @PrimaryKey val id: String = "local", // "local" for same-device, familyId for remote
+    val mode: String = "NONE", // NONE, SAME_DEVICE, REMOTE_PARENT, REMOTE_CHILD
+    val pinHash: String = "",
+    val pinSalt: String = "",
+    val childModeActive: Boolean = false,
+    val dailyLimitMinutes: Int = 60,
+    val bedtimeStart: String? = null, // "21:00"
+    val bedtimeEnd: String? = null, // "07:00"
+    val familyId: String? = null,
+    val inviteCode: String? = null,
+    val lastSyncedAt: Long? = null,
+    val createdAt: Long = System.currentTimeMillis()
+)
+
+@Entity(tableName = "allowed_app")
+data class AllowedApp(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val configId: String = "local",
+    val packageName: String,
+    val appLabel: String,
+    val needsEarnedTime: Boolean = true, // true = must earn screen time; false = always available
+    val dailyLimitMinutes: Int? = null // per-app limit, null = use global
+)
+
+@Entity(tableName = "child_session")
+data class ChildSession(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val startedAt: Long = System.currentTimeMillis(),
+    val endedAt: Long? = null,
+    val initialBalanceSecs: Int = 0,
+    val consumedSecs: Int = 0,
+    val endReason: String? = null // TIME_UP, PARENT_EXIT, FORCED_CLOSE
+)

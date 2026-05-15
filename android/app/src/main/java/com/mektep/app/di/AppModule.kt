@@ -18,21 +18,24 @@ object AppModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): MektepDatabase =
         Room.databaseBuilder(context, MektepDatabase::class.java, "mektep.db")
+            .addMigrations(MektepDatabase.MIGRATION_1_2)
             .fallbackToDestructiveMigration()
             .build()
 
-    @Provides
-    fun provideUserDao(db: MektepDatabase): UserDao = db.userDao()
-
-    @Provides
-    fun provideProgressDao(db: MektepDatabase): ProgressDao = db.progressDao()
-
-    @Provides
-    fun provideScreenTimeDao(db: MektepDatabase): ScreenTimeDao = db.screenTimeDao()
+    @Provides fun provideUserDao(db: MektepDatabase): UserDao = db.userDao()
+    @Provides fun provideProgressDao(db: MektepDatabase): ProgressDao = db.progressDao()
+    @Provides fun provideScreenTimeDao(db: MektepDatabase): ScreenTimeDao = db.screenTimeDao()
+    @Provides fun provideParentalConfigDao(db: MektepDatabase): ParentalConfigDao = db.parentalConfigDao()
+    @Provides fun provideAllowedAppDao(db: MektepDatabase): AllowedAppDao = db.allowedAppDao()
+    @Provides fun provideChildSessionDao(db: MektepDatabase): ChildSessionDao = db.childSessionDao()
 
     @Provides
     @Singleton
     fun provideTokenStore(@ApplicationContext context: Context): TokenStore = TokenStore(context)
+
+    @Provides
+    @Singleton
+    fun provideParentalPrefsStore(@ApplicationContext context: Context): ParentalPrefsStore = ParentalPrefsStore(context)
 
     @Provides
     @Singleton

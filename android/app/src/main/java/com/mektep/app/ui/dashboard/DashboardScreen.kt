@@ -33,6 +33,8 @@ fun DashboardScreen(
     onSubjectClick: (String) -> Unit,
     onScreenTimeClick: () -> Unit,
     onLogout: () -> Unit,
+    onParentSettings: () -> Unit = {},
+    onStartChildMode: () -> Unit = {},
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -88,6 +90,31 @@ fun DashboardScreen(
                         Text("${state.screenTimeMinutes} minutes available", color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
                     Icon(Icons.Default.ChevronRight, null)
+                }
+            }
+
+            // Parent controls (only show if mode is SAME_DEVICE or REMOTE_PARENT)
+            val deviceMode by viewModel.deviceMode.collectAsState()
+            if (deviceMode == "SAME_DEVICE") {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(
+                        onClick = onStartChildMode,
+                        modifier = Modifier.weight(1f).height(44.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = MektepOrange)
+                    ) {
+                        Icon(Icons.Default.Lock, null, Modifier.size(18.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text("Start Child Mode", fontSize = 14.sp)
+                    }
+                    OutlinedButton(
+                        onClick = onParentSettings,
+                        modifier = Modifier.height(44.dp)
+                    ) {
+                        Icon(Icons.Default.Settings, null, Modifier.size(18.dp))
+                    }
                 }
             }
 

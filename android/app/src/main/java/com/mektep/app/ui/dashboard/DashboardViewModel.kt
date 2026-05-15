@@ -3,6 +3,7 @@ package com.mektep.app.ui.dashboard
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mektep.app.data.local.LessonLoader
+import com.mektep.app.data.local.ParentalPrefsStore
 import com.mektep.app.data.local.ProgressDao
 import com.mektep.app.data.local.TokenStore
 import com.mektep.app.data.local.UserDao
@@ -33,10 +34,12 @@ class DashboardViewModel @Inject constructor(
     private val userDao: UserDao,
     private val progressDao: ProgressDao,
     private val lessonLoader: LessonLoader,
-    private val tokenStore: TokenStore
+    private val tokenStore: TokenStore,
+    private val parentalPrefsStore: ParentalPrefsStore
 ) : ViewModel() {
 
     val language: StateFlow<String> = tokenStore.language.stateIn(viewModelScope, SharingStarted.Eagerly, "en")
+    val deviceMode: StateFlow<String> = parentalPrefsStore.deviceMode.stateIn(viewModelScope, SharingStarted.Eagerly, "NONE")
 
     // Observe profile reactively — auto-updates when XP/screen time changes
     val uiState: StateFlow<DashboardUiState> = combine(

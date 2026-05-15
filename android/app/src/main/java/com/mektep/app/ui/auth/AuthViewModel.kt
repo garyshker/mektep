@@ -8,6 +8,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.mektep.app.data.local.ParentalPrefsStore
 import com.mektep.app.data.local.TokenStore
 import com.mektep.app.data.local.UserDao
 import com.mektep.app.data.models.UserProfile
@@ -27,23 +28,27 @@ data class AuthUiState(
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val userDao: UserDao,
-    private val tokenStore: TokenStore
+    private val tokenStore: TokenStore,
+    private val parentalPrefsStore: ParentalPrefsStore
 ) : ViewModel() {
 
-    private val auth = FirebaseAuth.getInstance()
+    private val auth: FirebaseAuth? = try { FirebaseAuth.getInstance() } catch (_: Exception) { null }
 
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()
 
     val isLoggedIn: Flow<Boolean> = tokenStore.accessToken.map { !it.isNullOrEmpty() }
     val userRole: Flow<String?> = tokenStore.userRole
+    val setupCompleted: Flow<Boolean> = parentalPrefsStore.setupCompleted
 
     init {
-        // Check if already signed in
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            _uiState.value = AuthUiState(isLoggedIn = true)
-        }
+        // Check if already signed in (gracefully handle missing Play Services)
+        try {
+            val currentUser = auth?.currentUser
+            if (currentUser != null) {
+                _uiState.value = AuthUiState(isLoggedIn = true)
+            }
+        } catch (_: Exception) { }
     }
 
     fun handleGoogleSignInResult(result: ActivityResult) {
@@ -53,7 +58,8 @@ class AuthViewModel @Inject constructor(
                 val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 val account = task.getResult(ApiException::class.java)
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                val authResult = auth.signInWithCredential(credential).await()
+                val firebaseAuth = auth ?: throw Exception("Firebase Auth not available")
+                val authResult = firebaseAuth.signInWithCredential(credential).await()
                 val user = authResult.user!!
 
                 // Check if profile exists
@@ -112,7 +118,7 @@ class AuthViewModel @Inject constructor(
 
     fun logout() {
         viewModelScope.launch {
-            auth.signOut()
+            try { auth?.signOut() } catch (_: Exception) { }
             tokenStore.clear()
             userDao.clear()
             _uiState.value = AuthUiState()

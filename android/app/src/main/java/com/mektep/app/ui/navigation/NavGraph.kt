@@ -1,30 +1,40 @@
 package com.mektep.app.ui.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.mektep.app.data.local.ParentalPrefsStore
 import com.mektep.app.ui.auth.AuthViewModel
 import com.mektep.app.ui.auth.LoginScreen
+import com.mektep.app.ui.components.PinEntryScreen
 import com.mektep.app.ui.dashboard.DashboardScreen
 import com.mektep.app.ui.lesson.LessonListScreen
 import com.mektep.app.ui.lesson.LessonRunnerScreen
 import com.mektep.app.ui.screentime.ScreenTimeScreen
+import com.mektep.app.ui.setup.SetupScreen
+import com.mektep.app.ui.setup.SetupViewModel
 
 object Routes {
     const val LOGIN = "login"
+    const val SETUP = "setup"
+    const val PIN_SETUP = "pin_setup"
+    const val PIN_VERIFY = "pin_verify/{purpose}" // purpose: activate, deactivate, settings
     const val DASHBOARD = "dashboard"
     const val LESSON_LIST = "lesson_list/{subjectId}"
     const val LESSON_RUNNER = "lesson_runner/{lessonId}"
     const val SCREEN_TIME = "screen_time"
+    const val PARENT_SETTINGS = "parent_settings"
+    const val APP_SELECTOR = "app_selector"
+    const val PAIRING = "pairing"
+    const val PARENT_DASHBOARD = "parent_dashboard"
 
     fun lessonList(subjectId: String) = "lesson_list/$subjectId"
     fun lessonRunner(lessonId: String) = "lesson_runner/$lessonId"
+    fun pinVerify(purpose: String) = "pin_verify/$purpose"
 }
 
 @Composable
@@ -32,19 +42,91 @@ fun MektepNavHost() {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = hiltViewModel()
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState(initial = false)
+    val setupCompleted by authViewModel.setupCompleted.collectAsState(initial = true) // default true to avoid flash
 
-    val startDest = if (isLoggedIn) Routes.DASHBOARD else Routes.LOGIN
+    val startDest = when {
+        !isLoggedIn -> Routes.LOGIN
+        !setupCompleted -> Routes.SETUP
+        else -> Routes.DASHBOARD
+    }
 
     NavHost(navController = navController, startDestination = startDest) {
 
         composable(Routes.LOGIN) {
             LoginScreen(
                 onLoginSuccess = {
-                    navController.navigate(Routes.DASHBOARD) {
+                    // After login, check if setup is needed
+                    navController.navigate(Routes.SETUP) {
                         popUpTo(Routes.LOGIN) { inclusive = true }
                     }
                 }
             )
+        }
+
+        composable(Routes.SETUP) {
+            val setupViewModel: SetupViewModel = hiltViewModel()
+            SetupScreen(
+                onSkip = {
+                    navController.navigate(Routes.DASHBOARD) {
+                        popUpTo(Routes.SETUP) { inclusive = true }
+                    }
+                },
+                onSameDevice = {
+                    navController.navigate(Routes.PIN_SETUP)
+                },
+                onRemoteParent = {
+                    // TODO Phase 3: navigate to pairing screen
+                    navController.navigate(Routes.DASHBOARD) {
+                        popUpTo(Routes.SETUP) { inclusive = true }
+                    }
+                },
+                onRemoteChild = {
+                    // TODO Phase 3: navigate to enter invite code
+                    navController.navigate(Routes.DASHBOARD) {
+                        popUpTo(Routes.SETUP) { inclusive = true }
+                    }
+                },
+                viewModel = setupViewModel
+            )
+        }
+
+        composable(Routes.PIN_SETUP) {
+            val setupViewModel: SetupViewModel = hiltViewModel()
+            var step by remember { mutableIntStateOf(1) }
+            var firstPin by remember { mutableStateOf("") }
+            val pinError by setupViewModel.pinError.collectAsState()
+
+            if (step == 1) {
+                PinEntryScreen(
+                    title = "Create a PIN",
+                    subtitle = "This PIN locks Child Mode. Only you should know it.",
+                    onPinComplete = { pin ->
+                        firstPin = pin
+                        step = 2
+                    },
+                    onBack = { navController.popBackStack() }
+                )
+            } else {
+                PinEntryScreen(
+                    title = "Confirm your PIN",
+                    subtitle = "Enter the same PIN again",
+                    onPinComplete = { pin ->
+                        if (pin == firstPin) {
+                            setupViewModel.savePin(pin) {
+                                setupViewModel.completeSetup()
+                                navController.navigate(Routes.DASHBOARD) {
+                                    popUpTo(Routes.SETUP) { inclusive = true }
+                                }
+                            }
+                        } else {
+                            step = 1
+                            firstPin = ""
+                        }
+                    },
+                    onBack = { step = 1; firstPin = "" },
+                    error = if (step == 2 && pinError != null) "PINs don't match. Try again." else null
+                )
+            }
         }
 
         composable(Routes.DASHBOARD) {
@@ -54,7 +136,44 @@ fun MektepNavHost() {
                 onLogout = {
                     authViewModel.logout()
                     navController.navigate(Routes.LOGIN) { popUpTo(0) { inclusive = true } }
+                },
+                onParentSettings = { navController.navigate(Routes.PARENT_SETTINGS) },
+                onStartChildMode = {
+                    navController.navigate(Routes.pinVerify("activate"))
                 }
+            )
+        }
+
+        composable(
+            Routes.PIN_VERIFY,
+            arguments = listOf(navArgument("purpose") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val purpose = backStackEntry.arguments?.getString("purpose") ?: "activate"
+            val setupViewModel: SetupViewModel = hiltViewModel()
+            val pinError by setupViewModel.pinError.collectAsState()
+
+            PinEntryScreen(
+                title = when (purpose) {
+                    "activate" -> "Enter PIN to start Child Mode"
+                    "deactivate" -> "Enter PIN to exit Child Mode"
+                    else -> "Enter your PIN"
+                },
+                onPinComplete = { pin ->
+                    setupViewModel.verifyPin(pin) {
+                        when (purpose) {
+                            "activate" -> {
+                                // TODO Phase 2: launch ChildLauncherActivity
+                                navController.popBackStack()
+                            }
+                            "deactivate" -> {
+                                navController.popBackStack()
+                            }
+                            else -> navController.popBackStack()
+                        }
+                    }
+                },
+                onBack = { navController.popBackStack() },
+                error = pinError
             )
         }
 
@@ -83,6 +202,17 @@ fun MektepNavHost() {
 
         composable(Routes.SCREEN_TIME) {
             ScreenTimeScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(Routes.PARENT_SETTINGS) {
+            // TODO Phase 2: parent settings screen
+            // Placeholder for now
+            PinEntryScreen(
+                title = "Parent Settings",
+                subtitle = "Coming soon — app selector, limits, bedtime",
+                onPinComplete = {},
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }
