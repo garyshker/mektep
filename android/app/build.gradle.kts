@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "com.mektep.app"
+    namespace = "app.tisimai.mektep"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.mektep.app"
+        applicationId = "app.tisimai.mektep"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
