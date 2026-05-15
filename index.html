@@ -1059,6 +1059,83 @@
   body.dark .li-text{ background:var(--card-soft) }
   body.dark .ob-input{ background:var(--card) }
   .q-image{ text-align:center; font-size:44px; padding:4px 0 16px; line-height:1.4; letter-spacing:3px }
+
+  /* ── Quick Game Launcher Card ── */
+  .qgame-launcher{
+    display:flex; align-items:center; justify-content:space-between;
+    background:linear-gradient(135deg,#FFE4A0,#FFB347);
+    border-radius:20px; padding:18px 20px; cursor:pointer;
+    box-shadow:0 4px 16px rgba(255,140,0,.2);
+    transition:transform .15s, box-shadow .15s;
+    margin-bottom:4px;
+  }
+  .qgame-launcher:hover{ transform:translateY(-2px); box-shadow:0 8px 24px rgba(255,140,0,.3) }
+  .qgl-left{ display:flex; align-items:center; gap:14px }
+  .qgl-icon{ font-size:28px; line-height:1 }
+  .qgl-title{ font-size:17px; font-weight:900; color:#7A3800 }
+  .qgl-sub{ font-size:13px; font-weight:700; color:#A05010; margin-top:2px }
+  .qgl-arrow{ font-size:22px; font-weight:900; color:#7A3800 }
+
+  /* ── Quick Game Shell ── */
+  .qgame-shell{
+    position:fixed; inset:0; z-index:200; background:var(--bg);
+    display:flex; flex-direction:column;
+    padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,16px);
+  }
+  .qgame-top{
+    display:flex; align-items:center; gap:12px; padding:16px 20px;
+  }
+  .qgame-dots{ display:flex; gap:5px; flex:1; flex-wrap:wrap; align-items:center }
+  .qgd{ width:7px; height:7px; border-radius:99px; background:var(--line); transition:all .25s }
+  .qgd.done{ background:var(--brand) }
+  .qgd.cur{ background:var(--brand); width:18px }
+  .qgame-counter{ font-weight:800; font-size:13px; color:var(--ink-mute) }
+
+  .qgame-body{
+    flex:1; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:28px; padding:0 24px 32px;
+  }
+  .qgame-ring-wrap{ position:relative; width:72px; height:72px }
+  .qgame-ring{ width:72px; height:72px }
+  .qgame-ring-num{
+    position:absolute; inset:0; display:grid; place-items:center;
+    font-size:22px; font-weight:900; color:var(--brand);
+  }
+  .qgame-prompt{
+    font-size:56px; font-weight:900; letter-spacing:-.02em;
+    color:var(--ink); text-align:center; line-height:1;
+  }
+  .qgame-opts{
+    display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    width:100%; max-width:360px;
+  }
+  .qgame-opt{
+    background:var(--card); border:2px solid var(--line); border-radius:18px;
+    padding:20px 12px; font-size:28px; font-weight:900; color:var(--ink);
+    transition:transform .1s, background .15s, border-color .15s;
+    box-shadow:var(--shadow);
+  }
+  .qgame-opt:not(:disabled):active{ transform:scale(.95) }
+  .qgame-opt.right{ background:#d4f5e2; border-color:#2D9D5C; color:#1a7a44 }
+  .qgame-opt.wrong{ background:#ffe4e4; border-color:#e14b4b; color:#b83333 }
+  .qgame-opt:disabled{ cursor:default }
+
+  .qgame-done{
+    flex:1; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:20px; text-align:center; padding:24px;
+  }
+  .qgame-score-big{
+    font-size:80px; font-weight:900; letter-spacing:-.02em; line-height:1; color:var(--ink);
+  }
+  .qgame-score-big span{ font-size:36px; color:var(--ink-mute) }
+  .qgame-done-msg{ font-size:20px; font-weight:700; color:var(--ink-soft) }
+  .qgame-done-btns{ display:flex; gap:12px; margin-top:8px }
+
+  body.dark .qgame-opt{ background:var(--card) }
+  body.dark .qgame-launcher{ background:linear-gradient(135deg,#3D2800,#5A3500) }
+  body.dark .qgl-title{ color:#FFD080 }
+  body.dark .qgl-sub{ color:#C08040 }
+  body.dark .qgl-arrow{ color:#FFD080 }
 </style>
 </head>
 <body>

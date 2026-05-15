@@ -3,7 +3,7 @@
 //   tweaks-panel.jsx  → sets window.useTweaks, window.TweaksPanel, etc.
 //   lesson-runner.jsx → sets window.LessonRunner, window.pickLang, etc.
 
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef, useMemo, useCallback } = React;
 
 // Capture shared dependencies from window at module-load time.
 // Because the sequential loader ran the above two files first, these are
@@ -118,6 +118,13 @@ const L = {
     darkMode: "Күңгірт тақырып",
     seeAllToast: "Барлық пәндер — жақында!",
     leaderboardToast: "Рейтинг — жақында!",
+    allDone: "Барлық сабақтар аяқталды! 🎉",
+    allDoneSub: "Жаңа сабақтарды күт",
+    allDoneBtn: "Күту...",
+    quickGame: "Жылдам ойын",
+    quickGameSub: "× ÷ жылдамдық тесті",
+    perfect:"Тамаша! 🌟", great:"Жарайсың!", good:"Жақсы!", tryAgain:"Тағы бір рет!",
+    quit:"Шығу", retry:"Қайталау",
   },
   ru: {
     welcome: (n) => `Привет, ${n || 'Ученик'}!`,
@@ -152,6 +159,13 @@ const L = {
     darkMode: "Тёмная тема",
     seeAllToast: "Все предметы — скоро!",
     leaderboardToast: "Рейтинг — скоро!",
+    allDone: "Все уроки пройдены! 🎉",
+    allDoneSub: "Ждите новые уроки",
+    allDoneBtn: "Ожидать...",
+    quickGame: "Быстрая игра",
+    quickGameSub: "× ÷ тест на скорость",
+    perfect:"Отлично! 🌟", great:"Хорошо!", good:"Неплохо!", tryAgain:"Ещё раз!",
+    quit:"Выйти", retry:"Снова",
   },
   en: {
     welcome: (n) => `Hi, ${n || 'Student'}!`,
@@ -186,6 +200,13 @@ const L = {
     darkMode: "Dark mode",
     seeAllToast: "All subjects — coming soon!",
     leaderboardToast: "Leaderboard — coming soon!",
+    allDone: "All lessons complete! 🎉",
+    allDoneSub: "New lessons coming soon",
+    allDoneBtn: "Coming soon...",
+    quickGame: "Quick Game",
+    quickGameSub: "× ÷ speed test",
+    perfect:"Excellent! 🌟", great:"Great!", good:"Good!", tryAgain:"Try again!",
+    quit:"Quit", retry:"Again",
   },
 };
 
@@ -193,8 +214,8 @@ const L = {
 
 const SUB_CONTENT = {
   kk: [
-    { id:"math", name:"Математика", tag:"Қосу, алу, көбейту", color:"math", icon: IconMath, ready:true,
-      lessonTitles:{ 1:"Қосу · 100 ішінде", 2:"Алу · 100 ішінде", 3:"Көбейту кестесі · 2-ге", 4:"Көбейту кестесі · 3-ке", 5:"Көбейту кестесі · 4-ке", 6:"Көбейту кестесі · 5-ке", 7:"Көбейту кестесі · 6-ға", 8:"Бөлу · 2-ге" } },
+    { id:"math", name:"Математика", tag:"Қосу, алу, көбейту, бөлу", color:"math", icon: IconMath, ready:true,
+      lessonTitles:{ 1:"Қосу · 100 ішінде", 2:"Алу · 100 ішінде", 3:"Көбейту кестесі · 2-ге", 4:"Көбейту кестесі · 3-ке", 5:"Көбейту кестесі · 4-ке", 6:"Көбейту кестесі · 5-ке", 7:"Көбейту кестесі · 6-ға", 8:"Бөлу · 2-ге", 9:"Сандарды салыстыру · < > =", 10:"Ұзындық · см, дм, м", 11:"Көлем мен масса · литр, кг", 12:"Бөлу · 3-ке, 4-ке, 5-ке" } },
     { id:"kaz",  name:"Қазақ тілі", tag:"Әліпби, дыбыстар, сөздер", color:"kaz", icon: IconKaz, ready:true,
       lessonTitles:{ 1:"Қазақ әліпбиі · ерекше әріптер", 2:"Буын · сөзді бөлу", 3:"Жануарлар · сөздік", 4:"Жуан және жіңішке дыбыстар", 5:"Сөз құрастыру", 6:"Түстер" } },
     { id:"world", name:"Дүниетану", tag:"Табиғат, жануарлар", color:"world", icon: IconWorld, ready:true,
@@ -205,8 +226,8 @@ const SUB_CONTENT = {
     { id:"music", name:"Музыка",  tag:"Ноталар, ырғақ, ән", color:"music", icon: IconMusic, ready:false },
   ],
   ru: [
-    { id:"math", name:"Математика", tag:"Сложение, вычитание, умножение", color:"math", icon: IconMath, ready:true,
-      lessonTitles:{ 1:"Сложение · до 100", 2:"Вычитание · до 100", 3:"Таблица умножения · на 2", 4:"Таблица умножения · на 3", 5:"Таблица умножения · на 4", 6:"Таблица умножения · на 5", 7:"Таблица умножения · на 6", 8:"Деление · на 2" } },
+    { id:"math", name:"Математика", tag:"Сложение, вычитание, умножение, деление", color:"math", icon: IconMath, ready:true,
+      lessonTitles:{ 1:"Сложение · до 100", 2:"Вычитание · до 100", 3:"Таблица умножения · на 2", 4:"Таблица умножения · на 3", 5:"Таблица умножения · на 4", 6:"Таблица умножения · на 5", 7:"Таблица умножения · на 6", 8:"Деление · на 2", 9:"Сравнение чисел · < > =", 10:"Длина · см, дм, м", 11:"Объём и масса · литр, кг", 12:"Деление · на 3, 4, 5" } },
     { id:"kaz",  name:"Казахский",  tag:"Алфавит, звуки, слова", color:"kaz", icon: IconKaz, ready:true,
       lessonTitles:{ 1:"Казахский алфавит · особые буквы", 2:"Слог · деление слова", 3:"Животные · словарь", 4:"Твёрдые и мягкие звуки", 5:"Составь слово", 6:"Цвета" } },
     { id:"world", name:"Дүниетану", tag:"Природа, животные", color:"world", icon: IconWorld, ready:true,
@@ -217,8 +238,8 @@ const SUB_CONTENT = {
     { id:"music", name:"Музыка",  tag:"Ноты, ритм, пение", color:"music", icon: IconMusic, ready:false },
   ],
   en: [
-    { id:"math", name:"Math",   tag:"Addition, subtraction, times tables", color:"math", icon: IconMath, ready:true,
-      lessonTitles:{ 1:"Addition · within 100", 2:"Subtraction · within 100", 3:"Times tables · ×2", 4:"Times tables · ×3", 5:"Times tables · ×4", 6:"Times tables · ×5", 7:"Times tables · ×6", 8:"Division · ÷2" } },
+    { id:"math", name:"Math",   tag:"Addition, subtraction, multiplication, division", color:"math", icon: IconMath, ready:true,
+      lessonTitles:{ 1:"Addition · within 100", 2:"Subtraction · within 100", 3:"Times tables · ×2", 4:"Times tables · ×3", 5:"Times tables · ×4", 6:"Times tables · ×5", 7:"Times tables · ×6", 8:"Division · ÷2", 9:"Comparing numbers · < > =", 10:"Length · cm, dm, m", 11:"Volume & Mass · litre, kg", 12:"Division · ÷3, ÷4, ÷5" } },
     { id:"kaz",  name:"Kazakh", tag:"Alphabet, sounds, words", color:"kaz", icon: IconKaz, ready:true,
       lessonTitles:{ 1:"Kazakh Alphabet · special letters", 2:"Syllables · splitting words", 3:"Animals · vocabulary", 4:"Hard & soft vowels", 5:"Build a word", 6:"Colors" } },
     { id:"world", name:"World Studies", tag:"Nature, animals", color:"world", icon: IconWorld, ready:true,
@@ -242,7 +263,7 @@ const LESSON_FOR = (subjectId, lessonNum) => {
 
 const DEFAULT_PROGRESS = {
   name: '',
-  math:  { lesson: 1, stars: 0, of: 8 },
+  math:  { lesson: 1, stars: 0, of: 12 },
   kaz:   { lesson: 1, stars: 0, of: 6 },
   world: { lesson: 1, stars: 0, of: 2 },
   eng:   { lesson: 1, stars: 0, of: 2 },
@@ -264,10 +285,10 @@ function loadProgress() {
       return {
         ...DEFAULT_PROGRESS,
         ...saved,
-        math:  { ...DEFAULT_PROGRESS.math,  ...(saved.math  || {}) },
-        kaz:   { ...DEFAULT_PROGRESS.kaz,   ...(saved.kaz   || {}) },
-        world: { ...DEFAULT_PROGRESS.world, ...(saved.world || {}) },
-        eng:   { ...DEFAULT_PROGRESS.eng,   ...(saved.eng   || {}) },
+        math:  { ...DEFAULT_PROGRESS.math,  ...(saved.math  || {}), of: DEFAULT_PROGRESS.math.of  },
+        kaz:   { ...DEFAULT_PROGRESS.kaz,   ...(saved.kaz   || {}), of: DEFAULT_PROGRESS.kaz.of   },
+        world: { ...DEFAULT_PROGRESS.world, ...(saved.world || {}), of: DEFAULT_PROGRESS.world.of },
+        eng:   { ...DEFAULT_PROGRESS.eng,   ...(saved.eng   || {}), of: DEFAULT_PROGRESS.eng.of   },
       };
     }
   } catch (e) {}
@@ -283,9 +304,13 @@ function subjectsFor(lang, progress) {
   return SUB_CONTENT[lang].map(s => {
     const p = prog[s.id];
     if (!s.ready) return s;
+    const of = DEFAULT_PROGRESS[s.id]?.of ?? (s.lessonTitles ? Object.keys(s.lessonTitles).length : 8);
     const lessonNum = p?.lesson ?? 1;
-    const nextTitle = s.lessonTitles[lessonNum] || s.lessonTitles[Object.keys(s.lessonTitles)[0]];
-    return { ...s, lesson: lessonNum, of: p.of, stars: p.stars, next: nextTitle, lessonId: LESSON_FOR(s.id, lessonNum) };
+    const allDone = lessonNum > of;
+    const safeNum = Math.min(lessonNum, of);
+    const nextTitle = s.lessonTitles[safeNum] || s.lessonTitles[1];
+    return { ...s, lesson: lessonNum, of, stars: p?.stars ?? 0, next: nextTitle,
+             lessonId: allDone ? null : LESSON_FOR(s.id, lessonNum), allDone };
   });
 }
 
@@ -450,15 +475,140 @@ function OnboardingScreen({ onDone }) {
   );
 }
 
+// ─── Quick Game ────────────────────────────────────────────────────
+
+function makeQs(total) {
+  return Array.from({ length: total }, () => {
+    const mul = Math.random() > 0.4;
+    const a = 2 + Math.floor(Math.random() * 8);
+    const b = 2 + Math.floor(Math.random() * 8);
+    const ans = mul ? a * b : a;
+    const prompt = mul ? `${a} × ${b}` : `${a * b} ÷ ${b}`;
+    const ws = [];
+    while (ws.length < 3) {
+      const delta = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1);
+      const w = ans + delta;
+      if (w > 0 && w !== ans && !ws.includes(w)) ws.push(w);
+    }
+    return { prompt, ans, opts: [ans, ...ws].sort(() => Math.random() - 0.5) };
+  });
+}
+
+function QuickGameRound({ t, onClose, onRestart }) {
+  const TOTAL = 20, SECS = 5;
+  const [qs] = useState(() => makeQs(TOTAL));
+  const [idx, setIdx] = useState(0);
+  const [score, setScore] = useState(0);
+  const [chosen, setChosen] = useState(null);
+  const [tLeft, setTLeft] = useState(SECS);
+  const busy = useRef(false);
+  const curAns = useRef(null);
+
+  const isDone = idx >= TOTAL;
+  const cur = qs[Math.min(idx, TOTAL - 1)];
+  curAns.current = cur?.ans;
+
+  const go = useCallback((picked) => {
+    if (busy.current) return;
+    busy.current = true;
+    const ok = picked === curAns.current;
+    if (ok) setScore(s => s + 1);
+    setChosen(picked);
+    setTimeout(() => {
+      setIdx(i => i + 1);
+      setTLeft(SECS);
+      setChosen(null);
+      busy.current = false;
+    }, 600);
+  }, []);
+
+  const goRef = useRef(go);
+  goRef.current = go;
+
+  useEffect(() => {
+    if (isDone || chosen !== null) return;
+    if (tLeft <= 0) { goRef.current('__timeout__'); return; }
+    const id = setTimeout(() => setTLeft(n => n - 1), 1000);
+    return () => clearTimeout(id);
+  }, [tLeft, isDone, chosen]);
+
+  if (isDone) {
+    const emoji = score >= 9 ? '🏆' : score >= 7 ? '🌟' : score >= 5 ? '👍' : '💪';
+    const msg = score >= 9 ? t.perfect : score >= 7 ? t.great : score >= 5 ? t.good : t.tryAgain;
+    return (
+      <div className="qgame-shell">
+        <div className="qgame-done">
+          <div style={{ fontSize: 64 }}>{emoji}</div>
+          <div className="qgame-score-big">{score}<span>/{TOTAL}</span></div>
+          <div className="qgame-done-msg">{msg}</div>
+          <div className="qgame-done-btns">
+            <button className="btn ghost" onClick={onClose}>{t.quit}</button>
+            <button className="btn prim" onClick={onRestart}>{t.retry} ↺</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const circ = 113;
+  return (
+    <div className="qgame-shell">
+      <div className="qgame-top">
+        <button className="lt-close" onClick={onClose}>✕</button>
+        <div className="qgame-dots">
+          {qs.map((_, i) => <div key={i} className={"qgd" + (i < idx ? " done" : i === idx ? " cur" : "")} />)}
+        </div>
+        <div className="qgame-counter">{idx + 1}/{TOTAL}</div>
+      </div>
+      <div className="qgame-body">
+        <div className="qgame-ring-wrap">
+          <svg viewBox="0 0 44 44" className="qgame-ring">
+            <circle cx="22" cy="22" r="18" fill="none" stroke="var(--line)" strokeWidth="3"/>
+            <circle cx="22" cy="22" r="18" fill="none" stroke="var(--brand)" strokeWidth="3"
+              strokeDasharray={`${(tLeft / SECS) * circ} ${circ}`}
+              strokeLinecap="round"
+              style={{ transform:'rotate(-90deg)', transformOrigin:'center', transition:'stroke-dasharray .9s linear' }}
+            />
+          </svg>
+          <span className="qgame-ring-num">{tLeft}</span>
+        </div>
+        <div className="qgame-prompt">{cur.prompt} = ?</div>
+        <div className="qgame-opts">
+          {cur.opts.map((opt, i) => {
+            let cls = "qgame-opt";
+            if (chosen !== null) {
+              if (opt === cur.ans) cls += " right";
+              else if (opt === chosen) cls += " wrong";
+            }
+            return (
+              <button key={i} className={cls} disabled={chosen !== null} onClick={() => go(opt)}>
+                {opt}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function QuickGame({ t, onClose }) {
+  const [round, setRound] = useState(0);
+  return <QuickGameRound key={round} t={t} onClose={onClose} onRestart={() => setRound(r => r + 1)} />;
+}
+
 // ─── Home screen ───────────────────────────────────────────────────
 
 function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, showToast }) {
   const t = L[tweaks.language];
   const subs = subjectsFor(tweaks.language, progress);
   const [open, setOpen] = useState(null);
+  const [quickGame, setQuickGame] = useState(false);
   const quests = progress.questsDone;
   const setQuests = (q) => setProgress(p => ({ ...p, questsDone: q }));
   const subject = (id) => subs.find(s => s.id === id);
+
+  if (quickGame) return <QuickGame t={t} onClose={() => setQuickGame(false)} />;
 
   return (
     <div className="v2">
@@ -497,27 +647,34 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
       <div className="hero">
         {(() => {
           const lastSub = subs.find(s => s.id === (progress.lastSubjectId || 'math')) || subs.find(s => s.ready);
-          const subProg = progress[lastSub?.id] || { lesson: 1, of: 8 };
+          const subProg = progress[lastSub?.id] || { lesson: 1, of: 12 };
+          const allDone = lastSub?.allDone;
+          const pct = allDone ? 100 : Math.round(((subProg.lesson - 1) / (lastSub?.of || 12)) * 100);
           return (
-            <div className="continue" style={{ cursor: 'pointer' }} onClick={() => {
-              if (lastSub?.lessonId) onStartLesson(lastSub.lessonId);
+            <div className="continue" style={{ cursor: allDone ? 'default' : 'pointer' }} onClick={() => {
+              if (!allDone && lastSub?.lessonId) onStartLesson(lastSub.lessonId);
             }}>
               <div>
                 <div className="continue-eyebrow">{t.continueEyebrow} · {lastSub?.name}</div>
-                <h2>{lastSub?.next || t.continueTitle}</h2>
-                <div className="sub">{t.continueSub}</div>
+                {allDone
+                  ? <><h2>{t.allDone}</h2><div className="sub">{t.allDoneSub}</div></>
+                  : <><h2>{lastSub?.next || t.continueTitle}</h2><div className="sub">{t.continueSub}</div></>
+                }
               </div>
               <div className="continue-row">
                 <div className="continue-meta">
                   <div className="continue-bar">
-                    <div style={{ width: ((subProg.lesson / subProg.of) * 100) + '%' }}></div>
+                    <div style={{ width: pct + '%' }}></div>
                   </div>
                   <div className="continue-bar-text">
-                    <span>{t.lessonOf(subProg.lesson, subProg.of)}</span>
-                    <span>+45 XP</span>
+                    <span>{t.lessonOf(Math.min(subProg.lesson, lastSub?.of ?? 12), lastSub?.of ?? 12)}</span>
+                    <span>{allDone ? '✓' : '+45 XP'}</span>
                   </div>
                 </div>
-                <button className="play-btn"><div className="ic">▶</div>{t.continueBtn}</button>
+                <button className="play-btn" disabled={allDone} style={allDone ? {opacity:.5,cursor:'default'} : {}}>
+                  <div className="ic">{allDone ? '✓' : '▶'}</div>
+                  {allDone ? t.allDoneBtn : t.continueBtn}
+                </button>
               </div>
             </div>
           );
@@ -549,6 +706,18 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
             </div>
           ))}
         </div>
+      </div>
+
+      {/* ── quick game launcher ── */}
+      <div className="qgame-launcher" onClick={() => setQuickGame(true)}>
+        <div className="qgl-left">
+          <div className="qgl-icon">⚡</div>
+          <div>
+            <div className="qgl-title">{t.quickGame}</div>
+            <div className="qgl-sub">{t.quickGameSub}</div>
+          </div>
+        </div>
+        <div className="qgl-arrow">→</div>
       </div>
 
       {/* ── subject grid ── */}
@@ -631,7 +800,8 @@ function App() {
     const subjectId = parts[0];
     const lessonNum = parseInt(parts[1], 10);
     setProgress(prev => {
-      const subj = prev[subjectId] || { lesson: lessonNum, stars: 0, of: 8 };
+      const defaultOf = { math:12, kaz:6, world:2, eng:2 }[subjectId] ?? 12;
+      const subj = prev[subjectId] || { lesson: lessonNum, stars: 0, of: defaultOf };
       const advancing = lessonNum >= subj.lesson;
       const newLesson = advancing ? Math.min(subj.of, lessonNum + 1) : subj.lesson;
       const newStars  = advancing ? Math.max(subj.stars, stars) : subj.stars;
