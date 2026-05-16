@@ -18,11 +18,12 @@ object AppModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): MektepDatabase =
         Room.databaseBuilder(context, MektepDatabase::class.java, "mektep.db")
-            .addMigrations(MektepDatabase.MIGRATION_1_2, MektepDatabase.MIGRATION_2_3)
+            .addMigrations(MektepDatabase.MIGRATION_1_2, MektepDatabase.MIGRATION_2_3, MektepDatabase.MIGRATION_3_4)
             .fallbackToDestructiveMigration()
             .build()
 
     @Provides fun provideUserDao(db: MektepDatabase): UserDao = db.userDao()
+    @Provides fun provideChildProfileDao(db: MektepDatabase): ChildProfileDao = db.childProfileDao()
     @Provides fun provideProgressDao(db: MektepDatabase): ProgressDao = db.progressDao()
     @Provides fun provideScreenTimeDao(db: MektepDatabase): ScreenTimeDao = db.screenTimeDao()
     @Provides fun provideParentalConfigDao(db: MektepDatabase): ParentalConfigDao = db.parentalConfigDao()

@@ -38,9 +38,11 @@ data class LessonRunnerState(
 class LessonRunnerViewModel @Inject constructor(
     private val lessonLoader: LessonLoader,
     private val userDao: UserDao,
+    private val childProfileDao: ChildProfileDao,
     private val progressDao: ProgressDao,
     private val screenTimeDao: ScreenTimeDao,
-    private val tokenStore: TokenStore
+    private val tokenStore: TokenStore,
+    private val parentalPrefsStore: ParentalPrefsStore
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LessonRunnerState())
@@ -152,33 +154,53 @@ class LessonRunnerViewModel @Inject constructor(
         val earnedSeconds = earnedMinutes * 60
 
         viewModelScope.launch {
-            val profile = userDao.getProfileOnce()
-            if (profile != null) {
-                // Update XP (gamification — separate from screen time)
-                userDao.addXp(profile.id, xp)
+            val childId = parentalPrefsStore.activeChildId.first()
 
-                // Update screen time balance (time-based)
-                userDao.updateScreenTimeBalance(profile.id, earnedSeconds)
+            if (childId != null) {
+                // Multi-child mode: write to child profile
+                val child = childProfileDao.getChild(childId)
+                if (child != null) {
+                    childProfileDao.addXp(childId, xp)
+                    childProfileDao.updateScreenTimeBalance(childId, earnedSeconds)
 
-                // Log screen time earned
-                screenTimeDao.addLog(
-                    ScreenTimeLog(type = "EARNED", amountSeconds = earnedSeconds, source = currentLessonId)
-                )
+                    // Update streak
+                    val today = java.time.LocalDate.now().toString()
+                    val newStreak = if (child.lastActiveDate == today) {
+                        child.currentStreak
+                    } else if (child.lastActiveDate == java.time.LocalDate.now().minusDays(1).toString()) {
+                        child.currentStreak + 1
+                    } else 1
+                    childProfileDao.updateStreak(childId, newStreak, today)
+                }
+            } else {
+                // Solo mode: write to user profile
+                val profile = userDao.getProfileOnce()
+                if (profile != null) {
+                    userDao.addXp(profile.id, xp)
+                    userDao.updateScreenTimeBalance(profile.id, earnedSeconds)
 
-                // Update streak
-                val today = java.time.LocalDate.now().toString()
-                val newStreak = if (profile.lastActiveDate == today) {
-                    profile.currentStreak
-                } else if (profile.lastActiveDate == java.time.LocalDate.now().minusDays(1).toString()) {
-                    profile.currentStreak + 1
-                } else 1
-                userDao.updateStreak(profile.id, newStreak, today)
+                    // Update streak
+                    val today = java.time.LocalDate.now().toString()
+                    val newStreak = if (profile.lastActiveDate == today) {
+                        profile.currentStreak
+                    } else if (profile.lastActiveDate == java.time.LocalDate.now().minusDays(1).toString()) {
+                        profile.currentStreak + 1
+                    } else 1
+                    userDao.updateStreak(profile.id, newStreak, today)
+                }
             }
 
+            // Log screen time earned
+            screenTimeDao.addLog(
+                ScreenTimeLog(childId = childId ?: "", type = "EARNED", amountSeconds = earnedSeconds, source = currentLessonId)
+            )
+
             // Save lesson progress
-            val existing = progressDao.getForLesson(currentLessonId)
+            val progressChildId = childId ?: ""
+            val existing = progressDao.getForLesson(progressChildId, currentLessonId)
             progressDao.upsert(
                 LessonProgress(
+                    childId = progressChildId,
                     lessonId = currentLessonId,
                     subjectId = currentSubjectId,
                     bestStars = maxOf(stars, existing?.bestStars ?: 0),

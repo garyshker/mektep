@@ -9,7 +9,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import app.tisimai.mektep.data.local.ParentalPrefsStore
 import app.tisimai.mektep.ui.auth.AuthViewModel
 import app.tisimai.mektep.ui.auth.LoginScreen
 import app.tisimai.mektep.ui.components.PinEntryScreen
@@ -19,7 +18,9 @@ import app.tisimai.mektep.ui.quickgame.QuickGameScreen
 import app.tisimai.mektep.ui.lesson.LessonRunnerScreen
 import app.tisimai.mektep.ui.pairing.ChildPairingScreen
 import app.tisimai.mektep.ui.pairing.ParentPairingScreen
+import app.tisimai.mektep.ui.parent.AddChildScreen
 import app.tisimai.mektep.ui.parent.AppSelectorScreen
+import app.tisimai.mektep.ui.parent.ChildPickerScreen
 import app.tisimai.mektep.ui.parent.ParentRemoteDashboardScreen
 import app.tisimai.mektep.ui.parent.ParentSettingsScreen
 import app.tisimai.mektep.ui.screentime.ScreenTimeScreen
@@ -41,6 +42,8 @@ object Routes {
     const val APP_SELECTOR = "app_selector"
     const val PAIRING = "pairing"
     const val PARENT_DASHBOARD = "parent_dashboard"
+    const val ADD_CHILD = "add_child"
+    const val CHILD_PICKER = "child_picker"
 
     fun lessonList(subjectId: String) = "lesson_list/$subjectId"
     fun lessonRunner(lessonId: String) = "lesson_runner/$lessonId"
@@ -160,7 +163,6 @@ fun MektepNavHost() {
             val setupViewModel: SetupViewModel = hiltViewModel()
             val pinError by setupViewModel.pinError.collectAsState()
 
-            val context = LocalContext.current
             PinEntryScreen(
                 title = when (purpose) {
                     "activate" -> tr("enter_pin_activate", "en")
@@ -171,11 +173,10 @@ fun MektepNavHost() {
                     setupViewModel.verifyPin(pin) {
                         when (purpose) {
                             "activate" -> {
-                                // Launch the custom ChildLauncher as home screen
-                                val intent = Intent(context, app.tisimai.mektep.ChildLauncherActivity::class.java)
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                context.startActivity(intent)
-                                navController.popBackStack()
+                                // Navigate to child picker instead of launching directly
+                                navController.navigate(Routes.CHILD_PICKER) {
+                                    popUpTo(Routes.DASHBOARD)
+                                }
                             }
                             "deactivate" -> {
                                 navController.popBackStack()
@@ -223,13 +224,35 @@ fun MektepNavHost() {
         composable(Routes.PARENT_SETTINGS) {
             ParentSettingsScreen(
                 onBack = { navController.popBackStack() },
-                onSelectApps = { navController.navigate(Routes.APP_SELECTOR) }
+                onSelectApps = { navController.navigate(Routes.APP_SELECTOR) },
+                onAddChild = { navController.navigate(Routes.ADD_CHILD) }
             )
         }
 
         composable(Routes.APP_SELECTOR) {
             AppSelectorScreen(
                 onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.ADD_CHILD) {
+            AddChildScreen(
+                onBack = { navController.popBackStack() },
+                onSaved = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.CHILD_PICKER) {
+            val context = LocalContext.current
+            ChildPickerScreen(
+                onChildSelected = {
+                    // Launch the custom ChildLauncher as home screen
+                    val intent = Intent(context, app.tisimai.mektep.ChildLauncherActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(intent)
+                    navController.popBackStack(Routes.DASHBOARD, inclusive = false)
+                },
+                onAddChild = { navController.navigate(Routes.ADD_CHILD) }
             )
         }
 

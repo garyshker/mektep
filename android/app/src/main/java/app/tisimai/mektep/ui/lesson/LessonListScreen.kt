@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.tisimai.mektep.data.local.LessonLoader
+import app.tisimai.mektep.data.local.ParentalPrefsStore
 import app.tisimai.mektep.data.local.ProgressDao
 import app.tisimai.mektep.data.local.TokenStore
 import app.tisimai.mektep.data.models.Lesson
@@ -32,7 +33,8 @@ import javax.inject.Inject
 class LessonListViewModel @Inject constructor(
     private val lessonLoader: LessonLoader,
     private val progressDao: ProgressDao,
-    private val tokenStore: TokenStore
+    private val tokenStore: TokenStore,
+    private val parentalPrefsStore: ParentalPrefsStore
 ) : ViewModel() {
 
     private val _lessons = MutableStateFlow<List<Pair<Lesson, LessonProgress?>>>(emptyList())
@@ -42,8 +44,9 @@ class LessonListViewModel @Inject constructor(
 
     fun load(subjectId: String) {
         viewModelScope.launch {
+            val childId = parentalPrefsStore.activeChildId.first() ?: ""
             val subjectLessons = lessonLoader.lessonsForSubject(subjectId)
-            val progress = progressDao.getForSubject(subjectId)
+            val progress = progressDao.getForSubject(childId, subjectId)
             _lessons.value = subjectLessons.map { lesson ->
                 lesson to progress.find { it.lessonId == lesson.id }
             }

@@ -1,5 +1,6 @@
 package app.tisimai.mektep
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,9 +31,10 @@ class ChildLauncherActivity : ComponentActivity() {
                 Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     ChildLauncherScreen(
                         onOpenMektep = {
-                            // Launch the main Mektep activity for learning
-                            val intent = packageManager.getLaunchIntentForPackage("app.tisimai.mektep")
-                            if (intent != null) startActivity(intent)
+                            // Launch MainActivity directly for learning
+                            val intent = Intent(this@ChildLauncherActivity, MainActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
                         },
                         onExitChildMode = {
                             // Close this launcher — system reverts to previous default

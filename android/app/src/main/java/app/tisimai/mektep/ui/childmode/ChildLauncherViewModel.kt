@@ -21,6 +21,7 @@ data class ChildLauncherState(
 @HiltViewModel
 class ChildLauncherViewModel @Inject constructor(
     private val userDao: UserDao,
+    private val childProfileDao: ChildProfileDao,
     private val allowedAppDao: AllowedAppDao,
     private val childSessionDao: ChildSessionDao,
     private val screenTimeDao: ScreenTimeDao,
@@ -36,19 +37,29 @@ class ChildLauncherViewModel @Inject constructor(
 
     private var countdownJob: Job? = null
     private var sessionStartBalance = 0
+    private var resolvedChildId: String? = null
 
     fun loadApps(pm: PackageManager) {
         viewModelScope.launch {
             val allowed = allowedAppDao.getAppsForConfigOnce("local")
             val apps = allowed.map { LauncherApp(it.packageName, it.appLabel, it.needsEarnedTime) }
 
-            val profile = userDao.getProfileOnce()
-            val balance = profile?.screenTimeBalanceSecs ?: 0
+            val childId = parentalPrefsStore.activeChildId.first()
+            resolvedChildId = childId
+
+            val balance: Int
+            if (childId != null) {
+                val child = childProfileDao.getChild(childId)
+                balance = child?.screenTimeBalanceSecs ?: 0
+            } else {
+                val profile = userDao.getProfileOnce()
+                balance = profile?.screenTimeBalanceSecs ?: 0
+            }
             sessionStartBalance = balance
 
             // Start a child session
             val sessionId = childSessionDao.startSession(
-                ChildSession(initialBalanceSecs = balance)
+                ChildSession(childId = childId ?: "", initialBalanceSecs = balance)
             )
 
             // Mark child mode active
@@ -79,9 +90,14 @@ class ChildLauncherViewModel @Inject constructor(
 
                 // Persist to DB every 10 seconds
                 if (newBalance % 10 == 0) {
-                    val profile = userDao.getProfileOnce()
-                    if (profile != null) {
-                        userDao.updateScreenTimeBalance(profile.id, -10)
+                    val childId = resolvedChildId
+                    if (childId != null) {
+                        childProfileDao.updateScreenTimeBalance(childId, -10)
+                    } else {
+                        val profile = userDao.getProfileOnce()
+                        if (profile != null) {
+                            userDao.updateScreenTimeBalance(profile.id, -10)
+                        }
                     }
                 }
             }
@@ -99,7 +115,7 @@ class ChildLauncherViewModel @Inject constructor(
 
             // Log screen time spent
             screenTimeDao.addLog(
-                ScreenTimeLog(type = "SPENT", amountSeconds = consumed, source = "child_mode")
+                ScreenTimeLog(childId = resolvedChildId ?: "", type = "SPENT", amountSeconds = consumed, source = "child_mode")
             )
         }
     }
@@ -122,13 +138,18 @@ class ChildLauncherViewModel @Inject constructor(
             }
 
             // Sync final balance to DB
-            val profile = userDao.getProfileOnce()
-            if (profile != null) {
-                val totalSpent = sessionStartBalance - _state.value.balanceSeconds
-                val alreadyDeducted = (totalSpent / 10) * 10
-                val remainder = totalSpent - alreadyDeducted
-                if (remainder > 0) {
-                    userDao.updateScreenTimeBalance(profile.id, -remainder)
+            val totalSpent = sessionStartBalance - _state.value.balanceSeconds
+            val alreadyDeducted = (totalSpent / 10) * 10
+            val remainder = totalSpent - alreadyDeducted
+            if (remainder > 0) {
+                val childId = resolvedChildId
+                if (childId != null) {
+                    childProfileDao.updateScreenTimeBalance(childId, -remainder)
+                } else {
+                    val profile = userDao.getProfileOnce()
+                    if (profile != null) {
+                        userDao.updateScreenTimeBalance(profile.id, -remainder)
+                    }
                 }
             }
         }

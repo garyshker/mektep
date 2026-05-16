@@ -131,6 +131,18 @@ object Strings {
         "child_mode_inactive" to mapOf("en" to "Online", "ru" to "В сети", "kk" to "Желіде"),
         "remaining" to mapOf("en" to "remaining", "ru" to "осталось", "kk" to "қалды"),
         "bonus_granted" to mapOf("en" to "Bonus time sent!", "ru" to "Бонусное время отправлено!", "kk" to "Бонус уақыт жіберілді!"),
+
+        // ── Multi-child ──
+        "add_child" to mapOf("en" to "Add Child", "ru" to "Добавить ребёнка", "kk" to "Бала қосу"),
+        "child_name" to mapOf("en" to "Child's name", "ru" to "Имя ребёнка", "kk" to "Баланың аты"),
+        "birth_date" to mapOf("en" to "Date of birth", "ru" to "Дата рождения", "kk" to "Туған күні"),
+        "avatar" to mapOf("en" to "Avatar", "ru" to "Аватар", "kk" to "Аватар"),
+        "grade" to mapOf("en" to "Grade", "ru" to "Класс", "kk" to "Сынып"),
+        "select_child" to mapOf("en" to "Select Child", "ru" to "Выберите ребёнка", "kk" to "Баланы таңдаңыз"),
+        "age_years" to mapOf("en" to "years", "ru" to "лет", "kk" to "жас"),
+        "add_new_child" to mapOf("en" to "Add New Child", "ru" to "Добавить ребёнка", "kk" to "Жаңа бала қосу"),
+        "children" to mapOf("en" to "Children", "ru" to "Дети", "kk" to "Балалар"),
+        "no_children_added" to mapOf("en" to "No children added yet", "ru" to "Дети ещё не добавлены", "kk" to "Әлі бала қосылмаған"),
     )
 }
 

@@ -77,9 +77,10 @@ data class UserProfile(
     val screenTimeBalanceSecs: Int = 0
 )
 
-@Entity(tableName = "lesson_progress")
+@Entity(tableName = "lesson_progress", primaryKeys = ["childId", "lessonId"])
 data class LessonProgress(
-    @PrimaryKey val lessonId: String,
+    val childId: String = "",
+    val lessonId: String,
     val subjectId: String,
     val bestStars: Int = 0,
     val bestAccuracy: Double = 0.0,
@@ -90,6 +91,7 @@ data class LessonProgress(
 @Entity(tableName = "screen_time_log")
 data class ScreenTimeLog(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val childId: String = "",
     val type: String, // EARNED, SPENT, BONUS
     val amountSeconds: Int,
     val source: String, // lesson ID or app name
@@ -98,15 +100,34 @@ data class ScreenTimeLog(
 
 // ── Daily quests ──
 
-@Entity(tableName = "daily_quest")
+@Entity(tableName = "daily_quest", primaryKeys = ["childId", "id"])
 data class DailyQuest(
-    @PrimaryKey val id: String, // e.g. "complete_1_lesson", "earn_50_xp"
+    val childId: String = "",
+    val id: String, // e.g. "complete_1_lesson", "earn_50_xp"
     val type: String, // LESSON_COUNT, XP_AMOUNT, QUICK_GAME, STREAK
     val targetValue: Int, // target to reach
     val currentValue: Int = 0,
     val xpReward: Int = 10,
     val completed: Boolean = false,
     val date: String // "2026-05-15" — quests reset daily
+)
+
+// ── Child profiles (multi-child support) ──
+
+@Entity(tableName = "child_profile")
+data class ChildProfile(
+    @PrimaryKey val id: String = java.util.UUID.randomUUID().toString(),
+    val parentUserId: String,
+    val name: String,
+    val birthDate: String = "", // ISO "2018-03-15"
+    val avatarEmoji: String = "\uD83E\uDDD2", // 🧒
+    val gradeLevel: Int = 1,
+    val xpTotal: Int = 0,
+    val currentStreak: Int = 0,
+    val longestStreak: Int = 0,
+    val lastActiveDate: String? = null,
+    val screenTimeBalanceSecs: Int = 0,
+    val createdAt: Long = System.currentTimeMillis()
 )
 
 // ── Parental control entities ──
@@ -140,6 +161,7 @@ data class AllowedApp(
 @Entity(tableName = "child_session")
 data class ChildSession(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val childId: String = "",
     val startedAt: Long = System.currentTimeMillis(),
     val endedAt: Long? = null,
     val initialBalanceSecs: Int = 0,

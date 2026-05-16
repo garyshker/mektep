@@ -2,6 +2,8 @@ package app.tisimai.mektep.ui.quickgame
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.tisimai.mektep.data.local.ChildProfileDao
+import app.tisimai.mektep.data.local.ParentalPrefsStore
 import app.tisimai.mektep.data.local.ScreenTimeDao
 import app.tisimai.mektep.data.local.UserDao
 import app.tisimai.mektep.data.models.ScreenTimeLog
@@ -35,7 +37,9 @@ data class QuickGameState(
 @HiltViewModel
 class QuickGameViewModel @Inject constructor(
     private val userDao: UserDao,
-    private val screenTimeDao: ScreenTimeDao
+    private val childProfileDao: ChildProfileDao,
+    private val screenTimeDao: ScreenTimeDao,
+    private val parentalPrefsStore: ParentalPrefsStore
 ) : ViewModel() {
 
     companion object {
@@ -131,14 +135,24 @@ class QuickGameViewModel @Inject constructor(
             val xp = s.score * 3 // 3 XP per correct quick game answer
             val earnedSeconds = (xp.toDouble() / 10 * 60).toInt().coerceAtLeast(60)
 
-            val profile = userDao.getProfileOnce()
-            if (profile != null) {
-                userDao.addXp(profile.id, xp)
-                userDao.updateScreenTimeBalance(profile.id, earnedSeconds)
-                screenTimeDao.addLog(
-                    ScreenTimeLog(type = "EARNED", amountSeconds = earnedSeconds, source = "quick_game")
-                )
+            val childId = parentalPrefsStore.activeChildId.first()
+
+            if (childId != null) {
+                // Multi-child mode
+                childProfileDao.addXp(childId, xp)
+                childProfileDao.updateScreenTimeBalance(childId, earnedSeconds)
+            } else {
+                // Solo mode
+                val profile = userDao.getProfileOnce()
+                if (profile != null) {
+                    userDao.addXp(profile.id, xp)
+                    userDao.updateScreenTimeBalance(profile.id, earnedSeconds)
+                }
             }
+
+            screenTimeDao.addLog(
+                ScreenTimeLog(childId = childId ?: "", type = "EARNED", amountSeconds = earnedSeconds, source = "quick_game")
+            )
         }
     }
 

@@ -30,9 +30,11 @@ class ParentalPrefsStore @Inject constructor(
         private val FAMILY_ID = stringPreferencesKey("family_id")
         private val DEVICE_ID = stringPreferencesKey("device_id")
         private val SETUP_COMPLETED = booleanPreferencesKey("setup_completed")
+        private val ACTIVE_CHILD_ID = stringPreferencesKey("active_child_id")
     }
 
     val deviceMode: Flow<String> = context.parentalDataStore.data.map { it[DEVICE_MODE] ?: "NONE" }
+    val activeChildId: Flow<String?> = context.parentalDataStore.data.map { it[ACTIVE_CHILD_ID] }
     val childModeActive: Flow<Boolean> = context.parentalDataStore.data.map { it[CHILD_MODE_ACTIVE] ?: false }
     val pinHash: Flow<String?> = context.parentalDataStore.data.map { it[PIN_HASH] }
     val pinSalt: Flow<String?> = context.parentalDataStore.data.map { it[PIN_SALT] }
@@ -60,6 +62,12 @@ class ParentalPrefsStore @Inject constructor(
 
     suspend fun setSetupCompleted(completed: Boolean) {
         context.parentalDataStore.edit { it[SETUP_COMPLETED] = completed }
+    }
+
+    suspend fun setActiveChildId(id: String?) {
+        context.parentalDataStore.edit {
+            if (id != null) it[ACTIVE_CHILD_ID] = id else it.remove(ACTIVE_CHILD_ID)
+        }
     }
 
     suspend fun clear() {

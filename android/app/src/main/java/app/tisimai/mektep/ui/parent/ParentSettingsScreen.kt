@@ -18,8 +18,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.tisimai.mektep.data.local.AllowedAppDao
+import app.tisimai.mektep.data.local.ChildProfileDao
 import app.tisimai.mektep.data.local.ParentalConfigDao
 import app.tisimai.mektep.data.local.ParentalPrefsStore
+import app.tisimai.mektep.data.local.UserDao
+import app.tisimai.mektep.data.models.ChildProfile
 import app.tisimai.mektep.data.models.ParentalConfig
 import app.tisimai.mektep.ui.theme.MektepGreen
 import app.tisimai.mektep.ui.theme.MektepOrange
@@ -27,13 +30,17 @@ import app.tisimai.mektep.util.tr
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.Period
 import javax.inject.Inject
 
 @HiltViewModel
 class ParentSettingsViewModel @Inject constructor(
     private val configDao: ParentalConfigDao,
     private val allowedAppDao: AllowedAppDao,
-    private val prefsStore: ParentalPrefsStore
+    private val prefsStore: ParentalPrefsStore,
+    private val childProfileDao: ChildProfileDao,
+    private val userDao: UserDao
 ) : ViewModel() {
 
     val config: StateFlow<ParentalConfig?> = configDao.getConfig()
@@ -42,9 +49,18 @@ class ParentSettingsViewModel @Inject constructor(
     private val _allowedAppCount = MutableStateFlow(0)
     val allowedAppCount: StateFlow<Int> = _allowedAppCount.asStateFlow()
 
+    private val _children = MutableStateFlow<List<ChildProfile>>(emptyList())
+    val children: StateFlow<List<ChildProfile>> = _children.asStateFlow()
+
     init {
         viewModelScope.launch {
             _allowedAppCount.value = allowedAppDao.getAppsForConfigOnce("local").size
+        }
+        viewModelScope.launch {
+            val user = userDao.getProfileOnce() ?: return@launch
+            childProfileDao.getChildrenForParent(user.id).collect { list ->
+                _children.value = list
+            }
         }
     }
 
@@ -68,11 +84,13 @@ class ParentSettingsViewModel @Inject constructor(
 fun ParentSettingsScreen(
     onBack: () -> Unit,
     onSelectApps: () -> Unit,
+    onAddChild: () -> Unit = {},
     lang: String = "en",
     viewModel: ParentSettingsViewModel = hiltViewModel()
 ) {
     val config by viewModel.config.collectAsState()
     val allowedAppCount by viewModel.allowedAppCount.collectAsState()
+    val children by viewModel.children.collectAsState()
     var dailyLimit by remember(config) { mutableFloatStateOf((config?.dailyLimitMinutes ?: 60).toFloat()) }
 
     Scaffold(
@@ -86,6 +104,54 @@ fun ParentSettingsScreen(
         Column(
             Modifier.fillMaxSize().padding(padding).padding(16.dp).verticalScroll(rememberScrollState())
         ) {
+            // Children section
+            Text(tr("children", lang), fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Spacer(Modifier.height(8.dp))
+
+            if (children.isEmpty()) {
+                Card(Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            tr("no_children_added", lang),
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            } else {
+                children.forEach { child ->
+                    Card(Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                        Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Text(child.avatarEmoji, fontSize = 32.sp)
+                            Spacer(Modifier.width(12.dp))
+                            Column(Modifier.weight(1f)) {
+                                Text(child.name, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                                val age = try {
+                                    Period.between(LocalDate.parse(child.birthDate), LocalDate.now()).years
+                                } catch (_: Exception) { null }
+                                Text(
+                                    buildString {
+                                        if (age != null) append("$age ${tr("age_years", lang)} | ")
+                                        append("${tr("grade", lang)} ${child.gradeLevel}")
+                                    },
+                                    fontSize = 13.sp,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(8.dp))
+            TextButton(onClick = onAddChild) {
+                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(4.dp))
+                Text(tr("add_child", lang))
+            }
+
+            Spacer(Modifier.height(20.dp))
+
             // App selector
             Card(
                 modifier = Modifier.fillMaxWidth().clickable { onSelectApps() }
