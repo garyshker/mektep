@@ -74,13 +74,13 @@ fun LoginScreen(
 
         Spacer(Modifier.height(24.dp))
 
-        // Language selector
+        // Language selector with flags
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            listOf("kk" to "Қазақша", "ru" to "Русский", "en" to "English").forEach { (code, label) ->
+            listOf("kk" to "🇰🇿", "ru" to "🇷🇺", "en" to "🇬🇧").forEach { (code, flag) ->
                 FilterChip(
                     selected = selectedLanguage == code,
                     onClick = { selectedLanguage = code },
-                    label = { Text(label) }
+                    label = { Text(flag, fontSize = 22.sp) }
                 )
             }
         }
