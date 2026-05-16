@@ -1,0 +1,108 @@
+{
+  "subject": "english",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 3,
+  "title": {
+    "kk": "Сандар: 11-ден 20-ға дейін",
+    "ru": "Числа: от 11 до 20",
+    "en": "Numbers: 11 to 20"
+  },
+  "description": {
+    "kk": "Ағылшын тілінде 11-ден 20-ға дейін сандарды үйреніңіз",
+    "ru": "Выучите числа от 11 до 20 на английском",
+    "en": "Learn numbers 11 to 20 in English"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Twelve\" ағылшынша қай сан?", "ru": "Какое число \"twelve\" по-английски?", "en": "What number is \"twelve\"?" },
+      "options": [
+        [{"kk":"10","ru":"10","en":"10"}],
+        [{"kk":"11","ru":"11","en":"11"}],
+        [{"kk":"12","ru":"12","en":"12"}],
+        [{"kk":"13","ru":"13","en":"13"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Санды сөзбен сәйкестендіріңіз", "ru": "Сопоставьте число и слово", "en": "Match the number to the word" },
+      "pairs": [
+        { "left": "11", "right": "Eleven" },
+        { "left": "13", "right": "Thirteen" },
+        { "left": "15", "right": "Fifteen" },
+        { "left": "20", "right": "Twenty" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"14\" санын ағылшынша жазыңыз", "ru": "Напишите число \"14\" по-английски", "en": "Write the number \"14\" in English" },
+      "correct_answer": "fourteen",
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Sixteen\" — бұл қай сан?", "ru": "\"Sixteen\" — это какое число?", "en": "\"Sixteen\" is which number?" },
+      "options": [
+        [{"kk":"14","ru":"14","en":"14"}],
+        [{"kk":"15","ru":"15","en":"15"}],
+        [{"kk":"16","ru":"16","en":"16"}],
+        [{"kk":"17","ru":"17","en":"17"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Eighteen\" қай сан?", "ru": "\"Eighteen\" — это?", "en": "\"Eighteen\" is?" },
+      "options": [
+        [{"kk":"16","ru":"16","en":"16"}],
+        [{"kk":"17","ru":"17","en":"17"}],
+        [{"kk":"18","ru":"18","en":"18"}],
+        [{"kk":"19","ru":"19","en":"19"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"17\" санын ағылшынша жазыңыз", "ru": "Напишите число \"17\" по-английски", "en": "Write the number \"17\" in English" },
+      "correct_answer": "seventeen",
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Санды сөзбен сәйкестендіріңіз", "ru": "Сопоставьте число и слово", "en": "Match the number to the word" },
+      "pairs": [
+        { "left": "12", "right": "Twelve" },
+        { "left": "14", "right": "Fourteen" },
+        { "left": "16", "right": "Sixteen" },
+        { "left": "19", "right": "Nineteen" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Twenty\" қай сан?", "ru": "\"Twenty\" — это?", "en": "\"Twenty\" is?" },
+      "options": [
+        [{"kk":"12","ru":"12","en":"12"}],
+        [{"kk":"15","ru":"15","en":"15"}],
+        [{"kk":"18","ru":"18","en":"18"}],
+        [{"kk":"20","ru":"20","en":"20"}]
+      ],
+      "correct_answer": 3,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    }
+  ]
+}

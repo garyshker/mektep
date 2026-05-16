@@ -1,0 +1,108 @@
+{
+  "subject": "world",
+  "grade_level": 2,
+  "difficulty_tier": 1,
+  "sort_order": 1,
+  "title": {
+    "kk": "Адам денесі",
+    "ru": "Тело человека",
+    "en": "Human Body Basics"
+  },
+  "description": {
+    "kk": "Адам денесінің негізгі бөліктері мен олардың қызметін үйреніңіз",
+    "ru": "Изучите основные части тела человека и их функции",
+    "en": "Learn the basic parts of the human body and their functions"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Жүрек не істейді?", "ru": "Что делает сердце?", "en": "What does the heart do?" },
+      "options": [
+        [{"kk":"Ауа жұтады","ru":"Поглощает воздух","en":"Absorbs air"}],
+        [{"kk":"Қан айдайды","ru":"Качает кровь","en":"Pumps blood"}],
+        [{"kk":"Тамақ қорытады","ru":"Переваривает пищу","en":"Digests food"}],
+        [{"kk":"Ойлайды","ru":"Думает","en":"Thinks"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Мүшені қызметімен сәйкестендіріңіз", "ru": "Сопоставьте орган с функцией", "en": "Match the organ with its function" },
+      "pairs": [
+        { "left": "Ми / Мозг / Brain", "right": "Thinks" },
+        { "left": "Жүрек / Сердце / Heart", "right": "Pumps blood" },
+        { "left": "Өкпе / Лёгкие / Lungs", "right": "Breathes" },
+        { "left": "Асқазан / Желудок / Stomach", "right": "Digests food" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "Біз немен тыныс аламыз? (қазақша)", "ru": "Чем мы дышим? (по-казахски)", "en": "What do we breathe with? (in Kazakh)" },
+      "correct_answer": "өкпе",
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Адам денесінде неше сүйек бар (шамамен)?", "ru": "Сколько примерно костей в теле человека?", "en": "Approximately how many bones are in the human body?" },
+      "options": [
+        [{"kk":"50","ru":"50","en":"50"}],
+        [{"kk":"100","ru":"100","en":"100"}],
+        [{"kk":"206","ru":"206","en":"206"}],
+        [{"kk":"500","ru":"500","en":"500"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Бес сезім мүшесі қайсы емес?", "ru": "Что НЕ является органом чувств?", "en": "Which is NOT a sense organ?" },
+      "options": [
+        [{"kk":"Көз","ru":"Глаз","en":"Eye"}],
+        [{"kk":"Құлақ","ru":"Ухо","en":"Ear"}],
+        [{"kk":"Тізе","ru":"Колено","en":"Knee"}],
+        [{"kk":"Мұрын","ru":"Нос","en":"Nose"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "Ойлау мүшесі қалай аталады? (қазақша)", "ru": "Как называется орган мышления? (по-казахски)", "en": "What is the thinking organ called? (in Kazakh)" },
+      "correct_answer": "ми",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Сезім мүшесін қызметімен сәйкестендіріңіз", "ru": "Сопоставьте орган чувств с функцией", "en": "Match the sense organ with its function" },
+      "pairs": [
+        { "left": "Көз / Глаз / Eye", "right": "See" },
+        { "left": "Құлақ / Ухо / Ear", "right": "Hear" },
+        { "left": "Мұрын / Нос / Nose", "right": "Smell" },
+        { "left": "Тіл / Язык / Tongue", "right": "Taste" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Сүйектер не үшін қажет?", "ru": "Для чего нужны кости?", "en": "What are bones for?" },
+      "options": [
+        [{"kk":"Дене тұлғасын ұстайды","ru":"Поддерживают тело","en":"Support the body"}],
+        [{"kk":"Тамақ қорытады","ru":"Переваривают пищу","en":"Digest food"}],
+        [{"kk":"Ауа жұтады","ru":"Поглощают воздух","en":"Absorb air"}],
+        [{"kk":"Қан жасайды","ru":"Создают кровь","en":"Make blood only"}]
+      ],
+      "correct_answer": 0,
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    }
+  ]
+}

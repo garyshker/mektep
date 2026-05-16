@@ -1,0 +1,108 @@
+{
+  "subject": "kazakh",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 4,
+  "title": {
+    "kk": "Отбасы мүшелері",
+    "ru": "Члены семьи",
+    "en": "Family Members"
+  },
+  "description": {
+    "kk": "Отбасы мүшелерінің атауларын үйреніңіз",
+    "ru": "Выучите названия членов семьи на казахском",
+    "en": "Learn family member names in Kazakh"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қазақша \"ана\" дегеніміз кім?", "ru": "Кто такая \"ана\" по-казахски?", "en": "Who is \"ана\" in Kazakh?" },
+      "options": [
+        [{"kk":"Әке","ru":"Отец","en":"Father"}],
+        [{"kk":"Ана","ru":"Мать","en":"Mother"}],
+        [{"kk":"Әже","ru":"Бабушка","en":"Grandmother"}],
+        [{"kk":"Апа","ru":"Старшая сестра","en":"Older sister"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Сөз бен аудармасын сәйкестендіріңіз", "ru": "Сопоставьте слово и перевод", "en": "Match the word and translation" },
+      "pairs": [
+        { "left": "Ата", "right": "Grandfather" },
+        { "left": "Әже", "right": "Grandmother" },
+        { "left": "Әке", "right": "Father" },
+        { "left": "Ана", "right": "Mother" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Мама\" сөзін қазақша жазыңыз", "ru": "Напишите слово \"мама\" по-казахски", "en": "Write \"mother\" in Kazakh" },
+      "correct_answer": "ана",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Аға\" дегеніміз кім?", "ru": "Кто такой \"аға\"?", "en": "Who is \"аға\"?" },
+      "options": [
+        [{"kk":"Кіші іні","ru":"Младший брат","en":"Younger brother"}],
+        [{"kk":"Үлкен аға","ru":"Старший брат","en":"Older brother"}],
+        [{"kk":"Әке","ru":"Отец","en":"Father"}],
+        [{"kk":"Ата","ru":"Дедушка","en":"Grandfather"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Апа\" дегеніміз кім?", "ru": "Кто такая \"апа\"?", "en": "Who is \"апа\"?" },
+      "options": [
+        [{"kk":"Ана","ru":"Мать","en":"Mother"}],
+        [{"kk":"Әже","ru":"Бабушка","en":"Grandmother"}],
+        [{"kk":"Үлкен апа","ru":"Старшая сестра","en":"Older sister"}],
+        [{"kk":"Кіші сіңлі","ru":"Младшая сестра","en":"Younger sister"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Дедушка\" сөзін қазақша жазыңыз", "ru": "Напишите слово \"дедушка\" по-казахски", "en": "Write \"grandfather\" in Kazakh" },
+      "correct_answer": "ата",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Сөз бен аудармасын сәйкестендіріңіз", "ru": "Сопоставьте слово и перевод", "en": "Match the word and translation" },
+      "pairs": [
+        { "left": "Аға", "right": "Older brother" },
+        { "left": "Апа", "right": "Older sister" },
+        { "left": "Іні", "right": "Younger brother" },
+        { "left": "Сіңлі", "right": "Younger sister" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Анаңның анасы — бұл кім?", "ru": "Мама твоей мамы — это кто?", "en": "Your mother's mother is who?" },
+      "options": [
+        [{"kk":"Апа","ru":"Старшая сестра","en":"Older sister"}],
+        [{"kk":"Ана","ru":"Мать","en":"Mother"}],
+        [{"kk":"Әже","ru":"Бабушка","en":"Grandmother"}],
+        [{"kk":"Ата","ru":"Дедушка","en":"Grandfather"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    }
+  ]
+}

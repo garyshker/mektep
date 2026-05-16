@@ -1,0 +1,108 @@
+{
+  "subject": "kazakh",
+  "grade_level": 2,
+  "difficulty_tier": 1,
+  "sort_order": 2,
+  "title": {
+    "kk": "Дене мүшелері",
+    "ru": "Части тела",
+    "en": "Body Parts"
+  },
+  "description": {
+    "kk": "Дене мүшелерінің атауларын қазақша үйреніңіз",
+    "ru": "Выучите названия частей тела на казахском",
+    "en": "Learn body part names in Kazakh"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Бас\" дегеніміз не?", "ru": "Что означает \"бас\"?", "en": "What does \"бас\" mean?" },
+      "options": [
+        [{"kk":"Қол","ru":"Рука","en":"Hand"}],
+        [{"kk":"Аяқ","ru":"Нога","en":"Leg"}],
+        [{"kk":"Бас","ru":"Голова","en":"Head"}],
+        [{"kk":"Көз","ru":"Глаз","en":"Eye"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Дене мүшесін аудармасымен сәйкестендіріңіз", "ru": "Сопоставьте часть тела с переводом", "en": "Match the body part with its translation" },
+      "pairs": [
+        { "left": "Көз", "right": "Eye" },
+        { "left": "Құлақ", "right": "Ear" },
+        { "left": "Мұрын", "right": "Nose" },
+        { "left": "Ауыз", "right": "Mouth" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Рука\" сөзін қазақша жазыңыз", "ru": "Напишите слово \"рука\" по-казахски", "en": "Write \"hand\" in Kazakh" },
+      "correct_answer": "қол",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Аяқ\" дегеніміз не?", "ru": "Что означает \"аяқ\"?", "en": "What does \"аяқ\" mean?" },
+      "options": [
+        [{"kk":"Бас","ru":"Голова","en":"Head"}],
+        [{"kk":"Қол","ru":"Рука","en":"Hand"}],
+        [{"kk":"Аяқ","ru":"Нога","en":"Leg"}],
+        [{"kk":"Тіс","ru":"Зуб","en":"Tooth"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Біз немен көреміз?", "ru": "Чем мы видим?", "en": "What do we see with?" },
+      "options": [
+        [{"kk":"Құлақ","ru":"Ухо","en":"Ear"}],
+        [{"kk":"Мұрын","ru":"Нос","en":"Nose"}],
+        [{"kk":"Көз","ru":"Глаз","en":"Eye"}],
+        [{"kk":"Ауыз","ru":"Рот","en":"Mouth"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Нога\" сөзін қазақша жазыңыз", "ru": "Напишите слово \"нога\" по-казахски", "en": "Write \"leg\" in Kazakh" },
+      "correct_answer": "аяқ",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Дене мүшесін аудармасымен сәйкестендіріңіз", "ru": "Сопоставьте часть тела с переводом", "en": "Match the body part with its translation" },
+      "pairs": [
+        { "left": "Бас", "right": "Head" },
+        { "left": "Қол", "right": "Hand" },
+        { "left": "Аяқ", "right": "Leg" },
+        { "left": "Тіс", "right": "Tooth" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Біз немен естиміз?", "ru": "Чем мы слышим?", "en": "What do we hear with?" },
+      "options": [
+        [{"kk":"Көз","ru":"Глаз","en":"Eye"}],
+        [{"kk":"Құлақ","ru":"Ухо","en":"Ear"}],
+        [{"kk":"Мұрын","ru":"Нос","en":"Nose"}],
+        [{"kk":"Ауыз","ru":"Рот","en":"Mouth"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    }
+  ]
+}

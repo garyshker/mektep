@@ -1,0 +1,95 @@
+{
+  "subject": "math",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 4,
+  "title": { "kk": "Сандарды реттеу", "ru": "Упорядочивание чисел", "en": "Number Ordering" },
+  "description": { "kk": "Сандарды кіші-үлкен және үлкен-кіші ретпен орналастыруды үйренеміз", "ru": "Учимся располагать числа по возрастанию и убыванию", "en": "Learn to arrange numbers in ascending and descending order" },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қай сан ең кішісі? 8, 3, 12, 5", "ru": "Какое число наименьшее? 8, 3, 12, 5", "en": "Which number is the smallest? 8, 3, 12, 5" },
+      "options": [
+        [{ "kk": "8", "ru": "8", "en": "8" }],
+        [{ "kk": "3", "ru": "3", "en": "3" }],
+        [{ "kk": "12", "ru": "12", "en": "12" }],
+        [{ "kk": "5", "ru": "5", "en": "5" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қай сан ең үлкені? 14, 7, 19, 11", "ru": "Какое число наибольшее? 14, 7, 19, 11", "en": "Which number is the largest? 14, 7, 19, 11" },
+      "options": [
+        [{ "kk": "14", "ru": "14", "en": "14" }],
+        [{ "kk": "7", "ru": "7", "en": "7" }],
+        [{ "kk": "19", "ru": "19", "en": "19" }],
+        [{ "kk": "11", "ru": "11", "en": "11" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "4-тен кейін қай сан келеді?", "ru": "Какое число идёт после 4?", "en": "What number comes after 4?" },
+      "correct_answer": "5",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "13-тен бұрын қай сан тұрады?", "ru": "Какое число стоит перед 13?", "en": "What number comes before 13?" },
+      "correct_answer": "12",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Кіші-үлкен ретпен дұрыс орналасқан қатар қайсы?", "ru": "Какой ряд расположен в порядке возрастания?", "en": "Which row is in ascending order?" },
+      "options": [
+        [{ "kk": "9, 5, 2, 15", "ru": "9, 5, 2, 15", "en": "9, 5, 2, 15" }],
+        [{ "kk": "2, 5, 9, 15", "ru": "2, 5, 9, 15", "en": "2, 5, 9, 15" }],
+        [{ "kk": "15, 9, 5, 2", "ru": "15, 9, 5, 2", "en": "15, 9, 5, 2" }],
+        [{ "kk": "5, 2, 15, 9", "ru": "5, 2, 15, 9", "en": "5, 2, 15, 9" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Үлкен-кіші ретпен дұрыс орналасқан қатар қайсы?", "ru": "Какой ряд расположен в порядке убывания?", "en": "Which row is in descending order?" },
+      "options": [
+        [{ "kk": "3, 8, 11, 20", "ru": "3, 8, 11, 20", "en": "3, 8, 11, 20" }],
+        [{ "kk": "8, 20, 3, 11", "ru": "8, 20, 3, 11", "en": "8, 20, 3, 11" }],
+        [{ "kk": "20, 11, 8, 3", "ru": "20, 11, 8, 3", "en": "20, 11, 8, 3" }],
+        [{ "kk": "11, 3, 20, 8", "ru": "11, 3, 20, 8", "en": "11, 3, 20, 8" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "9 мен 11 арасында қай сан тұрады?", "ru": "Какое число стоит между 9 и 11?", "en": "What number is between 9 and 11?" },
+      "correct_answer": "10",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Сандарды кіші-үлкен ретімен сәйкестендіріңіз", "ru": "Сопоставьте числа по порядку возрастания", "en": "Match numbers to their ascending position" },
+      "pairs": [
+        { "left": "1-ші / 1-е / 1st", "right": "2" },
+        { "left": "2-ші / 2-е / 2nd", "right": "6" },
+        { "left": "3-ші / 3-е / 3rd", "right": "10" },
+        { "left": "4-ші / 4-е / 4th", "right": "17" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    }
+  ]
+}

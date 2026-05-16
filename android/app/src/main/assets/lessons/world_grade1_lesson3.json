@@ -1,0 +1,108 @@
+{
+  "subject": "world",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 3,
+  "title": {
+    "kk": "Өсімдіктер мен ағаштар",
+    "ru": "Растения и деревья",
+    "en": "Plants and Trees"
+  },
+  "description": {
+    "kk": "Өсімдіктер мен ағаштар туралы негізгі білімді үйреніңіз",
+    "ru": "Изучите основные знания о растениях и деревьях",
+    "en": "Learn basic knowledge about plants and trees"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Ағаш өсу үшін не қажет?", "ru": "Что нужно дереву для роста?", "en": "What does a tree need to grow?" },
+      "options": [
+        [{"kk":"Тек су","ru":"Только вода","en":"Only water"}],
+        [{"kk":"Су, күн сәулесі, топырақ","ru":"Вода, солнечный свет, почва","en":"Water, sunlight, soil"}],
+        [{"kk":"Тек жарық","ru":"Только свет","en":"Only light"}],
+        [{"kk":"Тек топырақ","ru":"Только почва","en":"Only soil"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Өсімдік бөлігін аудармасымен сәйкестендіріңіз", "ru": "Сопоставьте часть растения с переводом", "en": "Match the plant part with its translation" },
+      "pairs": [
+        { "left": "Тамыр / Корень / Root", "right": "Underground part" },
+        { "left": "Сабақ / Стебель / Stem", "right": "Holds the plant up" },
+        { "left": "Жапырақ / Лист / Leaf", "right": "Makes food from sunlight" },
+        { "left": "Гүл / Цветок / Flower", "right": "Colorful part" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Дерево\" сөзін қазақша жазыңыз", "ru": "Напишите слово \"дерево\" по-казахски", "en": "Write \"tree\" in Kazakh" },
+      "correct_answer": "ағаш",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Жапырақтардың түсі не?", "ru": "Какого цвета листья?", "en": "What color are leaves usually?" },
+      "options": [
+        [{"kk":"Қызыл","ru":"Красный","en":"Red"}],
+        [{"kk":"Көк","ru":"Синий","en":"Blue"}],
+        [{"kk":"Жасыл","ru":"Зелёный","en":"Green"}],
+        [{"kk":"Сары","ru":"Жёлтый","en":"Yellow"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Алма қайда өседі?", "ru": "Где растут яблоки?", "en": "Where do apples grow?" },
+      "options": [
+        [{"kk":"Жерде","ru":"На земле","en":"On the ground"}],
+        [{"kk":"Ағашта","ru":"На дереве","en":"On a tree"}],
+        [{"kk":"Суда","ru":"В воде","en":"In water"}],
+        [{"kk":"Тасда","ru":"На камне","en":"On a rock"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Цветок\" сөзін қазақша жазыңыз", "ru": "Напишите слово \"цветок\" по-казахски", "en": "Write \"flower\" in Kazakh" },
+      "correct_answer": "гүл",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Жемісті ағашымен сәйкестендіріңіз", "ru": "Сопоставьте фрукт и дерево", "en": "Match the fruit with its tree" },
+      "pairs": [
+        { "left": "Алма / Яблоко / Apple", "right": "Apple tree" },
+        { "left": "Алмұрт / Груша / Pear", "right": "Pear tree" },
+        { "left": "Шие / Вишня / Cherry", "right": "Cherry tree" },
+        { "left": "Өрік / Абрикос / Apricot", "right": "Apricot tree" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Өсімдіктің қай бөлігі жер астында?", "ru": "Какая часть растения находится под землёй?", "en": "Which part of the plant is underground?" },
+      "options": [
+        [{"kk":"Жапырақ","ru":"Лист","en":"Leaf"}],
+        [{"kk":"Гүл","ru":"Цветок","en":"Flower"}],
+        [{"kk":"Тамыр","ru":"Корень","en":"Root"}],
+        [{"kk":"Сабақ","ru":"Стебель","en":"Stem"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    }
+  ]
+}

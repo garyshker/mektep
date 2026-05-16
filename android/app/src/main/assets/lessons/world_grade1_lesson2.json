@@ -1,0 +1,108 @@
+{
+  "subject": "world",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 2,
+  "title": {
+    "kk": "Жануарлар: үй және жабайы",
+    "ru": "Животные: домашние и дикие",
+    "en": "Animals: Domestic and Wild"
+  },
+  "description": {
+    "kk": "Үй жануарлары мен жабайы жануарлардың айырмашылығын үйреніңіз",
+    "ru": "Научитесь различать домашних и диких животных",
+    "en": "Learn to distinguish between domestic and wild animals"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қай жануар үй жануары?", "ru": "Какое животное домашнее?", "en": "Which animal is domestic?" },
+      "options": [
+        [{"kk":"Арыстан","ru":"Лев","en":"Lion"}],
+        [{"kk":"Мысық","ru":"Кошка","en":"Cat"}],
+        [{"kk":"Аю","ru":"Медведь","en":"Bear"}],
+        [{"kk":"Қасқыр","ru":"Волк","en":"Wolf"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Жануарды түрімен сәйкестендіріңіз", "ru": "Сопоставьте животное с типом", "en": "Match the animal with its type" },
+      "pairs": [
+        { "left": "Ит / Собака / Dog", "right": "Domestic" },
+        { "left": "Аю / Медведь / Bear", "right": "Wild" },
+        { "left": "Сиыр / Корова / Cow", "right": "Domestic" },
+        { "left": "Түлкі / Лиса / Fox", "right": "Wild" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Кошка\" сөзін қазақша жазыңыз", "ru": "Напишите слово \"кошка\" по-казахски", "en": "Write \"cat\" in Kazakh" },
+      "correct_answer": "мысық",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қай жануар жабайы?", "ru": "Какое животное дикое?", "en": "Which animal is wild?" },
+      "options": [
+        [{"kk":"Жылқы","ru":"Лошадь","en":"Horse"}],
+        [{"kk":"Қой","ru":"Овца","en":"Sheep"}],
+        [{"kk":"Тауық","ru":"Курица","en":"Chicken"}],
+        [{"kk":"Қасқыр","ru":"Волк","en":"Wolf"}]
+      ],
+      "correct_answer": 3,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Сиыр бізге не береді?", "ru": "Что нам даёт корова?", "en": "What does a cow give us?" },
+      "options": [
+        [{"kk":"Жұмыртқа","ru":"Яйца","en":"Eggs"}],
+        [{"kk":"Сүт","ru":"Молоко","en":"Milk"}],
+        [{"kk":"Бал","ru":"Мёд","en":"Honey"}],
+        [{"kk":"Жүн","ru":"Шерсть","en":"Wool"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Собака\" сөзін қазақша жазыңыз", "ru": "Напишите слово \"собака\" по-казахски", "en": "Write \"dog\" in Kazakh" },
+      "correct_answer": "ит",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Жануар мен оның дыбысын сәйкестендіріңіз", "ru": "Сопоставьте животное и его звук", "en": "Match the animal with its sound" },
+      "pairs": [
+        { "left": "Ит / Собака / Dog", "right": "Bark" },
+        { "left": "Мысық / Кошка / Cat", "right": "Meow" },
+        { "left": "Сиыр / Корова / Cow", "right": "Moo" },
+        { "left": "Қой / Овца / Sheep", "right": "Baa" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Тауық бізге не береді?", "ru": "Что нам даёт курица?", "en": "What does a chicken give us?" },
+      "options": [
+        [{"kk":"Сүт","ru":"Молоко","en":"Milk"}],
+        [{"kk":"Жұмыртқа","ru":"Яйца","en":"Eggs"}],
+        [{"kk":"Бал","ru":"Мёд","en":"Honey"}],
+        [{"kk":"Ет","ru":"Мясо","en":"Meat only"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    }
+  ]
+}

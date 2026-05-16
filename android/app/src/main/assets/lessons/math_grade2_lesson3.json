@@ -1,0 +1,95 @@
+{
+  "subject": "math",
+  "grade_level": 2,
+  "difficulty_tier": 1,
+  "sort_order": 3,
+  "title": { "kk": "Бөлу негіздері", "ru": "Основы деления", "en": "Division Basics" },
+  "description": { "kk": "2, 3, 4, 5 сандарына бөлуді үйренеміз", "ru": "Учимся делить на 2, 3, 4, 5", "en": "Learn to divide by 2, 3, 4, 5" },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "10 : 2 = ?", "ru": "10 : 2 = ?", "en": "10 / 2 = ?" },
+      "options": [
+        [{ "kk": "3", "ru": "3", "en": "3" }],
+        [{ "kk": "4", "ru": "4", "en": "4" }],
+        [{ "kk": "5", "ru": "5", "en": "5" }],
+        [{ "kk": "6", "ru": "6", "en": "6" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "12 : 3 = ?", "ru": "12 : 3 = ?", "en": "12 / 3 = ?" },
+      "correct_answer": "4",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "20 : 4 = ?", "ru": "20 : 4 = ?", "en": "20 / 4 = ?" },
+      "options": [
+        [{ "kk": "4", "ru": "4", "en": "4" }],
+        [{ "kk": "5", "ru": "5", "en": "5" }],
+        [{ "kk": "6", "ru": "6", "en": "6" }],
+        [{ "kk": "8", "ru": "8", "en": "8" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "25 : 5 = ?", "ru": "25 : 5 = ?", "en": "25 / 5 = ?" },
+      "correct_answer": "5",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "18 : 3 = ?", "ru": "18 : 3 = ?", "en": "18 / 3 = ?" },
+      "options": [
+        [{ "kk": "5", "ru": "5", "en": "5" }],
+        [{ "kk": "6", "ru": "6", "en": "6" }],
+        [{ "kk": "7", "ru": "7", "en": "7" }],
+        [{ "kk": "9", "ru": "9", "en": "9" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "16 : 4 = ?", "ru": "16 : 4 = ?", "en": "16 / 4 = ?" },
+      "correct_answer": "4",
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Бөлу нәтижесін сәйкестендіріңіз", "ru": "Сопоставьте результат деления", "en": "Match the division result" },
+      "pairs": [
+        { "left": "8 : 2", "right": "4" },
+        { "left": "15 : 3", "right": "5" },
+        { "left": "12 : 4", "right": "3" },
+        { "left": "30 : 5", "right": "6" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "35 : 5 = ?", "ru": "35 : 5 = ?", "en": "35 / 5 = ?" },
+      "options": [
+        [{ "kk": "5", "ru": "5", "en": "5" }],
+        [{ "kk": "6", "ru": "6", "en": "6" }],
+        [{ "kk": "7", "ru": "7", "en": "7" }],
+        [{ "kk": "8", "ru": "8", "en": "8" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    }
+  ]
+}

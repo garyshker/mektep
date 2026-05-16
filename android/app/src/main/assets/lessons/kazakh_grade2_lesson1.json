@@ -1,0 +1,108 @@
+{
+  "subject": "kazakh",
+  "grade_level": 2,
+  "difficulty_tier": 1,
+  "sort_order": 1,
+  "title": {
+    "kk": "Апта күндері мен айлар",
+    "ru": "Дни недели и месяцы",
+    "en": "Days of the Week and Months"
+  },
+  "description": {
+    "kk": "Апта күндері мен ай атауларын қазақша үйреніңіз",
+    "ru": "Выучите дни недели и названия месяцев на казахском",
+    "en": "Learn days of the week and month names in Kazakh"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Аптаның бірінші күні қалай аталады?", "ru": "Как называется первый день недели?", "en": "What is the first day of the week called?" },
+      "options": [
+        [{"kk":"Сейсенбі","ru":"Вторник","en":"Tuesday"}],
+        [{"kk":"Дүйсенбі","ru":"Понедельник","en":"Monday"}],
+        [{"kk":"Сәрсенбі","ru":"Среда","en":"Wednesday"}],
+        [{"kk":"Жексенбі","ru":"Воскресенье","en":"Sunday"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Апта күнін аудармасымен сәйкестендіріңіз", "ru": "Сопоставьте день недели с переводом", "en": "Match the day with its translation" },
+      "pairs": [
+        { "left": "Дүйсенбі", "right": "Monday" },
+        { "left": "Сәрсенбі", "right": "Wednesday" },
+        { "left": "Жұма", "right": "Friday" },
+        { "left": "Жексенбі", "right": "Sunday" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Понедельник\" сөзін қазақша жазыңыз", "ru": "Напишите \"понедельник\" по-казахски", "en": "Write \"Monday\" in Kazakh" },
+      "correct_answer": "дүйсенбі",
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Қаңтар\" — жылдың қай айы?", "ru": "\"Қаңтар\" — какой месяц года?", "en": "\"Қаңтар\" is which month?" },
+      "options": [
+        [{"kk":"Наурыз","ru":"Март","en":"March"}],
+        [{"kk":"Қаңтар","ru":"Январь","en":"January"}],
+        [{"kk":"Мамыр","ru":"Май","en":"May"}],
+        [{"kk":"Тамыз","ru":"Август","en":"August"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Сәуір\" — бұл қай ай?", "ru": "\"Сәуір\" — это какой месяц?", "en": "What month is \"Сәуір\"?" },
+      "options": [
+        [{"kk":"Ақпан","ru":"Февраль","en":"February"}],
+        [{"kk":"Наурыз","ru":"Март","en":"March"}],
+        [{"kk":"Сәуір","ru":"Апрель","en":"April"}],
+        [{"kk":"Мамыр","ru":"Май","en":"May"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Айды аудармасымен сәйкестендіріңіз", "ru": "Сопоставьте месяц с переводом", "en": "Match the month with its translation" },
+      "pairs": [
+        { "left": "Наурыз", "right": "March" },
+        { "left": "Маусым", "right": "June" },
+        { "left": "Қыркүйек", "right": "September" },
+        { "left": "Желтоқсан", "right": "December" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Пятница\" сөзін қазақша жазыңыз", "ru": "Напишите \"пятница\" по-казахски", "en": "Write \"Friday\" in Kazakh" },
+      "correct_answer": "жұма",
+      "difficulty_score": 2,
+      "time_limit_seconds": 25
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Аптада неше күн бар?", "ru": "Сколько дней в неделе?", "en": "How many days are in a week?" },
+      "options": [
+        [{"kk":"5","ru":"5","en":"5"}],
+        [{"kk":"6","ru":"6","en":"6"}],
+        [{"kk":"7","ru":"7","en":"7"}],
+        [{"kk":"8","ru":"8","en":"8"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    }
+  ]
+}

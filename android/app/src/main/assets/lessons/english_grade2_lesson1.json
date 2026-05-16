@@ -1,0 +1,108 @@
+{
+  "subject": "english",
+  "grade_level": 2,
+  "difficulty_tier": 1,
+  "sort_order": 1,
+  "title": {
+    "kk": "Күндер, айлар және мезгілдер",
+    "ru": "Дни, месяцы и времена года",
+    "en": "Days, Months, and Seasons"
+  },
+  "description": {
+    "kk": "Ағылшын тілінде апта күндерін, айларды және мезгілдерді үйреніңіз",
+    "ru": "Выучите дни недели, месяцы и времена года на английском",
+    "en": "Learn days of the week, months, and seasons in English"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Monday\" ағылшынша қай күн?", "ru": "Какой день \"Monday\"?", "en": "What day is \"Monday\"?" },
+      "options": [
+        [{"kk":"Жексенбі","ru":"Воскресенье","en":"Sunday"}],
+        [{"kk":"Дүйсенбі","ru":"Понедельник","en":"Monday"}],
+        [{"kk":"Сейсенбі","ru":"Вторник","en":"Tuesday"}],
+        [{"kk":"Сәрсенбі","ru":"Среда","en":"Wednesday"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Ағылшынша күнді аудармасымен сәйкестендіріңіз", "ru": "Сопоставьте английский день с переводом", "en": "Match the day with its translation" },
+      "pairs": [
+        { "left": "Tuesday", "right": "Сейсенбі" },
+        { "left": "Thursday", "right": "Бейсенбі" },
+        { "left": "Saturday", "right": "Сенбі" },
+        { "left": "Sunday", "right": "Жексенбі" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Дүйсенбі\" сөзін ағылшынша жазыңыз", "ru": "Напишите \"понедельник\" по-английски", "en": "Write \"понедельник\" in English" },
+      "correct_answer": "monday",
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"January\" қай ай?", "ru": "Какой месяц \"January\"?", "en": "What month is \"January\"?" },
+      "options": [
+        [{"kk":"Қаңтар","ru":"Январь","en":"January"}],
+        [{"kk":"Ақпан","ru":"Февраль","en":"February"}],
+        [{"kk":"Наурыз","ru":"Март","en":"March"}],
+        [{"kk":"Сәуір","ru":"Апрель","en":"April"}]
+      ],
+      "correct_answer": 0,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Spring\" дегеніміз қай мезгіл?", "ru": "Какое время года \"spring\"?", "en": "What season is \"spring\"?" },
+      "options": [
+        [{"kk":"Жаз","ru":"Лето","en":"Summer"}],
+        [{"kk":"Күз","ru":"Осень","en":"Autumn"}],
+        [{"kk":"Қыс","ru":"Зима","en":"Winter"}],
+        [{"kk":"Көктем","ru":"Весна","en":"Spring"}]
+      ],
+      "correct_answer": 3,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Мезгілді аудармасымен сәйкестендіріңіз", "ru": "Сопоставьте сезон с переводом", "en": "Match the season with its translation" },
+      "pairs": [
+        { "left": "Winter", "right": "Қыс" },
+        { "left": "Spring", "right": "Көктем" },
+        { "left": "Summer", "right": "Жаз" },
+        { "left": "Autumn", "right": "Күз" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Жаз\" мезгілін ағылшынша жазыңыз", "ru": "Напишите \"лето\" по-английски", "en": "Write \"лето\" in English" },
+      "correct_answer": "summer",
+      "difficulty_score": 2,
+      "time_limit_seconds": 25
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"September\" қай ай?", "ru": "Какой месяц \"September\"?", "en": "What month is \"September\"?" },
+      "options": [
+        [{"kk":"Шілде","ru":"Июль","en":"July"}],
+        [{"kk":"Тамыз","ru":"Август","en":"August"}],
+        [{"kk":"Қыркүйек","ru":"Сентябрь","en":"September"}],
+        [{"kk":"Қазан","ru":"Октябрь","en":"October"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "subject": "math",
+  "grade_level": 2,
+  "difficulty_tier": 1,
+  "sort_order": 4,
+  "title": { "kk": "Қарапайым есептер", "ru": "Простые задачи", "en": "Word Problems" },
+  "description": { "kk": "Қосу мен азайтуға қарапайым мәтінді есептерді шығарамыз", "ru": "Решаем простые текстовые задачи на сложение и вычитание", "en": "Solve simple addition and subtraction word problems" },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Айдында 5 алма бар. Анасы оған тағы 3 алма берді. Айдында барлығы қанша алма бар?", "ru": "У Айдына 5 яблок. Мама дала ему ещё 3 яблока. Сколько всего яблок у Айдына?", "en": "Aidyn has 5 apples. His mom gave him 3 more apples. How many apples does Aidyn have in total?" },
+      "options": [
+        [{ "kk": "6", "ru": "6", "en": "6" }],
+        [{ "kk": "7", "ru": "7", "en": "7" }],
+        [{ "kk": "8", "ru": "8", "en": "8" }],
+        [{ "kk": "9", "ru": "9", "en": "9" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 45
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "Сыныпта 12 оқушы отыр. 4 оқушы үйіне кетті. Сыныпта қанша оқушы қалды?", "ru": "В классе сидят 12 учеников. 4 ученика ушли домой. Сколько учеников осталось в классе?", "en": "There are 12 students in class. 4 students went home. How many students are left in class?" },
+      "correct_answer": "8",
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Дана 7 кітап оқыды. Арман 5 кітап оқыды. Олар барлығы қанша кітап оқыды?", "ru": "Дана прочитала 7 книг. Арман прочитал 5 книг. Сколько книг они прочитали вместе?", "en": "Dana read 7 books. Arman read 5 books. How many books did they read in total?" },
+      "options": [
+        [{ "kk": "10", "ru": "10", "en": "10" }],
+        [{ "kk": "11", "ru": "11", "en": "11" }],
+        [{ "kk": "12", "ru": "12", "en": "12" }],
+        [{ "kk": "13", "ru": "13", "en": "13" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 45
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "Автобуста 18 жолаушы болды. Аялдамада 6 жолаушы түсті. Автобуста қанша жолаушы қалды?", "ru": "В автобусе было 18 пассажиров. На остановке вышли 6 пассажиров. Сколько пассажиров осталось в автобусе?", "en": "There were 18 passengers on a bus. 6 passengers got off at a stop. How many passengers are left on the bus?" },
+      "correct_answer": "12",
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Бақшада 9 қызыл раушан гүл мен 8 ақ раушан гүл өсіп тұр. Барлығы қанша гүл бар?", "ru": "В саду растут 9 красных роз и 8 белых роз. Сколько всего роз в саду?", "en": "In a garden there are 9 red roses and 8 white roses. How many roses are there in total?" },
+      "options": [
+        [{ "kk": "15", "ru": "15", "en": "15" }],
+        [{ "kk": "16", "ru": "16", "en": "16" }],
+        [{ "kk": "17", "ru": "17", "en": "17" }],
+        [{ "kk": "18", "ru": "18", "en": "18" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 45
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "Болаттың 20 теңгесі бар. Ол 11 теңгеге тәтті сатып алды. Оның қанша теңгесі қалды?", "ru": "У Болата 20 тенге. Он купил конфету за 11 тенге. Сколько тенге у него осталось?", "en": "Bolat has 20 tenge. He bought candy for 11 tenge. How much money does he have left?" },
+      "correct_answer": "9",
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Есепті жауабымен сәйкестендіріңіз", "ru": "Сопоставьте задачу с ответом", "en": "Match the problem with the answer" },
+      "pairs": [
+        { "left": "6 + 7", "right": "13" },
+        { "left": "15 - 8", "right": "7" },
+        { "left": "11 + 9", "right": "20" },
+        { "left": "14 - 6", "right": "8" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Аквариумда 15 балық бар. 7 балықты басқа аквариумға көшірді. Қанша балық қалды?", "ru": "В аквариуме 15 рыбок. 7 рыбок пересадили в другой аквариум. Сколько рыбок осталось?", "en": "There are 15 fish in an aquarium. 7 fish were moved to another aquarium. How many fish are left?" },
+      "options": [
+        [{ "kk": "6", "ru": "6", "en": "6" }],
+        [{ "kk": "7", "ru": "7", "en": "7" }],
+        [{ "kk": "8", "ru": "8", "en": "8" }],
+        [{ "kk": "9", "ru": "9", "en": "9" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 45
+    }
+  ]
+}

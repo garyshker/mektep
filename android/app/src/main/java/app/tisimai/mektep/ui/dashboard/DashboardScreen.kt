@@ -5,9 +5,8 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -65,68 +64,79 @@ fun DashboardScreen(
             return@Scaffold
         }
 
-        Column(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp)
+        val deviceMode by viewModel.deviceMode.collectAsState()
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             // Stats
             state.profile?.let { profile ->
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    StatChip(Icons.Default.LocalFireDepartment, "${profile.currentStreak}", tr("streak", language), MektepOrange)
-                    StatChip(Icons.Default.Star, "${profile.xpTotal}", "XP", MektepGreen)
-                    StatChip(Icons.Default.EmojiEvents, "Lv ${profile.xpTotal / 100 + 1}", tr("level", language), MektepBlue)
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        StatChip(Icons.Default.LocalFireDepartment, "${profile.currentStreak}", tr("streak", language), MektepOrange)
+                        StatChip(Icons.Default.Star, "${profile.xpTotal}", "XP", MektepGreen)
+                        StatChip(Icons.Default.EmojiEvents, "Lv ${profile.xpTotal / 100 + 1}", tr("level", language), MektepBlue)
+                    }
                 }
             }
 
             // Screen Time Card
-            Card(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).clickable { onScreenTimeClick() },
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-            ) {
-                Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Timer, null, Modifier.size(40.dp), tint = MaterialTheme.colorScheme.primary)
-                    Spacer(Modifier.width(16.dp))
-                    Column(Modifier.weight(1f)) {
-                        Text(tr("screen_time", language), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        Text("${state.screenTimeMinutes} ${tr("minutes_available", language)}", color = MaterialTheme.colorScheme.onPrimaryContainer)
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).clickable { onScreenTimeClick() },
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                ) {
+                    Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.Timer, null, Modifier.size(40.dp), tint = MaterialTheme.colorScheme.primary)
+                        Spacer(Modifier.width(16.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(tr("screen_time", language), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text("${state.screenTimeMinutes} ${tr("minutes_available", language)}", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        }
+                        Icon(Icons.Default.ChevronRight, null)
                     }
-                    Icon(Icons.Default.ChevronRight, null)
                 }
             }
 
             // Quick Game card
-            Card(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp).clickable { onQuickGame() },
-                colors = CardDefaults.cardColors(containerColor = MektepOrange.copy(alpha = 0.15f)),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text("⚡", fontSize = 28.sp)
-                    Spacer(Modifier.width(12.dp))
-                    Column(Modifier.weight(1f)) {
-                        Text(tr("quick_game", language), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        Text(tr("quick_game_desc", language), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp).clickable { onQuickGame() },
+                    colors = CardDefaults.cardColors(containerColor = MektepOrange.copy(alpha = 0.15f)),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text("⚡", fontSize = 28.sp)
+                        Spacer(Modifier.width(12.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(tr("quick_game", language), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text(tr("quick_game_desc", language), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Icon(Icons.Default.ChevronRight, null, tint = MektepOrange)
                     }
-                    Icon(Icons.Default.ChevronRight, null, tint = MektepOrange)
                 }
             }
 
             // Daily Quests
             if (state.quests.isNotEmpty()) {
-                Row(
-                    Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(tr("daily_quests", language), fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    Text(
-                        "${state.questsCompletedCount}/${state.quests.size}",
-                        fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                item {
+                    Row(
+                        Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(tr("daily_quests", language), fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                        Text(
+                            "${state.questsCompletedCount}/${state.quests.size}",
+                            fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
-                state.quests.forEachIndexed { idx, quest ->
+                itemsIndexed(state.quests) { idx, quest ->
                     var questVisible by remember { mutableStateOf(false) }
                     LaunchedEffect(Unit) {
                         kotlinx.coroutines.delay(idx * 80L)
@@ -141,7 +151,6 @@ fun DashboardScreen(
                             language = language,
                             onClaim = { viewModel.claimQuestReward(quest) },
                             onTap = {
-                                // Navigate to the relevant activity for incomplete quests
                                 when (quest.type) {
                                     "LESSON_COUNT" -> state.subjects.firstOrNull()?.let { onSubjectClick(it.subject.id) }
                                     "QUICK_GAME" -> onQuickGame()
@@ -152,56 +161,70 @@ fun DashboardScreen(
                         )
                     }
                 }
-                Spacer(Modifier.height(4.dp))
             }
 
-            // Parent controls (only show if mode is SAME_DEVICE or REMOTE_PARENT)
-            val deviceMode by viewModel.deviceMode.collectAsState()
+            // Parent controls
             if (deviceMode == "SAME_DEVICE") {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    val hasPinConfigured by viewModel.hasPinConfigured.collectAsState()
-                    Button(
-                        onClick = { if (hasPinConfigured) onStartChildMode() else onSetupPin() },
-                        modifier = Modifier.weight(1f).height(44.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = MektepOrange)
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Icon(Icons.Default.Lock, null, Modifier.size(18.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text(tr("start_child_mode", language), fontSize = 14.sp)
-                    }
-                    OutlinedButton(
-                        onClick = onParentSettings,
-                        modifier = Modifier.height(44.dp)
-                    ) {
-                        Icon(Icons.Default.Settings, null, Modifier.size(18.dp))
+                        val hasPinConfigured by viewModel.hasPinConfigured.collectAsState()
+                        Button(
+                            onClick = { if (hasPinConfigured) onStartChildMode() else onSetupPin() },
+                            modifier = Modifier.weight(1f).height(44.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = MektepOrange)
+                        ) {
+                            Icon(Icons.Default.Lock, null, Modifier.size(18.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text(tr("start_child_mode", language), fontSize = 14.sp)
+                        }
+                        OutlinedButton(
+                            onClick = onParentSettings,
+                            modifier = Modifier.height(44.dp)
+                        ) {
+                            Icon(Icons.Default.Settings, null, Modifier.size(18.dp))
+                        }
                     }
                 }
             }
 
-            Text(tr("subjects", language), fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.padding(vertical = 12.dp))
+            // Subjects heading
+            item {
+                Text(tr("subjects", language), fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.padding(vertical = 12.dp))
+            }
 
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.weight(1f)
-            ) {
-                itemsIndexed(state.subjects) { index, item ->
-                    var visible by remember { mutableStateOf(false) }
-                    LaunchedEffect(Unit) {
-                        kotlinx.coroutines.delay(index * 100L)
-                        visible = true
+            // Subjects grid — render as pairs in rows
+            val subjects = state.subjects
+            val rows = subjects.chunked(2)
+            itemsIndexed(rows) { rowIndex, pair ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    pair.forEachIndexed { colIndex, item ->
+                        val index = rowIndex * 2 + colIndex
+                        var visible by remember { mutableStateOf(false) }
+                        LaunchedEffect(Unit) {
+                            kotlinx.coroutines.delay(index * 100L)
+                            visible = true
+                        }
+                        Box(Modifier.weight(1f)) {
+                            androidx.compose.animation.AnimatedVisibility(
+                                visible = visible,
+                                enter = fadeIn(tween(300)) + scaleIn(initialScale = 0.8f, animationSpec = spring(dampingRatio = 0.6f))
+                            ) {
+                                SubjectCard(item, language) { onSubjectClick(item.subject.id) }
+                            }
+                        }
                     }
-                    AnimatedVisibility(
-                        visible = visible,
-                        enter = fadeIn(tween(300)) + scaleIn(initialScale = 0.8f, animationSpec = spring(dampingRatio = 0.6f))
-                    ) {
-                        SubjectCard(item, language) { onSubjectClick(item.subject.id) }
+                    // If odd number of subjects, fill empty space
+                    if (pair.size == 1) {
+                        Spacer(Modifier.weight(1f))
                     }
                 }
+                Spacer(Modifier.height(12.dp))
             }
         }
     }

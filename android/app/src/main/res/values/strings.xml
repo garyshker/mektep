@@ -3,5 +3,5 @@
     <string name="app_name">Mektep</string>
     <string name="app_name_full">Mektep — Learn &amp; Earn</string>
     <!-- Replace with real Firebase web client ID after setting up Firebase project -->
-    <string name="default_web_client_id">000000000000-placeholder.apps.googleusercontent.com</string>
+    <string name="default_web_client_id">508396820691-5netf2jgojckrie936ui06fpouosc1tu.apps.googleusercontent.com</string>
 </resources>

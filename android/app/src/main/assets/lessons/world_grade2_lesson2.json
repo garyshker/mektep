@@ -1,0 +1,108 @@
+{
+  "subject": "world",
+  "grade_level": 2,
+  "difficulty_tier": 1,
+  "sort_order": 2,
+  "title": {
+    "kk": "Ауа райы мен мезгілдер",
+    "ru": "Погода и времена года",
+    "en": "Weather and Seasons"
+  },
+  "description": {
+    "kk": "Ауа райы құбылыстары мен мезгілдерді үйреніңіз",
+    "ru": "Изучите погодные явления и времена года",
+    "en": "Learn about weather phenomena and seasons"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қар қай мезгілде жауады?", "ru": "Когда идёт снег?", "en": "When does it snow?" },
+      "options": [
+        [{"kk":"Жаз","ru":"Лето","en":"Summer"}],
+        [{"kk":"Көктем","ru":"Весна","en":"Spring"}],
+        [{"kk":"Қыс","ru":"Зима","en":"Winter"}],
+        [{"kk":"Күз","ru":"Осень","en":"Autumn"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Ауа райын мезгілмен сәйкестендіріңіз", "ru": "Сопоставьте погоду с сезоном", "en": "Match the weather with the season" },
+      "pairs": [
+        { "left": "Snow", "right": "Winter" },
+        { "left": "Rain + flowers", "right": "Spring" },
+        { "left": "Hot sun", "right": "Summer" },
+        { "left": "Falling leaves", "right": "Autumn" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Дождь\" сөзін қазақша жазыңыз", "ru": "Напишите слово \"дождь\" по-казахски", "en": "Write \"rain\" in Kazakh" },
+      "correct_answer": "жаңбыр",
+      "difficulty_score": 2,
+      "time_limit_seconds": 25
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Кемпірқосақта неше түс бар?", "ru": "Сколько цветов в радуге?", "en": "How many colors are in a rainbow?" },
+      "options": [
+        [{"kk":"5","ru":"5","en":"5"}],
+        [{"kk":"6","ru":"6","en":"6"}],
+        [{"kk":"7","ru":"7","en":"7"}],
+        [{"kk":"8","ru":"8","en":"8"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Жаңбырдан кейін аспанда не пайда болады?", "ru": "Что появляется на небе после дождя?", "en": "What appears in the sky after rain?" },
+      "options": [
+        [{"kk":"Қар","ru":"Снег","en":"Snow"}],
+        [{"kk":"Кемпірқосақ","ru":"Радуга","en":"Rainbow"}],
+        [{"kk":"Жұлдыздар","ru":"Звёзды","en":"Stars"}],
+        [{"kk":"Ай","ru":"Луна","en":"Moon"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Снег\" сөзін қазақша жазыңыз", "ru": "Напишите слово \"снег\" по-казахски", "en": "Write \"snow\" in Kazakh" },
+      "correct_answer": "қар",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Ауа райы сөзін аудармасымен сәйкестендіріңіз", "ru": "Сопоставьте слово о погоде с переводом", "en": "Match the weather word with its translation" },
+      "pairs": [
+        { "left": "Жаңбыр / Дождь", "right": "Rain" },
+        { "left": "Қар / Снег", "right": "Snow" },
+        { "left": "Жел / Ветер", "right": "Wind" },
+        { "left": "Күн / Солнце", "right": "Sun" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қай мезгілде күн ең ұзақ?", "ru": "В каком сезоне самый длинный день?", "en": "In which season is the day the longest?" },
+      "options": [
+        [{"kk":"Қыс","ru":"Зима","en":"Winter"}],
+        [{"kk":"Көктем","ru":"Весна","en":"Spring"}],
+        [{"kk":"Жаз","ru":"Лето","en":"Summer"}],
+        [{"kk":"Күз","ru":"Осень","en":"Autumn"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    }
+  ]
+}

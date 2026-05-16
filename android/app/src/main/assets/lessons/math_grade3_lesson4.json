@@ -1,0 +1,95 @@
+{
+  "subject": "math",
+  "grade_level": 3,
+  "difficulty_tier": 2,
+  "sort_order": 4,
+  "title": { "kk": "Өлшем бірліктері", "ru": "Единицы измерения", "en": "Measurement" },
+  "description": { "kk": "Сантиметр, метр, килограмм, литр өлшем бірліктерін үйренеміз", "ru": "Изучаем единицы измерения: сантиметр, метр, килограмм, литр", "en": "Learn units of measurement: cm, m, kg, l" },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "1 метрде қанша сантиметр бар?", "ru": "Сколько сантиметров в 1 метре?", "en": "How many centimeters are in 1 meter?" },
+      "options": [
+        [{ "kk": "10", "ru": "10", "en": "10" }],
+        [{ "kk": "50", "ru": "50", "en": "50" }],
+        [{ "kk": "100", "ru": "100", "en": "100" }],
+        [{ "kk": "1000", "ru": "1000", "en": "1000" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "1 килограммда қанша грамм бар?", "ru": "Сколько граммов в 1 килограмме?", "en": "How many grams are in 1 kilogram?" },
+      "correct_answer": "1000",
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қарындаштың ұзындығын өлшеуге қай бірлік сай келеді?", "ru": "Какая единица подходит для измерения длины карандаша?", "en": "Which unit is best for measuring the length of a pencil?" },
+      "options": [
+        [{ "kk": "Метр", "ru": "Метр", "en": "Meter" }],
+        [{ "kk": "Сантиметр", "ru": "Сантиметр", "en": "Centimeter" }],
+        [{ "kk": "Километр", "ru": "Километр", "en": "Kilometer" }],
+        [{ "kk": "Литр", "ru": "Литр", "en": "Liter" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Сүттің көлемін өлшеуге қай бірлік қолданылады?", "ru": "Какая единица используется для измерения объёма молока?", "en": "Which unit is used to measure the volume of milk?" },
+      "options": [
+        [{ "kk": "Килограмм", "ru": "Килограмм", "en": "Kilogram" }],
+        [{ "kk": "Метр", "ru": "Метр", "en": "Meter" }],
+        [{ "kk": "Литр", "ru": "Литр", "en": "Liter" }],
+        [{ "kk": "Сантиметр", "ru": "Сантиметр", "en": "Centimeter" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "3 м = ? см", "ru": "3 м = ? см", "en": "3 m = ? cm" },
+      "correct_answer": "300",
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Затты өлшем бірлігімен сәйкестендіріңіз", "ru": "Сопоставьте предмет с единицей измерения", "en": "Match the object with the unit of measurement" },
+      "pairs": [
+        { "left": "Кітап салмағы / Вес книги / Weight of a book", "right": "кг / kg" },
+        { "left": "Су көлемі / Объём воды / Volume of water", "right": "л / l" },
+        { "left": "Жол ұзындығы / Длина дороги / Road length", "right": "м / m" },
+        { "left": "Өшіргіш / Ластик / Eraser length", "right": "см / cm" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "2 кг = ? г", "ru": "2 кг = ? г", "en": "2 kg = ? g" },
+      "correct_answer": "2000",
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "150 см -- бұл қанша метр мен сантиметр?", "ru": "150 см -- это сколько метров и сантиметров?", "en": "150 cm -- how many meters and centimeters is that?" },
+      "options": [
+        [{ "kk": "15 м 0 см", "ru": "15 м 0 см", "en": "15 m 0 cm" }],
+        [{ "kk": "1 м 50 см", "ru": "1 м 50 см", "en": "1 m 50 cm" }],
+        [{ "kk": "1 м 5 см", "ru": "1 м 5 см", "en": "1 m 5 cm" }],
+        [{ "kk": "10 м 50 см", "ru": "10 м 50 см", "en": "10 m 50 cm" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 3,
+      "time_limit_seconds": 30
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "subject": "math",
+  "grade_level": 3,
+  "difficulty_tier": 2,
+  "sort_order": 1,
+  "title": { "kk": "Көбейту кестесі (6-9)", "ru": "Таблица умножения (6-9)", "en": "Multiplication Table (6-9)" },
+  "description": { "kk": "6-дан 9-ға дейінгі сандарды көбейтуді үйренеміз", "ru": "Учим таблицу умножения для чисел от 6 до 9", "en": "Learn the multiplication table for numbers 6 through 9" },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "6 x 7 = ?", "ru": "6 x 7 = ?", "en": "6 x 7 = ?" },
+      "options": [
+        [{ "kk": "36", "ru": "36", "en": "36" }],
+        [{ "kk": "42", "ru": "42", "en": "42" }],
+        [{ "kk": "48", "ru": "48", "en": "48" }],
+        [{ "kk": "35", "ru": "35", "en": "35" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "7 x 8 = ?", "ru": "7 x 8 = ?", "en": "7 x 8 = ?" },
+      "correct_answer": "56",
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "8 x 9 = ?", "ru": "8 x 9 = ?", "en": "8 x 9 = ?" },
+      "options": [
+        [{ "kk": "63", "ru": "63", "en": "63" }],
+        [{ "kk": "64", "ru": "64", "en": "64" }],
+        [{ "kk": "72", "ru": "72", "en": "72" }],
+        [{ "kk": "81", "ru": "81", "en": "81" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "9 x 6 = ?", "ru": "9 x 6 = ?", "en": "9 x 6 = ?" },
+      "correct_answer": "54",
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "7 x 7 = ?", "ru": "7 x 7 = ?", "en": "7 x 7 = ?" },
+      "options": [
+        [{ "kk": "42", "ru": "42", "en": "42" }],
+        [{ "kk": "47", "ru": "47", "en": "47" }],
+        [{ "kk": "49", "ru": "49", "en": "49" }],
+        [{ "kk": "56", "ru": "56", "en": "56" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "6 x 9 = ?", "ru": "6 x 9 = ?", "en": "6 x 9 = ?" },
+      "correct_answer": "54",
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Көбейтінділерді сәйкестендіріңіз", "ru": "Сопоставьте произведения", "en": "Match the products" },
+      "pairs": [
+        { "left": "6 x 6", "right": "36" },
+        { "left": "8 x 7", "right": "56" },
+        { "left": "9 x 9", "right": "81" },
+        { "left": "7 x 6", "right": "42" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 3
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "9 x 7 = ?", "ru": "9 x 7 = ?", "en": "9 x 7 = ?" },
+      "options": [
+        [{ "kk": "56", "ru": "56", "en": "56" }],
+        [{ "kk": "63", "ru": "63", "en": "63" }],
+        [{ "kk": "72", "ru": "72", "en": "72" }],
+        [{ "kk": "54", "ru": "54", "en": "54" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    }
+  ]
+}

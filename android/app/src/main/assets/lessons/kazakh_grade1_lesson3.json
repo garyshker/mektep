@@ -1,0 +1,108 @@
+{
+  "subject": "kazakh",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 3,
+  "title": {
+    "kk": "Сандар: 1-ден 20-ға дейін",
+    "ru": "Числа: от 1 до 20",
+    "en": "Numbers: 1 to 20"
+  },
+  "description": {
+    "kk": "Қазақ тілінде сандарды үйреніңіз",
+    "ru": "Выучите числа на казахском языке",
+    "en": "Learn numbers in Kazakh"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қазақша \"бір\" дегеніміз қандай сан?", "ru": "Какое число означает \"бір\" по-казахски?", "en": "What number is \"бір\" in Kazakh?" },
+      "options": [
+        [{"kk":"1","ru":"1","en":"1"}],
+        [{"kk":"2","ru":"2","en":"2"}],
+        [{"kk":"3","ru":"3","en":"3"}],
+        [{"kk":"4","ru":"4","en":"4"}]
+      ],
+      "correct_answer": 0,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Санды сөзбен сәйкестендіріңіз", "ru": "Сопоставьте число и слово", "en": "Match the number to the word" },
+      "pairs": [
+        { "left": "3", "right": "Үш" },
+        { "left": "5", "right": "Бес" },
+        { "left": "7", "right": "Жеті" },
+        { "left": "10", "right": "Он" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"6\" санын қазақша жазыңыз", "ru": "Напишите число \"6\" по-казахски", "en": "Write the number \"6\" in Kazakh" },
+      "correct_answer": "алты",
+      "difficulty_score": 2,
+      "time_limit_seconds": 25
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Тоғыз\" — бұл қай сан?", "ru": "\"Тоғыз\" — это какое число?", "en": "What number is \"тоғыз\"?" },
+      "options": [
+        [{"kk":"7","ru":"7","en":"7"}],
+        [{"kk":"8","ru":"8","en":"8"}],
+        [{"kk":"9","ru":"9","en":"9"}],
+        [{"kk":"10","ru":"10","en":"10"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Он бес\" қандай сан?", "ru": "Какое число \"он бес\"?", "en": "What number is \"он бес\"?" },
+      "options": [
+        [{"kk":"12","ru":"12","en":"12"}],
+        [{"kk":"13","ru":"13","en":"13"}],
+        [{"kk":"15","ru":"15","en":"15"}],
+        [{"kk":"18","ru":"18","en":"18"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"4\" санын қазақша жазыңыз", "ru": "Напишите число \"4\" по-казахски", "en": "Write the number \"4\" in Kazakh" },
+      "correct_answer": "төрт",
+      "difficulty_score": 2,
+      "time_limit_seconds": 25
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Санды сөзбен сәйкестендіріңіз", "ru": "Сопоставьте число и слово", "en": "Match the number to the word" },
+      "pairs": [
+        { "left": "11", "right": "Он бір" },
+        { "left": "14", "right": "Он төрт" },
+        { "left": "17", "right": "Он жеті" },
+        { "left": "20", "right": "Жиырма" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 3
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Сегіз\" дегеніміз не?", "ru": "Что означает \"сегіз\"?", "en": "What does \"сегіз\" mean?" },
+      "options": [
+        [{"kk":"6","ru":"6","en":"6"}],
+        [{"kk":"7","ru":"7","en":"7"}],
+        [{"kk":"8","ru":"8","en":"8"}],
+        [{"kk":"9","ru":"9","en":"9"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    }
+  ]
+}

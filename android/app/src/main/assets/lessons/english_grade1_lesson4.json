@@ -1,0 +1,108 @@
+{
+  "subject": "english",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 4,
+  "title": {
+    "kk": "Отбасы мүшелері ағылшынша",
+    "ru": "Члены семьи на английском",
+    "en": "Family Members"
+  },
+  "description": {
+    "kk": "Ағылшын тілінде отбасы мүшелерін үйреніңіз",
+    "ru": "Выучите названия членов семьи на английском",
+    "en": "Learn family member names in English"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Mother\" ағылшынша не дегенді білдіреді?", "ru": "Что означает \"mother\" по-английски?", "en": "What does \"mother\" mean?" },
+      "options": [
+        [{"kk":"Әке","ru":"Отец","en":"Father"}],
+        [{"kk":"Ана","ru":"Мать","en":"Mother"}],
+        [{"kk":"Әже","ru":"Бабушка","en":"Grandmother"}],
+        [{"kk":"Апа","ru":"Сестра","en":"Sister"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Сөз бен аудармасын сәйкестендіріңіз", "ru": "Сопоставьте слово и перевод", "en": "Match the word and translation" },
+      "pairs": [
+        { "left": "Father", "right": "Әке" },
+        { "left": "Mother", "right": "Ана" },
+        { "left": "Brother", "right": "Аға / Іні" },
+        { "left": "Sister", "right": "Апа / Сіңлі" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Ана\" сөзін ағылшынша жазыңыз", "ru": "Напишите слово \"мать\" по-английски", "en": "Write \"мать\" in English" },
+      "correct_answer": "mother",
+      "difficulty_score": 1,
+      "time_limit_seconds": 25
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Grandfather\" дегеніміз кім?", "ru": "Кто такой \"grandfather\"?", "en": "Who is a \"grandfather\"?" },
+      "options": [
+        [{"kk":"Әке","ru":"Отец","en":"Father"}],
+        [{"kk":"Аға","ru":"Брат","en":"Brother"}],
+        [{"kk":"Ата","ru":"Дедушка","en":"Grandfather"}],
+        [{"kk":"Әже","ru":"Бабушка","en":"Grandmother"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Sister\" дегеніміз кім?", "ru": "Кто такая \"sister\"?", "en": "Who is a \"sister\"?" },
+      "options": [
+        [{"kk":"Аға","ru":"Брат","en":"Brother"}],
+        [{"kk":"Апа / Сіңлі","ru":"Сестра","en":"Sister"}],
+        [{"kk":"Ана","ru":"Мать","en":"Mother"}],
+        [{"kk":"Әже","ru":"Бабушка","en":"Grandmother"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Әке\" сөзін ағылшынша жазыңыз", "ru": "Напишите слово \"отец\" по-английски", "en": "Write \"отец\" in English" },
+      "correct_answer": "father",
+      "difficulty_score": 1,
+      "time_limit_seconds": 25
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Сөз бен аудармасын сәйкестендіріңіз", "ru": "Сопоставьте слово и перевод", "en": "Match the word and translation" },
+      "pairs": [
+        { "left": "Grandmother", "right": "Әже" },
+        { "left": "Grandfather", "right": "Ата" },
+        { "left": "Son", "right": "Ұл" },
+        { "left": "Daughter", "right": "Қыз" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Әкеңнің әкесі — ол кім?", "ru": "Папа твоего папы — это кто?", "en": "Your father's father is your...?" },
+      "options": [
+        [{"kk":"Father","ru":"Father","en":"Father"}],
+        [{"kk":"Brother","ru":"Brother","en":"Brother"}],
+        [{"kk":"Grandfather","ru":"Grandfather","en":"Grandfather"}],
+        [{"kk":"Uncle","ru":"Uncle","en":"Uncle"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 20
+    }
+  ]
+}

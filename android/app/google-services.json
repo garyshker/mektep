@@ -12,7 +12,20 @@
           "package_name": "app.tisimai.mektep"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "508396820691-flmtjqcoaj8eee5eof2a8aq14jsqm4kc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.tisimai.mektep",
+            "certificate_hash": "cb9e30de885ad85adb8a81f7b78accbac4ad5120"
+          }
+        },
+        {
+          "client_id": "508396820691-5netf2jgojckrie936ui06fpouosc1tu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCk2lxe6qshjBeV6z9ZZEVpDdabqgn436I"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "508396820691-5netf2jgojckrie936ui06fpouosc1tu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -1,0 +1,95 @@
+{
+  "subject": "math",
+  "grade_level": 1,
+  "difficulty_tier": 1,
+  "sort_order": 3,
+  "title": { "kk": "Сандарды салыстыру (1-20)", "ru": "Сравнение чисел (1-20)", "en": "Comparing Numbers (1-20)" },
+  "description": { "kk": "1-ден 20-ға дейінгі сандарды салыстыруды үйренеміз: үлкен, кіші, тең", "ru": "Учимся сравнивать числа от 1 до 20: больше, меньше, равно", "en": "Learn to compare numbers from 1 to 20: greater than, less than, equal to" },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "5 ... 3. Қай таңба дұрыс?", "ru": "5 ... 3. Какой знак правильный?", "en": "5 ... 3. Which sign is correct?" },
+      "options": [
+        [{ "kk": "<", "ru": "<", "en": "<" }],
+        [{ "kk": ">", "ru": ">", "en": ">" }],
+        [{ "kk": "=", "ru": "=", "en": "=" }],
+        [{ "kk": "+", "ru": "+", "en": "+" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "8 ... 12. Қай таңба дұрыс?", "ru": "8 ... 12. Какой знак правильный?", "en": "8 ... 12. Which sign is correct?" },
+      "options": [
+        [{ "kk": ">", "ru": ">", "en": ">" }],
+        [{ "kk": "=", "ru": "=", "en": "=" }],
+        [{ "kk": "<", "ru": "<", "en": "<" }],
+        [{ "kk": "+", "ru": "+", "en": "+" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "14 ... 14. Қай таңба дұрыс?", "ru": "14 ... 14. Какой знак правильный?", "en": "14 ... 14. Which sign is correct?" },
+      "options": [
+        [{ "kk": "<", "ru": "<", "en": "<" }],
+        [{ "kk": ">", "ru": ">", "en": ">" }],
+        [{ "kk": "+", "ru": "+", "en": "+" }],
+        [{ "kk": "=", "ru": "=", "en": "=" }]
+      ],
+      "correct_answer": 3,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": ">, < немесе = таңбасын жазыңыз: 7 ... 10", "ru": "Напишите знак >, < или =: 7 ... 10", "en": "Type the sign >, < or =: 7 ... 10" },
+      "correct_answer": "<",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": ">, < немесе = таңбасын жазыңыз: 15 ... 9", "ru": "Напишите знак >, < или =: 15 ... 9", "en": "Type the sign >, < or =: 15 ... 9" },
+      "correct_answer": ">",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": ">, < немесе = таңбасын жазыңыз: 20 ... 20", "ru": "Напишите знак >, < или =: 20 ... 20", "en": "Type the sign >, < or =: 20 ... 20" },
+      "correct_answer": "=",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Дұрыс таңбаны сәйкестендіріңіз", "ru": "Сопоставьте правильный знак", "en": "Match the correct sign" },
+      "pairs": [
+        { "left": "3 ... 7", "right": "<" },
+        { "left": "9 ... 4", "right": ">" },
+        { "left": "6 ... 6", "right": "=" },
+        { "left": "1 ... 18", "right": "<" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қай сан 16-дан үлкен?", "ru": "Какое число больше 16?", "en": "Which number is greater than 16?" },
+      "options": [
+        [{ "kk": "11", "ru": "11", "en": "11" }],
+        [{ "kk": "14", "ru": "14", "en": "14" }],
+        [{ "kk": "19", "ru": "19", "en": "19" }],
+        [{ "kk": "10", "ru": "10", "en": "10" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 2,
+      "time_limit_seconds": 30
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "subject": "english",
+  "grade_level": 2,
+  "difficulty_tier": 1,
+  "sort_order": 2,
+  "title": {
+    "kk": "Дене мүшелері ағылшынша",
+    "ru": "Части тела на английском",
+    "en": "Body Parts"
+  },
+  "description": {
+    "kk": "Ағылшын тілінде дене мүшелерін үйреніңіз",
+    "ru": "Выучите названия частей тела на английском",
+    "en": "Learn body part names in English"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Head\" ағылшынша не дегенді білдіреді?", "ru": "Что означает \"head\"?", "en": "What does \"head\" mean?" },
+      "options": [
+        [{"kk":"Қол","ru":"Рука","en":"Hand"}],
+        [{"kk":"Аяқ","ru":"Нога","en":"Leg"}],
+        [{"kk":"Бас","ru":"Голова","en":"Head"}],
+        [{"kk":"Көз","ru":"Глаз","en":"Eye"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Сөзді аудармасымен сәйкестендіріңіз", "ru": "Сопоставьте слово с переводом", "en": "Match the word with its translation" },
+      "pairs": [
+        { "left": "Eye", "right": "Көз" },
+        { "left": "Ear", "right": "Құлақ" },
+        { "left": "Nose", "right": "Мұрын" },
+        { "left": "Mouth", "right": "Ауыз" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Қол\" сөзін ағылшынша жазыңыз", "ru": "Напишите \"рука\" по-английски", "en": "Write \"рука\" in English" },
+      "correct_answer": "hand",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Leg\" дегеніміз не?", "ru": "Что означает \"leg\"?", "en": "What does \"leg\" mean?" },
+      "options": [
+        [{"kk":"Бас","ru":"Голова","en":"Head"}],
+        [{"kk":"Қол","ru":"Рука","en":"Hand"}],
+        [{"kk":"Аяқ","ru":"Нога","en":"Leg"}],
+        [{"kk":"Саусақ","ru":"Палец","en":"Finger"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Біз \"eyes\" арқылы не істейміз?", "ru": "Что мы делаем \"eyes\"?", "en": "We use our \"eyes\" to...?" },
+      "options": [
+        [{"kk":"Есту","ru":"Слышать","en":"Hear"}],
+        [{"kk":"Көру","ru":"Видеть","en":"See"}],
+        [{"kk":"Сезу","ru":"Чувствовать","en":"Touch"}],
+        [{"kk":"Дәм сезу","ru":"Пробовать на вкус","en":"Taste"}]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    },
+    {
+      "type": "type",
+      "prompt": { "kk": "\"Аяқ\" сөзін ағылшынша жазыңыз", "ru": "Напишите \"нога\" по-английски", "en": "Write \"нога\" in English" },
+      "correct_answer": "leg",
+      "difficulty_score": 1,
+      "time_limit_seconds": 20
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Сөзді аудармасымен сәйкестендіріңіз", "ru": "Сопоставьте слово с переводом", "en": "Match the word with its translation" },
+      "pairs": [
+        { "left": "Head", "right": "Бас" },
+        { "left": "Hand", "right": "Қол" },
+        { "left": "Leg", "right": "Аяқ" },
+        { "left": "Tooth", "right": "Тіс" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 2
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "\"Finger\" дегеніміз не?", "ru": "Что означает \"finger\"?", "en": "What does \"finger\" mean?" },
+      "options": [
+        [{"kk":"Аяқ","ru":"Нога","en":"Leg"}],
+        [{"kk":"Қол","ru":"Рука","en":"Hand"}],
+        [{"kk":"Саусақ","ru":"Палец","en":"Finger"}],
+        [{"kk":"Тізе","ru":"Колено","en":"Knee"}]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 15
+    }
+  ]
+}
