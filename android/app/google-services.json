@@ -30,6 +30,14 @@
           }
         },
         {
+          "client_id": "508396820691-lin9g7u12ing6bddbj89b42qchd6jhba.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.tisimai.mektep",
+            "certificate_hash": "d3e89ba0c78e4c18d6936b961e9d5fd5f4145fcc"
+          }
+        },
+        {
           "client_id": "508396820691-5netf2jgojckrie936ui06fpouosc1tu.apps.googleusercontent.com",
           "client_type": 3
         }
