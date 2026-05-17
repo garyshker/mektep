@@ -35,7 +35,8 @@ import javax.inject.Inject
 class AddChildViewModel @Inject constructor(
     private val childProfileDao: ChildProfileDao,
     private val userDao: UserDao,
-    private val tokenStore: TokenStore
+    private val tokenStore: TokenStore,
+    private val firebaseSync: app.tisimai.mektep.data.remote.FirebaseProfileSync
 ) : ViewModel() {
 
     fun saveChild(
@@ -58,6 +59,7 @@ class AddChildViewModel @Inject constructor(
                 createdAt = System.currentTimeMillis()
             )
             childProfileDao.insert(child)
+            firebaseSync.pushChild(child)
             onSaved()
         }
     }

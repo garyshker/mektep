@@ -173,6 +173,9 @@ interface ChildProfileDao {
     @Query("SELECT * FROM child_profile WHERE parentUserId = :parentId ORDER BY createdAt")
     fun getChildrenForParent(parentId: String): Flow<List<ChildProfile>>
 
+    @Query("SELECT * FROM child_profile WHERE parentUserId = :parentId ORDER BY createdAt")
+    suspend fun getChildrenForParentOnce(parentId: String): List<ChildProfile>
+
     @Query("SELECT * FROM child_profile WHERE id = :childId")
     suspend fun getChild(childId: String): ChildProfile?
 

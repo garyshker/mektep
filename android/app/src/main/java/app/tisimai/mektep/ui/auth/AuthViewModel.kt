@@ -29,7 +29,8 @@ data class AuthUiState(
 class AuthViewModel @Inject constructor(
     private val userDao: UserDao,
     private val tokenStore: TokenStore,
-    private val parentalPrefsStore: ParentalPrefsStore
+    private val parentalPrefsStore: ParentalPrefsStore,
+    private val firebaseSync: app.tisimai.mektep.data.remote.FirebaseProfileSync
 ) : ViewModel() {
 
     private val auth: FirebaseAuth? = try { FirebaseAuth.getInstance() } catch (_: Exception) { null }
@@ -47,6 +48,10 @@ class AuthViewModel @Inject constructor(
             val currentUser = auth?.currentUser
             if (currentUser != null) {
                 _uiState.value = AuthUiState(isLoggedIn = true)
+                // Sync children on app restart
+                viewModelScope.launch {
+                    firebaseSync.pullChildren()
+                }
             }
         } catch (_: Exception) { }
     }
@@ -80,6 +85,8 @@ class AuthViewModel @Inject constructor(
                         role = "CHILD"
                     )
                     _uiState.value = AuthUiState(isLoggedIn = true, needsOnboarding = true)
+                    // Sync children from Firebase (in case added on another device)
+                    firebaseSync.pullChildren()
                 } else {
                     tokenStore.saveAuth(
                         accessToken = user.uid,
@@ -87,6 +94,10 @@ class AuthViewModel @Inject constructor(
                         userId = existing.id,
                         role = existing.role
                     )
+                    // Sync children from Firebase
+                    firebaseSync.pullChildren()
+                    // Push any local children that aren't in Firebase yet
+                    firebaseSync.pushAllChildren(existing.id)
                     _uiState.value = AuthUiState(isLoggedIn = true)
                 }
             } catch (e: Exception) {
