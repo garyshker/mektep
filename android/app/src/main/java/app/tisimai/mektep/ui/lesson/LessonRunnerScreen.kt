@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import app.tisimai.mektep.data.models.AgeBand
 import app.tisimai.mektep.data.models.QuestionData
 import app.tisimai.mektep.ui.components.ConfettiEffect
 import app.tisimai.mektep.ui.components.SoundPlayer
@@ -37,6 +38,7 @@ fun LessonRunnerScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
     val language by viewModel.language.collectAsState()
+    val band by viewModel.bandInfo.collectAsState()
 
     LaunchedEffect(lessonId) { viewModel.loadLesson(lessonId) }
 
@@ -58,16 +60,16 @@ fun LessonRunnerScreen(
                 CircularProgressIndicator()
             }
             state.isCompleted -> {
-                CompletionScreen(state, onFinish)
+                CompletionScreen(state, onFinish, band)
                 ConfettiEffect(isActive = state.starsEarned > 0)
             }
-            state.currentQuestion != null -> QuestionScreen(state, language, viewModel)
+            state.currentQuestion != null -> QuestionScreen(state, language, viewModel, band)
         }
     }
 }
 
 @Composable
-private fun QuestionScreen(state: LessonRunnerState, language: String, viewModel: LessonRunnerViewModel) {
+private fun QuestionScreen(state: LessonRunnerState, language: String, viewModel: LessonRunnerViewModel, band: AgeBand) {
     val question = state.currentQuestion ?: return
     val prompt = question.prompt[language] ?: question.prompt["en"] ?: ""
 
@@ -100,20 +102,22 @@ private fun QuestionScreen(state: LessonRunnerState, language: String, viewModel
                 color = MektepGreen,
             )
             Spacer(Modifier.width(8.dp))
-            Row(Modifier.graphicsLayer { translationX = heartShake.value }) {
-                repeat(3) { i ->
-                    val isAlive = i < state.hearts
-                    val scale by animateFloatAsState(
-                        targetValue = if (isAlive) 1f else 0.6f,
-                        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
-                        label = "heartScale$i"
-                    )
-                    Icon(
-                        if (isAlive) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        null,
-                        tint = if (isAlive) MektepRed else MektepRed.copy(alpha = 0.3f),
-                        modifier = Modifier.size(20.dp).scale(scale)
-                    )
+            if (band.heartsEnabled) {
+                Row(Modifier.graphicsLayer { translationX = heartShake.value }) {
+                    repeat(band.heartsCount) { i ->
+                        val isAlive = i < state.hearts
+                        val scale by animateFloatAsState(
+                            targetValue = if (isAlive) 1f else 0.6f,
+                            animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+                            label = "heartScale$i"
+                        )
+                        Icon(
+                            if (isAlive) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            null,
+                            tint = if (isAlive) MektepRed else MektepRed.copy(alpha = 0.3f),
+                            modifier = Modifier.size(20.dp).scale(scale)
+                        )
+                    }
                 }
             }
         }
@@ -180,7 +184,11 @@ private fun QuestionScreen(state: LessonRunnerState, language: String, viewModel
                     Spacer(Modifier.width(12.dp))
                     Column {
                         Text(
-                            if (state.lastAnswerCorrect) "Correct!" else "Incorrect",
+                            when {
+                                state.lastAnswerCorrect -> "Correct!"
+                                !band.heartsEnabled -> "Try again! You're doing great!"
+                                else -> "Incorrect"
+                            },
                             fontWeight = FontWeight.Bold, color = fgColor, fontSize = 16.sp
                         )
                         if (state.lastAnswerCorrect) {
@@ -327,7 +335,7 @@ private fun MatchQuestion(state: LessonRunnerState, viewModel: LessonRunnerViewM
 }
 
 @Composable
-private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit) {
+private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit, band: AgeBand) {
     // Animated entrance
     val titleScale by animateFloatAsState(
         targetValue = 1f, animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
@@ -392,7 +400,7 @@ private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit) {
                     Text("screen time earned", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        "${state.timeSpentMinutes} min learning × 1.5",
+                        "${state.timeSpentMinutes} min learning × ${band.screenTimeRatio}",
                         fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }

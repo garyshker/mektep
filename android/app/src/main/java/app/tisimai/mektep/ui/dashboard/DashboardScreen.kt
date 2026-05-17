@@ -46,10 +46,26 @@ fun DashboardScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Column {
-                        Text("Mektep", fontWeight = FontWeight.Bold)
-                        state.profile?.let {
-                            Text(it.displayName, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    val cp = state.childProfile
+                    if (cp != null) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(cp.avatarEmoji, fontSize = 24.sp)
+                            Spacer(Modifier.width(8.dp))
+                            Column {
+                                Text(cp.name, fontWeight = FontWeight.Bold)
+                                Text(
+                                    tr(state.ageBand?.greetingKey ?: "", language),
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    } else {
+                        Column {
+                            Text("BilimALL", fontWeight = FontWeight.Bold)
+                            state.profile?.let {
+                                Text(it.displayName, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
                         }
                     }
                 },

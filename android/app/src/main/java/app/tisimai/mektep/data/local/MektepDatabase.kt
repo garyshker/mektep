@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
         AllowedApp::class,
         ChildSession::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class MektepDatabase : RoomDatabase() {
@@ -157,6 +157,12 @@ abstract class MektepDatabase : RoomDatabase() {
                 db.execSQL("ALTER TABLE child_session ADD COLUMN childId TEXT NOT NULL DEFAULT 'default_child'")
             }
         }
+
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE child_profile ADD COLUMN dailyLimitMinutes INTEGER NOT NULL DEFAULT 60")
+            }
+        }
     }
 }
 
@@ -187,6 +193,9 @@ interface ChildProfileDao {
 
     @Query("UPDATE child_profile SET screenTimeBalanceSecs = screenTimeBalanceSecs + :deltaSecs WHERE id = :childId")
     suspend fun updateScreenTimeBalance(childId: String, deltaSecs: Int)
+
+    @Query("UPDATE child_profile SET dailyLimitMinutes = :limit WHERE id = :childId")
+    suspend fun updateDailyLimit(childId: String, limit: Int)
 
     @Delete
     suspend fun delete(child: ChildProfile)

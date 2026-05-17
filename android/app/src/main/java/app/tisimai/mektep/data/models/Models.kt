@@ -127,6 +127,7 @@ data class ChildProfile(
     val longestStreak: Int = 0,
     val lastActiveDate: String? = null,
     val screenTimeBalanceSecs: Int = 0,
+    val dailyLimitMinutes: Int = 60,
     val createdAt: Long = System.currentTimeMillis()
 )
 

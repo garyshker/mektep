@@ -75,6 +75,7 @@ fun ChildLauncherScreen(
         return
     }
 
+    Box(Modifier.fillMaxSize()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -202,6 +203,40 @@ fun ChildLauncherScreen(
                         color = if (canOpen) MaterialTheme.colorScheme.onSurface
                         else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
                     )
+                }
+            }
+        }
+    }
+
+    // Break reminder overlay (non-blocking)
+    if (state.showBreakReminder) {
+        BreakReminderOverlay(lang = lang, onDismiss = { viewModel.dismissBreakReminder() })
+    }
+    } // end Box
+}
+
+@Composable
+private fun BreakReminderOverlay(lang: String, onDismiss: () -> Unit) {
+    Box(
+        Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.7f)),
+        contentAlignment = Alignment.Center
+    ) {
+        Card(
+            modifier = Modifier.padding(32.dp).fillMaxWidth(),
+            shape = RoundedCornerShape(24.dp)
+        ) {
+            Column(
+                Modifier.padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("\uD83C\uDF3F", fontSize = 48.sp)
+                Spacer(Modifier.height(16.dp))
+                Text(tr("break_title", lang), fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.height(8.dp))
+                Text(tr("break_desc", lang), textAlign = TextAlign.Center, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Spacer(Modifier.height(24.dp))
+                Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth().height(48.dp), shape = RoundedCornerShape(12.dp)) {
+                    Text(tr("break_dismiss", lang), fontSize = 16.sp)
                 }
             }
         }

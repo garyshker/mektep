@@ -22,6 +22,7 @@ import androidx.lifecycle.viewModelScope
 import app.tisimai.mektep.data.local.ChildProfileDao
 import app.tisimai.mektep.data.local.TokenStore
 import app.tisimai.mektep.data.local.UserDao
+import app.tisimai.mektep.data.models.AgeBand
 import app.tisimai.mektep.data.models.ChildProfile
 import app.tisimai.mektep.ui.theme.MektepGreen
 import app.tisimai.mektep.util.tr
@@ -42,6 +43,7 @@ class AddChildViewModel @Inject constructor(
         birthDate: String,
         avatarEmoji: String,
         gradeLevel: Int,
+        dailyLimitMinutes: Int,
         onSaved: () -> Unit
     ) {
         viewModelScope.launch {
@@ -52,6 +54,7 @@ class AddChildViewModel @Inject constructor(
                 birthDate = birthDate,
                 avatarEmoji = avatarEmoji,
                 gradeLevel = gradeLevel,
+                dailyLimitMinutes = dailyLimitMinutes,
                 createdAt = System.currentTimeMillis()
             )
             childProfileDao.insert(child)
@@ -152,7 +155,7 @@ fun AddChildScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                (1..4).forEach { grade ->
+                (1..6).forEach { grade ->
                     FilterChip(
                         selected = selectedGrade == grade,
                         onClick = { selectedGrade = grade },
@@ -165,6 +168,14 @@ fun AddChildScreen(
                 }
             }
 
+            // Band label preview
+            val band = AgeBand.fromGradeLevel(selectedGrade)
+            Text(
+                "${tr(band.labelKey, lang)} \u2022 ${tr("ratio", lang)}: 1:${band.screenTimeRatio}",
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
             Spacer(Modifier.height(16.dp))
 
             // Save button
@@ -175,6 +186,7 @@ fun AddChildScreen(
                         birthDate = birthDate,
                         avatarEmoji = selectedAvatar,
                         gradeLevel = selectedGrade,
+                        dailyLimitMinutes = AgeBand.fromGradeLevel(selectedGrade).dailyLimitDefaultMinutes,
                         onSaved = onSaved
                     )
                 },

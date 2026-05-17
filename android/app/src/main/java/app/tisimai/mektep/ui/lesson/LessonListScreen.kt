@@ -18,12 +18,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.tisimai.mektep.data.local.ChildProfileDao
 import app.tisimai.mektep.data.local.LessonLoader
 import app.tisimai.mektep.data.local.ParentalPrefsStore
 import app.tisimai.mektep.data.local.ProgressDao
 import app.tisimai.mektep.data.local.TokenStore
+import app.tisimai.mektep.data.local.UserDao
 import app.tisimai.mektep.data.models.Lesson
 import app.tisimai.mektep.data.models.LessonProgress
+import app.tisimai.mektep.util.tr
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -34,7 +37,9 @@ class LessonListViewModel @Inject constructor(
     private val lessonLoader: LessonLoader,
     private val progressDao: ProgressDao,
     private val tokenStore: TokenStore,
-    private val parentalPrefsStore: ParentalPrefsStore
+    private val parentalPrefsStore: ParentalPrefsStore,
+    private val childProfileDao: ChildProfileDao,
+    private val userDao: UserDao
 ) : ViewModel() {
 
     private val _lessons = MutableStateFlow<List<Pair<Lesson, LessonProgress?>>>(emptyList())
@@ -45,7 +50,12 @@ class LessonListViewModel @Inject constructor(
     fun load(subjectId: String) {
         viewModelScope.launch {
             val childId = parentalPrefsStore.activeChildId.first() ?: ""
-            val subjectLessons = lessonLoader.lessonsForSubject(subjectId)
+            val gradeLevel = if (childId.isNotEmpty()) {
+                childProfileDao.getChild(childId)?.gradeLevel ?: 6
+            } else {
+                userDao.getProfileOnce()?.gradeLevel ?: 6
+            }
+            val subjectLessons = lessonLoader.lessonsForSubject(subjectId, gradeLevel)
             val progress = progressDao.getForSubject(childId, subjectId)
             _lessons.value = subjectLessons.map { lesson ->
                 lesson to progress.find { it.lessonId == lesson.id }
@@ -84,12 +94,28 @@ fun LessonListScreen(
                 Card(modifier = Modifier.fillMaxWidth().clickable { onLessonClick(lesson.id) }) {
                     Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
-                            Text(lesson.title[language] ?: lesson.title["en"] ?: "Lesson", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(lesson.title[language] ?: lesson.title["en"] ?: "Lesson", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                Spacer(Modifier.width(8.dp))
+                                Text(
+                                    "${tr("grade", language)} ${lesson.gradeLevel}",
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier
+                                )
+                            }
                             Text(lesson.description[language] ?: lesson.description["en"] ?: "", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            if (progress != null && progress.timesCompleted > 0) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    "${lesson.questions.size} ${tr("questions", language)}",
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                if (progress != null && progress.timesCompleted > 0) {
+                                    Spacer(Modifier.width(8.dp))
                                     repeat(progress.bestStars) {
-                                        Text("⭐", fontSize = 12.sp)
+                                        Text("\u2B50", fontSize = 12.sp)
                                     }
                                     Text(" completed", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
                                 }

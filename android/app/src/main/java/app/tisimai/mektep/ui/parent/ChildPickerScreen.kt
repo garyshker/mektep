@@ -21,8 +21,11 @@ import androidx.lifecycle.viewModelScope
 import app.tisimai.mektep.data.local.ChildProfileDao
 import app.tisimai.mektep.data.local.ParentalPrefsStore
 import app.tisimai.mektep.data.local.UserDao
+import app.tisimai.mektep.data.models.AgeBand
 import app.tisimai.mektep.data.models.ChildProfile
+import app.tisimai.mektep.ui.theme.MektepBlue
 import app.tisimai.mektep.ui.theme.MektepGreen
+import app.tisimai.mektep.ui.theme.MektepPurple
 import app.tisimai.mektep.util.tr
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -35,7 +38,8 @@ import javax.inject.Inject
 class ChildPickerViewModel @Inject constructor(
     private val childProfileDao: ChildProfileDao,
     private val userDao: UserDao,
-    private val parentalPrefsStore: ParentalPrefsStore
+    private val parentalPrefsStore: ParentalPrefsStore,
+    private val tokenStore: app.tisimai.mektep.data.local.TokenStore
 ) : ViewModel() {
 
     private val _children = MutableStateFlow<List<ChildProfile>>(emptyList())
@@ -43,6 +47,8 @@ class ChildPickerViewModel @Inject constructor(
 
     private val _autoSelected = MutableStateFlow(false)
     val autoSelected: StateFlow<Boolean> = _autoSelected.asStateFlow()
+
+    val language: StateFlow<String> = tokenStore.language.stateIn(viewModelScope, SharingStarted.Eagerly, "en")
 
     init {
         viewModelScope.launch {
@@ -70,11 +76,11 @@ class ChildPickerViewModel @Inject constructor(
 fun ChildPickerScreen(
     onChildSelected: () -> Unit,
     onAddChild: () -> Unit,
-    lang: String = "en",
     viewModel: ChildPickerViewModel = hiltViewModel()
 ) {
     val children by viewModel.children.collectAsState()
     val autoSelected by viewModel.autoSelected.collectAsState()
+    val lang by viewModel.language.collectAsState()
 
     // Auto-select if only one child
     LaunchedEffect(autoSelected, children) {
@@ -96,32 +102,66 @@ fun ChildPickerScreen(
                 .padding(padding)
                 .padding(16.dp)
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.weight(1f)
-            ) {
-                items(children) { child ->
-                    ChildCard(
-                        child = child,
-                        lang = lang,
-                        onClick = { viewModel.selectChild(child) { onChildSelected() } }
+            if (children.isEmpty()) {
+                // No children yet — prompt to add one
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text("\uD83D\uDC76", fontSize = 64.sp) // 👶
+                    Spacer(Modifier.height(16.dp))
+                    Text(
+                        tr("no_children_added", lang),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
                     )
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        tr("add_child_to_start", lang),
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(Modifier.height(24.dp))
+                    Button(
+                        onClick = onAddChild,
+                        modifier = Modifier.height(50.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = MektepGreen)
+                    ) {
+                        Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(20.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text(tr("add_child", lang), fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    }
                 }
-            }
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    items(children) { child ->
+                        ChildCard(
+                            child = child,
+                            lang = lang,
+                            onClick = { viewModel.selectChild(child) { onChildSelected() } }
+                        )
+                    }
+                }
 
-            Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
 
-            // Add child button
-            OutlinedButton(
-                onClick = onAddChild,
-                modifier = Modifier.fillMaxWidth().height(50.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = MektepGreen)
-            ) {
-                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(20.dp))
-                Spacer(Modifier.width(8.dp))
-                Text(tr("add_new_child", lang), fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                OutlinedButton(
+                    onClick = onAddChild,
+                    modifier = Modifier.fillMaxWidth().height(50.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MektepGreen)
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(20.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(tr("add_new_child", lang), fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                }
             }
         }
     }
@@ -162,6 +202,18 @@ private fun ChildCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+            val band = AgeBand.fromGradeLevel(child.gradeLevel)
+            val bandColor = when (band) {
+                AgeBand.BALA -> MektepGreen
+                AgeBand.OQYSHY -> MektepBlue
+                AgeBand.ZERDE -> MektepPurple
+            }
+            Text(
+                tr(band.labelKey, lang),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Medium,
+                color = bandColor
+            )
             Spacer(Modifier.height(4.dp))
             Text(
                 "${child.xpTotal} XP",

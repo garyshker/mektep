@@ -15,7 +15,8 @@ data class ChildLauncherState(
     val isLoading: Boolean = true,
     val apps: List<LauncherApp> = emptyList(),
     val balanceSeconds: Int = 0,
-    val sessionId: Long = 0
+    val sessionId: Long = 0,
+    val showBreakReminder: Boolean = false
 )
 
 @HiltViewModel
@@ -86,7 +87,12 @@ class ChildLauncherViewModel @Inject constructor(
                 if (current.balanceSeconds <= 0) break
 
                 val newBalance = current.balanceSeconds - 1
-                _state.value = current.copy(balanceSeconds = newBalance)
+                val elapsed = sessionStartBalance - newBalance
+                if (elapsed >= 1500 && !current.showBreakReminder) {
+                    _state.value = current.copy(balanceSeconds = newBalance, showBreakReminder = true)
+                } else {
+                    _state.value = current.copy(balanceSeconds = newBalance)
+                }
 
                 // Persist to DB every 10 seconds
                 if (newBalance % 10 == 0) {
@@ -118,6 +124,10 @@ class ChildLauncherViewModel @Inject constructor(
                 ScreenTimeLog(childId = resolvedChildId ?: "", type = "SPENT", amountSeconds = consumed, source = "child_mode")
             )
         }
+    }
+
+    fun dismissBreakReminder() {
+        _state.value = _state.value.copy(showBreakReminder = false)
     }
 
     fun deactivateChildMode() {

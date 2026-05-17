@@ -143,6 +143,25 @@ object Strings {
         "add_new_child" to mapOf("en" to "Add New Child", "ru" to "Добавить ребёнка", "kk" to "Жаңа бала қосу"),
         "children" to mapOf("en" to "Children", "ru" to "Дети", "kk" to "Балалар"),
         "no_children_added" to mapOf("en" to "No children added yet", "ru" to "Дети ещё не добавлены", "kk" to "Әлі бала қосылмаған"),
+        "add_child_to_start" to mapOf("en" to "Add a child to start child mode", "ru" to "Добавьте ребёнка для запуска детского режима", "kk" to "Бала режимін бастау үшін бала қосыңыз"),
+
+        // ── Age Band Greetings & Labels ──
+        "greeting_bala" to mapOf("kk" to "Ойнап, үйренейік!", "ru" to "Играем и учимся!", "en" to "Let's play and learn!"),
+        "greeting_oqyshy" to mapOf("kk" to "Үйренуге дайынсың ба?", "ru" to "Готов учиться?", "en" to "Ready to learn?"),
+        "greeting_zerde" to mapOf("kk" to "Өзіңді сына!", "ru" to "Бросай себе вызов!", "en" to "Challenge yourself!"),
+        "band_bala" to mapOf("kk" to "Бала", "ru" to "Малыш", "en" to "Little"),
+        "band_oqyshy" to mapOf("kk" to "Оқушы", "ru" to "Ученик", "en" to "Learner"),
+        "band_zerde" to mapOf("kk" to "Зерде", "ru" to "Мыслитель", "en" to "Thinker"),
+
+        // ── Break Screen ──
+        "break_title" to mapOf("kk" to "Демалыс уақыты!", "ru" to "Время отдохнуть!", "en" to "Time for a break!"),
+        "break_desc" to mapOf("kk" to "Көзіңе демалыс бер. Сергіп, қайта оралыңыз!", "ru" to "Дайте глазам отдохнуть. Отдохните и возвращайтесь!", "en" to "Give your eyes a rest. Take a break and come back!"),
+        "break_dismiss" to mapOf("kk" to "Жалғастыру", "ru" to "Продолжить", "en" to "Continue"),
+
+        // ── Extra UI ──
+        "ratio" to mapOf("en" to "Ratio", "ru" to "Соотношение", "kk" to "Қатынас"),
+        "daily_limit_child" to mapOf("en" to "Daily limit", "ru" to "Дневной лимит", "kk" to "Күнделікті шектеу"),
+        "questions" to mapOf("en" to "questions", "ru" to "вопросов", "kk" to "сұрақ"),
     )
 }
 

@@ -22,6 +22,7 @@ import app.tisimai.mektep.data.local.ChildProfileDao
 import app.tisimai.mektep.data.local.ParentalConfigDao
 import app.tisimai.mektep.data.local.ParentalPrefsStore
 import app.tisimai.mektep.data.local.UserDao
+import app.tisimai.mektep.data.models.AgeBand
 import app.tisimai.mektep.data.models.ChildProfile
 import app.tisimai.mektep.data.models.ParentalConfig
 import app.tisimai.mektep.ui.theme.MektepGreen
@@ -77,6 +78,12 @@ class ParentSettingsViewModel @Inject constructor(
             configDao.upsertConfig(c.copy(bedtimeStart = start, bedtimeEnd = end))
         }
     }
+
+    fun updateChildDailyLimit(childId: String, minutes: Int) {
+        viewModelScope.launch {
+            childProfileDao.updateDailyLimit(childId, minutes)
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -120,24 +127,49 @@ fun ParentSettingsScreen(
                 }
             } else {
                 children.forEach { child ->
+                    var childDailyLimit by remember(child.id, child.dailyLimitMinutes) {
+                        mutableFloatStateOf(child.dailyLimitMinutes.toFloat())
+                    }
                     Card(Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
-                        Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Text(child.avatarEmoji, fontSize = 32.sp)
-                            Spacer(Modifier.width(12.dp))
-                            Column(Modifier.weight(1f)) {
-                                Text(child.name, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                                val age = try {
-                                    Period.between(LocalDate.parse(child.birthDate), LocalDate.now()).years
-                                } catch (_: Exception) { null }
-                                Text(
-                                    buildString {
-                                        if (age != null) append("$age ${tr("age_years", lang)} | ")
-                                        append("${tr("grade", lang)} ${child.gradeLevel}")
-                                    },
-                                    fontSize = 13.sp,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
+                        Column(Modifier.padding(12.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(child.avatarEmoji, fontSize = 32.sp)
+                                Spacer(Modifier.width(12.dp))
+                                Column(Modifier.weight(1f)) {
+                                    Text(child.name, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                                    val age = try {
+                                        Period.between(LocalDate.parse(child.birthDate), LocalDate.now()).years
+                                    } catch (_: Exception) { null }
+                                    Text(
+                                        buildString {
+                                            if (age != null) append("$age ${tr("age_years", lang)} | ")
+                                            append("${tr("grade", lang)} ${child.gradeLevel}")
+                                        },
+                                        fontSize = 13.sp,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                    val band = AgeBand.fromGradeLevel(child.gradeLevel)
+                                    Text(
+                                        tr(band.labelKey, lang),
+                                        fontSize = 12.sp,
+                                        color = MektepGreen
+                                    )
+                                }
                             }
+                            Spacer(Modifier.height(8.dp))
+                            Text(
+                                "${tr("daily_limit_child", lang)}: ${childDailyLimit.toInt()} ${tr("minutes", lang)}",
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Slider(
+                                value = childDailyLimit,
+                                onValueChange = { childDailyLimit = it },
+                                onValueChangeFinished = { viewModel.updateChildDailyLimit(child.id, childDailyLimit.toInt()) },
+                                valueRange = 15f..240f,
+                                steps = 14,
+                                colors = SliderDefaults.colors(thumbColor = MektepGreen, activeTrackColor = MektepGreen)
+                            )
                         }
                     }
                 }

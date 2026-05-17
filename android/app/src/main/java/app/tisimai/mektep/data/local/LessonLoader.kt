@@ -33,6 +33,18 @@ class LessonLoader @Inject constructor(
     fun lessonsForSubject(subjectId: String): List<Lesson> =
         lessons.filter { it.subjectId == subjectId }.sortedBy { it.sortOrder }
 
+    fun lessonsForSubject(subjectId: String, maxGradeLevel: Int): List<Lesson> =
+        lessons.filter { it.subjectId == subjectId && it.gradeLevel <= maxGradeLevel }
+            .sortedBy { it.sortOrder }
+
+    fun subjectsWithLessonsForGrade(maxGradeLevel: Int): List<Subject> {
+        val subjectIdsWithLessons = lessons
+            .filter { it.gradeLevel <= maxGradeLevel }
+            .map { it.subjectId }
+            .toSet()
+        return subjects.filter { it.id in subjectIdsWithLessons }
+    }
+
     fun getLesson(lessonId: String): Lesson? =
         lessons.find { it.id == lessonId }
 

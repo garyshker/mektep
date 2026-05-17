@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.tisimai.mektep.data.local.*
 import app.tisimai.mektep.data.models.*
+import app.tisimai.mektep.data.models.AgeBand
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -50,6 +51,9 @@ class LessonRunnerViewModel @Inject constructor(
 
     val language: StateFlow<String> = tokenStore.language.stateIn(viewModelScope, SharingStarted.Eagerly, "en")
 
+    private var currentBand: AgeBand = AgeBand.OQYSHY
+    val bandInfo = MutableStateFlow(AgeBand.OQYSHY)
+
     private var currentLessonId: String = ""
     private var currentSubjectId: String = ""
 
@@ -64,18 +68,31 @@ class LessonRunnerViewModel @Inject constructor(
 
             currentLessonId = lessonId
             currentSubjectId = lesson.subjectId
+
+            // Resolve age band
+            val childId = parentalPrefsStore.activeChildId.first()
+            val gradeLevel = if (childId != null) {
+                childProfileDao.getChild(childId)?.gradeLevel ?: 2
+            } else {
+                userDao.getProfileOnce()?.gradeLevel ?: 2
+            }
+            currentBand = AgeBand.fromGradeLevel(gradeLevel)
+            bandInfo.value = currentBand
+
             val lang = language.value
             val title = lesson.title[lang] ?: lesson.title["en"] ?: "Lesson"
+            val limitedQuestions = lesson.questions.take(currentBand.maxQuestionsPerSession)
 
             val now = System.currentTimeMillis()
             _uiState.value = LessonRunnerState(
                 isLoading = false,
                 lessonTitle = title,
-                questions = lesson.questions,
-                totalQuestions = lesson.questions.size,
-                currentQuestion = lesson.questions.firstOrNull(),
-                optionTexts = parseOptions(lesson.questions.firstOrNull()),
-                matchPairs = parsePairs(lesson.questions.firstOrNull()),
+                questions = limitedQuestions,
+                totalQuestions = limitedQuestions.size,
+                hearts = if (currentBand.heartsEnabled) currentBand.heartsCount else Int.MAX_VALUE,
+                currentQuestion = limitedQuestions.firstOrNull(),
+                optionTexts = parseOptions(limitedQuestions.firstOrNull()),
+                matchPairs = parsePairs(limitedQuestions.firstOrNull()),
                 startTimeMs = now,
                 lessonStartTimeMs = now
             )
@@ -91,7 +108,11 @@ class LessonRunnerViewModel @Inject constructor(
         val question = state.currentQuestion ?: return
 
         val isCorrect = checkAnswer(question, state.selectedAnswer)
-        val newHearts = if (isCorrect) state.hearts else (state.hearts - 1).coerceAtLeast(0)
+        val newHearts = when {
+            isCorrect -> state.hearts
+            !currentBand.heartsEnabled -> state.hearts  // Bala: no failure penalty
+            else -> (state.hearts - 1).coerceAtLeast(0)
+        }
         val newScore = if (isCorrect) state.score + 1 else state.score
 
         _uiState.value = state.copy(
@@ -106,7 +127,7 @@ class LessonRunnerViewModel @Inject constructor(
         val state = _uiState.value
         val nextIndex = state.questionIndex + 1
 
-        if (nextIndex >= state.totalQuestions || state.hearts <= 0) {
+        if (nextIndex >= state.totalQuestions || (currentBand.heartsEnabled && state.hearts <= 0)) {
             completeLesson()
             return
         }
@@ -130,9 +151,8 @@ class LessonRunnerViewModel @Inject constructor(
 
     companion object {
         // Time-based screen time model:
-        // Every 1 minute of learning earns 1.5 minutes of screen time
+        // Screen time ratio is now determined by AgeBand (BALA=2.0, OQYSHY=1.5, ZERDE=1.0)
         // Minimum 1 minute earned per lesson (even if lesson takes < 40 seconds)
-        const val SCREEN_TIME_RATIO = 1.5
         const val MIN_EARNED_MINUTES = 1
     }
 
@@ -150,7 +170,7 @@ class LessonRunnerViewModel @Inject constructor(
         // Calculate how long the student actually spent learning
         val elapsedMs = System.currentTimeMillis() - state.lessonStartTimeMs
         val learningMinutes = (elapsedMs / 60_000.0).coerceAtLeast(0.0)
-        val earnedMinutes = maxOf(MIN_EARNED_MINUTES, (learningMinutes * SCREEN_TIME_RATIO).toInt())
+        val earnedMinutes = maxOf(MIN_EARNED_MINUTES, (learningMinutes * currentBand.screenTimeRatio).toInt())
         val earnedSeconds = earnedMinutes * 60
 
         viewModelScope.launch {

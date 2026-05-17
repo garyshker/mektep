@@ -6,6 +6,7 @@ import app.tisimai.mektep.data.local.ChildProfileDao
 import app.tisimai.mektep.data.local.ParentalPrefsStore
 import app.tisimai.mektep.data.local.ScreenTimeDao
 import app.tisimai.mektep.data.local.UserDao
+import app.tisimai.mektep.data.models.AgeBand
 import app.tisimai.mektep.data.models.ScreenTimeLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -51,18 +52,29 @@ class QuickGameViewModel @Inject constructor(
     private val _state = MutableStateFlow(QuickGameState())
     val state: StateFlow<QuickGameState> = _state.asStateFlow()
 
+    private var currentBand: AgeBand = AgeBand.OQYSHY
     private var timerJob: Job? = null
     private var questions: List<QuickGameQuestion> = emptyList()
 
     fun startGame() {
-        questions = generateQuestions()
-        _state.value = QuickGameState(
-            isPlaying = true,
-            totalQuestions = TOTAL_QUESTIONS,
-            currentQuestion = questions.first(),
-            timeLeft = TIME_PER_QUESTION
-        )
-        startTimer()
+        viewModelScope.launch {
+            val childId = parentalPrefsStore.activeChildId.first()
+            val gradeLevel = if (childId != null) {
+                childProfileDao.getChild(childId)?.gradeLevel ?: 2
+            } else {
+                userDao.getProfileOnce()?.gradeLevel ?: 2
+            }
+            currentBand = AgeBand.fromGradeLevel(gradeLevel)
+
+            questions = generateQuestions()
+            _state.value = QuickGameState(
+                isPlaying = true,
+                totalQuestions = currentBand.quickGameQuestions,
+                currentQuestion = questions.first(),
+                timeLeft = currentBand.quickGameTimerSec
+            )
+            startTimer()
+        }
     }
 
     fun selectAnswer(optionIndex: Int) {
@@ -109,7 +121,7 @@ class QuickGameViewModel @Inject constructor(
         val s = _state.value
         val nextIdx = s.questionIndex + 1
 
-        if (nextIdx >= TOTAL_QUESTIONS) {
+        if (nextIdx >= currentBand.quickGameQuestions) {
             finishGame()
             return
         }
@@ -120,7 +132,7 @@ class QuickGameViewModel @Inject constructor(
             chosenAnswer = null,
             isCorrect = null,
             showingFeedback = false,
-            timeLeft = TIME_PER_QUESTION
+            timeLeft = currentBand.quickGameTimerSec
         )
         startTimer()
     }
@@ -133,7 +145,7 @@ class QuickGameViewModel @Inject constructor(
         // Award XP and screen time
         viewModelScope.launch {
             val xp = s.score * 3 // 3 XP per correct quick game answer
-            val earnedSeconds = (xp.toDouble() / 10 * 60).toInt().coerceAtLeast(60)
+            val earnedSeconds = (xp.toDouble() / 10 * 60 * currentBand.screenTimeRatio / 1.5).toInt().coerceAtLeast(60)
 
             val childId = parentalPrefsStore.activeChildId.first()
 
@@ -159,7 +171,7 @@ class QuickGameViewModel @Inject constructor(
     private fun startTimer() {
         timerJob?.cancel()
         timerJob = viewModelScope.launch {
-            for (t in (TIME_PER_QUESTION - 1) downTo 0) {
+            for (t in (currentBand.quickGameTimerSec - 1) downTo 0) {
                 delay(1000)
                 val current = _state.value
                 if (current.showingFeedback || current.isDone) return@launch
@@ -173,32 +185,57 @@ class QuickGameViewModel @Inject constructor(
     }
 
     private fun generateQuestions(): List<QuickGameQuestion> {
-        return (0 until TOTAL_QUESTIONS).map { generateOneQuestion() }
+        return (0 until currentBand.quickGameQuestions).map { generateOneQuestion() }
     }
 
     private fun generateOneQuestion(): QuickGameQuestion {
-        val isMultiplication = Random.nextFloat() > 0.4f // 60% multiply, 40% divide
-        val a = Random.nextInt(2, 10) // 2-9
-        val b = Random.nextInt(2, 10) // 2-9
-
-        val (prompt, answer) = if (isMultiplication) {
-            "$a × $b" to (a * b)
-        } else {
-            "${a * b} ÷ $b" to a
-        }
-
-        // Generate 3 wrong options
-        val wrongAnswers = mutableSetOf<Int>()
-        while (wrongAnswers.size < 3) {
-            val delta = Random.nextInt(1, 6) * if (Random.nextBoolean()) 1 else -1
-            val wrong = answer + delta
-            if (wrong > 0 && wrong != answer && wrong !in wrongAnswers) {
-                wrongAnswers.add(wrong)
+        return when (currentBand) {
+            AgeBand.BALA -> {
+                // Addition/subtraction only, single digit
+                val isAddition = Random.nextBoolean()
+                val a = Random.nextInt(1, 10)
+                val b = Random.nextInt(1, 10)
+                if (isAddition) {
+                    QuickGameQuestion("$a + $b", a + b, generateWrongOptions(a + b))
+                } else {
+                    val big = maxOf(a, b)
+                    val small = minOf(a, b)
+                    QuickGameQuestion("$big - $small", big - small, generateWrongOptions(big - small))
+                }
+            }
+            AgeBand.OQYSHY -> {
+                // Multiply up to 5x9, divide by small numbers
+                val isMultiplication = Random.nextFloat() > 0.4f
+                val a = Random.nextInt(2, 6)  // 2-5
+                val b = Random.nextInt(2, 10) // 2-9
+                if (isMultiplication) {
+                    QuickGameQuestion("$a \u00D7 $b", a * b, generateWrongOptions(a * b))
+                } else {
+                    QuickGameQuestion("${a * b} \u00F7 $b", a, generateWrongOptions(a))
+                }
+            }
+            AgeBand.ZERDE -> {
+                // Full multiplication/division
+                val isMultiplication = Random.nextFloat() > 0.4f
+                val a = Random.nextInt(2, 10)
+                val b = Random.nextInt(2, 10)
+                if (isMultiplication) {
+                    QuickGameQuestion("$a \u00D7 $b", a * b, generateWrongOptions(a * b))
+                } else {
+                    QuickGameQuestion("${a * b} \u00F7 $b", a, generateWrongOptions(a))
+                }
             }
         }
+    }
 
-        val options = (wrongAnswers + answer).toList().shuffled()
-        return QuickGameQuestion(prompt = prompt, correctAnswer = answer, options = options)
+    private fun generateWrongOptions(correct: Int): List<Int> {
+        val wrongs = mutableSetOf<Int>()
+        while (wrongs.size < 3) {
+            val delta = Random.nextInt(1, 6) * if (Random.nextBoolean()) 1 else -1
+            val wrong = correct + delta
+            if (wrong > 0 && wrong != correct && wrong !in wrongs) wrongs.add(wrong)
+        }
+        return (wrongs + correct).toList().shuffled()
     }
 
     override fun onCleared() {

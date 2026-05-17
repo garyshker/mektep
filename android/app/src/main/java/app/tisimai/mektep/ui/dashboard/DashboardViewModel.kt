@@ -24,7 +24,8 @@ data class DashboardUiState(
     val subjects: List<SubjectWithProgress> = emptyList(),
     val screenTimeMinutes: Int = 0,
     val quests: List<DailyQuest> = emptyList(),
-    val questsCompletedCount: Int = 0
+    val questsCompletedCount: Int = 0,
+    val ageBand: AgeBand? = null
 )
 
 @HiltViewModel
@@ -91,9 +92,11 @@ class DashboardViewModel @Inject constructor(
         quests: List<DailyQuest>,
         screenTimeSecs: Int
     ): DashboardUiState {
-        val subjects = lessonLoader.subjects
+        val gradeLevel = childProfile?.gradeLevel ?: profile?.gradeLevel ?: 6
+        val ageBand = AgeBand.fromGradeLevel(gradeLevel)
+        val subjects = lessonLoader.subjectsWithLessonsForGrade(gradeLevel)
         val subjectsWithProgress = subjects.map { subject ->
-            val subjectLessons = lessonLoader.lessonsForSubject(subject.id)
+            val subjectLessons = lessonLoader.lessonsForSubject(subject.id, gradeLevel)
             val subjectProgress = allProgress.filter { it.subjectId == subject.id }
             SubjectWithProgress(
                 subject = subject,
@@ -109,7 +112,8 @@ class DashboardViewModel @Inject constructor(
             subjects = subjectsWithProgress,
             screenTimeMinutes = screenTimeSecs / 60,
             quests = quests,
-            questsCompletedCount = quests.count { it.completed }
+            questsCompletedCount = quests.count { it.completed },
+            ageBand = ageBand
         )
     }
 
