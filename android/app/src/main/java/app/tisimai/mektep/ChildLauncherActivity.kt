@@ -39,8 +39,11 @@ class ChildLauncherActivity : ComponentActivity() {
                             startActivity(intent)
                         },
                         onExitChildMode = {
-                            // Close this launcher — system reverts to previous default
-                            finishAffinity()
+                            // Return to parent's MainActivity
+                            val intent = Intent(this@ChildLauncherActivity, MainActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            startActivity(intent)
+                            finish()
                         }
                     )
                 }
