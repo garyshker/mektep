@@ -17,13 +17,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val isChildMode = intent.getBooleanExtra("CHILD_MODE", false)
         setContent {
             MektepTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MektepNavHost()
+                    MektepNavHost(isChildMode = isChildMode)
                 }
             }
         }

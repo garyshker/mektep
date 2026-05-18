@@ -30,6 +30,7 @@ import app.tisimai.mektep.util.tr
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
+    isChildMode: Boolean = false,
     onSubjectClick: (String) -> Unit,
     onScreenTimeClick: () -> Unit,
     onQuickGame: () -> Unit = {},
@@ -37,6 +38,7 @@ fun DashboardScreen(
     onParentSettings: () -> Unit = {},
     onStartChildMode: () -> Unit = {},
     onSetupPin: () -> Unit = {},
+    onBackToLauncher: () -> Unit = {},
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -70,7 +72,14 @@ fun DashboardScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = onLogout) { Icon(Icons.Default.Logout, "Logout") }
+                    if (isChildMode) {
+                        // Child mode: back to launcher button
+                        IconButton(onClick = onBackToLauncher) {
+                            Icon(Icons.Default.Home, tr("back_to_launcher", language))
+                        }
+                    } else {
+                        IconButton(onClick = onLogout) { Icon(Icons.Default.Logout, "Logout") }
+                    }
                 }
             )
         }
@@ -179,8 +188,8 @@ fun DashboardScreen(
                 }
             }
 
-            // Parent controls
-            if (deviceMode == "SAME_DEVICE") {
+            // Parent controls (hidden in child mode)
+            if (deviceMode == "SAME_DEVICE" && !isChildMode) {
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),

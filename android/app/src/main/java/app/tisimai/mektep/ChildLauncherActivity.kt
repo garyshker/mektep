@@ -31,8 +31,9 @@ class ChildLauncherActivity : ComponentActivity() {
                 Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     ChildLauncherScreen(
                         onOpenMektep = {
-                            // Launch MainActivity directly for learning
+                            // Launch MainActivity in child mode (no parent controls)
                             val intent = Intent(this@ChildLauncherActivity, MainActivity::class.java)
+                            intent.putExtra("CHILD_MODE", true)
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
                         },

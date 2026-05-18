@@ -51,7 +51,7 @@ object Routes {
 }
 
 @Composable
-fun MektepNavHost() {
+fun MektepNavHost(isChildMode: Boolean = false) {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = hiltViewModel()
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState(initial = false)
@@ -137,7 +137,9 @@ fun MektepNavHost() {
         }
 
         composable(Routes.DASHBOARD) {
+            val context = LocalContext.current
             DashboardScreen(
+                isChildMode = isChildMode,
                 onSubjectClick = { subjectId -> navController.navigate(Routes.lessonList(subjectId)) },
                 onScreenTimeClick = { navController.navigate(Routes.SCREEN_TIME) },
                 onQuickGame = { navController.navigate(Routes.QUICK_GAME) },
@@ -151,6 +153,10 @@ fun MektepNavHost() {
                 },
                 onSetupPin = {
                     navController.navigate(Routes.PIN_SETUP)
+                },
+                onBackToLauncher = {
+                    // Return to ChildLauncherActivity
+                    (context as? android.app.Activity)?.finish()
                 }
             )
         }
