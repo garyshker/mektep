@@ -16,8 +16,8 @@ android {
         applicationId = "app.tisimai.mektep"
         minSdk = 26
         targetSdk = 35
-        versionCode = 10
-        versionName = "1.3.0"
+        versionCode = 11
+        versionName = "2.0.0"
     }
 
     signingConfigs {
@@ -100,4 +100,7 @@ dependencies {
 
     // DataStore (settings)
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    // Biometric (parent auth on blocking overlay)
+    implementation("androidx.biometric:biometric:1.1.0")
 }

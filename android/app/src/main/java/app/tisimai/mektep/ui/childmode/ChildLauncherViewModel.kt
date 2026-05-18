@@ -1,12 +1,16 @@
 package app.tisimai.mektep.ui.childmode
 
+import android.content.Context
 import android.content.pm.PackageManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.tisimai.mektep.data.local.*
 import app.tisimai.mektep.data.models.ChildSession
 import app.tisimai.mektep.data.models.ScreenTimeLog
+import app.tisimai.mektep.services.ScreenTimePrefs
+import app.tisimai.mektep.services.ScreenTimeService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -21,6 +25,7 @@ data class ChildLauncherState(
 
 @HiltViewModel
 class ChildLauncherViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val userDao: UserDao,
     private val childProfileDao: ChildProfileDao,
     private val allowedAppDao: AllowedAppDao,
@@ -67,6 +72,16 @@ class ChildLauncherViewModel @Inject constructor(
             parentalPrefsStore.setChildModeActive(true)
             parentalConfigDao.setChildModeActive("local", true)
 
+            // Write initial state to ScreenTimePrefs for cross-service communication
+            val screenTimePrefs = ScreenTimePrefs(context)
+            screenTimePrefs.activeChildId = resolvedChildId
+            screenTimePrefs.balanceSeconds = balance
+            screenTimePrefs.isChildModeActive = true
+            screenTimePrefs.isOverlayShowing = false
+
+            // Start the ScreenTimeService (source of truth for countdown)
+            ScreenTimeService.start(context, resolvedChildId ?: "")
+
             _state.value = ChildLauncherState(
                 isLoading = false,
                 apps = apps,
@@ -81,31 +96,21 @@ class ChildLauncherViewModel @Inject constructor(
     private fun startCountdown() {
         countdownJob?.cancel()
         countdownJob = viewModelScope.launch {
+            val stPrefs = ScreenTimePrefs(context)
             while (isActive) {
                 delay(1000)
+                // Read balance from ScreenTimePrefs — ScreenTimeService is the source of truth
+                val balance = stPrefs.balanceSeconds
                 val current = _state.value
-                if (current.balanceSeconds <= 0) break
+                val elapsed = sessionStartBalance - balance
 
-                val newBalance = current.balanceSeconds - 1
-                val elapsed = sessionStartBalance - newBalance
                 if (elapsed >= 1500 && !current.showBreakReminder) {
-                    _state.value = current.copy(balanceSeconds = newBalance, showBreakReminder = true)
+                    _state.value = current.copy(balanceSeconds = balance, showBreakReminder = true)
                 } else {
-                    _state.value = current.copy(balanceSeconds = newBalance)
+                    _state.value = current.copy(balanceSeconds = balance)
                 }
 
-                // Persist to DB every 10 seconds
-                if (newBalance % 10 == 0) {
-                    val childId = resolvedChildId
-                    if (childId != null) {
-                        childProfileDao.updateScreenTimeBalance(childId, -10)
-                    } else {
-                        val profile = userDao.getProfileOnce()
-                        if (profile != null) {
-                            userDao.updateScreenTimeBalance(profile.id, -10)
-                        }
-                    }
-                }
+                if (balance <= 0) break
             }
 
             // Time's up — log the session
@@ -132,6 +137,13 @@ class ChildLauncherViewModel @Inject constructor(
 
     fun deactivateChildMode() {
         countdownJob?.cancel()
+
+        // Stop the ScreenTimeService and clear prefs
+        ScreenTimeService.stop(context)
+        val screenTimePrefs = ScreenTimePrefs(context)
+        screenTimePrefs.isChildModeActive = false
+        screenTimePrefs.isOverlayShowing = false
+
         viewModelScope.launch {
             parentalPrefsStore.setChildModeActive(false)
             parentalConfigDao.setChildModeActive("local", false)
@@ -152,22 +164,6 @@ class ChildLauncherViewModel @Inject constructor(
                     consumed,
                     "PARENT_EXIT"
                 )
-            }
-
-            // Sync final balance to DB
-            val totalSpent = sessionStartBalance - _state.value.balanceSeconds
-            val alreadyDeducted = (totalSpent / 10) * 10
-            val remainder = totalSpent - alreadyDeducted
-            if (remainder > 0) {
-                val childId = resolvedChildId
-                if (childId != null) {
-                    childProfileDao.updateScreenTimeBalance(childId, -remainder)
-                } else {
-                    val profile = userDao.getProfileOnce()
-                    if (profile != null) {
-                        userDao.updateScreenTimeBalance(profile.id, -remainder)
-                    }
-                }
             }
         }
     }

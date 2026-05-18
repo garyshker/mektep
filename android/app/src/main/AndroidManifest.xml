@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
     <application
         android:name=".MektepApp"
@@ -75,6 +76,15 @@
             android:name=".services.ScreenTimeService"
             android:foregroundServiceType="specialUse"
             android:exported="false" />
+
+        <!-- Blocking Overlay (screen time expired) -->
+        <activity
+            android:name=".BlockingOverlayActivity"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:screenOrientation="portrait" />
 
         <!-- App Blocker Accessibility Service -->
         <service

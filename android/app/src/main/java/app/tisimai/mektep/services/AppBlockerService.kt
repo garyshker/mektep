@@ -2,46 +2,28 @@ package app.tisimai.mektep.services
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
-import android.util.Log
 import android.view.accessibility.AccessibilityEvent
-import app.tisimai.mektep.MainActivity
+import app.tisimai.mektep.BlockingOverlayActivity
 
 /**
- * Accessibility Service that detects when a blocked app opens.
+ * Accessibility service that detects foreground app changes and enforces screen time.
  *
- * This is more reliable than UsageStatsManager for real-time detection.
- * When a blocked app is detected and screen time balance is zero,
- * it immediately redirects to the Mektep app.
+ * Communicates with [ScreenTimeService] through [ScreenTimePrefs]:
+ * - Writes [ScreenTimePrefs.currentForegroundPackage] and [ScreenTimePrefs.isForegroundCounted]
+ *   so the tick loop knows whether to decrement the balance.
+ * - Reads [ScreenTimePrefs.balanceSeconds] / [ScreenTimePrefs.isChildModeActive] to decide
+ *   whether to launch the blocking overlay immediately.
  *
- * User must enable this in:
- * Settings > Accessibility > Mektep
- *
- * Note: This approach is used by many parental control apps.
- * Google Play may review apps using AccessibilityService more carefully.
+ * Does NOT use Hilt -- accessibility services are instantiated by the system, outside the
+ * Hilt component graph.  All shared state goes through [ScreenTimePrefs].
  */
 class AppBlockerService : AccessibilityService() {
 
-    companion object {
-        var isRunning = false
-            private set
-
-        var screenTimeBalance: Int = 0
-        var blockedPackages: MutableSet<String> = mutableSetOf()
-        var allowedPackages: MutableSet<String> = mutableSetOf(
-            "app.tisimai.mektep",
-            "com.android.dialer",
-            "com.android.contacts",
-            "com.android.messaging",
-            "com.android.systemui",
-            "com.android.launcher",
-            "com.android.settings"
-        )
-    }
+    private lateinit var prefs: ScreenTimePrefs
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        isRunning = true
-        Log.d("AppBlocker", "Service connected")
+        prefs = ScreenTimePrefs(this)
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
@@ -49,36 +31,32 @@ class AppBlockerService : AccessibilityService() {
 
         val packageName = event.packageName?.toString() ?: return
 
-        // Skip allowed apps
-        if (packageName in allowedPackages) return
-
-        // If no blocked list configured, block everything not in allowed
-        val shouldBlock = if (blockedPackages.isNotEmpty()) {
-            packageName in blockedPackages
-        } else {
-            true // block all non-allowed by default
+        // System-essential apps are never counted and never blocked.
+        if (SystemEssentials.isSystemEssential(packageName)) {
+            prefs.isForegroundCounted = false
+            return
         }
 
-        if (shouldBlock && screenTimeBalance <= 0) {
-            Log.d("AppBlocker", "Blocking $packageName - no screen time")
-            redirectToMektep()
+        prefs.currentForegroundPackage = packageName
+
+        val needsEarnedTime = prefs.needsEarnedTimePackages
+
+        if (packageName in needsEarnedTime) {
+            prefs.isForegroundCounted = true
+
+            if (prefs.balanceSeconds <= 0 && !prefs.isOverlayShowing && prefs.isChildModeActive) {
+                val intent = Intent(this, BlockingOverlayActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                startActivity(intent)
+                prefs.isOverlayShowing = true
+            }
+        } else {
+            prefs.isForegroundCounted = false
         }
     }
 
     override fun onInterrupt() {
-        isRunning = false
-    }
-
-    override fun onDestroy() {
-        isRunning = false
-        super.onDestroy()
-    }
-
-    private fun redirectToMektep() {
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra("blocked", true)
-        }
-        startActivity(intent)
+        // Required override -- nothing to clean up.
     }
 }

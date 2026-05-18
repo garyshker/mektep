@@ -172,6 +172,29 @@ object Strings {
         "delete_child_confirm" to mapOf("en" to "All progress for %s will be lost.", "ru" to "Весь прогресс %s будет потерян.", "kk" to "%s-ның барлық прогресі жойылады."),
         "minutes" to mapOf("en" to "minutes", "ru" to "минут", "kk" to "минут"),
         "edit_child" to mapOf("en" to "Edit Child", "ru" to "Редактировать", "kk" to "Өзгерту"),
+
+        // ── Blocking Overlay ──
+        "overlay_ask_parent" to mapOf("en" to "Ask your parent to unlock", "ru" to "Попросите родителя разблокировать", "kk" to "Ата-анаңыздан ашуын сұраңыз"),
+        "overlay_learn_more" to mapOf("en" to "Earn more time by learning", "ru" to "Заработай время, учась", "kk" to "Оқып, уақыт жина"),
+        "biometric_title" to mapOf("en" to "Parent Authentication", "ru" to "Аутентификация родителя", "kk" to "Ата-ана аутентификациясы"),
+        "biometric_subtitle" to mapOf("en" to "Use fingerprint to unlock", "ru" to "Используйте отпечаток пальца", "kk" to "Саусақ ізін қолданыңыз"),
+        "use_pin" to mapOf("en" to "Use PIN", "ru" to "Ввести PIN", "kk" to "PIN енгізу"),
+        "bonus_title" to mapOf("en" to "Grant Bonus Time?", "ru" to "Дать бонусное время?", "kk" to "Бонус уақыт беру керек пе?"),
+        "bonus_15" to mapOf("en" to "+15 minutes", "ru" to "+15 минут", "kk" to "+15 минут"),
+        "bonus_30" to mapOf("en" to "+30 minutes", "ru" to "+30 минут", "kk" to "+30 минут"),
+        "bonus_60" to mapOf("en" to "+1 hour", "ru" to "+1 час", "kk" to "+1 сағат"),
+        "bonus_none" to mapOf("en" to "No bonus (just unlock)", "ru" to "Без бонуса (только разблокировать)", "kk" to "Бонуссыз (тек ашу)"),
+
+        // ── Permissions (Parent Settings) ──
+        "permissions_required" to mapOf("en" to "Permissions Required", "ru" to "Необходимые разрешения", "kk" to "Қажетті рұқсаттар"),
+        "permissions_desc" to mapOf("en" to "Enable these for screen time enforcement", "ru" to "Включите для контроля экранного времени", "kk" to "Экран уақытын бақылау үшін қосыңыз"),
+        "usage_access" to mapOf("en" to "Usage Access", "ru" to "Доступ к использованию", "kk" to "Қолдану деректеріне қол жетімділік"),
+        "overlay_permission" to mapOf("en" to "Display Over Apps", "ru" to "Поверх других приложений", "kk" to "Басқа қолданбалар үстінен"),
+        "accessibility_service" to mapOf("en" to "Accessibility Service", "ru" to "Служба специальных возможностей", "kk" to "Арнайы мүмкіндіктер қызметі"),
+        "permission_granted" to mapOf("en" to "Enabled", "ru" to "Включено", "kk" to "Қосылған"),
+        "permission_not_granted" to mapOf("en" to "Tap to enable", "ru" to "Нажмите для включения", "kk" to "Қосу үшін басыңыз"),
+        "screen_time_remaining" to mapOf("en" to "Screen time: %d min remaining", "ru" to "Экранное время: %d мин осталось", "kk" to "Экран уақыты: %d мин қалды"),
+        "screen_time_used_up" to mapOf("en" to "Screen time used up", "ru" to "Экранное время закончилось", "kk" to "Экран уақыты біткен"),
     )
 }
 
