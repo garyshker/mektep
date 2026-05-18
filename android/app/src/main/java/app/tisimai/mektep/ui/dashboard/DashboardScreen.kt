@@ -222,7 +222,42 @@ fun DashboardScreen(
             // ── Child/Learner-only content (hidden for parent view) ──
             if (!isParentView) {
 
-            // Quick Game card
+            // 1. Subjects FIRST — child came to learn
+            item {
+                Text(tr("subjects", language), fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.padding(vertical = 12.dp))
+            }
+
+            val subjects = state.subjects
+            val rows = subjects.chunked(2)
+            itemsIndexed(rows) { rowIndex, pair ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    pair.forEachIndexed { colIndex, item ->
+                        val index = rowIndex * 2 + colIndex
+                        var visible by remember { mutableStateOf(false) }
+                        LaunchedEffect(Unit) {
+                            kotlinx.coroutines.delay(index * 100L)
+                            visible = true
+                        }
+                        Box(Modifier.weight(1f)) {
+                            androidx.compose.animation.AnimatedVisibility(
+                                visible = visible,
+                                enter = fadeIn(tween(300)) + scaleIn(initialScale = 0.8f, animationSpec = spring(dampingRatio = 0.6f))
+                            ) {
+                                SubjectCard(item, language) { onSubjectClick(item.subject.id) }
+                            }
+                        }
+                    }
+                    if (pair.size == 1) {
+                        Spacer(Modifier.weight(1f))
+                    }
+                }
+                Spacer(Modifier.height(12.dp))
+            }
+
+            // 2. Quick Game
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp).clickable { onQuickGame() },
@@ -241,7 +276,7 @@ fun DashboardScreen(
                 }
             }
 
-            // Daily Quests
+            // 3. Daily Quests
             if (state.quests.isNotEmpty()) {
                 item {
                     Row(
@@ -281,42 +316,6 @@ fun DashboardScreen(
                         )
                     }
                 }
-            }
-
-            // Subjects heading
-            item {
-                Text(tr("subjects", language), fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.padding(vertical = 12.dp))
-            }
-
-            // Subjects grid
-            val subjects = state.subjects
-            val rows = subjects.chunked(2)
-            itemsIndexed(rows) { rowIndex, pair ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    pair.forEachIndexed { colIndex, item ->
-                        val index = rowIndex * 2 + colIndex
-                        var visible by remember { mutableStateOf(false) }
-                        LaunchedEffect(Unit) {
-                            kotlinx.coroutines.delay(index * 100L)
-                            visible = true
-                        }
-                        Box(Modifier.weight(1f)) {
-                            androidx.compose.animation.AnimatedVisibility(
-                                visible = visible,
-                                enter = fadeIn(tween(300)) + scaleIn(initialScale = 0.8f, animationSpec = spring(dampingRatio = 0.6f))
-                            ) {
-                                SubjectCard(item, language) { onSubjectClick(item.subject.id) }
-                            }
-                        }
-                    }
-                    if (pair.size == 1) {
-                        Spacer(Modifier.weight(1f))
-                    }
-                }
-                Spacer(Modifier.height(12.dp))
             }
 
             } // end if (!isParentView)
