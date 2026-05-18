@@ -141,6 +141,9 @@ const L = {
     compareRush: "Салыстыр", compareRushSub: "< немесе > таңда",
     numChain: "Сан тізбегі", numChainSub: "Қадамдарды орында",
     lessBtn: "◀ Кіші", moreBtn: "Үлкен ▶",
+    multiTable: "Көбейту кестесі", multiTableSub: "2-ден 9-ға дейін",
+    multiTablePick: "Санды таңда", multiTablePractice: "Жаттықтыру",
+    logout: "Шығу",
   },
   ru: {
     welcome: (n) => `Привет, ${n || 'Ученик'}!`,
@@ -198,6 +201,9 @@ const L = {
     compareRush: "Сравни", compareRushSub: "Выбери < или >",
     numChain: "Цепочка чисел", numChainSub: "Считай по шагам",
     lessBtn: "◀ Меньше", moreBtn: "Больше ▶",
+    multiTable: "Таблица умножения", multiTableSub: "от 2 до 9",
+    multiTablePick: "Выбери число", multiTablePractice: "Тренировка",
+    logout: "Выйти",
   },
   en: {
     welcome: (n) => `Hi, ${n || 'Student'}!`,
@@ -255,6 +261,9 @@ const L = {
     compareRush: "Compare Rush", compareRushSub: "Pick < or >",
     numChain: "Number Chain", numChainSub: "Follow the steps",
     lessBtn: "◀ Less", moreBtn: "More ▶",
+    multiTable: "Times Table", multiTableSub: "from 2 to 9",
+    multiTablePick: "Pick a number", multiTablePractice: "Practice",
+    logout: "Log out",
   },
 };
 
@@ -1343,6 +1352,119 @@ function GamePicker({ t, onPick, onClose }) {
   );
 }
 
+// ─── Times Table ───────────────────────────────────────────────────
+
+function MultiTablePicker({ t, onPick, onClose }) {
+  return (
+    <div className="game-shell">
+      <div className="game-top">
+        <button className="back-btn" onClick={onClose}>←</button>
+        <div className="game-top-title">{t.multiTable}</div>
+        <div />
+      </div>
+      <div className="mt-pick-label">{t.multiTablePick}</div>
+      <div className="mt-grid">
+        {[2,3,4,5,6,7,8,9].map(n => (
+          <button key={n} className="mt-num-btn" onClick={() => onPick(n)}>×{n}</button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MultiTablePractice({ t, num, onBack }) {
+  // queue holds factors still to master; wrong answers get reinserted
+  const [queue, setQueue] = useState(() =>
+    [...Array(10)].map((_, i) => i + 1).sort(() => Math.random() - .5)
+  );
+  const [mastered, setMastered] = useState(() => new Set());
+  const [correctCount, setCorrectCount] = useState(0);
+  const [chosen, setChosen] = useState(null);
+
+  const isDone = queue.length === 0;
+  const factor = queue[0];
+
+  // regenerate options when the factor changes
+  const opts = useMemo(() => {
+    if (!factor) return [];
+    const ans = num * factor;
+    const pool = new Set([ans]);
+    while (pool.size < 4) pool.add(num * (Math.floor(Math.random() * 12) + 1));
+    return [...pool].sort(() => Math.random() - .5);
+  }, [factor, num]);
+
+  const ans = factor ? num * factor : 0;
+
+  const pick = (opt) => {
+    if (chosen !== null || isDone) return;
+    setChosen(opt);
+    const ok = opt === ans;
+    ok ? window.soundCorrect?.() : window.soundWrong?.();
+    if (ok) setCorrectCount(n => n + 1);
+
+    setTimeout(() => {
+      setQueue(prev => {
+        const [cur, ...rest] = prev;
+        if (!ok) {
+          // reinsert after 3 positions so child sees something else first
+          const at = Math.min(3, rest.length);
+          return [...rest.slice(0, at), cur, ...rest.slice(at)];
+        }
+        return rest; // mastered — remove from queue
+      });
+      if (ok) setMastered(prev => { const s = new Set(prev); s.add(factor); return s; });
+      setChosen(null);
+    }, 700);
+  };
+
+  if (isDone) {
+    const pct = Math.round((correctCount / (correctCount + queue.length)) * 100) || 100;
+    return (
+      <div className="game-shell">
+        <div className="mt-result">
+          <div className="mt-result-icon">{mastered.size >= 9 ? '🏆' : mastered.size >= 7 ? '⭐' : '💪'}</div>
+          <div className="mt-result-score">{mastered.size}/10</div>
+          <div className="mt-result-sub">{t.multiTablePractice} ×{num}</div>
+          <div className="mt-result-btns">
+            <button className="btn prim" style={{flex:1}} onClick={onBack}>← {t.multiTablePick}</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const progress = mastered.size / 10;
+
+  return (
+    <div className="game-shell">
+      <div className="game-top">
+        <button className="back-btn" onClick={onBack}>←</button>
+        <div className="mt-prog-bar"><div style={{ width: (progress * 100) + '%' }} /></div>
+        <div className="mt-score-chip">{mastered.size}/10</div>
+      </div>
+      <div className="mt-q-area">
+        <div className="mt-question">{num} × {factor} = ?</div>
+      </div>
+      <div className="mt-options">
+        {opts.map((opt, i) => {
+          let cls = "mt-opt";
+          if (chosen !== null) {
+            if (opt === ans) cls += " correct";
+            else if (opt === chosen) cls += " wrong";
+          }
+          return <button key={i} className={cls} onClick={() => pick(opt)}>{opt}</button>;
+        })}
+      </div>
+    </div>
+  );
+}
+
+function MultiTableView({ t, onClose }) {
+  const [num, setNum] = useState(null);
+  if (!num) return <MultiTablePicker t={t} onPick={setNum} onClose={onClose} />;
+  return <MultiTablePractice t={t} num={num} onBack={() => setNum(null)} />;
+}
+
 function QuickGame({ t, onClose, grade }) {
   const [mode, setMode] = useState(null);
   const back = () => setMode(null);
@@ -1362,12 +1484,21 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
   const subs = subjectsFor(tweaks.language, progress);
   const [open, setOpen] = useState(null);
   const [quickGame, setQuickGame] = useState(false);
+  const [multiTable, setMultiTable] = useState(false);
+  const [userMenu, setUserMenu] = useState(false);
+
+  const logout = () => {
+    try { localStorage.removeItem(PROGRESS_KEY); } catch(e) {}
+    setProgress(DEFAULT_PROGRESS);
+    setUserMenu(false);
+  };
   const ctaVariant = getVariant('ab_cta');
   const quests = progress.questsDone;
   const setQuests = (q) => setProgress(p => ({ ...p, questsDone: q }));
   const subject = (id) => subs.find(s => s.id === id);
 
   if (quickGame) return <QuickGame t={t} onClose={() => setQuickGame(false)} grade={progress.grade || 2} />;
+  if (multiTable) return <MultiTableView t={t} onClose={() => setMultiTable(false)} />;
 
   return (
     <div className="v2">
@@ -1404,7 +1535,16 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
             title={tweaks.darkMode ? 'Light mode' : 'Dark mode'}
           >{tweaks.darkMode ? '☀️' : '🌙'}</button>
           <LangChip lang={tweaks.language} onChange={(v) => setTweak('language', v)} />
-          <div className="avatar">{(progress.name || 'А')[0].toUpperCase()}</div>
+          <div className="avatar-wrap">
+            <div className="avatar" onClick={() => setUserMenu(v => !v)}>{(progress.name || 'А')[0].toUpperCase()}</div>
+            {userMenu && <>
+              <div className="user-menu-backdrop" onClick={() => setUserMenu(false)} />
+              <div className="user-menu">
+                <div className="user-menu-name">{progress.name}</div>
+                <button className="user-menu-logout" onClick={logout}>🚪 {t.logout || 'Шығу'}</button>
+              </div>
+            </>}
+          </div>
         </div>
       </div>
 
@@ -1476,22 +1616,33 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
         </div>
       </div>
 
-      {/* ── quick game launcher ── */}
-      <div className="qgame-launcher" onClick={() => setQuickGame(true)}>
-        <div className="qgl-left">
-          <div className="qgl-icon">⚡</div>
-          <div>
-            <div className="qgl-title">{t.quickGame}</div>
-            <div className="qgl-sub">{t.quickGameSub}</div>
+      {/* ── game launchers ── */}
+      <div className="game-launchers">
+        <div className="qgame-launcher" onClick={() => setQuickGame(true)}>
+          <div className="qgl-left">
+            <div className="qgl-icon">⚡</div>
+            <div>
+              <div className="qgl-title">{t.quickGame}</div>
+              <div className="qgl-sub">{t.quickGameSub}</div>
+            </div>
           </div>
+          <div className="qgl-arrow">→</div>
         </div>
-        <div className="qgl-arrow">→</div>
+        <div className="qgame-launcher mt-launcher" onClick={() => setMultiTable(true)}>
+          <div className="qgl-left">
+            <div className="qgl-icon">×</div>
+            <div>
+              <div className="qgl-title">{t.multiTable}</div>
+              <div className="qgl-sub">{t.multiTableSub}</div>
+            </div>
+          </div>
+          <div className="qgl-arrow">→</div>
+        </div>
       </div>
 
       {/* ── subject grid ── */}
       <div className="section-head">
         <div>
-          <div className="eyebrow" style={{ fontSize: 11, letterSpacing: '.2em', fontWeight: 800, color: 'var(--brand)', textTransform: 'uppercase', marginBottom: 6 }}>{t.eyebrowAll}</div>
           <h2>{t.all}</h2>
         </div>
         <button className="more" onClick={() => showToast?.(t.seeAllToast)}>{t.seeAll} →</button>

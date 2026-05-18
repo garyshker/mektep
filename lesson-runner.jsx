@@ -84,19 +84,26 @@ const LESSONS = {
     titleByLang:{ kk:"Қосу · 100 ішінде", ru:"Сложение · в пределах 100", en:"Addition · within 100" },
     introByLang:{ kk:"100-ге дейінгі сандарды қосуды үйренеміз!", ru:"Учимся складывать числа в пределах 100!", en:"Let's practise adding numbers within 100!" },
     questions:[
-      { kind:"mc", big:true, prompt:"36 + 24", options:["58","60","62","64"], answer:1 },
-      { kind:"type", prompt:"45 + 18 = ?", answer:63 },
-      { kind:"mc", big:true, prompt:"27 + 35", options:["58","60","62","64"], answer:2 },
-      { kind:"type", prompt:"54 + 27 = ?", answer:81 },
+      { kind:"mc", big:true, prompt:"36 + 24", options:["58","60","62","64"], answer:1,
+        explainByLang:{ kk:"36 + 20 = 56\n56 + 4 = 60 ✓", ru:"36 + 20 = 56\n56 + 4 = 60 ✓", en:"36 + 20 = 56\n56 + 4 = 60 ✓" } },
+      { kind:"type", prompt:"45 + 18 = ?", answer:63,
+        explainByLang:{ kk:"45 + 10 = 55\n55 + 8 = 63 ✓", ru:"45 + 10 = 55\n55 + 8 = 63 ✓", en:"45 + 10 = 55\n55 + 8 = 63 ✓" } },
+      { kind:"mc", big:true, prompt:"27 + 35", options:["58","60","62","64"], answer:2,
+        explainByLang:{ kk:"27 + 30 = 57\n57 + 5 = 62 ✓", ru:"27 + 30 = 57\n57 + 5 = 62 ✓", en:"27 + 30 = 57\n57 + 5 = 62 ✓" } },
+      { kind:"type", prompt:"54 + 27 = ?", answer:81,
+        explainByLang:{ kk:"54 + 20 = 74\n74 + 7 = 81 ✓", ru:"54 + 20 = 74\n74 + 7 = 81 ✓", en:"54 + 20 = 74\n74 + 7 = 81 ✓" } },
       { kind:"tap",
         promptByLang:{ kk:"Жауабы 10-нан үлкен болатын мысалдарды тап", ru:"Найди примеры, где сумма больше 10", en:"Tap the sums greater than 10" },
         words:["3+5","4+8","2+6","7+9","1+3","6+7","2+2","5+3"], correctIdxs:[1,3,5] },
-      { kind:"type", prompt:"63 + 19 = ?", answer:82 },
+      { kind:"type", prompt:"63 + 19 = ?", answer:82,
+        explainByLang:{ kk:"63 + 10 = 73\n73 + 9 = 82 ✓", ru:"63 + 10 = 73\n73 + 9 = 82 ✓", en:"63 + 10 = 73\n73 + 9 = 82 ✓" } },
       { kind:"word", image:"🍎🍐",
         storyByLang:{ kk:"Дүкенде 45 алма мен 38 алмұрт бар. Барлығы қанша жеміс?", ru:"В магазине 45 яблок и 38 груш. Сколько всего фруктов?", en:"A shop has 45 apples and 38 pears. How many fruits total?" },
         options:["73","83","85","87"], answer:1 },
-      { kind:"type", prompt:"48 + 36 = ?", answer:84 },
-      { kind:"mc", big:true, prompt:"57 + 25", options:["78","80","82","84"], answer:2 },
+      { kind:"type", prompt:"48 + 36 = ?", answer:84,
+        explainByLang:{ kk:"48 + 30 = 78\n78 + 6 = 84 ✓", ru:"48 + 30 = 78\n78 + 6 = 84 ✓", en:"48 + 30 = 78\n78 + 6 = 84 ✓" } },
+      { kind:"mc", big:true, prompt:"57 + 25", options:["78","80","82","84"], answer:2,
+        explainByLang:{ kk:"57 + 20 = 77\n77 + 5 = 82 ✓", ru:"57 + 20 = 77\n77 + 5 = 82 ✓", en:"57 + 20 = 77\n77 + 5 = 82 ✓" } },
       { kind:"word",
         storyByLang:{ kk:"Аружанда 32 теңге, Болатта 46 теңге бар. Барлығы қанша?", ru:"У Аружан 32 тенге, у Болата 46 тенге. Сколько вместе?", en:"Aruzhan has 32 tenge, Bolat has 46 tenge. Total?" },
         options:["72 ₸","76 ₸","78 ₸","82 ₸"], answer:2 },
@@ -109,19 +116,26 @@ const LESSONS = {
     titleByLang:{ kk:"Алу · 100 ішінде", ru:"Вычитание · в пределах 100", en:"Subtraction · within 100" },
     introByLang:{ kk:"100-ге дейінгі сандарды алуды үйренеміз!", ru:"Учимся вычитать в пределах 100!", en:"Let's practise subtraction within 100!" },
     questions:[
-      { kind:"mc", big:true, prompt:"45 − 18", options:["23","25","27","29"], answer:2 },
-      { kind:"type", prompt:"80 − 37 = ?", answer:43 },
-      { kind:"mc", big:true, prompt:"73 − 29", options:["40","42","44","46"], answer:2 },
-      { kind:"type", prompt:"91 − 54 = ?", answer:37 },
+      { kind:"mc", big:true, prompt:"45 − 18", options:["23","25","27","29"], answer:2,
+        explainByLang:{ kk:"45 − 10 = 35\n35 − 8 = 27 ✓", ru:"45 − 10 = 35\n35 − 8 = 27 ✓", en:"45 − 10 = 35\n35 − 8 = 27 ✓" } },
+      { kind:"type", prompt:"80 − 37 = ?", answer:43,
+        explainByLang:{ kk:"80 − 30 = 50\n50 − 7 = 43 ✓", ru:"80 − 30 = 50\n50 − 7 = 43 ✓", en:"80 − 30 = 50\n50 − 7 = 43 ✓" } },
+      { kind:"mc", big:true, prompt:"73 − 29", options:["40","42","44","46"], answer:2,
+        explainByLang:{ kk:"73 − 20 = 53\n53 − 9 = 44 ✓", ru:"73 − 20 = 53\n53 − 9 = 44 ✓", en:"73 − 20 = 53\n53 − 9 = 44 ✓" } },
+      { kind:"type", prompt:"91 − 54 = ?", answer:37,
+        explainByLang:{ kk:"91 − 50 = 41\n41 − 4 = 37 ✓", ru:"91 − 50 = 41\n41 − 4 = 37 ✓", en:"91 − 50 = 41\n41 − 4 = 37 ✓" } },
       { kind:"tap",
         promptByLang:{ kk:"Жауабы жұп болатын мысалдарды тап", ru:"Найди примеры с чётным ответом", en:"Tap examples with an even answer" },
         words:["50−17","60−22","80−45","40−16","70−31","90−64"], correctIdxs:[1,3,5] },
-      { kind:"type", prompt:"64 − 28 = ?", answer:36 },
+      { kind:"type", prompt:"64 − 28 = ?", answer:36,
+        explainByLang:{ kk:"64 − 20 = 44\n44 − 8 = 36 ✓", ru:"64 − 20 = 44\n44 − 8 = 36 ✓", en:"64 − 20 = 44\n44 − 8 = 36 ✓" } },
       { kind:"word",
         storyByLang:{ kk:"Айданада 50 теңге болды. Ол нанға 23 теңге жұмсады. Қанша қалды?", ru:"У Айданы было 50 тенге. Она купила хлеб за 23 тенге. Сколько осталось?", en:"Aidana had 50 tenge. She bought bread for 23 tenge. How much is left?" },
         options:["21 ₸","23 ₸","27 ₸","29 ₸"], answer:2 },
-      { kind:"type", prompt:"100 − 63 = ?", answer:37 },
-      { kind:"mc", big:true, prompt:"82 − 47", options:["31","33","35","37"], answer:2 },
+      { kind:"type", prompt:"100 − 63 = ?", answer:37,
+        explainByLang:{ kk:"100 − 60 = 40\n40 − 3 = 37 ✓", ru:"100 − 60 = 40\n40 − 3 = 37 ✓", en:"100 − 60 = 40\n40 − 3 = 37 ✓" } },
+      { kind:"mc", big:true, prompt:"82 − 47", options:["31","33","35","37"], answer:2,
+        explainByLang:{ kk:"82 − 40 = 42\n42 − 7 = 35 ✓", ru:"82 − 40 = 42\n42 − 7 = 35 ✓", en:"82 − 40 = 42\n42 − 7 = 35 ✓" } },
       { kind:"word",
         storyByLang:{ kk:"Сыныпта 32 оқушы болды. 15 оқушы үйде қалды. Сыныпта қанша оқушы?", ru:"В классе 32 ученика. 15 заболели. Сколько в классе?", en:"There were 32 pupils. 15 stayed home. How many in class?" },
         options:["13","15","17","19"], answer:2 },
@@ -767,6 +781,8 @@ const RT = {
     check:"Тексеру", continue:"Жалғастыру", next:"Келесі",
     skip:"Өткізу",
     correct:"Дұрыс!", wrong:"Қателестің", tryAgain:"Қайталап көр",
+    rightAnswer:"Дұрыс жауап:",
+    statCorrect:"Дұрыс", homeBtn:"Басты",
     typeHere:"Жауабыңды жаз",
     lessonComplete:"Сабақ аяқталды!",
     perfect:"Тамаша!", great:"Жарайсың!", good:"Жақсы!",
@@ -782,6 +798,8 @@ const RT = {
     check:"Проверить", continue:"Продолжить", next:"Дальше",
     skip:"Пропустить",
     correct:"Правильно!", wrong:"Неверно", tryAgain:"Попробуй ещё",
+    rightAnswer:"Правильный ответ:",
+    statCorrect:"Верно", homeBtn:"Домой",
     typeHere:"Введи ответ",
     lessonComplete:"Урок пройден!",
     perfect:"Идеально!", great:"Отлично!", good:"Молодец!",
@@ -797,6 +815,8 @@ const RT = {
     check:"Check", continue:"Continue", next:"Next",
     skip:"Skip",
     correct:"Correct!", wrong:"Not quite", tryAgain:"Try again",
+    rightAnswer:"Correct answer:",
+    statCorrect:"Correct", homeBtn:"Home",
     typeHere:"Type your answer",
     lessonComplete:"Lesson complete!",
     perfect:"Perfect!", great:"Great work!", good:"Nice!",
@@ -1014,7 +1034,6 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
 
   const [showIntro, setShowIntro] = useState(!resume && !!lesson.introByLang);
   const [idx, setIdx] = useState(resume?.idx ?? 0);
-  const [hearts, setHearts] = useState(resume?.hearts ?? 3);
   const [answers, setAnswers] = useState(resume?.answers ?? {});
   const [matchState, setMatchState] = useState(resume?.matchState ?? {});
   const [locked, setLocked] = useState(false);
@@ -1068,7 +1087,6 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
       setCorrectCount(correctRef.current);
     } else {
       soundWrong();
-      setHearts(h => Math.max(0, h-1));
     }
   };
 
@@ -1083,15 +1101,13 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
       setCorrectCount(correctRef.current);
     } else {
       soundWrong();
-      setHearts(h => Math.max(0, h-1));
     }
   };
 
   const advance = () => {
     const finalCorrect = correctRef.current;
-    const newHearts = feedback === 'wrong' ? Math.max(0, hearts - 1) : hearts;
     const nextIdx = idx + 1;
-    const finished = nextIdx >= total || newHearts <= 0;
+    const finished = nextIdx >= total;
 
     if (finished) {
       clearResume();
@@ -1099,13 +1115,12 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
       const xp = 15 + finalCorrect * 5 + (stars === 3 ? 15 : stars === 2 ? 5 : 0);
       soundComplete();
       setDone(true);
-      onComplete?.({ lessonId, correct: finalCorrect, total, stars, xp, hearts: newHearts });
+      onComplete?.({ lessonId, correct: finalCorrect, total, stars, xp });
       return;
     }
 
-    saveResume({ lessonId, idx: nextIdx, hearts: newHearts, answers, matchState, correctCount: finalCorrect });
+    saveResume({ lessonId, idx: nextIdx, answers, matchState, correctCount: finalCorrect });
     setIdx(nextIdx);
-    setHearts(newHearts);
     setLocked(false);
     setFeedback(null);
     setQKey(k => k + 1);
@@ -1115,7 +1130,6 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
     clearResume();
     correctRef.current = 0;
     setIdx(0);
-    setHearts(3);
     setAnswers({});
     setMatchState({});
     setLocked(false);
@@ -1176,11 +1190,6 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
         <div className="lt-bar">
           <div className="lt-bar-fill" style={{width: progressPct + '%'}} />
         </div>
-        <div className="lt-hearts">
-          {[0,1,2].map(i => (
-            <span key={i} className={"heart " + (i < hearts ? "on":"off")}>♥</span>
-          ))}
-        </div>
       </div>
 
       <div className="lesson-stage">
@@ -1222,9 +1231,15 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
             <div className="fb-ic no">✕</div>
             <div className="fb-msg">
               <div className="fb-title">{rt.wrong}</div>
-              <div className="fb-sub">{rightAnswerText(q, lang)}</div>
+              <div className="fb-sub">
+                <span className="fb-ans-label">{rt.rightAnswer}</span>
+                <span className="fb-ans-value">{rightAnswerText(q, lang)}</span>
+              </div>
+              {(q.explain || q.explainByLang?.[lang]) && (
+                <div className="fb-explain">{q.explainByLang?.[lang] || q.explain}</div>
+              )}
             </div>
-            <button className="fb-btn" onClick={advance}>{rt.continue}</button>
+            <button className="fb-btn fb-btn-wrong" onClick={advance}>{rt.continue}</button>
           </div>
         )}
         {!feedback && (
@@ -1255,9 +1270,9 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
 }
 
 function rightAnswerText(q, lang) {
-  if (q.kind === 'mc' || q.kind === 'word') return "→ " + q.options[q.answer];
-  if (q.kind === 'type') return "→ " + q.answer;
-  if (q.kind === 'tap') return "→ " + q.correctIdxs.map(i=>q.words[i]).join(", ");
+  if (q.kind === 'mc' || q.kind === 'word') return String(q.options[q.answer]);
+  if (q.kind === 'type') return String(q.answer);
+  if (q.kind === 'tap') return q.correctIdxs.map(i=>q.words[i]).join(", ");
   if (q.kind === 'match') return "—";
   return "";
 }
@@ -1267,49 +1282,42 @@ function rightAnswerText(q, lang) {
 // ────────────────────────────────────────────────────────────────────
 
 function CompleteScreen({ lesson, lang, rt, stars, xp, accuracy, elapsed, correct, total, banner, onFinish, onRetry }) {
-  useEffect(()=>{
-    const root = document.querySelector('.confetti-host');
-    if (!root) return;
-    const colors = ['#FFB547','#0E8C6B','#E14B73','#5764D8','#2D9D5C','#E88912'];
-    for (let i=0; i<60; i++) {
-      const el = document.createElement('div');
-      el.className = 'confetti';
-      el.style.left = Math.random()*100 + '%';
-      el.style.background = colors[i % colors.length];
-      el.style.animationDelay = (Math.random()*0.6) + 's';
-      el.style.transform = `rotate(${Math.random()*360}deg)`;
-      root.appendChild(el);
-    }
-    return ()=>{ root.innerHTML = ''; };
-  }, []);
-
-  const m = Math.floor(elapsed/60), s = elapsed % 60;
-  const timeStr = m > 0 ? `${m}:${String(s).padStart(2,'0')}` : `${s}s`;
-  const title = pickLang(lesson.titleByLang, lang);
-
   return (
     <div className="lesson-shell complete">
-      <div className="confetti-host" />
       <div className="complete-card">
-        <div className="celebrate">
-          <div className="celebrate-emoji">🎉</div>
+        <div className="comp-trophy">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6 9H3.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h2.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/>
+          </svg>
         </div>
-        <div className="comp-stars">
-          {[0,1,2].map(i => <span key={i} className={"big-star " + (i<stars?"on":"off")}>★</span>)}
-        </div>
+
         <div className="comp-banner">{banner}</div>
-        <div className="comp-sub">{rt.lessonComplete} · {title}</div>
+        <div className="comp-sub">{rt.lessonComplete}</div>
 
         <div className="comp-stats">
-          <div className="cs"><div className="cs-v">+{xp}</div><div className="cs-l">{rt.xpEarned}</div></div>
-          <div className="cs"><div className="cs-v">{accuracy}%</div><div className="cs-l">{rt.accuracy}</div></div>
-          <div className="cs"><div className="cs-v">{timeStr}</div><div className="cs-l">{rt.time}</div></div>
+          <div className="cs">
+            <div className="cs-v cs-green">{correct}/{total}</div>
+            <div className="cs-l">{rt.statCorrect}</div>
+          </div>
+          <div className="cs">
+            <div className="cs-v cs-blue">{accuracy}%</div>
+            <div className="cs-l">{rt.accuracy}</div>
+          </div>
+          <div className="cs">
+            <div className="cs-v cs-orange">+{xp}</div>
+            <div className="cs-l">{rt.xpEarned}</div>
+          </div>
         </div>
 
-        <button className="btn prim big" onClick={onFinish}>{rt.finish} →</button>
-        {stars < 3 && onRetry && (
-          <button className="btn ghost" style={{marginTop:10}} onClick={onRetry}>↺ {rt.retry}</button>
-        )}
+        <div className="comp-btns">
+          {onRetry && <button className="btn ghost comp-ghost" onClick={onRetry}>↺ {rt.retry}</button>}
+          <button className="btn prim comp-prim" onClick={onFinish}>🏠 {rt.homeBtn}</button>
+        </div>
       </div>
     </div>
   );
