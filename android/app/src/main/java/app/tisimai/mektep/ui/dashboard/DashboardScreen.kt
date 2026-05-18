@@ -46,6 +46,8 @@ fun DashboardScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
     val language by viewModel.language.collectAsState()
+    // Child mode is active when: Intent flag is set OR a child profile is active
+    val effectiveChildMode = isChildMode || state.childProfile != null
     var childToDelete by remember { mutableStateOf<app.tisimai.mektep.data.models.ChildProfile?>(null) }
 
     // Delete confirmation dialog
@@ -98,10 +100,10 @@ fun DashboardScreen(
                     }
                 },
                 actions = {
-                    if (isChildMode) {
-                        // Child mode: back to launcher button
+                    if (effectiveChildMode) {
+                        // Child mode: lock icon for parent takeover
                         IconButton(onClick = onBackToLauncher) {
-                            Icon(Icons.Default.Home, tr("back_to_launcher", language))
+                            Icon(Icons.Default.Lock, tr("parent_takeover", language), tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                         }
                     } else {
                         IconButton(onClick = onLogout) { Icon(Icons.Default.Logout, "Logout") }
@@ -117,7 +119,7 @@ fun DashboardScreen(
 
         val deviceMode by viewModel.deviceMode.collectAsState()
 
-        val isParentView = deviceMode == "SAME_DEVICE" && !isChildMode && state.children.isNotEmpty()
+        val isParentView = deviceMode == "SAME_DEVICE" && !effectiveChildMode && state.children.isNotEmpty()
 
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp),
@@ -322,7 +324,7 @@ fun DashboardScreen(
             } // end if (!isParentView)
 
             // Parent controls (hidden in child mode)
-            if (deviceMode == "SAME_DEVICE" && !isChildMode) {
+            if (deviceMode == "SAME_DEVICE" && !effectiveChildMode) {
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
