@@ -43,6 +43,7 @@ class AddChildViewModel @Inject constructor(
         name: String,
         birthDate: String,
         avatarEmoji: String,
+        language: String,
         gradeLevel: Int,
         dailyLimitMinutes: Int,
         onSaved: () -> Unit
@@ -54,6 +55,7 @@ class AddChildViewModel @Inject constructor(
                 name = name,
                 birthDate = birthDate,
                 avatarEmoji = avatarEmoji,
+                language = language,
                 gradeLevel = gradeLevel,
                 dailyLimitMinutes = dailyLimitMinutes,
                 createdAt = System.currentTimeMillis()
@@ -76,6 +78,7 @@ fun AddChildScreen(
     var name by remember { mutableStateOf("") }
     var birthDate by remember { mutableStateOf("") }
     var selectedAvatar by remember { mutableStateOf("\uD83E\uDDD2") } // 🧒
+    var selectedLanguage by remember { mutableStateOf("kk") } // default Kazakh for children
     var selectedGrade by remember { mutableIntStateOf(1) }
 
     val avatarOptions = listOf(
@@ -151,6 +154,25 @@ fun AddChildScreen(
                 }
             }
 
+            // Language picker
+            Text(tr("child_language", lang), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                listOf("kk" to "\uD83C\uDDF0\uD83C\uDDFF", "ru" to "\uD83C\uDDF7\uD83C\uDDFA", "en" to "\uD83C\uDDEC\uD83C\uDDE7").forEach { (code, flag) ->
+                    FilterChip(
+                        selected = selectedLanguage == code,
+                        onClick = { selectedLanguage = code },
+                        label = { Text(flag, fontSize = 20.sp) },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = MektepGreen,
+                            selectedLabelColor = MaterialTheme.colorScheme.onPrimary
+                        )
+                    )
+                }
+            }
+
             // Grade level selector
             Text(tr("grade", lang), fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Row(
@@ -187,6 +209,7 @@ fun AddChildScreen(
                         name = name,
                         birthDate = birthDate,
                         avatarEmoji = selectedAvatar,
+                        language = selectedLanguage,
                         gradeLevel = selectedGrade,
                         dailyLimitMinutes = AgeBand.fromGradeLevel(selectedGrade).dailyLimitDefaultMinutes,
                         onSaved = onSaved

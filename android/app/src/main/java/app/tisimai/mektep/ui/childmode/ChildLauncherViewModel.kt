@@ -135,6 +135,13 @@ class ChildLauncherViewModel @Inject constructor(
         viewModelScope.launch {
             parentalPrefsStore.setChildModeActive(false)
             parentalConfigDao.setChildModeActive("local", false)
+            parentalPrefsStore.setActiveChildId(null)
+
+            // Restore parent's language
+            val parentLang = parentalPrefsStore.parentLanguage.first()
+            if (parentLang != null) {
+                tokenStore.saveLanguage(parentLang)
+            }
 
             // End session
             val consumed = sessionStartBalance - _state.value.balanceSeconds

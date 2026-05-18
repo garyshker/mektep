@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
         AllowedApp::class,
         ChildSession::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 abstract class MektepDatabase : RoomDatabase() {
@@ -161,6 +161,12 @@ abstract class MektepDatabase : RoomDatabase() {
         val MIGRATION_4_5 = object : Migration(4, 5) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE child_profile ADD COLUMN dailyLimitMinutes INTEGER NOT NULL DEFAULT 60")
+            }
+        }
+
+        val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE child_profile ADD COLUMN language TEXT NOT NULL DEFAULT 'kk'")
             }
         }
     }

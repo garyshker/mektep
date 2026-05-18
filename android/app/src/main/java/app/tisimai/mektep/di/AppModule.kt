@@ -18,7 +18,7 @@ object AppModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): MektepDatabase =
         Room.databaseBuilder(context, MektepDatabase::class.java, "mektep.db")
-            .addMigrations(MektepDatabase.MIGRATION_1_2, MektepDatabase.MIGRATION_2_3, MektepDatabase.MIGRATION_3_4, MektepDatabase.MIGRATION_4_5)
+            .addMigrations(MektepDatabase.MIGRATION_1_2, MektepDatabase.MIGRATION_2_3, MektepDatabase.MIGRATION_3_4, MektepDatabase.MIGRATION_4_5, MektepDatabase.MIGRATION_5_6)
             .fallbackToDestructiveMigration()
             .build()
 

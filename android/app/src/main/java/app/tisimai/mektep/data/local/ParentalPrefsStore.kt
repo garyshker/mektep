@@ -31,10 +31,12 @@ class ParentalPrefsStore @Inject constructor(
         private val DEVICE_ID = stringPreferencesKey("device_id")
         private val SETUP_COMPLETED = booleanPreferencesKey("setup_completed")
         private val ACTIVE_CHILD_ID = stringPreferencesKey("active_child_id")
+        private val PARENT_LANGUAGE = stringPreferencesKey("parent_language")
     }
 
     val deviceMode: Flow<String> = context.parentalDataStore.data.map { it[DEVICE_MODE] ?: "NONE" }
     val activeChildId: Flow<String?> = context.parentalDataStore.data.map { it[ACTIVE_CHILD_ID] }
+    val parentLanguage: Flow<String?> = context.parentalDataStore.data.map { it[PARENT_LANGUAGE] }
     val childModeActive: Flow<Boolean> = context.parentalDataStore.data.map { it[CHILD_MODE_ACTIVE] ?: false }
     val pinHash: Flow<String?> = context.parentalDataStore.data.map { it[PIN_HASH] }
     val pinSalt: Flow<String?> = context.parentalDataStore.data.map { it[PIN_SALT] }
@@ -68,6 +70,10 @@ class ParentalPrefsStore @Inject constructor(
         context.parentalDataStore.edit {
             if (id != null) it[ACTIVE_CHILD_ID] = id else it.remove(ACTIVE_CHILD_ID)
         }
+    }
+
+    suspend fun saveParentLanguage(lang: String) {
+        context.parentalDataStore.edit { it[PARENT_LANGUAGE] = lang }
     }
 
     suspend fun clear() {

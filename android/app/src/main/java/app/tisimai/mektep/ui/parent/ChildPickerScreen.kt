@@ -29,6 +29,7 @@ import app.tisimai.mektep.ui.theme.MektepPurple
 import app.tisimai.mektep.util.tr
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.Period
@@ -58,6 +59,7 @@ class ChildPickerViewModel @Inject constructor(
                 if (list.size == 1 && !_autoSelected.value) {
                     _autoSelected.value = true
                     parentalPrefsStore.setActiveChildId(list[0].id)
+                    tokenStore.saveLanguage(list[0].language)
                 }
             }
         }
@@ -65,7 +67,12 @@ class ChildPickerViewModel @Inject constructor(
 
     fun selectChild(child: ChildProfile, onSelected: () -> Unit) {
         viewModelScope.launch {
+            // Save parent's language before switching
+            val currentLang = tokenStore.language.first()
+            parentalPrefsStore.saveParentLanguage(currentLang)
             parentalPrefsStore.setActiveChildId(child.id)
+            // Switch app language to child's preferred language
+            tokenStore.saveLanguage(child.language)
             onSelected()
         }
     }

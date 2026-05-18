@@ -121,6 +121,7 @@ data class ChildProfile(
     val name: String,
     val birthDate: String = "", // ISO "2018-03-15"
     val avatarEmoji: String = "\uD83E\uDDD2", // 🧒
+    val language: String = "kk", // child's preferred language
     val gradeLevel: Int = 1,
     val xpTotal: Int = 0,
     val currentStreak: Int = 0,
