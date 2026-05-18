@@ -174,6 +174,9 @@ fun DashboardScreen(
                 }
             }
 
+            // ── Child/Learner-only content (hidden for parent view) ──
+            if (!isParentView) {
+
             // Quick Game card
             item {
                 Card(
@@ -235,6 +238,44 @@ fun DashboardScreen(
                 }
             }
 
+            // Subjects heading
+            item {
+                Text(tr("subjects", language), fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.padding(vertical = 12.dp))
+            }
+
+            // Subjects grid
+            val subjects = state.subjects
+            val rows = subjects.chunked(2)
+            itemsIndexed(rows) { rowIndex, pair ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    pair.forEachIndexed { colIndex, item ->
+                        val index = rowIndex * 2 + colIndex
+                        var visible by remember { mutableStateOf(false) }
+                        LaunchedEffect(Unit) {
+                            kotlinx.coroutines.delay(index * 100L)
+                            visible = true
+                        }
+                        Box(Modifier.weight(1f)) {
+                            androidx.compose.animation.AnimatedVisibility(
+                                visible = visible,
+                                enter = fadeIn(tween(300)) + scaleIn(initialScale = 0.8f, animationSpec = spring(dampingRatio = 0.6f))
+                            ) {
+                                SubjectCard(item, language) { onSubjectClick(item.subject.id) }
+                            }
+                        }
+                    }
+                    if (pair.size == 1) {
+                        Spacer(Modifier.weight(1f))
+                    }
+                }
+                Spacer(Modifier.height(12.dp))
+            }
+
+            } // end if (!isParentView)
+
             // Parent controls (hidden in child mode)
             if (deviceMode == "SAME_DEVICE" && !isChildMode) {
                 item {
@@ -262,42 +303,6 @@ fun DashboardScreen(
                 }
             }
 
-            // Subjects heading
-            item {
-                Text(tr("subjects", language), fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.padding(vertical = 12.dp))
-            }
-
-            // Subjects grid — render as pairs in rows
-            val subjects = state.subjects
-            val rows = subjects.chunked(2)
-            itemsIndexed(rows) { rowIndex, pair ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    pair.forEachIndexed { colIndex, item ->
-                        val index = rowIndex * 2 + colIndex
-                        var visible by remember { mutableStateOf(false) }
-                        LaunchedEffect(Unit) {
-                            kotlinx.coroutines.delay(index * 100L)
-                            visible = true
-                        }
-                        Box(Modifier.weight(1f)) {
-                            androidx.compose.animation.AnimatedVisibility(
-                                visible = visible,
-                                enter = fadeIn(tween(300)) + scaleIn(initialScale = 0.8f, animationSpec = spring(dampingRatio = 0.6f))
-                            ) {
-                                SubjectCard(item, language) { onSubjectClick(item.subject.id) }
-                            }
-                        }
-                    }
-                    // If odd number of subjects, fill empty space
-                    if (pair.size == 1) {
-                        Spacer(Modifier.weight(1f))
-                    }
-                }
-                Spacer(Modifier.height(12.dp))
-            }
         }
     }
 }
