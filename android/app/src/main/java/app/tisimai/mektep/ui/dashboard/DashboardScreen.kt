@@ -49,6 +49,25 @@ fun DashboardScreen(
     // Child mode is active when: Intent flag is set OR a child profile is active
     val effectiveChildMode = isChildMode || state.childProfile != null
     var childToDelete by remember { mutableStateOf<app.tisimai.mektep.data.models.ChildProfile?>(null) }
+    var showParentPinDialog by remember { mutableStateOf(false) }
+
+    // PIN dialog for parent takeover from child mode
+    if (showParentPinDialog) {
+        val setupVm: app.tisimai.mektep.ui.setup.SetupViewModel = hiltViewModel()
+        val pinError by setupVm.pinError.collectAsState()
+        app.tisimai.mektep.ui.components.PinEntryScreen(
+            title = tr("parent_takeover", language),
+            onPinComplete = { pin ->
+                setupVm.verifyPin(pin) {
+                    viewModel.exitChildMode()
+                    showParentPinDialog = false
+                }
+            },
+            onBack = { showParentPinDialog = false },
+            error = pinError
+        )
+        return
+    }
 
     // Delete confirmation dialog
     childToDelete?.let { child ->
@@ -101,11 +120,8 @@ fun DashboardScreen(
                 },
                 actions = {
                     if (effectiveChildMode) {
-                        // Child mode: lock icon for parent takeover → PIN verify
-                        IconButton(onClick = {
-                            // Clear active child so parent dashboard shows after PIN
-                            viewModel.exitChildMode()
-                        }) {
+                        // Child mode: lock icon → PIN required to switch to parent
+                        IconButton(onClick = { showParentPinDialog = true }) {
                             Icon(Icons.Default.Lock, tr("parent_takeover", language), tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                         }
                     } else {

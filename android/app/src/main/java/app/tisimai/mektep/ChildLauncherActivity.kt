@@ -34,7 +34,8 @@ class ChildLauncherActivity : ComponentActivity() {
                             // Launch MainActivity in child mode (no parent controls)
                             val intent = Intent(this@ChildLauncherActivity, MainActivity::class.java)
                             intent.putExtra("CHILD_MODE", true)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            android.util.Log.d("BilimALL", "Launching MainActivity in child mode")
                             startActivity(intent)
                         },
                         onExitChildMode = {
