@@ -163,6 +163,7 @@ object Strings {
         "daily_limit_child" to mapOf("en" to "Daily limit", "ru" to "Дневной лимит", "kk" to "Күнделікті шектеу"),
         "questions" to mapOf("en" to "questions", "ru" to "вопросов", "kk" to "сұрақ"),
         "back_to_launcher" to mapOf("en" to "Back", "ru" to "Назад", "kk" to "Артқа"),
+        "parent_takeover" to mapOf("en" to "Parent? Enter PIN", "ru" to "Родитель? Введите PIN", "kk" to "Ата-ана? PIN енгізіңіз"),
     )
 }
 

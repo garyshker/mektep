@@ -71,7 +71,11 @@ fun ChildLauncherScreen(
 
     // Time's up overlay
     if (state.balanceSeconds <= 0 && !state.isLoading) {
-        TimesUpScreen(lang = lang, onLearnMore = onOpenMektep)
+        TimesUpScreen(
+            lang = lang,
+            onLearnMore = onOpenMektep,
+            onParentTakeover = { showPinDialog = true }
+        )
         return
     }
 
@@ -244,7 +248,7 @@ private fun BreakReminderOverlay(lang: String, onDismiss: () -> Unit) {
 }
 
 @Composable
-private fun TimesUpScreen(lang: String, onLearnMore: () -> Unit) {
+private fun TimesUpScreen(lang: String, onLearnMore: () -> Unit, onParentTakeover: () -> Unit) {
     Column(
         Modifier.fillMaxSize().padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -268,6 +272,19 @@ private fun TimesUpScreen(lang: String, onLearnMore: () -> Unit) {
             Icon(Icons.Default.School, null, Modifier.size(20.dp))
             Spacer(Modifier.width(8.dp))
             Text(tr("earn_more_time", lang), fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        }
+        Spacer(Modifier.height(16.dp))
+        TextButton(
+            onClick = onParentTakeover,
+            Modifier.fillMaxWidth().height(44.dp)
+        ) {
+            Icon(Icons.Default.Lock, null, Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Spacer(Modifier.width(8.dp))
+            Text(
+                tr("parent_takeover", lang),
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
