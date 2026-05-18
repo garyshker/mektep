@@ -101,8 +101,11 @@ fun DashboardScreen(
                 },
                 actions = {
                     if (effectiveChildMode) {
-                        // Child mode: lock icon for parent takeover
-                        IconButton(onClick = onBackToLauncher) {
+                        // Child mode: lock icon for parent takeover → PIN verify
+                        IconButton(onClick = {
+                            // Clear active child so parent dashboard shows after PIN
+                            viewModel.exitChildMode()
+                        }) {
                             Icon(Icons.Default.Lock, tr("parent_takeover", language), tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                         }
                     } else {

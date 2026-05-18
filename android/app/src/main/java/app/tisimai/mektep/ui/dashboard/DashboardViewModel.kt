@@ -129,6 +129,17 @@ class DashboardViewModel @Inject constructor(
         )
     }
 
+    fun exitChildMode() {
+        viewModelScope.launch {
+            parentalPrefsStore.setActiveChildId(null)
+            // Restore parent language
+            val parentLang = parentalPrefsStore.parentLanguage.first()
+            if (parentLang != null) {
+                tokenStore.saveLanguage(parentLang)
+            }
+        }
+    }
+
     fun deleteChild(child: ChildProfile) {
         viewModelScope.launch {
             childProfileDao.delete(child)
