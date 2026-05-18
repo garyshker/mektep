@@ -1044,18 +1044,21 @@
     box-shadow:0 8px 24px rgba(14,140,107,.25);
   }
   .ob-start:disabled{ opacity:.35; box-shadow:none; cursor:not-allowed }
-  .ob-grade-label{ font-size:13px; font-weight:800; letter-spacing:.1em; color:var(--ink-mute); text-transform:uppercase; margin:0 }
-  .ob-grades{ display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; max-width:360px }
+  .ob-grade-label{ font-size:22px; font-weight:900; letter-spacing:-.01em; color:var(--ink); margin:0 }
+  .ob-grades{ display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; max-width:360px }
   .ob-grade-btn{
-    padding:20px 8px 16px; border-radius:20px; border:2.5px solid var(--line);
-    background:var(--card); display:flex; flex-direction:column;
-    align-items:center; gap:6px; cursor:pointer; transition:all .15s;
-    box-shadow:0 2px 8px rgba(0,0,0,.05);
+    min-height:150px; border-radius:24px; border:2px solid transparent;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:2px; cursor:pointer;
+    transition:transform .18s cubic-bezier(.2,.8,.3,1), box-shadow .18s;
+    -webkit-tap-highlight-color:transparent;
   }
-  .ob-grade-btn:not(.on):hover{ transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,.1) }
-  .ob-grade-emoji{ font-size:34px; line-height:1.1 }
-  .ob-grade-num { font-size:22px; font-weight:900; color:inherit }
-  .ob-grade-name{ font-size:12px; font-weight:700; color:inherit; opacity:.8 }
+  .ob-grade-btn:active{ transform:scale(.94) !important }
+  .ob-grade-btn.on{ transform:scale(1.03); box-shadow:0 12px 32px rgba(0,0,0,.18) }
+  .ob-grade-num{ font-size:86px; font-weight:900; line-height:1; color:var(--gc, var(--brand)) }
+  .ob-grade-btn.on .ob-grade-num{ color:#fff }
+  .ob-grade-name{ font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-mute) }
+  .ob-grade-btn.on .ob-grade-name{ color:rgba(255,255,255,.75) }
   .ob-mascot{
     width:160px; height:160px; object-fit:cover;
     border-radius:36px;

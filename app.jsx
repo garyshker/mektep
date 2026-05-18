@@ -127,7 +127,7 @@ const L = {
     quit:"Шығу", retry:"Қайталау",
     continueBtnShort: "Жалғастыру →",
     grade: (g) => `${g}-сынып`,
-    gradeLabel: "Сыныпты таңда",
+    gradeLabel: "Қай сыныпта оқисың?",
     pickGame: "Ойын таңда",
     mathSprint: "Математикалық жарыс",
     mathSprintSub: "× ÷ жылдамдық сынағы",
@@ -187,7 +187,7 @@ const L = {
     quit:"Выйти", retry:"Снова",
     continueBtnShort: "Продолжить →",
     grade: (g) => `${g} класс`,
-    gradeLabel: "Выбери класс",
+    gradeLabel: "В каком классе учишься?",
     pickGame: "Выбери игру",
     mathSprint: "Математический спринт",
     mathSprintSub: "× ÷ тест на скорость",
@@ -247,7 +247,7 @@ const L = {
     quit:"Quit", retry:"Again",
     continueBtnShort: "Continue →",
     grade: (g) => `Grade ${g}`,
-    gradeLabel: "Pick your grade",
+    gradeLabel: "What grade are you in?",
     pickGame: "Pick a game",
     mathSprint: "Math Sprint",
     mathSprintSub: "× ÷ speed test",
@@ -670,11 +670,13 @@ function OnboardingScreen({ onDone }) {
           return (
             <button key={g}
               className={"ob-grade-btn " + (sel ? "on" : "")}
-              style={sel ? { background: gi.color, borderColor: gi.color, color:'#fff' } : {}}
+              style={sel
+                ? { background: gi.color, borderColor: gi.color }
+                : { background: gi.bg, borderColor: gi.color + '28', '--gc': gi.color }
+              }
               onClick={() => setGrade(g)}>
-              <span className="ob-grade-emoji">{gi.emoji}</span>
               <span className="ob-grade-num">{g}</span>
-              <span className="ob-grade-name">{t.grade(g)}</span>
+              <span className="ob-grade-name">{gi.label[lang]}</span>
             </button>
           );
         })}
