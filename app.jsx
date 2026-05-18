@@ -125,6 +125,22 @@ const L = {
     quickGameSub: "× ÷ жылдамдық тесті",
     perfect:"Тамаша! 🌟", great:"Жарайсың!", good:"Жақсы!", tryAgain:"Тағы бір рет!",
     quit:"Шығу", retry:"Қайталау",
+    continueBtnShort: "Жалғастыру →",
+    grade: (g) => `${g}-сынып`,
+    gradeLabel: "Сыныпты таңда",
+    pickGame: "Ойын таңда",
+    mathSprint: "Математикалық жарыс",
+    mathSprintSub: "× ÷ жылдамдық сынағы",
+    trueFalse: "Дұрыс па?",
+    trueFalseSub: "Жауабын тексер",
+    difficulty: ["Оңай", "Орта", "Қиын"],
+    combo: (n) => `${n} қатарынан 🔥`,
+    trueBtn: "✓ Дұрыс",
+    falseBtn: "✗ Қате",
+    missingNum: "Санды тап", missingNumSub: "?-ді тап",
+    compareRush: "Салыстыр", compareRushSub: "< немесе > таңда",
+    numChain: "Сан тізбегі", numChainSub: "Қадамдарды орында",
+    lessBtn: "◀ Кіші", moreBtn: "Үлкен ▶",
   },
   ru: {
     welcome: (n) => `Привет, ${n || 'Ученик'}!`,
@@ -166,6 +182,22 @@ const L = {
     quickGameSub: "× ÷ тест на скорость",
     perfect:"Отлично! 🌟", great:"Хорошо!", good:"Неплохо!", tryAgain:"Ещё раз!",
     quit:"Выйти", retry:"Снова",
+    continueBtnShort: "Продолжить →",
+    grade: (g) => `${g} класс`,
+    gradeLabel: "Выбери класс",
+    pickGame: "Выбери игру",
+    mathSprint: "Математический спринт",
+    mathSprintSub: "× ÷ тест на скорость",
+    trueFalse: "Верно или нет?",
+    trueFalseSub: "Проверь ответ",
+    difficulty: ["Легко", "Средне", "Сложно"],
+    combo: (n) => `${n} подряд 🔥`,
+    trueBtn: "✓ Верно",
+    falseBtn: "✗ Неверно",
+    missingNum: "Найди число", missingNumSub: "Что вместо ?",
+    compareRush: "Сравни", compareRushSub: "Выбери < или >",
+    numChain: "Цепочка чисел", numChainSub: "Считай по шагам",
+    lessBtn: "◀ Меньше", moreBtn: "Больше ▶",
   },
   en: {
     welcome: (n) => `Hi, ${n || 'Student'}!`,
@@ -207,6 +239,22 @@ const L = {
     quickGameSub: "× ÷ speed test",
     perfect:"Excellent! 🌟", great:"Great!", good:"Good!", tryAgain:"Try again!",
     quit:"Quit", retry:"Again",
+    continueBtnShort: "Continue →",
+    grade: (g) => `Grade ${g}`,
+    gradeLabel: "Pick your grade",
+    pickGame: "Pick a game",
+    mathSprint: "Math Sprint",
+    mathSprintSub: "× ÷ speed test",
+    trueFalse: "True or False?",
+    trueFalseSub: "Check the equation",
+    difficulty: ["Easy", "Medium", "Hard"],
+    combo: (n) => `${n} in a row 🔥`,
+    trueBtn: "✓ True",
+    falseBtn: "✗ False",
+    missingNum: "Missing Number", missingNumSub: "What replaces ?",
+    compareRush: "Compare Rush", compareRushSub: "Pick < or >",
+    numChain: "Number Chain", numChainSub: "Follow the steps",
+    lessBtn: "◀ Less", moreBtn: "More ▶",
   },
 };
 
@@ -251,6 +299,81 @@ const SUB_CONTENT = {
   ],
 };
 
+// ─── Grade system ──────────────────────────────────────────────────
+
+const GRADE_INFO = {
+  1: { emoji:'🐣', color:'#F97316', bg:'#FFF7ED', label:{ kk:'1-сынып', ru:'1 класс', en:'Grade 1' } },
+  2: { emoji:'🚀', color:'#8B5CF6', bg:'#F5F3FF', label:{ kk:'2-сынып', ru:'2 класс', en:'Grade 2' } },
+  3: { emoji:'🌿', color:'#0D9488', bg:'#F0FDFA', label:{ kk:'3-сынып', ru:'3 класс', en:'Grade 3' } },
+  4: { emoji:'🔭', color:'#2563EB', bg:'#EFF6FF', label:{ kk:'4-сынып', ru:'4 класс', en:'Grade 4' } },
+};
+
+// null for a subject = hidden for that grade. Otherwise overrides lessonTitles + of.
+// grade 2 = null means "use default SUB_CONTENT" (it's our base content).
+const GRADE_SUBJECTS = {
+  1: {
+    kk: {
+      math:  { of:5, lessonTitles:{1:"Сандар · 1-10",2:"Сандар · 11-20",3:"Қосу · 10 ішінде",4:"Алу · 10 ішінде",5:"Геометриялық фигуралар"} },
+      kaz:   { of:3, lessonTitles:{1:"Қазақ әліпбиі",2:"Жануарлар сөздігі",3:"Менің отбасым"} },
+      world: { of:2, lessonTitles:{1:"Жыл мезгілдері",2:"Жабайы жануарлар"} },
+      eng:   null,
+    },
+    ru: {
+      math:  { of:5, lessonTitles:{1:"Числа · 1–10",2:"Числа · 11–20",3:"Сложение · до 10",4:"Вычитание · до 10",5:"Геометрические фигуры"} },
+      kaz:   { of:3, lessonTitles:{1:"Казахский алфавит",2:"Словарь животных",3:"Моя семья"} },
+      world: { of:2, lessonTitles:{1:"Времена года",2:"Дикие животные"} },
+      eng:   null,
+    },
+    en: {
+      math:  { of:5, lessonTitles:{1:"Numbers · 1–10",2:"Numbers · 11–20",3:"Addition · within 10",4:"Subtraction · within 10",5:"Shapes"} },
+      kaz:   { of:3, lessonTitles:{1:"Kazakh Alphabet",2:"Animal vocabulary",3:"My family"} },
+      world: { of:2, lessonTitles:{1:"Seasons",2:"Wild Animals"} },
+      eng:   null,
+    },
+  },
+  2: null, // uses default SUB_CONTENT
+  3: {
+    kk: {
+      math:  { of:12, lessonTitles:{1:"Үш таңбалы сандар · қосу",2:"Үш таңбалы сандар · алу",3:"Көбейту · 7-ге, 8-ге, 9-ға",4:"Бөлу · 3-ке, 4-ке",5:"Бөлу · 5-ке, 6-ға",6:"Уақыт · сағат, минут",7:"Санды дөңгелектеу",8:"Периметр",9:"Аудан",10:"2 амалды есептер",11:"3 амалды есептер",12:"Жылдық қайталау"} },
+      kaz:   { of:6, lessonTitles:{1:"Зат есім",2:"Сын есім",3:"Мәтін оқу",4:"Сөйлем мүшелері",5:"Диктант тренажері",6:"Шығарма"} },
+      world: { of:4, lessonTitles:{1:"Қазақстан картасы",2:"Табиғат аймақтары",3:"Жануарлар дүниесі",4:"Адам мен табиғат"} },
+      eng:   { of:4, lessonTitles:{1:"Алфавит · A-Z",2:"Дене мүшелері",3:"Тамақ · сөздік",4:"Менің күнім"} },
+    },
+    ru: {
+      math:  { of:12, lessonTitles:{1:"Трёхзначные числа · сложение",2:"Трёхзначные числа · вычитание",3:"Умножение · на 7, 8, 9",4:"Деление · на 3, 4",5:"Деление · на 5, 6",6:"Время · часы, минуты",7:"Округление чисел",8:"Периметр",9:"Площадь",10:"Задачи · 2 действия",11:"Задачи · 3 действия",12:"Итоговое повторение"} },
+      kaz:   { of:6, lessonTitles:{1:"Имя существительное",2:"Имя прилагательное",3:"Чтение текста",4:"Члены предложения",5:"Диктант",6:"Сочинение"} },
+      world: { of:4, lessonTitles:{1:"Карта Казахстана",2:"Природные зоны",3:"Животный мир",4:"Человек и природа"} },
+      eng:   { of:4, lessonTitles:{1:"Алфавит · A-Z",2:"Части тела",3:"Еда · словарь",4:"Мой день"} },
+    },
+    en: {
+      math:  { of:12, lessonTitles:{1:"3-digit addition",2:"3-digit subtraction",3:"Times tables · ×7,×8,×9",4:"Division · ÷3, ÷4",5:"Division · ÷5, ÷6",6:"Time · hours & minutes",7:"Rounding numbers",8:"Perimeter",9:"Area",10:"2-step word problems",11:"3-step word problems",12:"Annual review"} },
+      kaz:   { of:6, lessonTitles:{1:"Nouns",2:"Adjectives",3:"Reading texts",4:"Sentence structure",5:"Dictation practice",6:"Essay writing"} },
+      world: { of:4, lessonTitles:{1:"Map of Kazakhstan",2:"Natural zones",3:"Animal world",4:"Humans & nature"} },
+      eng:   { of:4, lessonTitles:{1:"Alphabet · A-Z",2:"Body parts",3:"Food vocabulary",4:"My day"} },
+    },
+  },
+  4: {
+    kk: {
+      math:  { of:12, lessonTitles:{1:"Үлкен сандар · миллионға дейін",2:"Бөлшектер · кіріспе",3:"Ондық бөлшектер",4:"Бұрыштар · өлшеу",5:"Үшбұрыш · қасиеттері",6:"Периметр мен аудан",7:"Теңдеулер · x-ті табу",8:"Пропорция",9:"Масштаб",10:"Координаттар жүйесі",11:"3 амалды есептер",12:"Жылдық тест"} },
+      kaz:   { of:6, lessonTitles:{1:"Туынды сөздер",2:"Етістік шақтары",3:"Күрделі сөйлемдер",4:"Пунктуация",5:"Хат жазу",6:"Мазмұндама"} },
+      world: { of:5, lessonTitles:{1:"Ежелгі Қазақстан",2:"Көшпенділер мәдениеті",3:"Мемлекет рәміздері",4:"Табиғи ресурстар",5:"Экология және адам"} },
+      eng:   { of:5, lessonTitles:{1:"Present Simple",2:"Past Simple",3:"My school life",4:"Hobbies & sports",5:"Short story writing"} },
+    },
+    ru: {
+      math:  { of:12, lessonTitles:{1:"Большие числа · до миллиона",2:"Дроби · введение",3:"Десятичные дроби",4:"Углы · измерение",5:"Треугольники",6:"Периметр и площадь",7:"Уравнения · найди x",8:"Пропорции",9:"Масштаб",10:"Система координат",11:"Задачи · 3 действия",12:"Годовой тест"} },
+      kaz:   { of:6, lessonTitles:{1:"Производные слова",2:"Времена глагола",3:"Сложные предложения",4:"Пунктуация",5:"Письмо",6:"Изложение"} },
+      world: { of:5, lessonTitles:{1:"Древний Казахстан",2:"Культура кочевников",3:"Символы государства",4:"Природные ресурсы",5:"Экология"} },
+      eng:   { of:5, lessonTitles:{1:"Present Simple",2:"Past Simple",3:"My school life",4:"Hobbies & sports",5:"Short story"} },
+    },
+    en: {
+      math:  { of:12, lessonTitles:{1:"Large numbers · to a million",2:"Fractions · intro",3:"Decimal fractions",4:"Angles · measuring",5:"Triangles",6:"Perimeter & area",7:"Equations · find x",8:"Proportions",9:"Scale",10:"Coordinate system",11:"3-step word problems",12:"Annual test"} },
+      kaz:   { of:6, lessonTitles:{1:"Derived words",2:"Verb tenses",3:"Complex sentences",4:"Punctuation",5:"Letter writing",6:"Retelling"} },
+      world: { of:5, lessonTitles:{1:"Ancient Kazakhstan",2:"Nomad culture",3:"State symbols",4:"Natural resources",5:"Ecology"} },
+      eng:   { of:5, lessonTitles:{1:"Present Simple",2:"Past Simple",3:"My school life",4:"Hobbies & sports",5:"Short story writing"} },
+    },
+  },
+};
+
 const LESSON_FOR = (subjectId, lessonNum) => {
   if (subjectId === 'math')  return `math-${lessonNum}`;
   if (subjectId === 'kaz')   return `kaz-${lessonNum}`;
@@ -263,6 +386,7 @@ const LESSON_FOR = (subjectId, lessonNum) => {
 
 const DEFAULT_PROGRESS = {
   name: '',
+  grade: null,
   math:  { lesson: 1, stars: 0, of: 12 },
   kaz:   { lesson: 1, stars: 0, of: 6 },
   world: { lesson: 1, stars: 0, of: 2 },
@@ -276,6 +400,41 @@ const DEFAULT_PROGRESS = {
 };
 
 const PROGRESS_KEY = 'mektep_progress_v1';
+
+// ─── A/B Testing ───────────────────────────────────────────────────
+
+const AB_TESTS = {
+  ab_timer:  { variants: ['A','B'], desc: 'QuickGame timer · 5s (A) vs 8s (B)' },
+  ab_cta:    { variants: ['A','B'], desc: 'Continue CTA · full (A) vs short (B)' },
+  ab_grade:  { variants: ['A','B'], desc: 'Onboarding · name only (A) vs +grade (B)' },
+};
+
+const AB_KEY = 'mektep_ab_v1';
+const _abCache = {};
+
+function getVariant(testId) {
+  if (_abCache[testId]) return _abCache[testId];
+  let stored = {};
+  try { stored = JSON.parse(localStorage.getItem(AB_KEY) || '{}'); } catch(e) {}
+  if (stored[testId]) { _abCache[testId] = stored[testId]; return stored[testId]; }
+  const v = Math.random() < 0.5 ? 'A' : 'B';
+  _abCache[testId] = v;
+  try { stored[testId] = v; localStorage.setItem(AB_KEY, JSON.stringify(stored)); } catch(e) {}
+  return v;
+}
+
+function forceVariant(testId, v) {
+  _abCache[testId] = v;
+  let stored = {};
+  try { stored = JSON.parse(localStorage.getItem(AB_KEY) || '{}'); } catch(e) {}
+  stored[testId] = v;
+  try { localStorage.setItem(AB_KEY, JSON.stringify(stored)); } catch(e) {}
+}
+
+function logABEvent(testId, variant, event, data) {
+  // Replace with real analytics (Firebase logEvent, Mixpanel, etc.)
+  console.log(`[AB] ${testId}/${variant} → ${event}`, data || '');
+}
 
 function loadProgress() {
   try {
@@ -301,15 +460,25 @@ function saveProgress(p) {
 
 function subjectsFor(lang, progress) {
   const prog = progress || DEFAULT_PROGRESS;
-  return SUB_CONTENT[lang].map(s => {
-    const p = prog[s.id];
+  const grade = prog.grade || 2;
+  const gradeOverrides = GRADE_SUBJECTS[grade]?.[lang]; // null = use defaults
+
+  return SUB_CONTENT[lang].filter(s => {
+    if (!s.ready) return true;
+    // Grade-specific: null entry means "hide this subject for this grade"
+    if (gradeOverrides && gradeOverrides[s.id] === null) return false;
+    return true;
+  }).map(s => {
     if (!s.ready) return s;
-    const of = DEFAULT_PROGRESS[s.id]?.of ?? (s.lessonTitles ? Object.keys(s.lessonTitles).length : 8);
+    const override = gradeOverrides?.[s.id];
+    const lessonTitles = override?.lessonTitles ?? s.lessonTitles;
+    const of = override?.of ?? DEFAULT_PROGRESS[s.id]?.of ?? Object.keys(lessonTitles || {}).length;
+    const p = prog[s.id];
     const lessonNum = p?.lesson ?? 1;
     const allDone = lessonNum > of;
     const safeNum = Math.min(lessonNum, of);
-    const nextTitle = s.lessonTitles[safeNum] || s.lessonTitles[1];
-    return { ...s, lesson: lessonNum, of, stars: p?.stars ?? 0, next: nextTitle,
+    const nextTitle = lessonTitles[safeNum] || lessonTitles[1];
+    return { ...s, lessonTitles, lesson: lessonNum, of, stars: p?.stars ?? 0, next: nextTitle,
              lessonId: allDone ? null : LESSON_FOR(s.id, lessonNum), allDone };
   });
 }
@@ -439,15 +608,22 @@ function LessonModal({ s, t, onClose, onStart }) {
 function OnboardingScreen({ onDone }) {
   const [name, setName] = useState('');
   const [lang, setLang] = useState('kk');
+  const [grade, setGrade] = useState(null);
   const t = L[lang];
-  const flags = { kk: '🇰🇿', ru: '🇷🇺', en: '🇬🇧' };
-  const labels = { kk: 'Қаз', ru: 'Рус', en: 'Eng' };
+  const flags  = { kk:'🇰🇿', ru:'🇷🇺', en:'🇬🇧' };
+  const labels = { kk:'Қаз',  ru:'Рус',  en:'Eng'  };
 
-  const submit = () => { if (name.trim()) onDone(name.trim(), lang); };
+  const canSubmit = name.trim() && grade;
+
+  const submit = () => {
+    if (!canSubmit) return;
+    logABEvent('ab_grade', getVariant('ab_grade'), 'onboarding_done', { grade });
+    onDone(name.trim(), lang, grade);
+  };
 
   return (
     <div className="onboarding">
-      <div className="ob-logo"><Sparkle style={{ color: '#fff', width: 36, height: 36 }} /></div>
+      <div className="ob-logo"><Sparkle style={{ color:'#fff', width:36, height:36 }} /></div>
       <h1 className="ob-title">iМектеп</h1>
       <p className="ob-sub">{t.obSub}</p>
       <div className="ob-form">
@@ -456,7 +632,7 @@ function OnboardingScreen({ onDone }) {
           placeholder={t.obPlaceholder}
           value={name}
           onChange={e => setName(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && submit()}
+          onKeyDown={e => e.key === 'Enter' && canSubmit && submit()}
           autoFocus
           maxLength={30}
         />
@@ -467,8 +643,28 @@ function OnboardingScreen({ onDone }) {
             </button>
           ))}
         </div>
-        <button className="ob-start" disabled={!name.trim()} onClick={submit}>
-          {t.obStart}
+        <div className="ob-grade-section">
+          <div className="ob-grade-label">{t.gradeLabel}</div>
+          <div className="ob-grades">
+            {[1,2,3,4].map(g => {
+              const gi = GRADE_INFO[g];
+              const sel = grade === g;
+              return (
+                <button key={g}
+                  className={"ob-grade-btn " + (sel ? "on" : "")}
+                  style={sel ? { background: gi.color, borderColor: gi.color, color:'#fff' }
+                              : { borderColor: 'var(--line)' }}
+                  onClick={() => setGrade(g)}>
+                  <span className="ob-grade-emoji">{gi.emoji}</span>
+                  <span className="ob-grade-num">{g}</span>
+                  <span className="ob-grade-name">{t.grade(g)}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        <button className="ob-start" disabled={!canSubmit} onClick={submit}>
+          {canSubmit ? t.obStart : (grade ? t.obStart : '← ' + t.gradeLabel)}
         </button>
       </div>
     </div>
@@ -477,47 +673,260 @@ function OnboardingScreen({ onDone }) {
 
 // ─── Quick Game ────────────────────────────────────────────────────
 
-function makeQs(total) {
-  return Array.from({ length: total }, () => {
-    const mul = Math.random() > 0.4;
-    const a = 2 + Math.floor(Math.random() * 8);
-    const b = 2 + Math.floor(Math.random() * 8);
-    const ans = mul ? a * b : a;
-    const prompt = mul ? `${a} × ${b}` : `${a * b} ÷ ${b}`;
+function makeQ(difficulty, grade) {
+  grade = grade || 2;
+  // Grade 1: addition and subtraction within 20
+  if (grade === 1) {
+    const add = Math.random() > 0.4;
+    const a = 1 + Math.floor(Math.random() * 9);
+    const b = add
+      ? 1 + Math.floor(Math.random() * Math.min(9, 20 - a))
+      : 1 + Math.floor(Math.random() * a);
+    const ans = add ? a + b : a - b;
+    const prompt = add ? `${a} + ${b}` : `${a} − ${b}`;
     const ws = [];
     while (ws.length < 3) {
-      const delta = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1);
+      const delta = (Math.floor(Math.random() * 4) + 1) * (Math.random() > 0.5 ? 1 : -1);
       const w = ans + delta;
-      if (w > 0 && w !== ans && !ws.includes(w)) ws.push(w);
+      if (w >= 0 && w !== ans && !ws.includes(w)) ws.push(w);
     }
     return { prompt, ans, opts: [ans, ...ws].sort(() => Math.random() - 0.5) };
+  }
+  // Grade 3–4: start with harder tables
+  const startDiff = grade >= 4 ? 3 : grade >= 3 ? 2 : 1;
+  const eff = Math.max(startDiff, difficulty);
+  const mul = Math.random() > 0.4;
+  const tables = eff >= 3 ? [2,3,4,5,6,7,8,9]
+               : eff >= 2 ? [2,3,4,5,6]
+               : [2,3,5];
+  const maxB = eff >= 3 ? 9 : eff >= 2 ? 8 : 5;
+  const a = tables[Math.floor(Math.random() * tables.length)];
+  const b = 2 + Math.floor(Math.random() * (maxB - 1));
+  const ans = mul ? a * b : a;
+  const prompt = mul ? `${a} × ${b}` : `${a * b} ÷ ${b}`;
+  const ws = [];
+  while (ws.length < 3) {
+    const delta = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1);
+    const w = ans + delta;
+    if (w > 0 && w !== ans && !ws.includes(w)) ws.push(w);
+  }
+  return { prompt, ans, opts: [ans, ...ws].sort(() => Math.random() - 0.5) };
+}
+
+function makeTFQs(total, grade) {
+  grade = grade || 2;
+  return Array.from({ length: total }, () => {
+    // Grade 1: simple addition/subtraction
+    if (grade === 1) {
+      const add = Math.random() > 0.5;
+      const a = 1 + Math.floor(Math.random() * 9);
+      const b = add ? 1 + Math.floor(Math.random() * Math.min(9, 20 - a)) : 1 + Math.floor(Math.random() * a);
+      const correct = add ? a + b : a - b;
+      const expr = add ? `${a} + ${b}` : `${a} − ${b}`;
+      const isTrue = Math.random() > 0.5;
+      let shown = correct;
+      if (!isTrue) {
+        let delta;
+        do { delta = (Math.floor(Math.random() * 4) + 1) * (Math.random() > 0.5 ? 1 : -1); }
+        while (correct + delta < 0);
+        shown = correct + delta;
+      }
+      return { prompt: `${expr} = ${shown}`, answer: isTrue };
+    }
+    // Grade 2+: multiplication and division
+    const mul = Math.random() > 0.4;
+    const maxN = grade >= 4 ? 9 : grade >= 3 ? 8 : 7;
+    const a = 2 + Math.floor(Math.random() * (maxN - 1));
+    const b = 2 + Math.floor(Math.random() * (maxN - 1));
+    const correct = mul ? a * b : a;
+    const expr = mul ? `${a} × ${b}` : `${a * b} ÷ ${b}`;
+    const isTrue = Math.random() > 0.5;
+    let shown = correct;
+    if (!isTrue) {
+      let delta;
+      do { delta = (Math.floor(Math.random() * 4) + 1) * (Math.random() > 0.5 ? 1 : -1); }
+      while (correct + delta <= 0);
+      shown = correct + delta;
+    }
+    return { prompt: `${expr} = ${shown}`, answer: isTrue };
   });
 }
 
-function QuickGameRound({ t, onClose, onRestart }) {
-  const TOTAL = 20, SECS = 5;
-  const [qs] = useState(() => makeQs(TOTAL));
+function makeMissingQs(total, grade) {
+  grade = grade || 2;
+  return Array.from({ length: total }, () => {
+    let prompt, correct;
+    if (grade === 1) {
+      const add = Math.random() > 0.5;
+      const a = 2 + Math.floor(Math.random() * 8);
+      const b = 1 + Math.floor(Math.random() * Math.min(8, add ? 18 - a : a - 1));
+      const hideFirst = Math.random() > 0.5;
+      if (add) {
+        if (hideFirst) { prompt = `? + ${b} = ${a+b}`; correct = a; }
+        else           { prompt = `${a} + ? = ${a+b}`; correct = b; }
+      } else {
+        if (hideFirst) { prompt = `? − ${b} = ${a-b}`; correct = a; }
+        else           { prompt = `${a} − ? = ${a-b}`; correct = b; }
+      }
+    } else {
+      const ops = grade >= 3 ? ['+','−','×','÷'] : ['+','−','×'];
+      const op = ops[Math.floor(Math.random() * ops.length)];
+      const mx = grade >= 4 ? 12 : 9;
+      if (op === '+') {
+        const a = 3 + Math.floor(Math.random() * mx), b = 3 + Math.floor(Math.random() * mx);
+        if (Math.random() > 0.5) { prompt = `? + ${b} = ${a+b}`; correct = a; }
+        else                     { prompt = `${a} + ? = ${a+b}`; correct = b; }
+      } else if (op === '−') {
+        const b = 2 + Math.floor(Math.random() * mx), a = b + 2 + Math.floor(Math.random() * mx);
+        if (Math.random() > 0.5) { prompt = `? − ${b} = ${a-b}`; correct = a; }
+        else                     { prompt = `${a} − ? = ${a-b}`; correct = b; }
+      } else if (op === '×') {
+        const a = 2 + Math.floor(Math.random() * 8), b = 2 + Math.floor(Math.random() * 8);
+        if (Math.random() > 0.5) { prompt = `? × ${b} = ${a*b}`; correct = a; }
+        else                     { prompt = `${a} × ? = ${a*b}`; correct = b; }
+      } else {
+        const b = 2 + Math.floor(Math.random() * 8), a = b * (2 + Math.floor(Math.random() * 8));
+        if (Math.random() > 0.5) { prompt = `? ÷ ${b} = ${a/b}`; correct = a; }
+        else                     { prompt = `${a} ÷ ? = ${a/b}`; correct = b; }
+      }
+    }
+    const ws = new Set();
+    while (ws.size < 3) {
+      const d = (1 + Math.floor(Math.random() * 5)) * (Math.random() > 0.5 ? 1 : -1);
+      const w = correct + d;
+      if (w > 0 && w !== correct) ws.add(w);
+    }
+    return { prompt, ans: correct, opts: [correct, ...ws].sort(() => Math.random() - 0.5) };
+  });
+}
+
+function makeCompareQs(total, grade) {
+  grade = grade || 2;
+  const makeExpr = () => {
+    const ops = grade === 1 ? ['+','−'] : ['+','−','×'];
+    const op = ops[Math.floor(Math.random() * ops.length)];
+    const mx = grade >= 4 ? 12 : grade >= 3 ? 9 : grade >= 2 ? 7 : 5;
+    let a, b;
+    if (op === '+')      { a = 1+Math.floor(Math.random()*mx); b = 1+Math.floor(Math.random()*mx); }
+    else if (op === '−') { a = 3+Math.floor(Math.random()*mx); b = 1+Math.floor(Math.random()*(a-1)); }
+    else                 { a = 2+Math.floor(Math.random()*7);  b = 2+Math.floor(Math.random()*7); }
+    const val = op==='+' ? a+b : op==='−' ? a-b : a*b;
+    return { expr: `${a} ${op} ${b}`, val };
+  };
+  return Array.from({ length: total }, () => {
+    let left, right;
+    do { left = makeExpr(); right = makeExpr(); } while (left.val === right.val);
+    return { left: left.expr, right: right.expr, answer: left.val < right.val ? '<' : '>' };
+  });
+}
+
+function makeChainQs(total, grade) {
+  grade = grade || 2;
+  return Array.from({ length: total }, () => {
+    const steps = grade === 1 ? 2 : 3;
+    const ops = grade === 1 ? ['+','−'] : ['+','−','×'];
+    const mx = grade >= 4 ? 9 : grade >= 3 ? 7 : 6;
+    let val = 2 + Math.floor(Math.random() * (grade === 1 ? 6 : 9));
+    const parts = [`${val}`];
+    for (let i = 0; i < steps; i++) {
+      const op = ops[Math.floor(Math.random() * ops.length)];
+      let n;
+      if (op === '+')      { n = 1+Math.floor(Math.random()*mx); val += n; parts.push(`+${n}`); }
+      else if (op === '−') { n = 1+Math.floor(Math.random()*Math.min(val-1,mx)); val -= n; parts.push(`−${n}`); }
+      else                 { n = 2+Math.floor(Math.random()*3); val *= n; parts.push(`×${n}`); }
+    }
+    const ws = new Set();
+    while (ws.size < 3) {
+      const d = (1+Math.floor(Math.random()*(grade===1?3:7))) * (Math.random()>0.5?1:-1);
+      const w = val + d;
+      if (w > 0 && w !== val) ws.add(w);
+    }
+    return { prompt: parts.join(' → ') + ' = ?', ans: val, opts: [val,...ws].sort(()=>Math.random()-0.5) };
+  });
+}
+
+function GameResult({ score, total, t, onBack, onRestart }) {
+  const pct = Math.round(score / total * 100);
+  const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '🌟' : pct >= 50 ? '👍' : '💪';
+  const msg   = pct >= 90 ? t.perfect : pct >= 70 ? t.great : pct >= 50 ? t.good : t.tryAgain;
+  useEffect(() => { window.soundComplete?.(); }, []);
+  return (
+    <div className="qgame-shell">
+      <div className="qgame-done">
+        <div style={{ fontSize: 64 }}>{emoji}</div>
+        <div className="qgame-score-big">{score}<span>/{total}</span></div>
+        <div className="qgame-done-msg">{msg}</div>
+        <div className="qgame-done-btns">
+          <button className="btn ghost" onClick={onBack}>{t.quit}</button>
+          <button className="btn prim" onClick={onRestart}>{t.retry} ↺</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+function MathSprintRound({ t, onBack, onRestart, grade }) {
+  const TOTAL = 20;
+  const [timerVariant] = useState(() => getVariant('ab_timer'));
+  const SECS = timerVariant === 'B' ? 8 : 5;
+  const circ = 113;
+  const startDiff = (grade || 2) >= 4 ? 3 : (grade || 2) >= 3 ? 2 : 1;
+  const [difficulty, setDifficulty] = useState(startDiff);
+  const [combo, setCombo] = useState(0);
+  const [comboFlash, setComboFlash] = useState(null);
+  const [qs, setQs] = useState(() => Array.from({ length: TOTAL }, () => makeQ(startDiff, grade)));
   const [idx, setIdx] = useState(0);
   const [score, setScore] = useState(0);
   const [chosen, setChosen] = useState(null);
   const [tLeft, setTLeft] = useState(SECS);
   const busy = useRef(false);
   const curAns = useRef(null);
+  const diffRef = useRef(1);
+  const comboRef = useRef(0);
+  const idxRef = useRef(0);
 
   const isDone = idx >= TOTAL;
   const cur = qs[Math.min(idx, TOTAL - 1)];
   curAns.current = cur?.ans;
 
+  useEffect(() => {
+    logABEvent('ab_timer', timerVariant, 'sprint_started', { secs: SECS });
+  }, []);
+
+  useEffect(() => {
+    if (isDone) logABEvent('ab_timer', timerVariant, 'sprint_completed', { score, total: TOTAL });
+  }, [isDone]);
+
   const go = useCallback((picked) => {
     if (busy.current) return;
     busy.current = true;
     const ok = picked === curAns.current;
-    if (ok) window.soundCorrect?.();
-    else if (picked !== '__timeout__') window.soundWrong?.();
-    else window.soundWrong?.();
-    if (ok) setScore(s => s + 1);
+    if (ok) {
+      window.soundCorrect?.();
+      setScore(s => s + 1);
+      comboRef.current += 1;
+      setCombo(comboRef.current);
+      if ([3, 6, 9].includes(comboRef.current) && diffRef.current < 3) {
+        const nd = diffRef.current + 1;
+        diffRef.current = nd;
+        setDifficulty(nd);
+        setComboFlash(comboRef.current);
+        const ci = idxRef.current;
+        setQs(prev => [
+          ...prev.slice(0, ci + 1),
+          ...Array.from({ length: TOTAL - ci - 1 }, () => makeQ(nd, grade)),
+        ]);
+        setTimeout(() => setComboFlash(null), 900);
+      }
+    } else {
+      window.soundWrong?.();
+      comboRef.current = 0;
+      setCombo(0);
+    }
     setChosen(picked);
     setTimeout(() => {
+      idxRef.current += 1;
       setIdx(i => i + 1);
       setTLeft(SECS);
       setChosen(null);
@@ -525,8 +934,7 @@ function QuickGameRound({ t, onClose, onRestart }) {
     }, 600);
   }, []);
 
-  const goRef = useRef(go);
-  goRef.current = go;
+  const goRef = useRef(go); goRef.current = go;
 
   useEffect(() => {
     if (isDone || chosen !== null) return;
@@ -536,47 +944,37 @@ function QuickGameRound({ t, onClose, onRestart }) {
     return () => clearTimeout(id);
   }, [tLeft, isDone, chosen]);
 
-  useEffect(() => {
-    if (isDone) window.soundComplete?.();
-  }, [isDone]);
+  if (isDone) return <GameResult score={score} total={TOTAL} t={t} onBack={onBack} onRestart={onRestart} />;
 
-  if (isDone) {
-    const emoji = score >= 9 ? '🏆' : score >= 7 ? '🌟' : score >= 5 ? '👍' : '💪';
-    const msg = score >= 9 ? t.perfect : score >= 7 ? t.great : score >= 5 ? t.good : t.tryAgain;
-    return (
-      <div className="qgame-shell">
-        <div className="qgame-done">
-          <div style={{ fontSize: 64 }}>{emoji}</div>
-          <div className="qgame-score-big">{score}<span>/{TOTAL}</span></div>
-          <div className="qgame-done-msg">{msg}</div>
-          <div className="qgame-done-btns">
-            <button className="btn ghost" onClick={onClose}>{t.quit}</button>
-            <button className="btn prim" onClick={onRestart}>{t.retry} ↺</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const diffLabels = t.difficulty || ['Easy', 'Medium', 'Hard'];
+  const diffColors = ['#0E8C6B', '#F59E0B', '#EF4444'];
 
-  const circ = 113;
   return (
     <div className="qgame-shell">
+      {comboFlash && (
+        <div className="combo-flash">{t.combo ? t.combo(comboFlash) : `${comboFlash} in a row 🔥`}</div>
+      )}
       <div className="qgame-top">
-        <button className="lt-close" onClick={onClose}>✕</button>
+        <button className="lt-close" onClick={onBack}>✕</button>
         <div className="qgame-dots">
           {qs.map((_, i) => <div key={i} className={"qgd" + (i < idx ? " done" : i === idx ? " cur" : "")} />)}
         </div>
         <div className="qgame-counter">{idx + 1}/{TOTAL}</div>
       </div>
       <div className="qgame-body">
+        <div className="qgame-meta-row">
+          <div className="diff-badge" style={{ background: diffColors[difficulty-1] + '22', color: diffColors[difficulty-1] }}>
+            {diffLabels[difficulty - 1]}
+          </div>
+          {combo >= 2 && <div className="combo-badge">🔥 ×{combo}</div>}
+        </div>
         <div className="qgame-ring-wrap">
           <svg viewBox="0 0 44 44" className="qgame-ring">
             <circle cx="22" cy="22" r="18" fill="none" stroke="var(--line)" strokeWidth="3"/>
             <circle key={idx} cx="22" cy="22" r="18" fill="none" stroke="var(--brand)" strokeWidth="3"
-              strokeDasharray={`${circ} ${circ}`}
-              strokeLinecap="round"
+              strokeDasharray={`${circ} ${circ}`} strokeLinecap="round"
               style={{ transform:'rotate(-90deg)', transformOrigin:'center',
-                       animation: `qgame-cd ${SECS}s linear forwards` }}
+                       animation:`qgame-cd ${SECS}s linear forwards` }}
             />
           </svg>
           <span className="qgame-ring-num">{tLeft}</span>
@@ -591,9 +989,7 @@ function QuickGameRound({ t, onClose, onRestart }) {
               else if (!timedOut && opt === chosen) cls += " wrong";
             }
             return (
-              <button key={i} className={cls} disabled={chosen !== null} onClick={() => go(opt)}>
-                {opt}
-              </button>
+              <button key={i} className={cls} disabled={chosen !== null} onClick={() => go(opt)}>{opt}</button>
             );
           })}
         </div>
@@ -602,9 +998,361 @@ function QuickGameRound({ t, onClose, onRestart }) {
   );
 }
 
-function QuickGame({ t, onClose }) {
-  const [round, setRound] = useState(0);
-  return <QuickGameRound key={round} t={t} onClose={onClose} onRestart={() => setRound(r => r + 1)} />;
+function TrueFalseRound({ t, onBack, onRestart, grade }) {
+  const TOTAL = 20, SECS = 4, circ = 113;
+  const [qs] = useState(() => makeTFQs(TOTAL, grade));
+  const [idx, setIdx] = useState(0);
+  const [score, setScore] = useState(0);
+  const [chosen, setChosen] = useState(null);
+  const [tLeft, setTLeft] = useState(SECS);
+  const busy = useRef(false);
+  const ansRef = useRef(null);
+
+  const isDone = idx >= TOTAL;
+  const cur = qs[Math.min(idx, TOTAL - 1)];
+  ansRef.current = cur?.answer;
+
+  const go = useCallback((picked) => {
+    if (busy.current) return;
+    busy.current = true;
+    const isTimeout = picked === '__timeout__';
+    const ok = !isTimeout && picked === ansRef.current;
+    if (ok) { window.soundCorrect?.(); setScore(s => s + 1); }
+    else window.soundWrong?.();
+    setChosen(picked);
+    setTimeout(() => {
+      setIdx(i => i + 1);
+      setTLeft(SECS);
+      setChosen(null);
+      busy.current = false;
+    }, 700);
+  }, []);
+
+  const goRef = useRef(go); goRef.current = go;
+
+  useEffect(() => {
+    if (isDone || chosen !== null) return;
+    if (tLeft <= 0) { goRef.current('__timeout__'); return; }
+    if (tLeft <= 2) window.soundTick?.();
+    const id = setTimeout(() => setTLeft(n => n - 1), 1000);
+    return () => clearTimeout(id);
+  }, [tLeft, isDone, chosen]);
+
+  if (isDone) return <GameResult score={score} total={TOTAL} t={t} onBack={onBack} onRestart={onRestart} />;
+
+  const timedOut = chosen === '__timeout__';
+  let trueClass = "tf-btn tf-true", falseClass = "tf-btn tf-false";
+  if (chosen !== null) {
+    if (cur.answer) trueClass  += (!timedOut && chosen === true)  ? " tf-right" : " tf-reveal";
+    else            falseClass += (!timedOut && chosen === false)  ? " tf-right" : " tf-reveal";
+    if (!timedOut && chosen === true  && !cur.answer) trueClass  += " tf-wrong";
+    if (!timedOut && chosen === false &&  cur.answer) falseClass += " tf-wrong";
+  }
+
+  return (
+    <div className="qgame-shell">
+      <div className="qgame-top">
+        <button className="lt-close" onClick={onBack}>✕</button>
+        <div className="qgame-dots">
+          {qs.map((_, i) => <div key={i} className={"qgd" + (i < idx ? " done" : i === idx ? " cur" : "")} />)}
+        </div>
+        <div className="qgame-counter">{idx + 1}/{TOTAL}</div>
+      </div>
+      <div className="tf-body">
+        <div className="qgame-ring-wrap">
+          <svg viewBox="0 0 44 44" className="qgame-ring">
+            <circle cx="22" cy="22" r="18" fill="none" stroke="var(--line)" strokeWidth="3"/>
+            <circle key={idx} cx="22" cy="22" r="18" fill="none" stroke="var(--brand)" strokeWidth="3"
+              strokeDasharray={`${circ} ${circ}`} strokeLinecap="round"
+              style={{ transform:'rotate(-90deg)', transformOrigin:'center',
+                       animation:`qgame-cd ${SECS}s linear forwards` }}
+            />
+          </svg>
+          <span className="qgame-ring-num">{tLeft}</span>
+        </div>
+        <div className="tf-prompt">{cur.prompt}</div>
+        <div className="tf-opts">
+          <button className={trueClass} disabled={chosen !== null} onClick={() => go(true)}>
+            {t.trueBtn || '✓ True'}
+          </button>
+          <button className={falseClass} disabled={chosen !== null} onClick={() => go(false)}>
+            {t.falseBtn || '✗ False'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MathSprintGame({ t, onBack, grade }) {
+  const [key, setKey] = useState(0);
+  return <MathSprintRound key={key} t={t} onBack={onBack} onRestart={() => setKey(k => k + 1)} grade={grade} />;
+}
+
+function TrueFalseGame({ t, onBack, grade }) {
+  const [key, setKey] = useState(0);
+  return <TrueFalseRound key={key} t={t} onBack={onBack} onRestart={() => setKey(k => k + 1)} grade={grade} />;
+}
+
+function MissingNumberRound({ t, onBack, onRestart, grade }) {
+  const TOTAL = 15, SECS = 5, circ = 113;
+  const [qs] = useState(() => makeMissingQs(TOTAL, grade));
+  const [idx, setIdx] = useState(0);
+  const [score, setScore] = useState(0);
+  const [chosen, setChosen] = useState(null);
+  const [tLeft, setTLeft] = useState(SECS);
+  const busy = useRef(false);
+  const ansRef = useRef(null);
+  const isDone = idx >= TOTAL;
+  const cur = qs[Math.min(idx, TOTAL - 1)];
+  ansRef.current = cur?.ans;
+  const go = useCallback((picked) => {
+    if (busy.current) return;
+    busy.current = true;
+    const ok = picked !== '__timeout__' && picked === ansRef.current;
+    if (ok) { window.soundCorrect?.(); setScore(s => s+1); } else window.soundWrong?.();
+    setChosen(picked);
+    setTimeout(() => { setIdx(i => i+1); setTLeft(SECS); setChosen(null); busy.current = false; }, 700);
+  }, []);
+  const goRef = useRef(go); goRef.current = go;
+  useEffect(() => {
+    if (isDone || chosen !== null) return;
+    if (tLeft <= 0) { goRef.current('__timeout__'); return; }
+    if (tLeft <= 2) window.soundTick?.();
+    const id = setTimeout(() => setTLeft(n => n-1), 1000);
+    return () => clearTimeout(id);
+  }, [tLeft, isDone, chosen]);
+  if (isDone) return <GameResult score={score} total={TOTAL} t={t} onBack={onBack} onRestart={onRestart} />;
+  return (
+    <div className="qgame-shell">
+      <div className="qgame-top">
+        <button className="lt-close" onClick={onBack}>✕</button>
+        <div className="qgame-dots">{qs.map((_,i)=><div key={i} className={"qgd"+(i<idx?" done":i===idx?" cur":"")}/>)}</div>
+        <div className="qgame-counter">{idx+1}/{TOTAL}</div>
+      </div>
+      <div className="qgame-body">
+        <div className="qgame-ring-wrap">
+          <svg viewBox="0 0 44 44" className="qgame-ring">
+            <circle cx="22" cy="22" r="18" fill="none" stroke="var(--line)" strokeWidth="3"/>
+            <circle key={idx} cx="22" cy="22" r="18" fill="none" stroke="var(--brand)" strokeWidth="3"
+              strokeDasharray={`${circ} ${circ}`} strokeLinecap="round"
+              style={{transform:'rotate(-90deg)',transformOrigin:'center',animation:`qgame-cd ${SECS}s linear forwards`}}/>
+          </svg>
+          <span className="qgame-ring-num">{tLeft}</span>
+        </div>
+        <div className="qgame-prompt">{cur.prompt}</div>
+        <div className="qgame-opts">
+          {cur.opts.map((opt,i) => {
+            let cls = "qgame-opt";
+            if (chosen !== null) {
+              const to = chosen === '__timeout__';
+              if (opt === cur.ans) cls += to ? " reveal" : " right";
+              else if (!to && opt === chosen) cls += " wrong";
+            }
+            return <button key={i} className={cls} disabled={chosen!==null} onClick={()=>go(opt)}>{opt}</button>;
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MissingNumberGame({ t, onBack, grade }) {
+  const [key, setKey] = useState(0);
+  return <MissingNumberRound key={key} t={t} onBack={onBack} onRestart={() => setKey(k => k+1)} grade={grade} />;
+}
+
+function ComparisonRound({ t, onBack, onRestart, grade }) {
+  const TOTAL = 20, SECS = 6, circ = 113;
+  const [qs] = useState(() => makeCompareQs(TOTAL, grade));
+  const [idx, setIdx] = useState(0);
+  const [score, setScore] = useState(0);
+  const [chosen, setChosen] = useState(null);
+  const [tLeft, setTLeft] = useState(SECS);
+  const busy = useRef(false);
+  const ansRef = useRef(null);
+  const isDone = idx >= TOTAL;
+  const cur = qs[Math.min(idx, TOTAL - 1)];
+  ansRef.current = cur?.answer;
+  const go = useCallback((picked) => {
+    if (busy.current) return;
+    busy.current = true;
+    const ok = picked !== '__timeout__' && picked === ansRef.current;
+    if (ok) { window.soundCorrect?.(); setScore(s => s+1); } else window.soundWrong?.();
+    setChosen(picked);
+    setTimeout(() => { setIdx(i => i+1); setTLeft(SECS); setChosen(null); busy.current = false; }, 700);
+  }, []);
+  const goRef = useRef(go); goRef.current = go;
+  useEffect(() => {
+    if (isDone || chosen !== null) return;
+    if (tLeft <= 0) { goRef.current('__timeout__'); return; }
+    if (tLeft <= 1) window.soundTick?.();
+    const id = setTimeout(() => setTLeft(n => n-1), 1000);
+    return () => clearTimeout(id);
+  }, [tLeft, isDone, chosen]);
+  if (isDone) return <GameResult score={score} total={TOTAL} t={t} onBack={onBack} onRestart={onRestart} />;
+  const isTimeout = chosen === '__timeout__';
+  const correct = cur.answer;
+  let ltClass = "compare-btn", gtClass = "compare-btn";
+  if (chosen !== null) {
+    if (isTimeout) {
+      ltClass += correct === '<' ? " reveal" : "";
+      gtClass += correct === '>' ? " reveal" : "";
+    } else if (chosen === '<') {
+      ltClass += correct === '<' ? " right" : " wrong";
+      if (correct === '>') gtClass += " reveal";
+    } else {
+      gtClass += correct === '>' ? " right" : " wrong";
+      if (correct === '<') ltClass += " reveal";
+    }
+  }
+  return (
+    <div className="qgame-shell">
+      <div className="qgame-top">
+        <button className="lt-close" onClick={onBack}>✕</button>
+        <div className="qgame-dots">{qs.map((_,i)=><div key={i} className={"qgd"+(i<idx?" done":i===idx?" cur":"")}/>)}</div>
+        <div className="qgame-counter">{idx+1}/{TOTAL}</div>
+      </div>
+      <div className="qgame-body">
+        <div className="qgame-ring-wrap">
+          <svg viewBox="0 0 44 44" className="qgame-ring">
+            <circle cx="22" cy="22" r="18" fill="none" stroke="var(--line)" strokeWidth="3"/>
+            <circle key={idx} cx="22" cy="22" r="18" fill="none" stroke="var(--brand)" strokeWidth="3"
+              strokeDasharray={`${circ} ${circ}`} strokeLinecap="round"
+              style={{transform:'rotate(-90deg)',transformOrigin:'center',animation:`qgame-cd ${SECS}s linear forwards`}}/>
+          </svg>
+          <span className="qgame-ring-num">{tLeft}</span>
+        </div>
+        <div className="compare-exprs">
+          <div className="compare-expr">{cur.left}</div>
+          <div className="compare-vs">?</div>
+          <div className="compare-expr">{cur.right}</div>
+        </div>
+        <div className="compare-btns">
+          <button className={ltClass} disabled={chosen!==null} onClick={() => go('<')}>
+            <span className="compare-sym">{'<'}</span>
+            <span className="compare-lbl">{t.lessBtn || '◀ Less'}</span>
+          </button>
+          <button className={gtClass} disabled={chosen!==null} onClick={() => go('>')}>
+            <span className="compare-sym">{'>'}</span>
+            <span className="compare-lbl">{t.moreBtn || 'More ▶'}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ComparisonGame({ t, onBack, grade }) {
+  const [key, setKey] = useState(0);
+  return <ComparisonRound key={key} t={t} onBack={onBack} onRestart={() => setKey(k => k+1)} grade={grade} />;
+}
+
+function NumberChainRound({ t, onBack, onRestart, grade }) {
+  const TOTAL = 12, SECS = 10, circ = 113;
+  const [qs] = useState(() => makeChainQs(TOTAL, grade));
+  const [idx, setIdx] = useState(0);
+  const [score, setScore] = useState(0);
+  const [chosen, setChosen] = useState(null);
+  const [tLeft, setTLeft] = useState(SECS);
+  const busy = useRef(false);
+  const ansRef = useRef(null);
+  const isDone = idx >= TOTAL;
+  const cur = qs[Math.min(idx, TOTAL - 1)];
+  ansRef.current = cur?.ans;
+  const go = useCallback((picked) => {
+    if (busy.current) return;
+    busy.current = true;
+    const ok = picked !== '__timeout__' && picked === ansRef.current;
+    if (ok) { window.soundCorrect?.(); setScore(s => s+1); } else window.soundWrong?.();
+    setChosen(picked);
+    setTimeout(() => { setIdx(i => i+1); setTLeft(SECS); setChosen(null); busy.current = false; }, 700);
+  }, []);
+  const goRef = useRef(go); goRef.current = go;
+  useEffect(() => {
+    if (isDone || chosen !== null) return;
+    if (tLeft <= 0) { goRef.current('__timeout__'); return; }
+    if (tLeft <= 2) window.soundTick?.();
+    const id = setTimeout(() => setTLeft(n => n-1), 1000);
+    return () => clearTimeout(id);
+  }, [tLeft, isDone, chosen]);
+  if (isDone) return <GameResult score={score} total={TOTAL} t={t} onBack={onBack} onRestart={onRestart} />;
+  return (
+    <div className="qgame-shell">
+      <div className="qgame-top">
+        <button className="lt-close" onClick={onBack}>✕</button>
+        <div className="qgame-dots">{qs.map((_,i)=><div key={i} className={"qgd"+(i<idx?" done":i===idx?" cur":"")}/>)}</div>
+        <div className="qgame-counter">{idx+1}/{TOTAL}</div>
+      </div>
+      <div className="qgame-body">
+        <div className="qgame-ring-wrap">
+          <svg viewBox="0 0 44 44" className="qgame-ring">
+            <circle cx="22" cy="22" r="18" fill="none" stroke="var(--line)" strokeWidth="3"/>
+            <circle key={idx} cx="22" cy="22" r="18" fill="none" stroke="var(--brand)" strokeWidth="3"
+              strokeDasharray={`${circ} ${circ}`} strokeLinecap="round"
+              style={{transform:'rotate(-90deg)',transformOrigin:'center',animation:`qgame-cd ${SECS}s linear forwards`}}/>
+          </svg>
+          <span className="qgame-ring-num">{tLeft}</span>
+        </div>
+        <div className="qgame-prompt chain-prompt">{cur.prompt}</div>
+        <div className="qgame-opts">
+          {cur.opts.map((opt,i) => {
+            let cls = "qgame-opt";
+            if (chosen !== null) {
+              const to = chosen === '__timeout__';
+              if (opt === cur.ans) cls += to ? " reveal" : " right";
+              else if (!to && opt === chosen) cls += " wrong";
+            }
+            return <button key={i} className={cls} disabled={chosen!==null} onClick={()=>go(opt)}>{opt}</button>;
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NumberChainGame({ t, onBack, grade }) {
+  const [key, setKey] = useState(0);
+  return <NumberChainRound key={key} t={t} onBack={onBack} onRestart={() => setKey(k => k+1)} grade={grade} />;
+}
+
+function GamePicker({ t, onPick, onClose }) {
+  const games = [
+    { id:'sprint',  icon:'⚡', name:t.mathSprint,  sub:t.mathSprintSub },
+    { id:'tf',      icon:'❓', name:t.trueFalse,    sub:t.trueFalseSub },
+    { id:'missing', icon:'🔢', name:t.missingNum,   sub:t.missingNumSub },
+    { id:'compare', icon:'⚖️', name:t.compareRush,  sub:t.compareRushSub },
+    { id:'chain',   icon:'🔗', name:t.numChain,     sub:t.numChainSub },
+  ];
+  return (
+    <div className="qgame-shell picker-shell">
+      <button className="lt-close picker-close" onClick={onClose}>✕</button>
+      <div className="picker-title">{t.pickGame}</div>
+      <div className="picker-grid">
+        {games.map(g => (
+          <div key={g.id} className="picker-card" onClick={() => onPick(g.id)}>
+            <div className="picker-icon">{g.icon}</div>
+            <div className="picker-info">
+              <div className="picker-name">{g.name}</div>
+              <div className="picker-sub">{g.sub}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function QuickGame({ t, onClose, grade }) {
+  const [mode, setMode] = useState(null);
+  const back = () => setMode(null);
+  if (!mode)          return <GamePicker       t={t} onPick={setMode} onClose={onClose} />;
+  if (mode==='sprint') return <MathSprintGame   t={t} onBack={back} grade={grade} />;
+  if (mode==='tf')     return <TrueFalseGame    t={t} onBack={back} grade={grade} />;
+  if (mode==='missing')return <MissingNumberGame t={t} onBack={back} grade={grade} />;
+  if (mode==='compare')return <ComparisonGame   t={t} onBack={back} grade={grade} />;
+  if (mode==='chain')  return <NumberChainGame  t={t} onBack={back} grade={grade} />;
+  return null;
 }
 
 // ─── Home screen ───────────────────────────────────────────────────
@@ -614,11 +1362,12 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
   const subs = subjectsFor(tweaks.language, progress);
   const [open, setOpen] = useState(null);
   const [quickGame, setQuickGame] = useState(false);
+  const ctaVariant = getVariant('ab_cta');
   const quests = progress.questsDone;
   const setQuests = (q) => setProgress(p => ({ ...p, questsDone: q }));
   const subject = (id) => subs.find(s => s.id === id);
 
-  if (quickGame) return <QuickGame t={t} onClose={() => setQuickGame(false)} />;
+  if (quickGame) return <QuickGame t={t} onClose={() => setQuickGame(false)} grade={progress.grade || 2} />;
 
   return (
     <div className="v2">
@@ -632,6 +1381,12 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
           </div>
         </div>
         <div className="topbar-right">
+          {progress.grade && (
+            <div className="grade-badge">
+              <span>{GRADE_INFO[progress.grade]?.emoji}</span>
+              <span>{GRADE_INFO[progress.grade]?.label[tweaks.language]}</span>
+            </div>
+          )}
           <div className="chip streak"><div className="flame">🔥</div>{progress.streak}</div>
           <div className="chip xp">
             <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1, alignItems: 'flex-start' }}>
@@ -662,7 +1417,10 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
           const pct = allDone ? 100 : Math.round(((subProg.lesson - 1) / (lastSub?.of || 12)) * 100);
           return (
             <div className="continue" style={{ cursor: allDone ? 'default' : 'pointer' }} onClick={() => {
-              if (!allDone && lastSub?.lessonId) onStartLesson(lastSub.lessonId);
+              if (!allDone && lastSub?.lessonId) {
+                logABEvent('ab_cta', ctaVariant, 'continue_clicked', { subject: lastSub.id });
+                onStartLesson(lastSub.lessonId);
+              }
             }}>
               <div>
                 <div className="continue-eyebrow">{t.continueEyebrow} · {lastSub?.name}</div>
@@ -683,7 +1441,7 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
                 </div>
                 <button className="play-btn" disabled={allDone} style={allDone ? {opacity:.5,cursor:'default'} : {}}>
                   <div className="ic">{allDone ? '✓' : '▶'}</div>
-                  {allDone ? t.allDoneBtn : t.continueBtn}
+                  {allDone ? t.allDoneBtn : ctaVariant === 'B' ? t.continueBtnShort : t.continueBtn}
                 </button>
               </div>
             </div>
@@ -790,6 +1548,11 @@ function App() {
   const [showCallouts, setShowCallouts] = useState(true);
   const [progress, setProgressRaw] = useState(loadProgress);
   const [activeLesson, setActiveLesson] = useState(null);
+
+  useEffect(() => {
+    [1,2,3,4].forEach(g => document.body.classList.remove('grade-' + g));
+    if (progress.grade) document.body.classList.add('grade-' + progress.grade);
+  }, [progress.grade]);
   const [toast, setToast] = useState(null);
 
   const setProgress = (updater) => {
@@ -851,10 +1614,10 @@ function App() {
   };
 
   // ── Onboarding ──
-  if (!progress.name) {
+  if (!progress.name || !progress.grade) {
     return (
-      <OnboardingScreen onDone={(name, lang) => {
-        setProgress(p => ({ ...p, name }));
+      <OnboardingScreen onDone={(name, lang, grade) => {
+        setProgress(p => ({ ...p, name, grade }));
         setTweak('language', lang);
       }} />
     );
@@ -921,6 +1684,27 @@ function App() {
             <TweakButton label="Change name" onClick={() => {
               setProgress(p => ({ ...p, name: '' }));
             }} />
+          </TweakSection>
+          <TweakSection title="A/B Tests">
+            {Object.entries(AB_TESTS).map(([id, cfg]) => {
+              const cur = getVariant(id);
+              return (
+                <TweakRow key={id} label={cfg.desc}>
+                  <div style={{ display:'flex', gap:4 }}>
+                    {cfg.variants.map(v => (
+                      <button key={v} onClick={() => { forceVariant(id, v); window.location.reload(); }}
+                        style={{ padding:'3px 12px', borderRadius:8,
+                          border: cur === v ? '2px solid var(--brand)' : '1.5px solid var(--line)',
+                          background: cur === v ? 'var(--brand)' : 'transparent',
+                          color: cur === v ? '#fff' : 'var(--ink)',
+                          cursor:'pointer', fontSize:12, fontWeight:700 }}>
+                        {v}
+                      </button>
+                    ))}
+                  </div>
+                </TweakRow>
+              );
+            })}
           </TweakSection>
         </TweaksPanel>
       )}
