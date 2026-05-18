@@ -171,6 +171,7 @@ object Strings {
         "delete_child_title" to mapOf("en" to "Delete child profile?", "ru" to "Удалить профиль ребёнка?", "kk" to "Бала профилін жою керек пе?"),
         "delete_child_confirm" to mapOf("en" to "All progress for %s will be lost.", "ru" to "Весь прогресс %s будет потерян.", "kk" to "%s-ның барлық прогресі жойылады."),
         "minutes" to mapOf("en" to "minutes", "ru" to "минут", "kk" to "минут"),
+        "edit_child" to mapOf("en" to "Edit Child", "ru" to "Редактировать", "kk" to "Өзгерту"),
     )
 }
 

@@ -27,6 +27,9 @@ import app.tisimai.mektep.data.models.ChildProfile
 import app.tisimai.mektep.ui.theme.MektepGreen
 import app.tisimai.mektep.util.tr
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,7 +42,17 @@ class AddChildViewModel @Inject constructor(
     private val firebaseSync: app.tisimai.mektep.data.remote.FirebaseProfileSync
 ) : ViewModel() {
 
+    private val _existingChild = MutableStateFlow<ChildProfile?>(null)
+    val existingChild: StateFlow<ChildProfile?> = _existingChild.asStateFlow()
+
+    fun loadChild(childId: String) {
+        viewModelScope.launch {
+            _existingChild.value = childProfileDao.getChild(childId)
+        }
+    }
+
     fun saveChild(
+        childId: String?,
         name: String,
         birthDate: String,
         avatarEmoji: String,
@@ -49,19 +62,35 @@ class AddChildViewModel @Inject constructor(
         onSaved: () -> Unit
     ) {
         viewModelScope.launch {
-            val userId = tokenStore.userId.first() ?: return@launch
-            val child = ChildProfile(
-                parentUserId = userId,
-                name = name,
-                birthDate = birthDate,
-                avatarEmoji = avatarEmoji,
-                language = language,
-                gradeLevel = gradeLevel,
-                dailyLimitMinutes = dailyLimitMinutes,
-                createdAt = System.currentTimeMillis()
-            )
-            childProfileDao.insert(child)
-            firebaseSync.pushChild(child)
+            val existing = if (childId != null) childProfileDao.getChild(childId) else null
+            if (existing != null) {
+                // Update existing child
+                val updated = existing.copy(
+                    name = name,
+                    birthDate = birthDate,
+                    avatarEmoji = avatarEmoji,
+                    language = language,
+                    gradeLevel = gradeLevel,
+                    dailyLimitMinutes = dailyLimitMinutes
+                )
+                childProfileDao.update(updated)
+                firebaseSync.pushChild(updated)
+            } else {
+                // Create new child
+                val userId = tokenStore.userId.first() ?: return@launch
+                val child = ChildProfile(
+                    parentUserId = userId,
+                    name = name,
+                    birthDate = birthDate,
+                    avatarEmoji = avatarEmoji,
+                    language = language,
+                    gradeLevel = gradeLevel,
+                    dailyLimitMinutes = dailyLimitMinutes,
+                    createdAt = System.currentTimeMillis()
+                )
+                childProfileDao.insert(child)
+                firebaseSync.pushChild(child)
+            }
             onSaved()
         }
     }
@@ -72,14 +101,37 @@ class AddChildViewModel @Inject constructor(
 fun AddChildScreen(
     onBack: () -> Unit,
     onSaved: () -> Unit,
+    childId: String? = null,
     lang: String = "en",
     viewModel: AddChildViewModel = hiltViewModel()
 ) {
+    val existingChild by viewModel.existingChild.collectAsState()
+    val isEditMode = childId != null
+
+    LaunchedEffect(childId) {
+        if (childId != null) viewModel.loadChild(childId)
+    }
+
     var name by remember { mutableStateOf("") }
     var birthDate by remember { mutableStateOf("") }
     var selectedAvatar by remember { mutableStateOf("\uD83E\uDDD2") } // 🧒
-    var selectedLanguage by remember { mutableStateOf("kk") } // default Kazakh for children
+    var selectedLanguage by remember { mutableStateOf("kk") }
     var selectedGrade by remember { mutableIntStateOf(1) }
+    var prefilled by remember { mutableStateOf(false) }
+
+    // Pre-fill when editing
+    LaunchedEffect(existingChild) {
+        existingChild?.let { child ->
+            if (!prefilled) {
+                name = child.name
+                birthDate = child.birthDate
+                selectedAvatar = child.avatarEmoji
+                selectedLanguage = child.language
+                selectedGrade = child.gradeLevel
+                prefilled = true
+            }
+        }
+    }
 
     val avatarOptions = listOf(
         "\uD83E\uDDD2", // 🧒
@@ -94,7 +146,7 @@ fun AddChildScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(tr("add_child", lang), fontWeight = FontWeight.Bold) },
+                title = { Text(tr(if (isEditMode) "edit_child" else "add_child", lang), fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -206,12 +258,13 @@ fun AddChildScreen(
             Button(
                 onClick = {
                     viewModel.saveChild(
+                        childId = childId,
                         name = name,
                         birthDate = birthDate,
                         avatarEmoji = selectedAvatar,
                         language = selectedLanguage,
                         gradeLevel = selectedGrade,
-                        dailyLimitMinutes = AgeBand.fromGradeLevel(selectedGrade).dailyLimitDefaultMinutes,
+                        dailyLimitMinutes = existingChild?.dailyLimitMinutes ?: AgeBand.fromGradeLevel(selectedGrade).dailyLimitDefaultMinutes,
                         onSaved = onSaved
                     )
                 },

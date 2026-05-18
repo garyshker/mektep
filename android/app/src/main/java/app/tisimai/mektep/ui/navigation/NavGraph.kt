@@ -247,10 +247,15 @@ fun MektepNavHost(isChildMode: Boolean = false) {
             )
         }
 
-        composable(Routes.ADD_CHILD) {
+        composable(
+            "${Routes.ADD_CHILD}?childId={childId}",
+            arguments = listOf(navArgument("childId") { type = NavType.StringType; defaultValue = "" })
+        ) { backStackEntry ->
+            val childId = backStackEntry.arguments?.getString("childId")?.ifEmpty { null }
             AddChildScreen(
                 onBack = { navController.popBackStack() },
-                onSaved = { navController.popBackStack() }
+                onSaved = { navController.popBackStack() },
+                childId = childId
             )
         }
 
