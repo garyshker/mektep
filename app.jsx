@@ -615,6 +615,7 @@ function LessonModal({ s, t, onClose, onStart }) {
 // ─── Onboarding ────────────────────────────────────────────────────
 
 function OnboardingScreen({ onDone }) {
+  const [step, setStep] = useState(1);
   const [name, setName] = useState('');
   const [lang, setLang] = useState('kk');
   const [grade, setGrade] = useState(null);
@@ -622,15 +623,13 @@ function OnboardingScreen({ onDone }) {
   const flags  = { kk:'🇰🇿', ru:'🇷🇺', en:'🇬🇧' };
   const labels = { kk:'Қаз',  ru:'Рус',  en:'Eng'  };
 
-  const canSubmit = name.trim() && grade;
-
   const submit = () => {
-    if (!canSubmit) return;
+    if (!grade) return;
     logABEvent('ab_grade', getVariant('ab_grade'), 'onboarding_done', { grade });
     onDone(name.trim(), lang, grade);
   };
 
-  return (
+  if (step === 1) return (
     <div className="onboarding">
       <div className="ob-logo"><Sparkle style={{ color:'#fff', width:36, height:36 }} /></div>
       <h1 className="ob-title">iМектеп</h1>
@@ -641,7 +640,7 @@ function OnboardingScreen({ onDone }) {
           placeholder={t.obPlaceholder}
           value={name}
           onChange={e => setName(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && canSubmit && submit()}
+          onKeyDown={e => e.key === 'Enter' && name.trim() && setStep(2)}
           autoFocus
           maxLength={30}
         />
@@ -652,30 +651,36 @@ function OnboardingScreen({ onDone }) {
             </button>
           ))}
         </div>
-        <div className="ob-grade-section">
-          <div className="ob-grade-label">{t.gradeLabel}</div>
-          <div className="ob-grades">
-            {[1,2,3,4].map(g => {
-              const gi = GRADE_INFO[g];
-              const sel = grade === g;
-              return (
-                <button key={g}
-                  className={"ob-grade-btn " + (sel ? "on" : "")}
-                  style={sel ? { background: gi.color, borderColor: gi.color, color:'#fff' }
-                              : { borderColor: 'var(--line)' }}
-                  onClick={() => setGrade(g)}>
-                  <span className="ob-grade-emoji">{gi.emoji}</span>
-                  <span className="ob-grade-num">{g}</span>
-                  <span className="ob-grade-name">{t.grade(g)}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-        <button className="ob-start" disabled={!canSubmit} onClick={submit}>
-          {canSubmit ? t.obStart : (grade ? t.obStart : '← ' + t.gradeLabel)}
+        <button className="ob-start" disabled={!name.trim()} onClick={() => setStep(2)}>
+          {t.obStart}
         </button>
       </div>
+    </div>
+  );
+
+  return (
+    <div className="onboarding">
+      <button className="ob-back" onClick={() => setStep(1)}>←</button>
+      <p className="ob-grade-label">{t.gradeLabel}</p>
+      <div className="ob-grades">
+        {[1,2,3,4].map(g => {
+          const gi = GRADE_INFO[g];
+          const sel = grade === g;
+          return (
+            <button key={g}
+              className={"ob-grade-btn " + (sel ? "on" : "")}
+              style={sel ? { background: gi.color, borderColor: gi.color, color:'#fff' } : {}}
+              onClick={() => setGrade(g)}>
+              <span className="ob-grade-emoji">{gi.emoji}</span>
+              <span className="ob-grade-num">{g}</span>
+              <span className="ob-grade-name">{t.grade(g)}</span>
+            </button>
+          );
+        })}
+      </div>
+      <button className="ob-start" disabled={!grade} onClick={submit}>
+        {t.obStart}
+      </button>
     </div>
   );
 }
@@ -1325,23 +1330,63 @@ function NumberChainGame({ t, onBack, grade }) {
   return <NumberChainRound key={key} t={t} onBack={onBack} onRestart={() => setKey(k => k+1)} grade={grade} />;
 }
 
+const IcoSprint = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M13 2L3 14h8l-2 8 12-12h-8l2-8z"/>
+  </svg>
+);
+const IcoTF = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 13l3.5 3.5L13 9"/>
+    <path d="M16 9l4 4M20 9l-4 4"/>
+  </svg>
+);
+const IcoMissing = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+    <rect x="3" y="5" width="18" height="14" rx="4"/>
+    <path d="M9.5 9.5a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 3.5"/>
+    <circle cx="12" cy="16.5" r="1" fill="currentColor" stroke="none"/>
+  </svg>
+);
+const IcoCompare = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M5 8l-3 4 3 4"/>
+    <path d="M19 8l3 4-3 4"/>
+    <path d="M2 12h20"/>
+  </svg>
+);
+const IcoChain = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+    <circle cx="5" cy="12" r="3"/>
+    <circle cx="19" cy="12" r="3"/>
+    <path d="M8 12h8"/>
+    <path d="M14 7l5 5-5 5"/>
+  </svg>
+);
+
 function GamePicker({ t, onPick, onClose }) {
   const games = [
-    { id:'sprint',  icon:'⚡', name:t.mathSprint,  sub:t.mathSprintSub },
-    { id:'tf',      icon:'❓', name:t.trueFalse,    sub:t.trueFalseSub },
-    { id:'missing', icon:'🔢', name:t.missingNum,   sub:t.missingNumSub },
-    { id:'compare', icon:'⚖️', name:t.compareRush,  sub:t.compareRushSub },
-    { id:'chain',   icon:'🔗', name:t.numChain,     sub:t.numChainSub },
+    { id:'sprint',  Icon:IcoSprint,  color:'#F59E0B', bg:'#FFFBEB', name:t.mathSprint,  sub:t.mathSprintSub },
+    { id:'tf',      Icon:IcoTF,      color:'#8B5CF6', bg:'#F5F3FF', name:t.trueFalse,   sub:t.trueFalseSub },
+    { id:'missing', Icon:IcoMissing, color:'#0D9488', bg:'#F0FDFA', name:t.missingNum,  sub:t.missingNumSub },
+    { id:'compare', Icon:IcoCompare, color:'#2563EB', bg:'#EFF6FF', name:t.compareRush, sub:t.compareRushSub },
+    { id:'chain',   Icon:IcoChain,   color:'#E11D48', bg:'#FFF1F2', name:t.numChain,    sub:t.numChainSub },
   ];
   return (
     <div className="qgame-shell picker-shell">
-      <button className="lt-close picker-close" onClick={onClose}>✕</button>
-      <div className="picker-title">{t.pickGame}</div>
+      <div className="picker-header">
+        <button className="back-btn" onClick={onClose}>←</button>
+        <div className="picker-title">{t.pickGame}</div>
+        <div/>
+      </div>
       <div className="picker-grid">
-        {games.map(g => (
-          <div key={g.id} className="picker-card" onClick={() => onPick(g.id)}>
-            <div className="picker-icon">{g.icon}</div>
-            <div className="picker-info">
+        {games.map((g, i) => (
+          <div key={g.id}
+            className={"picker-card" + (i === 4 ? " picker-wide" : "")}
+            style={{ '--pc': g.color, '--pb': g.bg }}
+            onClick={() => onPick(g.id)}>
+            <div className="picker-icon-wrap"><g.Icon/></div>
+            <div className="picker-card-body">
               <div className="picker-name">{g.name}</div>
               <div className="picker-sub">{g.sub}</div>
             </div>
@@ -1357,6 +1402,7 @@ function GamePicker({ t, onPick, onClose }) {
 function MultiTablePicker({ t, onPick, onClose }) {
   return (
     <div className="game-shell">
+      <div className="game-shell-inner">
       <div className="game-top">
         <button className="back-btn" onClick={onClose}>←</button>
         <div className="game-top-title">{t.multiTable}</div>
@@ -1367,6 +1413,7 @@ function MultiTablePicker({ t, onPick, onClose }) {
         {[2,3,4,5,6,7,8,9].map(n => (
           <button key={n} className="mt-num-btn" onClick={() => onPick(n)}>×{n}</button>
         ))}
+      </div>
       </div>
     </div>
   );
@@ -1388,9 +1435,22 @@ function MultiTablePractice({ t, num, onBack }) {
   const opts = useMemo(() => {
     if (!factor) return [];
     const ans = num * factor;
-    const pool = new Set([ans]);
-    while (pool.size < 4) pool.add(num * (Math.floor(Math.random() * 12) + 1));
-    return [...pool].sort(() => Math.random() - .5);
+    // distractors: adjacent entries in the same table (±1, ±2 from factor)
+    const nearby = [-2, -1, 1, 2]
+      .map(d => num * (factor + d))
+      .filter(v => v > 0 && v !== ans);
+    // shuffle nearby and take 3; fill with ±num offsets if somehow not enough
+    const shuffled = nearby.sort(() => Math.random() - .5);
+    const distractors = [];
+    for (const v of shuffled) {
+      if (distractors.length === 3) break;
+      distractors.push(v);
+    }
+    while (distractors.length < 3) {
+      const v = ans + (distractors.length + 1) * num;
+      if (v !== ans && !distractors.includes(v)) distractors.push(v);
+    }
+    return [...distractors, ans].sort(() => Math.random() - .5);
   }, [factor, num]);
 
   const ans = factor ? num * factor : 0;
@@ -1421,6 +1481,7 @@ function MultiTablePractice({ t, num, onBack }) {
     const pct = Math.round((correctCount / (correctCount + queue.length)) * 100) || 100;
     return (
       <div className="game-shell">
+        <div className="game-shell-inner">
         <div className="mt-result">
           <div className="mt-result-icon">{mastered.size >= 9 ? '🏆' : mastered.size >= 7 ? '⭐' : '💪'}</div>
           <div className="mt-result-score">{mastered.size}/10</div>
@@ -1428,6 +1489,7 @@ function MultiTablePractice({ t, num, onBack }) {
           <div className="mt-result-btns">
             <button className="btn prim" style={{flex:1}} onClick={onBack}>← {t.multiTablePick}</button>
           </div>
+        </div>
         </div>
       </div>
     );
@@ -1437,6 +1499,7 @@ function MultiTablePractice({ t, num, onBack }) {
 
   return (
     <div className="game-shell">
+      <div className="game-shell-inner">
       <div className="game-top">
         <button className="back-btn" onClick={onBack}>←</button>
         <div className="mt-prog-bar"><div style={{ width: (progress * 100) + '%' }} /></div>
@@ -1454,6 +1517,7 @@ function MultiTablePractice({ t, num, onBack }) {
           }
           return <button key={i} className={cls} onClick={() => pick(opt)}>{opt}</button>;
         })}
+      </div>
       </div>
     </div>
   );
