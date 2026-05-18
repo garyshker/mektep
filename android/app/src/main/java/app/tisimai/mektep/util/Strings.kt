@@ -165,6 +165,7 @@ object Strings {
         "back_to_launcher" to mapOf("en" to "Back", "ru" to "Назад", "kk" to "Артқа"),
         "parent_takeover" to mapOf("en" to "Parent? Enter PIN", "ru" to "Родитель? Введите PIN", "kk" to "Ата-ана? PIN енгізіңіз"),
         "child_language" to mapOf("en" to "Child's language", "ru" to "Язык ребёнка", "kk" to "Баланың тілі"),
+        "min" to mapOf("en" to "min", "ru" to "мин", "kk" to "мин"),
     )
 }
 

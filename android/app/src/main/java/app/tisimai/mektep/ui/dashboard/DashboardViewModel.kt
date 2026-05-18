@@ -21,6 +21,7 @@ data class DashboardUiState(
     val isLoading: Boolean = true,
     val profile: UserProfile? = null,
     val childProfile: ChildProfile? = null,
+    val children: List<ChildProfile> = emptyList(),
     val subjects: List<SubjectWithProgress> = emptyList(),
     val screenTimeMinutes: Int = 0,
     val quests: List<DailyQuest> = emptyList(),
@@ -48,8 +49,15 @@ class DashboardViewModel @Inject constructor(
     private val activeChildId: StateFlow<String?> = parentalPrefsStore.activeChildId
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
+    private val _children = MutableStateFlow<List<ChildProfile>>(emptyList())
+
     init {
         ensureQuestsExist()
+        // Load children for parent view
+        viewModelScope.launch {
+            val user = userDao.getProfileOnce() ?: return@launch
+            childProfileDao.getChildrenForParent(user.id).collect { _children.value = it }
+        }
     }
 
     // Observe profile + progress + quests reactively, switching on activeChildId
@@ -72,14 +80,16 @@ class DashboardViewModel @Inject constructor(
             combine(
                 userDao.getProfile(),
                 progressDao.getAll(),
-                questDao.getQuestsForDate(today)
-            ) { profile, allProgress, quests ->
+                questDao.getQuestsForDate(today),
+                _children
+            ) { profile, allProgress, quests, children ->
                 buildUiState(
                     profile = profile,
                     childProfile = null,
                     allProgress = allProgress,
                     quests = quests,
-                    screenTimeSecs = profile?.screenTimeBalanceSecs ?: 0
+                    screenTimeSecs = profile?.screenTimeBalanceSecs ?: 0,
+                    children = children
                 )
             }
         }
@@ -90,7 +100,8 @@ class DashboardViewModel @Inject constructor(
         childProfile: ChildProfile?,
         allProgress: List<LessonProgress>,
         quests: List<DailyQuest>,
-        screenTimeSecs: Int
+        screenTimeSecs: Int,
+        children: List<ChildProfile> = emptyList()
     ): DashboardUiState {
         val gradeLevel = childProfile?.gradeLevel ?: profile?.gradeLevel ?: 6
         val ageBand = AgeBand.fromGradeLevel(gradeLevel)
@@ -109,6 +120,7 @@ class DashboardViewModel @Inject constructor(
             isLoading = false,
             profile = profile,
             childProfile = childProfile,
+            children = children,
             subjects = subjectsWithProgress,
             screenTimeMinutes = screenTimeSecs / 60,
             quests = quests,

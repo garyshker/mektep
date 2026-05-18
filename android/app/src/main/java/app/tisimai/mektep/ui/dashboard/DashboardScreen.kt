@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import app.tisimai.mektep.data.models.AgeBand
 import app.tisimai.mektep.ui.theme.*
 import app.tisimai.mektep.util.tr
 
@@ -91,38 +92,84 @@ fun DashboardScreen(
 
         val deviceMode by viewModel.deviceMode.collectAsState()
 
+        val isParentView = deviceMode == "SAME_DEVICE" && !isChildMode && state.children.isNotEmpty()
+
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            // Stats
-            state.profile?.let { profile ->
+            if (isParentView) {
+                // ── Parent View: show children's progress ──
+                item {
+                    Text(tr("children", language), fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.padding(vertical = 8.dp))
+                }
+                items(state.children.size) { index ->
+                    val child = state.children[index]
+                    val band = AgeBand.fromGradeLevel(child.gradeLevel)
+                    val bandColor = when (band) {
+                        AgeBand.BALA -> MektepGreen
+                        AgeBand.OQYSHY -> MektepBlue
+                        AgeBand.ZERDE -> MektepPurple
+                    }
+                    Card(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = bandColor.copy(alpha = 0.08f))
+                    ) {
+                        Row(
+                            Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(child.avatarEmoji, fontSize = 36.sp)
+                            Spacer(Modifier.width(12.dp))
+                            Column(Modifier.weight(1f)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(child.name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                    Spacer(Modifier.width(8.dp))
+                                    Text(tr(band.labelKey, language), fontSize = 11.sp, color = bandColor, fontWeight = FontWeight.Medium)
+                                }
+                                Spacer(Modifier.height(4.dp))
+                                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                                    Text("🔥 ${child.currentStreak}", fontSize = 13.sp)
+                                    Text("⭐ ${child.xpTotal} XP", fontSize = 13.sp, color = MektepGreen)
+                                    Text("⏱ ${child.screenTimeBalanceSecs / 60} ${tr("min", language)}", fontSize = 13.sp)
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                // ── Learner View: show own stats ──
+                val displayProfile = state.childProfile
+                val xp = displayProfile?.xpTotal ?: state.profile?.xpTotal ?: 0
+                val streak = displayProfile?.currentStreak ?: state.profile?.currentStreak ?: 0
+
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        StatChip(Icons.Default.LocalFireDepartment, "${profile.currentStreak}", tr("streak", language), MektepOrange)
-                        StatChip(Icons.Default.Star, "${profile.xpTotal}", "XP", MektepGreen)
-                        StatChip(Icons.Default.EmojiEvents, "Lv ${profile.xpTotal / 100 + 1}", tr("level", language), MektepBlue)
+                        StatChip(Icons.Default.LocalFireDepartment, "$streak", tr("streak", language), MektepOrange)
+                        StatChip(Icons.Default.Star, "$xp", "XP", MektepGreen)
+                        StatChip(Icons.Default.EmojiEvents, "Lv ${xp / 100 + 1}", tr("level", language), MektepBlue)
                     }
                 }
-            }
 
-            // Screen Time Card
-            item {
-                Card(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).clickable { onScreenTimeClick() },
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-                ) {
-                    Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Timer, null, Modifier.size(40.dp), tint = MaterialTheme.colorScheme.primary)
-                        Spacer(Modifier.width(16.dp))
-                        Column(Modifier.weight(1f)) {
-                            Text(tr("screen_time", language), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                            Text("${state.screenTimeMinutes} ${tr("minutes_available", language)}", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                // Screen Time Card
+                item {
+                    Card(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).clickable { onScreenTimeClick() },
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                    ) {
+                        Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.Timer, null, Modifier.size(40.dp), tint = MaterialTheme.colorScheme.primary)
+                            Spacer(Modifier.width(16.dp))
+                            Column(Modifier.weight(1f)) {
+                                Text(tr("screen_time", language), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                Text("${state.screenTimeMinutes} ${tr("minutes_available", language)}", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                            }
+                            Icon(Icons.Default.ChevronRight, null)
                         }
-                        Icon(Icons.Default.ChevronRight, null)
                     }
                 }
             }
