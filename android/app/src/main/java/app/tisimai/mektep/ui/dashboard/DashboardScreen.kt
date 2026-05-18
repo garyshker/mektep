@@ -138,7 +138,8 @@ fun DashboardScreen(
 
         val deviceMode by viewModel.deviceMode.collectAsState()
 
-        val isParentView = deviceMode == "SAME_DEVICE" && !effectiveChildMode && state.children.isNotEmpty()
+        // Parent view: if children exist, this is a parent — regardless of deviceMode setup
+        val isParentView = !effectiveChildMode && state.children.isNotEmpty()
 
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp),
@@ -343,7 +344,7 @@ fun DashboardScreen(
             } // end if (!isParentView)
 
             // Parent controls (hidden in child mode)
-            if (deviceMode == "SAME_DEVICE" && !effectiveChildMode) {
+            if (isParentView) {
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
