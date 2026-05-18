@@ -631,7 +631,7 @@ function OnboardingScreen({ onDone }) {
 
   if (step === 1) return (
     <div className="onboarding">
-      <div className="ob-logo"><Sparkle style={{ color:'#fff', width:36, height:36 }} /></div>
+      <img src="./otter.png" className="ob-mascot" alt="" />
       <h1 className="ob-title">iМектеп</h1>
       <p className="ob-sub">{t.obSub}</p>
       <div className="ob-form">
@@ -655,6 +655,7 @@ function OnboardingScreen({ onDone }) {
           {t.obStart}
         </button>
       </div>
+      <p className="ob-copy">© 2025 iМектеп</p>
     </div>
   );
 
@@ -681,6 +682,7 @@ function OnboardingScreen({ onDone }) {
       <button className="ob-start" disabled={!grade} onClick={submit}>
         {t.obStart}
       </button>
+      <p className="ob-copy">© 2025 iМектеп</p>
     </div>
   );
 }
