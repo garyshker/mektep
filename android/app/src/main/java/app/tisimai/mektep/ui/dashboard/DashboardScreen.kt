@@ -40,10 +40,35 @@ fun DashboardScreen(
     onStartChildMode: () -> Unit = {},
     onSetupPin: () -> Unit = {},
     onBackToLauncher: () -> Unit = {},
+    onAddChild: () -> Unit = {},
+    onEditChild: (String) -> Unit = {},
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
     val language by viewModel.language.collectAsState()
+    var childToDelete by remember { mutableStateOf<app.tisimai.mektep.data.models.ChildProfile?>(null) }
+
+    // Delete confirmation dialog
+    childToDelete?.let { child ->
+        AlertDialog(
+            onDismissRequest = { childToDelete = null },
+            title = { Text(tr("delete_child_title", language)) },
+            text = { Text(tr("delete_child_confirm", language, child.name)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.deleteChild(child)
+                    childToDelete = null
+                }) {
+                    Text(tr("delete", language), color = MektepRed)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { childToDelete = null }) {
+                    Text(tr("cancel", language))
+                }
+            }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -117,7 +142,7 @@ fun DashboardScreen(
                         colors = CardDefaults.cardColors(containerColor = bandColor.copy(alpha = 0.08f))
                     ) {
                         Row(
-                            Modifier.padding(16.dp),
+                            Modifier.padding(start = 16.dp, top = 12.dp, bottom = 12.dp, end = 4.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(child.avatarEmoji, fontSize = 36.sp)
@@ -130,12 +155,32 @@ fun DashboardScreen(
                                 }
                                 Spacer(Modifier.height(4.dp))
                                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                                    Text("🔥 ${child.currentStreak}", fontSize = 13.sp)
+                                    Text("\uD83D\uDD25 ${child.currentStreak}", fontSize = 13.sp)
                                     Text("⭐ ${child.xpTotal} XP", fontSize = 13.sp, color = MektepGreen)
                                     Text("⏱ ${child.screenTimeBalanceSecs / 60} ${tr("min", language)}", fontSize = 13.sp)
                                 }
                             }
+                            Column {
+                                IconButton(onClick = { onEditChild(child.id) }, modifier = Modifier.size(36.dp)) {
+                                    Icon(Icons.Default.Edit, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                                }
+                                IconButton(onClick = { childToDelete = child }, modifier = Modifier.size(36.dp)) {
+                                    Icon(Icons.Default.Delete, null, Modifier.size(18.dp), tint = MektepRed.copy(alpha = 0.6f))
+                                }
+                            }
                         }
+                    }
+                }
+                // Add child button
+                item {
+                    OutlinedButton(
+                        onClick = onAddChild,
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).height(44.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MektepGreen)
+                    ) {
+                        Icon(Icons.Default.Add, null, Modifier.size(18.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text(tr("add_child", language), fontSize = 14.sp)
                     }
                 }
             } else {

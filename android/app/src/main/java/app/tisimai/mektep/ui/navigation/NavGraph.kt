@@ -154,6 +154,12 @@ fun MektepNavHost(isChildMode: Boolean = false) {
                 onSetupPin = {
                     navController.navigate(Routes.PIN_SETUP)
                 },
+                onAddChild = {
+                    navController.navigate(Routes.ADD_CHILD)
+                },
+                onEditChild = { childId ->
+                    navController.navigate("${Routes.ADD_CHILD}?childId=$childId")
+                },
                 onBackToLauncher = {
                     // Return to ChildLauncherActivity
                     (context as? android.app.Activity)?.finish()

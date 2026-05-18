@@ -166,6 +166,11 @@ object Strings {
         "parent_takeover" to mapOf("en" to "Parent? Enter PIN", "ru" to "Родитель? Введите PIN", "kk" to "Ата-ана? PIN енгізіңіз"),
         "child_language" to mapOf("en" to "Child's language", "ru" to "Язык ребёнка", "kk" to "Баланың тілі"),
         "min" to mapOf("en" to "min", "ru" to "мин", "kk" to "мин"),
+        "delete" to mapOf("en" to "Delete", "ru" to "Удалить", "kk" to "Жою"),
+        "cancel" to mapOf("en" to "Cancel", "ru" to "Отмена", "kk" to "Болдырмау"),
+        "delete_child_title" to mapOf("en" to "Delete child profile?", "ru" to "Удалить профиль ребёнка?", "kk" to "Бала профилін жою керек пе?"),
+        "delete_child_confirm" to mapOf("en" to "All progress for %s will be lost.", "ru" to "Весь прогресс %s будет потерян.", "kk" to "%s-ның барлық прогресі жойылады."),
+        "minutes" to mapOf("en" to "minutes", "ru" to "минут", "kk" to "минут"),
     )
 }
 

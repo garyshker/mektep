@@ -95,10 +95,8 @@ fun ParentSettingsScreen(
     lang: String = "en",
     viewModel: ParentSettingsViewModel = hiltViewModel()
 ) {
-    val config by viewModel.config.collectAsState()
     val allowedAppCount by viewModel.allowedAppCount.collectAsState()
     val children by viewModel.children.collectAsState()
-    var dailyLimit by remember(config) { mutableFloatStateOf((config?.dailyLimitMinutes ?: 60).toFloat()) }
 
     Scaffold(
         topBar = {
@@ -202,62 +200,6 @@ fun ParentSettingsScreen(
                 }
             }
 
-            Spacer(Modifier.height(20.dp))
-
-            // Daily limit slider
-            Text(tr("daily_limit", lang), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Spacer(Modifier.height(4.dp))
-            Text(
-                "${dailyLimit.toInt()} ${tr("minutes", lang)}",
-                fontSize = 24.sp, fontWeight = FontWeight.Bold, color = MektepGreen
-            )
-            Slider(
-                value = dailyLimit,
-                onValueChange = { dailyLimit = it },
-                onValueChangeFinished = { viewModel.updateDailyLimit(dailyLimit.toInt()) },
-                valueRange = 15f..240f,
-                steps = 14, // 15-min increments
-                colors = SliderDefaults.colors(thumbColor = MektepGreen, activeTrackColor = MektepGreen)
-            )
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("15m", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("4h", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-
-            Spacer(Modifier.height(24.dp))
-
-            // Bedtime
-            Text(tr("bedtime", lang), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Spacer(Modifier.height(8.dp))
-            Card(Modifier.fillMaxWidth()) {
-                Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Bedtime, null, tint = MaterialTheme.colorScheme.tertiary)
-                    Spacer(Modifier.width(16.dp))
-                    Column(Modifier.weight(1f)) {
-                        Text(
-                            config?.bedtimeStart?.let { "${config?.bedtimeStart} — ${config?.bedtimeEnd}" } ?: tr("not_set", lang),
-                            fontSize = 16.sp
-                        )
-                        Text(tr("bedtime_desc", lang), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(24.dp))
-
-            // Screen time ratio
-            Text(tr("screen_time_ratio", lang), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Spacer(Modifier.height(8.dp))
-            Card(Modifier.fillMaxWidth()) {
-                Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Timer, null, tint = MektepOrange)
-                    Spacer(Modifier.width(16.dp))
-                    Column {
-                        Text("1 min → 1.5 min", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                        Text(tr("screen_time_ratio_desc", lang), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                }
-            }
         }
     }
 }

@@ -129,6 +129,17 @@ class DashboardViewModel @Inject constructor(
         )
     }
 
+    fun deleteChild(child: ChildProfile) {
+        viewModelScope.launch {
+            childProfileDao.delete(child)
+            // Also delete from Firebase
+            try {
+                val sync = app.tisimai.mektep.data.remote.FirebaseProfileSync(childProfileDao)
+                sync.deleteChild(child.id)
+            } catch (_: Exception) { }
+        }
+    }
+
     fun claimQuestReward(quest: DailyQuest) {
         if (!quest.completed) return
         viewModelScope.launch {
