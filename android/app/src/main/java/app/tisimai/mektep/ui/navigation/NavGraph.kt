@@ -58,6 +58,7 @@ fun MektepNavHost(isChildMode: Boolean = false) {
     val setupCompleted by authViewModel.setupCompleted.collectAsState(initial = true) // default true to avoid flash
 
     val startDest = when {
+        isChildMode -> Routes.DASHBOARD // child mode: skip auth, go straight to learning
         !isLoggedIn -> Routes.LOGIN
         !setupCompleted -> Routes.SETUP
         else -> Routes.DASHBOARD
