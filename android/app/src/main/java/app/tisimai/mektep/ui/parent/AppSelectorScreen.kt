@@ -49,22 +49,40 @@ class AppSelectorViewModel @Inject constructor(
     private val _savedCount = MutableStateFlow(0)
     val savedCount: StateFlow<Int> = _savedCount.asStateFlow()
 
-    // Packages to exclude from the list
+    // System apps worth showing (kids might use these)
+    private val allowedSystemApps = setOf(
+        "com.android.camera", "com.android.camera2",
+        "com.google.android.calculator", "com.android.calculator2",
+        "com.google.android.apps.photos",
+        "com.google.android.youtube",
+        "com.google.android.apps.maps"
+    )
+
+    // Always hide these
     private val excludedPackages = setOf(
-        "app.tisimai.mektep",
-        "com.android.systemui",
-        "com.android.launcher",
-        "com.android.launcher3",
-        "com.android.settings",
-        "com.android.providers.settings",
-        "com.android.inputmethod.latin",
-        "com.google.android.inputmethod.latin"
+        "app.tisimai.mektep", // our own app
+        "com.android.systemui", "com.android.launcher", "com.android.launcher3",
+        "com.android.settings", "com.android.providers.settings",
+        "com.android.inputmethod.latin", "com.google.android.inputmethod.latin",
+        "com.android.shell", "com.android.providers.media",
+        "com.android.providers.contacts", "com.android.providers.telephony",
+        "com.android.phone", "com.android.server.telecom",
+        "com.google.android.gms", "com.google.android.gsf",
+        "com.google.android.ext.services", "com.google.android.packageinstaller"
     )
 
     fun loadApps(pm: PackageManager) {
         viewModelScope.launch {
             val installed = pm.getInstalledApplications(PackageManager.GET_META_DATA)
-                .filter { it.flags and ApplicationInfo.FLAG_SYSTEM == 0 || isUserFacing(it, pm) }
+                .filter { app ->
+                    // Must have a launcher intent (can actually be opened)
+                    pm.getLaunchIntentForPackage(app.packageName) != null
+                }
+                .filter { app ->
+                    val isSystem = app.flags and ApplicationInfo.FLAG_SYSTEM != 0
+                    // Show: non-system apps (user installed) OR whitelisted system apps
+                    (!isSystem || app.packageName in allowedSystemApps)
+                }
                 .filter { it.packageName !in excludedPackages }
                 .sortedBy { pm.getApplicationLabel(it).toString().lowercase() }
 
@@ -112,9 +130,6 @@ class AppSelectorViewModel @Inject constructor(
         }
     }
 
-    private fun isUserFacing(app: ApplicationInfo, pm: PackageManager): Boolean {
-        return pm.getLaunchIntentForPackage(app.packageName) != null
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
