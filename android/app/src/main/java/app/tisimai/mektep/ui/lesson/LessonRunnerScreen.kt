@@ -138,22 +138,31 @@ private fun QuestionScreen(state: LessonRunnerState, language: String, viewModel
             label = "questionTransition"
         ) { _ ->
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                // Show image if media_url is provided
-                question.mediaUrl?.let { url ->
-                    if (url.isNotEmpty()) {
-                        coil.compose.AsyncImage(
-                            model = url,
-                            contentDescription = prompt,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(180.dp)
-                                .clip(RoundedCornerShape(16.dp)),
-                            contentScale = androidx.compose.ui.layout.ContentScale.Crop
-                        )
-                        Spacer(Modifier.height(16.dp))
+                // Show image: URL via Coil, or large emoji extracted from prompt
+                val mediaUrl = question.mediaUrl
+                if (!mediaUrl.isNullOrEmpty()) {
+                    coil.compose.AsyncImage(
+                        model = mediaUrl,
+                        contentDescription = prompt,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(180.dp)
+                            .clip(RoundedCornerShape(16.dp)),
+                        contentScale = androidx.compose.ui.layout.ContentScale.Crop
+                    )
+                    Spacer(Modifier.height(16.dp))
+                } else {
+                    // Extract emoji from prompt and show it large
+                    val emojiRegex = Regex("[\\p{So}\\p{Cn}]+(\\uFE0F)?")
+                    val emoji = emojiRegex.find(prompt)?.value
+                    if (emoji != null) {
+                        Text(emoji, fontSize = 100.sp, modifier = Modifier.padding(vertical = 8.dp))
                     }
                 }
-                Text(prompt, fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                // Show prompt text without the emoji (or full prompt if no emoji found)
+                val emojiRegex = Regex("[\\p{So}\\p{Cn}]+(\\uFE0F)?\\s*")
+                val cleanPrompt = prompt.replace(emojiRegex, "").trim()
+                Text(cleanPrompt, fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
 
                 Spacer(Modifier.height(32.dp))
 

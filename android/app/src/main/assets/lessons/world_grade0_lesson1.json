@@ -16,8 +16,7 @@
   "questions": [
     {
       "type": "mc",
-      "prompt": { "kk": "Бұл қандай жануар?", "ru": "Что это за животное?", "en": "What animal is this?" },
-      "media_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/440px-Cat_November_2010-1a.jpg",
+      "prompt": { "kk": "🐱 Бұл қандай жануар?", "ru": "🐱 Что это за животное?", "en": "🐱 What animal is this?" },
       "options": [
         [{ "kk": "Ит", "ru": "Собака", "en": "Dog" }],
         [{ "kk": "Мысық", "ru": "Кошка", "en": "Cat" }],
@@ -29,8 +28,7 @@
     },
     {
       "type": "mc",
-      "prompt": { "kk": "Бұл қандай жануар?", "ru": "Что это за животное?", "en": "What animal is this?" },
-      "media_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/YellowLabradorLooking_new.jpg/440px-YellowLabradorLooking_new.jpg",
+      "prompt": { "kk": "🐶 Бұл қандай жануар?", "ru": "🐶 Что это за животное?", "en": "🐶 What animal is this?" },
       "options": [
         [{ "kk": "Балық", "ru": "Рыба", "en": "Fish" }],
         [{ "kk": "Мысық", "ru": "Кошка", "en": "Cat" }],
@@ -42,8 +40,7 @@
     },
     {
       "type": "mc",
-      "prompt": { "kk": "Бұл қандай жануар?", "ru": "Что это за животное?", "en": "What animal is this?" },
-      "media_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Autumn_Red_peridge_background.jpg/440px-Autumn_Red_peridge_background.jpg",
+      "prompt": { "kk": "🐟 Бұл қандай жануар?", "ru": "🐟 Что это за животное?", "en": "🐟 What animal is this?" },
       "options": [
         [{ "kk": "Балық", "ru": "Рыба", "en": "Fish" }],
         [{ "kk": "Құс", "ru": "Птица", "en": "Bird" }],
@@ -55,8 +52,7 @@
     },
     {
       "type": "mc",
-      "prompt": { "kk": "Бұл қандай жануар?", "ru": "Что это за животное?", "en": "What animal is this?" },
-      "media_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Eopsaltria_australis_-_Mogo_Campground.jpg/440px-Eopsaltria_australis_-_Mogo_Campground.jpg",
+      "prompt": { "kk": "🐦 Бұл қандай жануар?", "ru": "🐦 Что это за животное?", "en": "🐦 What animal is this?" },
       "options": [
         [{ "kk": "Мысық", "ru": "Кошка", "en": "Cat" }],
         [{ "kk": "Балық", "ru": "Рыба", "en": "Fish" }],
