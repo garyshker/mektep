@@ -144,7 +144,7 @@ fun DashboardScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 80.dp)
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 120.dp)
         ) {
             if (isParentView) {
                 // ── Parent View: show children's progress ──
