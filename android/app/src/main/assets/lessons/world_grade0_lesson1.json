@@ -16,7 +16,8 @@
   "questions": [
     {
       "type": "mc",
-      "prompt": { "kk": "🐱 Бұл қандай жануар?", "ru": "🐱 Что это за животное?", "en": "🐱 What animal is this?" },
+      "prompt": { "kk": "Бұл қандай жануар?", "ru": "Что это за животное?", "en": "What animal is this?" },
+      "media_url": "file:///android_asset/images/cat.jpg",
       "options": [
         [{ "kk": "Ит", "ru": "Собака", "en": "Dog" }],
         [{ "kk": "Мысық", "ru": "Кошка", "en": "Cat" }],
@@ -28,7 +29,8 @@
     },
     {
       "type": "mc",
-      "prompt": { "kk": "🐶 Бұл қандай жануар?", "ru": "🐶 Что это за животное?", "en": "🐶 What animal is this?" },
+      "prompt": { "kk": "Бұл қандай жануар?", "ru": "Что это за животное?", "en": "What animal is this?" },
+      "media_url": "file:///android_asset/images/dog.jpg",
       "options": [
         [{ "kk": "Балық", "ru": "Рыба", "en": "Fish" }],
         [{ "kk": "Мысық", "ru": "Кошка", "en": "Cat" }],
@@ -40,7 +42,8 @@
     },
     {
       "type": "mc",
-      "prompt": { "kk": "🐟 Бұл қандай жануар?", "ru": "🐟 Что это за животное?", "en": "🐟 What animal is this?" },
+      "prompt": { "kk": "Бұл қандай жануар?", "ru": "Что это за животное?", "en": "What animal is this?" },
+      "media_url": "file:///android_asset/images/fish.jpg",
       "options": [
         [{ "kk": "Балық", "ru": "Рыба", "en": "Fish" }],
         [{ "kk": "Құс", "ru": "Птица", "en": "Bird" }],
@@ -52,7 +55,8 @@
     },
     {
       "type": "mc",
-      "prompt": { "kk": "🐦 Бұл қандай жануар?", "ru": "🐦 Что это за животное?", "en": "🐦 What animal is this?" },
+      "prompt": { "kk": "Бұл қандай жануар?", "ru": "Что это за животное?", "en": "What animal is this?" },
+      "media_url": "file:///android_asset/images/bird.jpg",
       "options": [
         [{ "kk": "Мысық", "ru": "Кошка", "en": "Cat" }],
         [{ "kk": "Балық", "ru": "Рыба", "en": "Fish" }],
