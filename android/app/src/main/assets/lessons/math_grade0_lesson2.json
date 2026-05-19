@@ -1,0 +1,79 @@
+{
+  "subject": "math",
+  "grade_level": 0,
+  "difficulty_tier": 1,
+  "sort_order": 2,
+  "title": {
+    "kk": "Санау: 1-ден 10-ға дейін",
+    "ru": "Счёт: от 1 до 10",
+    "en": "Counting: 1 to 10"
+  },
+  "description": {
+    "kk": "Онға дейін санауды үйренейік!",
+    "ru": "Научимся считать до десяти!",
+    "en": "Let's learn to count to ten!"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қанша жұлдыз бар? ⭐⭐⭐⭐⭐", "ru": "Сколько звёзд? ⭐⭐⭐⭐⭐", "en": "How many stars? ⭐⭐⭐⭐⭐" },
+      "options": [
+        [{ "kk": "4", "ru": "4", "en": "4" }],
+        [{ "kk": "5", "ru": "5", "en": "5" }],
+        [{ "kk": "6", "ru": "6", "en": "6" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қанша шар бар? 🔵🔵🔵🔵🔵🔵🔵", "ru": "Сколько шаров? 🔵🔵🔵🔵🔵🔵🔵", "en": "How many balls? 🔵🔵🔵🔵🔵🔵🔵" },
+      "options": [
+        [{ "kk": "6", "ru": "6", "en": "6" }],
+        [{ "kk": "7", "ru": "7", "en": "7" }],
+        [{ "kk": "8", "ru": "8", "en": "8" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қанша алма бар? 🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎", "ru": "Сколько яблок? 🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎", "en": "How many apples? 🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎" },
+      "options": [
+        [{ "kk": "8", "ru": "8", "en": "8" }],
+        [{ "kk": "9", "ru": "9", "en": "9" }],
+        [{ "kk": "10", "ru": "10", "en": "10" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қанша көбелек бар? 🦋🦋🦋🦋🦋🦋", "ru": "Сколько бабочек? 🦋🦋🦋🦋🦋🦋", "en": "How many butterflies? 🦋🦋🦋🦋🦋🦋" },
+      "options": [
+        [{ "kk": "5", "ru": "5", "en": "5" }],
+        [{ "kk": "6", "ru": "6", "en": "6" }],
+        [{ "kk": "7", "ru": "7", "en": "7" }],
+        [{ "kk": "8", "ru": "8", "en": "8" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Санды суретпен сәйкестендір", "ru": "Сопоставь число с картинкой", "en": "Match the number to the picture" },
+      "pairs": [
+        { "left": "6", "right": "🌸🌸🌸🌸🌸🌸" },
+        { "left": "8", "right": "⭐⭐⭐⭐⭐⭐⭐⭐" },
+        { "left": "9", "right": "🐟🐟🐟🐟🐟🐟🐟🐟🐟" },
+        { "left": "10", "right": "🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 1
+    }
+  ]
+}

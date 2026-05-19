@@ -1,0 +1,78 @@
+{
+  "subject": "kazakh",
+  "grade_level": 0,
+  "difficulty_tier": 1,
+  "sort_order": 2,
+  "title": {
+    "kk": "Түстер: қызыл, жасыл, көк, сары",
+    "ru": "Цвета: красный, зелёный, синий, жёлтый",
+    "en": "Colors: Red, Green, Blue, Yellow"
+  },
+  "description": {
+    "kk": "Түстерді қазақша үйренейік!",
+    "ru": "Выучим цвета на казахском!",
+    "en": "Let's learn colors in Kazakh!"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "🔴 Бұл қандай түс?", "ru": "🔴 Какой это цвет?", "en": "🔴 What color is this?" },
+      "options": [
+        [{ "kk": "Қызыл", "ru": "Красный", "en": "Red" }],
+        [{ "kk": "Көк", "ru": "Синий", "en": "Blue" }],
+        [{ "kk": "Сары", "ru": "Жёлтый", "en": "Yellow" }]
+      ],
+      "correct_answer": 0,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "🟢 Бұл қандай түс?", "ru": "🟢 Какой это цвет?", "en": "🟢 What color is this?" },
+      "options": [
+        [{ "kk": "Қызыл", "ru": "Красный", "en": "Red" }],
+        [{ "kk": "Жасыл", "ru": "Зелёный", "en": "Green" }],
+        [{ "kk": "Көк", "ru": "Синий", "en": "Blue" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "🔵 Бұл қандай түс?", "ru": "🔵 Какой это цвет?", "en": "🔵 What color is this?" },
+      "options": [
+        [{ "kk": "Сары", "ru": "Жёлтый", "en": "Yellow" }],
+        [{ "kk": "Жасыл", "ru": "Зелёный", "en": "Green" }],
+        [{ "kk": "Көк", "ru": "Синий", "en": "Blue" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "🟡 Бұл қандай түс?", "ru": "🟡 Какой это цвет?", "en": "🟡 What color is this?" },
+      "options": [
+        [{ "kk": "Сары", "ru": "Жёлтый", "en": "Yellow" }],
+        [{ "kk": "Қызыл", "ru": "Красный", "en": "Red" }],
+        [{ "kk": "Жасыл", "ru": "Зелёный", "en": "Green" }]
+      ],
+      "correct_answer": 0,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Түсті атымен сәйкестендір", "ru": "Сопоставь цвет с названием", "en": "Match the color to its name" },
+      "pairs": [
+        { "left": "🔴", "right": "Қызыл" },
+        { "left": "🟢", "right": "Жасыл" },
+        { "left": "🔵", "right": "Көк" },
+        { "left": "🟡", "right": "Сары" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 1
+    }
+  ]
+}

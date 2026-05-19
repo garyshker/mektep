@@ -155,9 +155,9 @@ fun DashboardScreen(
                     val child = state.children[index]
                     val band = AgeBand.fromGradeLevel(child.gradeLevel)
                     val bandColor = when (band) {
+                        AgeBand.BOLASHAK -> MektepOrange
                         AgeBand.BALA -> MektepGreen
                         AgeBand.OQYSHY -> MektepBlue
-                        AgeBand.ZERDE -> MektepPurple
                     }
                     Card(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),

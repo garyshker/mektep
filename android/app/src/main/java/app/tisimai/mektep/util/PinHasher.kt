@@ -22,6 +22,7 @@ object PinHasher {
     }
 
     fun verify(pin: String, salt: String, expectedHash: String): Boolean {
+        if (salt.isEmpty() || expectedHash.isEmpty()) return false
         return hash(pin, salt) == expectedHash
     }
 }

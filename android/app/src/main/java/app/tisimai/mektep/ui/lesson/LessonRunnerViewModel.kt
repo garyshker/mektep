@@ -151,7 +151,7 @@ class LessonRunnerViewModel @Inject constructor(
 
     companion object {
         // Time-based screen time model:
-        // Screen time ratio is now determined by AgeBand (BALA=2.0, OQYSHY=1.5, ZERDE=1.0)
+        // Screen time ratio is now determined by AgeBand (BOLASHAK=2.5, BALA=2.0, OQYSHY=1.5)
         // Minimum 1 minute earned per lesson (even if lesson takes < 40 seconds)
         const val MIN_EARNED_MINUTES = 1
     }

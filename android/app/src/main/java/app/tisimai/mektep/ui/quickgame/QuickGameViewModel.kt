@@ -214,16 +214,12 @@ class QuickGameViewModel @Inject constructor(
                     QuickGameQuestion("${a * b} \u00F7 $b", a, generateWrongOptions(a))
                 }
             }
-            AgeBand.ZERDE -> {
-                // Full multiplication/division
-                val isMultiplication = Random.nextFloat() > 0.4f
-                val a = Random.nextInt(2, 10)
-                val b = Random.nextInt(2, 10)
-                if (isMultiplication) {
-                    QuickGameQuestion("$a \u00D7 $b", a * b, generateWrongOptions(a * b))
-                } else {
-                    QuickGameQuestion("${a * b} \u00F7 $b", a, generateWrongOptions(a))
-                }
+            AgeBand.BOLASHAK -> {
+                // Simple counting: "How many? 🍎🍎🍎" → 3
+                val count = Random.nextInt(1, 6) // 1-5
+                val emoji = listOf("🍎", "⭐", "🐟", "🌸", "🔵").random()
+                val prompt = emoji.repeat(count)
+                QuickGameQuestion(prompt, count, generateWrongOptions(count))
             }
         }
     }

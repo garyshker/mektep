@@ -1,0 +1,78 @@
+{
+  "subject": "math",
+  "grade_level": 0,
+  "difficulty_tier": 1,
+  "sort_order": 1,
+  "title": {
+    "kk": "Санау: 1-ден 5-ке дейін",
+    "ru": "Счёт: от 1 до 5",
+    "en": "Counting: 1 to 5"
+  },
+  "description": {
+    "kk": "Заттарды санауды үйренейік!",
+    "ru": "Научимся считать предметы!",
+    "en": "Let's learn to count objects!"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қанша алма бар? 🍎🍎🍎", "ru": "Сколько яблок? 🍎🍎🍎", "en": "How many apples? 🍎🍎🍎" },
+      "options": [
+        [{ "kk": "2", "ru": "2", "en": "2" }],
+        [{ "kk": "3", "ru": "3", "en": "3" }],
+        [{ "kk": "4", "ru": "4", "en": "4" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қанша жұлдыз бар? ⭐", "ru": "Сколько звёзд? ⭐", "en": "How many stars? ⭐" },
+      "options": [
+        [{ "kk": "1", "ru": "1", "en": "1" }],
+        [{ "kk": "2", "ru": "2", "en": "2" }],
+        [{ "kk": "3", "ru": "3", "en": "3" }]
+      ],
+      "correct_answer": 0,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қанша гүл бар? 🌸🌸🌸🌸🌸", "ru": "Сколько цветов? 🌸🌸🌸🌸🌸", "en": "How many flowers? 🌸🌸🌸🌸🌸" },
+      "options": [
+        [{ "kk": "3", "ru": "3", "en": "3" }],
+        [{ "kk": "4", "ru": "4", "en": "4" }],
+        [{ "kk": "5", "ru": "5", "en": "5" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Қанша балық бар? 🐟🐟", "ru": "Сколько рыбок? 🐟🐟", "en": "How many fish? 🐟🐟" },
+      "options": [
+        [{ "kk": "1", "ru": "1", "en": "1" }],
+        [{ "kk": "2", "ru": "2", "en": "2" }],
+        [{ "kk": "3", "ru": "3", "en": "3" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Санды суретпен сәйкестендір", "ru": "Сопоставь число с картинкой", "en": "Match the number to the picture" },
+      "pairs": [
+        { "left": "1", "right": "🍎" },
+        { "left": "2", "right": "⭐⭐" },
+        { "left": "3", "right": "🐟🐟🐟" },
+        { "left": "4", "right": "🌸🌸🌸🌸" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 1
+    }
+  ]
+}

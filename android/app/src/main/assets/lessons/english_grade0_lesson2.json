@@ -1,0 +1,78 @@
+{
+  "subject": "english",
+  "grade_level": 0,
+  "difficulty_tier": 1,
+  "sort_order": 2,
+  "title": {
+    "kk": "Түстер ағылшынша",
+    "ru": "Цвета на английском",
+    "en": "Colors in English"
+  },
+  "description": {
+    "kk": "Түстерді ағылшынша үйренейік!",
+    "ru": "Выучим цвета на английском!",
+    "en": "Let's learn colors in English!"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "🔴 Бұл ағылшынша қалай?", "ru": "🔴 Как это по-английски?", "en": "🔴 What color is this?" },
+      "options": [
+        [{ "kk": "Red", "ru": "Red", "en": "Red" }],
+        [{ "kk": "Blue", "ru": "Blue", "en": "Blue" }],
+        [{ "kk": "Green", "ru": "Green", "en": "Green" }]
+      ],
+      "correct_answer": 0,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "🟢 Бұл ағылшынша қалай?", "ru": "🟢 Как это по-английски?", "en": "🟢 What color is this?" },
+      "options": [
+        [{ "kk": "Yellow", "ru": "Yellow", "en": "Yellow" }],
+        [{ "kk": "Green", "ru": "Green", "en": "Green" }],
+        [{ "kk": "Red", "ru": "Red", "en": "Red" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "🔵 Бұл ағылшынша қалай?", "ru": "🔵 Как это по-английски?", "en": "🔵 What color is this?" },
+      "options": [
+        [{ "kk": "Green", "ru": "Green", "en": "Green" }],
+        [{ "kk": "Yellow", "ru": "Yellow", "en": "Yellow" }],
+        [{ "kk": "Blue", "ru": "Blue", "en": "Blue" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "🟡 Бұл ағылшынша қалай?", "ru": "🟡 Как это по-английски?", "en": "🟡 What color is this?" },
+      "options": [
+        [{ "kk": "Yellow", "ru": "Yellow", "en": "Yellow" }],
+        [{ "kk": "Blue", "ru": "Blue", "en": "Blue" }],
+        [{ "kk": "Red", "ru": "Red", "en": "Red" }]
+      ],
+      "correct_answer": 0,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Түсті атымен сәйкестендір", "ru": "Сопоставь цвет с названием", "en": "Match the color to its name" },
+      "pairs": [
+        { "left": "🔴", "right": "Red" },
+        { "left": "🟢", "right": "Green" },
+        { "left": "🔵", "right": "Blue" },
+        { "left": "🟡", "right": "Yellow" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 1
+    }
+  ]
+}

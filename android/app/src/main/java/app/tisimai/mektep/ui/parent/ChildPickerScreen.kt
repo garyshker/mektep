@@ -25,7 +25,7 @@ import app.tisimai.mektep.data.models.AgeBand
 import app.tisimai.mektep.data.models.ChildProfile
 import app.tisimai.mektep.ui.theme.MektepBlue
 import app.tisimai.mektep.ui.theme.MektepGreen
-import app.tisimai.mektep.ui.theme.MektepPurple
+import app.tisimai.mektep.ui.theme.MektepOrange
 import app.tisimai.mektep.util.tr
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -211,9 +211,9 @@ private fun ChildCard(
             }
             val band = AgeBand.fromGradeLevel(child.gradeLevel)
             val bandColor = when (band) {
+                AgeBand.BOLASHAK -> MektepOrange
                 AgeBand.BALA -> MektepGreen
                 AgeBand.OQYSHY -> MektepBlue
-                AgeBand.ZERDE -> MektepPurple
             }
             Text(
                 tr(band.labelKey, lang),

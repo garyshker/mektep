@@ -116,7 +116,7 @@ fun AddChildScreen(
     var birthDate by remember { mutableStateOf("") }
     var selectedAvatar by remember { mutableStateOf("\uD83E\uDDD2") } // 🧒
     var selectedLanguage by remember { mutableStateOf("kk") }
-    var selectedGrade by remember { mutableIntStateOf(1) }
+    var selectedGrade by remember { mutableIntStateOf(0) }
     var prefilled by remember { mutableStateOf(false) }
 
     // Pre-fill when editing
@@ -231,11 +231,11 @@ fun AddChildScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                (1..6).forEach { grade ->
+                (0..3).forEach { grade ->
                     FilterChip(
                         selected = selectedGrade == grade,
                         onClick = { selectedGrade = grade },
-                        label = { Text("$grade") },
+                        label = { Text(if (grade == 0) "Pre-K" else "$grade") },
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = MektepGreen,
                             selectedLabelColor = MaterialTheme.colorScheme.onPrimary

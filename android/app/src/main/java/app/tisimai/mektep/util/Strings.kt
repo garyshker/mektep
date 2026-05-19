@@ -146,9 +146,11 @@ object Strings {
         "add_child_to_start" to mapOf("en" to "Add a child to start child mode", "ru" to "Добавьте ребёнка для запуска детского режима", "kk" to "Бала режимін бастау үшін бала қосыңыз"),
 
         // ── Age Band Greetings & Labels ──
+        "greeting_bolashak" to mapOf("kk" to "Ойнайық!", "ru" to "Давай играть!", "en" to "Let's play!"),
         "greeting_bala" to mapOf("kk" to "Ойнап, үйренейік!", "ru" to "Играем и учимся!", "en" to "Let's play and learn!"),
         "greeting_oqyshy" to mapOf("kk" to "Үйренуге дайынсың ба?", "ru" to "Готов учиться?", "en" to "Ready to learn?"),
         "greeting_zerde" to mapOf("kk" to "Өзіңді сына!", "ru" to "Бросай себе вызов!", "en" to "Challenge yourself!"),
+        "band_bolashak" to mapOf("kk" to "Болашақ", "ru" to "Малышок", "en" to "Pre-K"),
         "band_bala" to mapOf("kk" to "Бала", "ru" to "Малыш", "en" to "Little"),
         "band_oqyshy" to mapOf("kk" to "Оқушы", "ru" to "Ученик", "en" to "Learner"),
         "band_zerde" to mapOf("kk" to "Зерде", "ru" to "Мыслитель", "en" to "Thinker"),

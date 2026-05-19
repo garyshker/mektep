@@ -1,0 +1,78 @@
+{
+  "subject": "english",
+  "grade_level": 0,
+  "difficulty_tier": 1,
+  "sort_order": 1,
+  "title": {
+    "kk": "Ағылшын әліпбиі: A, B, C, D, E",
+    "ru": "Английский алфавит: A, B, C, D, E",
+    "en": "English Alphabet: A, B, C, D, E"
+  },
+  "description": {
+    "kk": "Ағылшын әріптерін үйренейік!",
+    "ru": "Выучим английские буквы!",
+    "en": "Let's learn English letters!"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "🍎 Apple қай әріптен басталады?", "ru": "🍎 Apple начинается с какой буквы?", "en": "🍎 Apple starts with which letter?" },
+      "options": [
+        [{ "kk": "A", "ru": "A", "en": "A" }],
+        [{ "kk": "B", "ru": "B", "en": "B" }],
+        [{ "kk": "C", "ru": "C", "en": "C" }]
+      ],
+      "correct_answer": 0,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "🐻 Bear қай әріптен басталады?", "ru": "🐻 Bear начинается с какой буквы?", "en": "🐻 Bear starts with which letter?" },
+      "options": [
+        [{ "kk": "A", "ru": "A", "en": "A" }],
+        [{ "kk": "B", "ru": "B", "en": "B" }],
+        [{ "kk": "D", "ru": "D", "en": "D" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "🐱 Cat қай әріптен басталады?", "ru": "🐱 Cat начинается с какой буквы?", "en": "🐱 Cat starts with which letter?" },
+      "options": [
+        [{ "kk": "B", "ru": "B", "en": "B" }],
+        [{ "kk": "C", "ru": "C", "en": "C" }],
+        [{ "kk": "D", "ru": "D", "en": "D" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "🐶 Dog қай әріптен басталады?", "ru": "🐶 Dog начинается с какой буквы?", "en": "🐶 Dog starts with which letter?" },
+      "options": [
+        [{ "kk": "C", "ru": "C", "en": "C" }],
+        [{ "kk": "E", "ru": "E", "en": "E" }],
+        [{ "kk": "D", "ru": "D", "en": "D" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Әріпті суретпен сәйкестендір", "ru": "Сопоставь букву с картинкой", "en": "Match the letter to the picture" },
+      "pairs": [
+        { "left": "A", "right": "🍎 Apple" },
+        { "left": "B", "right": "🐻 Bear" },
+        { "left": "C", "right": "🐱 Cat" },
+        { "left": "D", "right": "🐶 Dog" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 1
+    }
+  ]
+}

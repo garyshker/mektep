@@ -1,0 +1,77 @@
+{
+  "subject": "world",
+  "grade_level": 0,
+  "difficulty_tier": 1,
+  "sort_order": 2,
+  "title": {
+    "kk": "Пішіндер: шеңбер, үшбұрыш, шаршы",
+    "ru": "Фигуры: круг, треугольник, квадрат",
+    "en": "Shapes: Circle, Triangle, Square"
+  },
+  "description": {
+    "kk": "Пішіндерді танып үйренейік!",
+    "ru": "Научимся узнавать фигуры!",
+    "en": "Let's learn to recognize shapes!"
+  },
+  "questions": [
+    {
+      "type": "mc",
+      "prompt": { "kk": "⭕ Бұл қандай пішін?", "ru": "⭕ Какая это фигура?", "en": "⭕ What shape is this?" },
+      "options": [
+        [{ "kk": "Үшбұрыш", "ru": "Треугольник", "en": "Triangle" }],
+        [{ "kk": "Шеңбер", "ru": "Круг", "en": "Circle" }],
+        [{ "kk": "Шаршы", "ru": "Квадрат", "en": "Square" }]
+      ],
+      "correct_answer": 1,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "△ Бұл қандай пішін?", "ru": "△ Какая это фигура?", "en": "△ What shape is this?" },
+      "options": [
+        [{ "kk": "Шеңбер", "ru": "Круг", "en": "Circle" }],
+        [{ "kk": "Шаршы", "ru": "Квадрат", "en": "Square" }],
+        [{ "kk": "Үшбұрыш", "ru": "Треугольник", "en": "Triangle" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "⬜ Бұл қандай пішін?", "ru": "⬜ Какая это фигура?", "en": "⬜ What shape is this?" },
+      "options": [
+        [{ "kk": "Шаршы", "ru": "Квадрат", "en": "Square" }],
+        [{ "kk": "Шеңбер", "ru": "Круг", "en": "Circle" }],
+        [{ "kk": "Үшбұрыш", "ru": "Треугольник", "en": "Triangle" }]
+      ],
+      "correct_answer": 0,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "mc",
+      "prompt": { "kk": "Доп ⚽ қай пішінге ұқсайды?", "ru": "На какую фигуру похож мяч ⚽?", "en": "A ball ⚽ looks like which shape?" },
+      "options": [
+        [{ "kk": "Шаршы", "ru": "Квадрат", "en": "Square" }],
+        [{ "kk": "Үшбұрыш", "ru": "Треугольник", "en": "Triangle" }],
+        [{ "kk": "Шеңбер", "ru": "Круг", "en": "Circle" }]
+      ],
+      "correct_answer": 2,
+      "difficulty_score": 1,
+      "time_limit_seconds": 30
+    },
+    {
+      "type": "match",
+      "prompt": { "kk": "Пішінді атымен сәйкестендір", "ru": "Сопоставь фигуру с названием", "en": "Match the shape to its name" },
+      "pairs": [
+        { "left": "⭕", "right": "Шеңбер" },
+        { "left": "△", "right": "Үшбұрыш" },
+        { "left": "⬜", "right": "Шаршы" }
+      ],
+      "correct_answer": null,
+      "difficulty_score": 1
+    }
+  ]
+}

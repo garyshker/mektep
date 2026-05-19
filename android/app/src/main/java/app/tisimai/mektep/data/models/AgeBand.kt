@@ -1,5 +1,11 @@
 package app.tisimai.mektep.data.models
 
+/**
+ * Age bands for children 4-8 years old.
+ * BOLASHAK (Pre-K, 4-5yo): visual learning, no reading, no failure
+ * BALA (Grade 1, 5-7yo): basic literacy/math, gentle encouragement
+ * OQYSHY (Grade 2-3, 7-8yo): real exercises, achievements, streaks
+ */
 enum class AgeBand(
     val gradeRange: IntRange,
     val screenTimeRatio: Double,
@@ -13,6 +19,19 @@ enum class AgeBand(
     val quickGameQuestions: Int,
     val quickGameTimerSec: Int
 ) {
+    BOLASHAK(
+        gradeRange = 0..0,
+        screenTimeRatio = 2.5,
+        maxQuestionsPerSession = 5,
+        heartsEnabled = false,
+        heartsCount = 0,
+        dailyLimitDefaultMinutes = 20,
+        showExplanationOnWrong = false,
+        greetingKey = "greeting_bolashak",
+        labelKey = "band_bolashak",
+        quickGameQuestions = 8,
+        quickGameTimerSec = 10
+    ),
     BALA(
         gradeRange = 1..1,
         screenTimeRatio = 2.0,
@@ -38,26 +57,13 @@ enum class AgeBand(
         labelKey = "band_oqyshy",
         quickGameQuestions = 15,
         quickGameTimerSec = 6
-    ),
-    ZERDE(
-        gradeRange = 4..6,
-        screenTimeRatio = 1.0,
-        maxQuestionsPerSession = 10,
-        heartsEnabled = true,
-        heartsCount = 3,
-        dailyLimitDefaultMinutes = 60,
-        showExplanationOnWrong = true,
-        greetingKey = "greeting_zerde",
-        labelKey = "band_zerde",
-        quickGameQuestions = 20,
-        quickGameTimerSec = 5
     );
 
     companion object {
         fun fromGradeLevel(grade: Int): AgeBand = when {
+            grade <= 0 -> BOLASHAK
             grade <= 1 -> BALA
-            grade <= 3 -> OQYSHY
-            else -> ZERDE
+            else -> OQYSHY
         }
     }
 }
