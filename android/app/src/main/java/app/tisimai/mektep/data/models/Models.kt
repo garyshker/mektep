@@ -91,7 +91,10 @@ data class LessonProgress(
 
 // ── Adaptive learning entities ──
 
-@Entity(tableName = "question_attempt")
+@Entity(
+    tableName = "question_attempt",
+    indices = [androidx.room.Index(value = ["childId", "lessonId"])]
+)
 data class QuestionAttempt(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val childId: String,
@@ -99,7 +102,7 @@ data class QuestionAttempt(
     val questionIndex: Int,
     val isCorrect: Boolean,
     val responseTimeMs: Long,
-    val attemptTimestamp: Long = System.currentTimeMillis()
+    @androidx.room.ColumnInfo(defaultValue = "0") val attemptTimestamp: Long = System.currentTimeMillis()
 )
 
 @Entity(tableName = "topic_mastery", primaryKeys = ["childId", "topicId"])
