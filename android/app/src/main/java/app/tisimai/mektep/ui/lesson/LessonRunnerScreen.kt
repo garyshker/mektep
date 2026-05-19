@@ -137,7 +137,22 @@ private fun QuestionScreen(state: LessonRunnerState, language: String, viewModel
             },
             label = "questionTransition"
         ) { _ ->
-            Column {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                // Show image if media_url is provided
+                question.mediaUrl?.let { url ->
+                    if (url.isNotEmpty()) {
+                        coil.compose.AsyncImage(
+                            model = url,
+                            contentDescription = prompt,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(180.dp)
+                                .clip(RoundedCornerShape(16.dp)),
+                            contentScale = androidx.compose.ui.layout.ContentScale.Crop
+                        )
+                        Spacer(Modifier.height(16.dp))
+                    }
+                }
                 Text(prompt, fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
 
                 Spacer(Modifier.height(32.dp))

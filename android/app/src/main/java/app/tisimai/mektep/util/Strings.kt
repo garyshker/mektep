@@ -197,6 +197,10 @@ object Strings {
         "permission_not_granted" to mapOf("en" to "Tap to enable", "ru" to "Нажмите для включения", "kk" to "Қосу үшін басыңыз"),
         "screen_time_remaining" to mapOf("en" to "Screen time: %d min remaining", "ru" to "Экранное время: %d мин осталось", "kk" to "Экран уақыты: %d мин қалды"),
         "screen_time_used_up" to mapOf("en" to "Screen time used up", "ru" to "Экранное время закончилось", "kk" to "Экран уақыты біткен"),
+        "rec_review" to mapOf("en" to "Review", "ru" to "Повторение", "kk" to "Қайталау"),
+        "rec_next" to mapOf("en" to "Up Next", "ru" to "Следующий", "kk" to "Келесі"),
+        "rec_practice" to mapOf("en" to "Practice", "ru" to "Практика", "kk" to "Жаттығу"),
+        "start" to mapOf("en" to "Start", "ru" to "Начать", "kk" to "Бастау"),
     )
 }
 

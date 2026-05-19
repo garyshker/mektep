@@ -265,9 +265,9 @@ fun DashboardScreen(
                             else -> MektepGreen
                         }
                         val badgeText = when (recommendation.reason) {
-                            "review" -> "Review"
-                            "next" -> "Up Next"
-                            else -> "Practice"
+                            "review" -> tr("rec_review", language)
+                            "next" -> tr("rec_next", language)
+                            else -> tr("rec_practice", language)
                         }
                         Card(
                             modifier = Modifier

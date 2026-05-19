@@ -87,6 +87,9 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
+    // Coil (image loading for Compose)
+    implementation("io.coil-kt:coil-compose:2.7.0")
+
     // WorkManager (periodic tasks)
     implementation("androidx.work:work-runtime-ktx:2.10.0")
 
