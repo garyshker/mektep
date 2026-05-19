@@ -30,7 +30,7 @@ import app.tisimai.mektep.data.local.UserDao
 import app.tisimai.mektep.data.models.Lesson
 import app.tisimai.mektep.data.models.LessonProgress
 import app.tisimai.mektep.data.models.LessonStatus
-import app.tisimai.mektep.ui.theme.MektepOrange
+import app.tisimai.mektep.ui.theme.*
 import app.tisimai.mektep.util.tr
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -110,18 +110,25 @@ fun LessonListScreen(
                 ) {
                     Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(lesson.title[language] ?: lesson.title["en"] ?: "Lesson", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                                Spacer(Modifier.width(8.dp))
+                            Text(
+                                lesson.title[language] ?: lesson.title["en"] ?: "Lesson",
+                                fontWeight = FontWeight.Bold, fontSize = 16.sp,
+                                maxLines = 2, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            Text(
+                                lesson.description[language] ?: lesson.description["en"] ?: "",
+                                fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 2, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Text(
-                                    "${tr("grade", language)} ${lesson.gradeLevel}",
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Medium,
-                                    color = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier
+                                    "${lesson.questions.size} ${tr("questions", language)}",
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 if (status.isDueForReview) {
-                                    Spacer(Modifier.width(8.dp))
                                     Text(
                                         "Review",
                                         fontSize = 11.sp,
@@ -129,23 +136,14 @@ fun LessonListScreen(
                                         color = MektepOrange
                                     )
                                 }
-                            }
-                            Text(lesson.description[language] ?: lesson.description["en"] ?: "", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(
-                                    "${lesson.questions.size} ${tr("questions", language)}",
-                                    fontSize = 12.sp,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
                                 if (progress != null && progress.timesCompleted > 0) {
-                                    Spacer(Modifier.width(8.dp))
                                     repeat(progress.bestStars) {
-                                        Text("\u2B50", fontSize = 12.sp)
+                                        Text("⭐", fontSize = 11.sp)
                                     }
-                                    Text(" completed", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
                                 }
                             }
                         }
+                        Spacer(Modifier.width(8.dp))
                         Icon(
                             when {
                                 isLocked -> Icons.Default.Lock
@@ -153,8 +151,12 @@ fun LessonListScreen(
                                 else -> Icons.Default.PlayArrow
                             },
                             contentDescription = if (isLocked) "Locked" else "Start",
-                            tint = if (isLocked) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(32.dp)
+                            tint = when {
+                                isLocked -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                                (progress?.timesCompleted ?: 0) > 0 -> MektepGreen
+                                else -> MaterialTheme.colorScheme.primary
+                            },
+                            modifier = Modifier.size(28.dp)
                         )
                     }
                 }
