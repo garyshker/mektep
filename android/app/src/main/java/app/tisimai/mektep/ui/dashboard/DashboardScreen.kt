@@ -48,8 +48,9 @@ fun DashboardScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
     val language by viewModel.language.collectAsState()
-    // Child mode is active when: Intent flag is set OR a child profile is active
-    val effectiveChildMode = isChildMode || state.childProfile != null
+    // Mutable override — cleared when parent enters PIN
+    var childModeOverride by remember { mutableStateOf(isChildMode) }
+    val effectiveChildMode = childModeOverride || state.childProfile != null
     var childToDelete by remember { mutableStateOf<app.tisimai.mektep.data.models.ChildProfile?>(null) }
     var showParentPinDialog by remember { mutableStateOf(false) }
 
@@ -62,6 +63,7 @@ fun DashboardScreen(
             onPinComplete = { pin ->
                 setupVm.verifyPin(pin) {
                     viewModel.exitChildMode()
+                    childModeOverride = false // clear the Intent flag
                     showParentPinDialog = false
                 }
             },
