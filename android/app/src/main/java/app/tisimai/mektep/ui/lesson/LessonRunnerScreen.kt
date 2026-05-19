@@ -310,28 +310,105 @@ private fun TapQuestion(state: LessonRunnerState, language: String, viewModel: L
 
 @Composable
 private fun MatchQuestion(state: LessonRunnerState, viewModel: LessonRunnerViewModel) {
-    Text("Match the pairs:", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    Spacer(Modifier.height(12.dp))
-    state.matchPairs.forEachIndexed { index, (left, right) ->
-        val animOffset by animateDpAsState(
-            targetValue = 0.dp,
-            animationSpec = tween(400, delayMillis = index * 100, easing = EaseOutCubic),
-            label = "matchOffset$index"
-        )
-        Row(
-            Modifier.fillMaxWidth().padding(vertical = 4.dp).graphicsLayer { translationX = animOffset.value },
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Card(Modifier.weight(1f), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), shape = RoundedCornerShape(8.dp)) {
-                Text(left, Modifier.padding(12.dp).fillMaxWidth(), textAlign = TextAlign.Center, fontWeight = FontWeight.Medium)
+    // Interactive tap-to-match: tap a left item, then tap its right match
+    var selectedLeft by remember { mutableIntStateOf(-1) }
+    var matchedPairs by remember { mutableStateOf(setOf<Int>()) }
+    val shuffledRight = remember(state.matchPairs) { state.matchPairs.indices.toList().shuffled() }
+
+    // Auto-complete when all matched
+    LaunchedEffect(matchedPairs) {
+        if (matchedPairs.size == state.matchPairs.size && state.matchPairs.isNotEmpty()) {
+            kotlinx.coroutines.delay(500)
+            viewModel.selectAnswer("matched")
+        }
+    }
+
+    // Left column + Right column side by side
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        // Left items
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            state.matchPairs.forEachIndexed { index, (left, _) ->
+                var visible by remember { mutableStateOf(false) }
+                LaunchedEffect(Unit) { kotlinx.coroutines.delay(index * 120L); visible = true }
+
+                AnimatedVisibility(
+                    visible = visible,
+                    enter = slideInHorizontally(initialOffsetX = { -it }) + fadeIn(tween(300))
+                ) {
+                    val isMatched = index in matchedPairs
+                    val isSelected = selectedLeft == index && !isMatched
+                    val bgColor by animateColorAsState(
+                        when {
+                            isMatched -> MektepGreen.copy(alpha = 0.3f)
+                            isSelected -> MaterialTheme.colorScheme.primary
+                            else -> MaterialTheme.colorScheme.primaryContainer
+                        }, label = "leftBg$index"
+                    )
+                    val textColor = when {
+                        isSelected -> MaterialTheme.colorScheme.onPrimary
+                        else -> MaterialTheme.colorScheme.onPrimaryContainer
+                    }
+
+                    Card(
+                        modifier = Modifier.fillMaxWidth().clickable(enabled = !isMatched) {
+                            selectedLeft = if (selectedLeft == index) -1 else index
+                        },
+                        colors = CardDefaults.cardColors(containerColor = bgColor),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(
+                            left, Modifier.padding(14.dp).fillMaxWidth(),
+                            textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp, color = textColor
+                        )
+                    }
+                }
             }
-            Icon(Icons.Default.ArrowForward, null, Modifier.padding(horizontal = 8.dp).align(Alignment.CenterVertically), tint = MaterialTheme.colorScheme.onSurfaceVariant)
-            Card(Modifier.weight(1f), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer), shape = RoundedCornerShape(8.dp)) {
-                Text(right, Modifier.padding(12.dp).fillMaxWidth(), textAlign = TextAlign.Center, fontWeight = FontWeight.Medium)
+        }
+
+        // Right items (shuffled)
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            shuffledRight.forEachIndexed { displayIndex, originalIndex ->
+                var visible by remember { mutableStateOf(false) }
+                LaunchedEffect(Unit) { kotlinx.coroutines.delay(displayIndex * 120L + 60L); visible = true }
+
+                val (_, right) = state.matchPairs[originalIndex]
+                val isMatched = originalIndex in matchedPairs
+
+                AnimatedVisibility(
+                    visible = visible,
+                    enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(tween(300))
+                ) {
+                    val bgColor by animateColorAsState(
+                        if (isMatched) MektepGreen.copy(alpha = 0.3f)
+                        else MaterialTheme.colorScheme.secondaryContainer,
+                        label = "rightBg$originalIndex"
+                    )
+
+                    Card(
+                        modifier = Modifier.fillMaxWidth().clickable(enabled = !isMatched && selectedLeft >= 0) {
+                            if (selectedLeft >= 0 && originalIndex == selectedLeft) {
+                                // Correct match!
+                                matchedPairs = matchedPairs + originalIndex
+                                selectedLeft = -1
+                            } else {
+                                // Wrong match — shake and deselect
+                                selectedLeft = -1
+                            }
+                        },
+                        colors = CardDefaults.cardColors(containerColor = bgColor),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(
+                            right, Modifier.padding(14.dp).fillMaxWidth(),
+                            textAlign = TextAlign.Center, fontWeight = FontWeight.Medium,
+                            fontSize = 15.sp
+                        )
+                    }
+                }
             }
         }
     }
-    LaunchedEffect(Unit) { viewModel.selectAnswer("matched") }
 }
 
 @Composable
