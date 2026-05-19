@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.tisimai.mektep.data.models.AgeBand
+import app.tisimai.mektep.data.models.Lesson
 import app.tisimai.mektep.ui.theme.*
 import app.tisimai.mektep.util.tr
 
@@ -42,6 +43,7 @@ fun DashboardScreen(
     onBackToLauncher: () -> Unit = {},
     onAddChild: () -> Unit = {},
     onEditChild: (String) -> Unit = {},
+    onRecommendedLesson: (String) -> Unit = {},
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -244,6 +246,61 @@ fun DashboardScreen(
 
             // ── Child/Learner-only content (hidden for parent view) ──
             if (!isParentView) {
+
+            // Recommendation card
+            item {
+                val rec by viewModel.recommendation.collectAsState()
+                rec?.let { recommendation ->
+                    val lesson = remember(recommendation.lessonId) { viewModel.getLessonInfo(recommendation.lessonId) }
+                    if (lesson != null) {
+                        val badgeColor = when (recommendation.reason) {
+                            "review" -> MektepOrange
+                            "next" -> MektepBlue
+                            else -> MektepGreen
+                        }
+                        val badgeText = when (recommendation.reason) {
+                            "review" -> "Review"
+                            "next" -> "Up Next"
+                            else -> "Practice"
+                        }
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = CardDefaults.cardColors(containerColor = badgeColor.copy(alpha = 0.1f))
+                        ) {
+                            Row(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(Modifier.weight(1f)) {
+                                    Text(
+                                        badgeText,
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = badgeColor
+                                    )
+                                    Spacer(Modifier.height(4.dp))
+                                    Text(
+                                        lesson.title[language] ?: lesson.title["en"] ?: "Lesson",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp
+                                    )
+                                }
+                                Button(
+                                    onClick = { onRecommendedLesson(recommendation.lessonId) },
+                                    colors = ButtonDefaults.buttonColors(containerColor = badgeColor)
+                                ) {
+                                    Text(tr("start", language))
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             // 1. Subjects FIRST — child came to learn
             item {

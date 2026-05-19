@@ -155,6 +155,9 @@ fun MektepNavHost(isChildMode: Boolean = false) {
                 onSetupPin = {
                     navController.navigate(Routes.PIN_SETUP)
                 },
+                onRecommendedLesson = { lessonId ->
+                    navController.navigate(Routes.lessonRunner(lessonId))
+                },
                 onAddChild = {
                     navController.navigate(Routes.ADD_CHILD)
                 },

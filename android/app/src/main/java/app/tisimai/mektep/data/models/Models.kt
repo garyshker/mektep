@@ -85,7 +85,48 @@ data class LessonProgress(
     val bestStars: Int = 0,
     val bestAccuracy: Double = 0.0,
     val timesCompleted: Int = 0,
-    val lastCompletedAt: Long? = null
+    val lastCompletedAt: Long? = null,
+    val nextReviewDate: String? = null // ISO date for spaced repetition
+)
+
+// ── Adaptive learning entities ──
+
+@Entity(tableName = "question_attempt")
+data class QuestionAttempt(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val childId: String,
+    val lessonId: String,
+    val questionIndex: Int,
+    val isCorrect: Boolean,
+    val responseTimeMs: Long,
+    val attemptTimestamp: Long = System.currentTimeMillis()
+)
+
+@Entity(tableName = "topic_mastery", primaryKeys = ["childId", "topicId"])
+data class TopicMastery(
+    val childId: String,
+    val topicId: String, // same as lessonId
+    val masteryScore: Double = 50.0, // 0-100, starts neutral
+    val totalAttempts: Int = 0,
+    val lastUpdatedAt: Long = System.currentTimeMillis()
+)
+
+// ── Adaptive learning helper types ──
+
+data class AttemptResult(
+    val questionIndex: Int,
+    val isCorrect: Boolean,
+    val responseTimeMs: Long
+)
+
+data class LessonStatus(
+    val isUnlocked: Boolean,
+    val isDueForReview: Boolean
+)
+
+data class RecommendedLesson(
+    val lessonId: String,
+    val reason: String // "review", "next", "practice"
 )
 
 @Entity(tableName = "screen_time_log")

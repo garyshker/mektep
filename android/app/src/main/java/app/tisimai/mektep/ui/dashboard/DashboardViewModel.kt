@@ -37,7 +37,8 @@ class DashboardViewModel @Inject constructor(
     private val questDao: QuestDao,
     private val lessonLoader: LessonLoader,
     private val tokenStore: TokenStore,
-    private val parentalPrefsStore: ParentalPrefsStore
+    private val parentalPrefsStore: ParentalPrefsStore,
+    private val masteryEngine: MasteryEngine
 ) : ViewModel() {
 
     val language: StateFlow<String> = tokenStore.language.stateIn(viewModelScope, SharingStarted.Eagerly, "en")
@@ -51,6 +52,8 @@ class DashboardViewModel @Inject constructor(
 
     private val _children = MutableStateFlow<List<ChildProfile>>(emptyList())
 
+    val recommendation = MutableStateFlow<RecommendedLesson?>(null)
+
     init {
         ensureQuestsExist()
         // Load children for parent view
@@ -58,7 +61,19 @@ class DashboardViewModel @Inject constructor(
             val user = userDao.getProfileOnce() ?: return@launch
             childProfileDao.getChildrenForParent(user.id).collect { _children.value = it }
         }
+        // Load recommendation for active child
+        viewModelScope.launch {
+            val childId = parentalPrefsStore.activeChildId.first() ?: ""
+            if (childId.isNotEmpty()) {
+                val child = childProfileDao.getChild(childId)
+                if (child != null) {
+                    recommendation.value = masteryEngine.getRecommendedLesson(childId, child.gradeLevel)
+                }
+            }
+        }
     }
+
+    fun getLessonInfo(lessonId: String): Lesson? = lessonLoader.getLesson(lessonId)
 
     // Observe profile + progress + quests reactively, switching on activeChildId
     val uiState: StateFlow<DashboardUiState> = activeChildId.flatMapLatest { childId ->

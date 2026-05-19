@@ -15,9 +15,11 @@ import kotlinx.coroutines.flow.Flow
         DailyQuest::class,
         ParentalConfig::class,
         AllowedApp::class,
-        ChildSession::class
+        ChildSession::class,
+        QuestionAttempt::class,
+        TopicMastery::class
     ],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 abstract class MektepDatabase : RoomDatabase() {
@@ -29,6 +31,8 @@ abstract class MektepDatabase : RoomDatabase() {
     abstract fun allowedAppDao(): AllowedAppDao
     abstract fun childSessionDao(): ChildSessionDao
     abstract fun questDao(): QuestDao
+    abstract fun questionAttemptDao(): QuestionAttemptDao
+    abstract fun topicMasteryDao(): TopicMasteryDao
 
     companion object {
         val MIGRATION_1_2 = object : Migration(1, 2) {
@@ -169,6 +173,15 @@ abstract class MektepDatabase : RoomDatabase() {
                 db.execSQL("ALTER TABLE child_profile ADD COLUMN language TEXT NOT NULL DEFAULT 'kk'")
             }
         }
+
+        val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS question_attempt (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, childId TEXT NOT NULL, lessonId TEXT NOT NULL, questionIndex INTEGER NOT NULL, isCorrect INTEGER NOT NULL, responseTimeMs INTEGER NOT NULL, attemptTimestamp INTEGER NOT NULL DEFAULT 0)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS idx_attempt_child_lesson ON question_attempt(childId, lessonId)")
+                db.execSQL("CREATE TABLE IF NOT EXISTS topic_mastery (childId TEXT NOT NULL, topicId TEXT NOT NULL, masteryScore REAL NOT NULL DEFAULT 50.0, totalAttempts INTEGER NOT NULL DEFAULT 0, lastUpdatedAt INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(childId, topicId))")
+                db.execSQL("ALTER TABLE lesson_progress ADD COLUMN nextReviewDate TEXT DEFAULT NULL")
+            }
+        }
     }
 }
 
@@ -259,6 +272,35 @@ interface ProgressDao {
 
     @Upsert
     suspend fun upsert(progress: LessonProgress)
+
+    @Query("SELECT * FROM lesson_progress WHERE childId = :childId AND nextReviewDate IS NOT NULL AND nextReviewDate <= :today ORDER BY nextReviewDate ASC")
+    suspend fun getLessonsDueForReview(childId: String, today: String): List<LessonProgress>
+}
+
+@Dao
+interface QuestionAttemptDao {
+    @Insert suspend fun insert(attempt: QuestionAttempt)
+    @Insert suspend fun insertAll(attempts: List<QuestionAttempt>)
+
+    @Query("SELECT * FROM question_attempt WHERE childId = :childId AND lessonId = :lessonId ORDER BY attemptTimestamp DESC")
+    suspend fun getForLesson(childId: String, lessonId: String): List<QuestionAttempt>
+
+    @Query("SELECT DISTINCT questionIndex FROM question_attempt WHERE childId = :childId AND lessonId = :lessonId AND isCorrect = 0 AND attemptTimestamp = (SELECT MAX(attemptTimestamp) FROM question_attempt a2 WHERE a2.childId = question_attempt.childId AND a2.lessonId = question_attempt.lessonId AND a2.questionIndex = question_attempt.questionIndex)")
+    suspend fun getRecentlyWrongIndices(childId: String, lessonId: String): List<Int>
+}
+
+@Dao
+interface TopicMasteryDao {
+    @Query("SELECT * FROM topic_mastery WHERE childId = :childId AND topicId = :topicId")
+    suspend fun get(childId: String, topicId: String): TopicMastery?
+
+    @Query("SELECT * FROM topic_mastery WHERE childId = :childId ORDER BY masteryScore ASC")
+    suspend fun getAllForChild(childId: String): List<TopicMastery>
+
+    @Query("SELECT * FROM topic_mastery WHERE childId = :childId ORDER BY masteryScore ASC LIMIT 1")
+    suspend fun getWeakest(childId: String): TopicMastery?
+
+    @Upsert suspend fun upsert(mastery: TopicMastery)
 }
 
 @Dao

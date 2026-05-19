@@ -32,7 +32,8 @@ data class LessonRunnerState(
     val startTimeMs: Long = 0L,          // when current question started
     val lessonStartTimeMs: Long = 0L,    // when entire lesson started
     val timeSpentMinutes: Int = 0,       // total learning time
-    val earnedScreenTimeMinutes: Int = 0 // screen time earned
+    val earnedScreenTimeMinutes: Int = 0, // screen time earned
+    val attemptResults: List<AttemptResult> = emptyList()
 )
 
 @HiltViewModel
@@ -43,7 +44,8 @@ class LessonRunnerViewModel @Inject constructor(
     private val progressDao: ProgressDao,
     private val screenTimeDao: ScreenTimeDao,
     private val tokenStore: TokenStore,
-    private val parentalPrefsStore: ParentalPrefsStore
+    private val parentalPrefsStore: ParentalPrefsStore,
+    private val masteryEngine: MasteryEngine
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LessonRunnerState())
@@ -81,7 +83,10 @@ class LessonRunnerViewModel @Inject constructor(
 
             val lang = language.value
             val title = lesson.title[lang] ?: lesson.title["en"] ?: "Lesson"
-            val limitedQuestions = lesson.questions.take(currentBand.maxQuestionsPerSession)
+            val progressChildId = childId ?: ""
+            val limitedQuestions = masteryEngine.selectQuestions(
+                progressChildId, lessonId, lesson.questions, currentBand.maxQuestionsPerSession
+            )
 
             val now = System.currentTimeMillis()
             _uiState.value = LessonRunnerState(
@@ -115,11 +120,15 @@ class LessonRunnerViewModel @Inject constructor(
         }
         val newScore = if (isCorrect) state.score + 1 else state.score
 
+        val responseTime = System.currentTimeMillis() - state.startTimeMs
+        val newAttempts = state.attemptResults + AttemptResult(state.questionIndex, isCorrect, responseTime)
+
         _uiState.value = state.copy(
             feedbackShown = true,
             lastAnswerCorrect = isCorrect,
             hearts = newHearts,
-            score = newScore
+            score = newScore,
+            attemptResults = newAttempts
         )
     }
 
@@ -229,6 +238,11 @@ class LessonRunnerViewModel @Inject constructor(
                     lastCompletedAt = System.currentTimeMillis()
                 )
             )
+
+            // Adaptive learning: record attempts and schedule review
+            masteryEngine.recordAttempts(progressChildId, currentLessonId, state.attemptResults)
+            val mastery = masteryEngine.getMastery(progressChildId, currentLessonId)
+            masteryEngine.scheduleReview(progressChildId, currentLessonId, mastery)
         }
 
         val timeSpentMin = (elapsedMs / 60_000.0).toInt()

@@ -18,7 +18,7 @@ object AppModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): MektepDatabase =
         Room.databaseBuilder(context, MektepDatabase::class.java, "mektep.db")
-            .addMigrations(MektepDatabase.MIGRATION_1_2, MektepDatabase.MIGRATION_2_3, MektepDatabase.MIGRATION_3_4, MektepDatabase.MIGRATION_4_5, MektepDatabase.MIGRATION_5_6)
+            .addMigrations(MektepDatabase.MIGRATION_1_2, MektepDatabase.MIGRATION_2_3, MektepDatabase.MIGRATION_3_4, MektepDatabase.MIGRATION_4_5, MektepDatabase.MIGRATION_5_6, MektepDatabase.MIGRATION_6_7)
             .fallbackToDestructiveMigration()
             .build()
 
@@ -30,6 +30,8 @@ object AppModule {
     @Provides fun provideAllowedAppDao(db: MektepDatabase): AllowedAppDao = db.allowedAppDao()
     @Provides fun provideChildSessionDao(db: MektepDatabase): ChildSessionDao = db.childSessionDao()
     @Provides fun provideQuestDao(db: MektepDatabase): QuestDao = db.questDao()
+    @Provides fun provideQuestionAttemptDao(db: MektepDatabase): QuestionAttemptDao = db.questionAttemptDao()
+    @Provides fun provideTopicMasteryDao(db: MektepDatabase): TopicMasteryDao = db.topicMasteryDao()
 
     @Provides
     @Singleton
