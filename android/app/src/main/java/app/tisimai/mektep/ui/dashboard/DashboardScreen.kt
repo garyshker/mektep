@@ -164,7 +164,11 @@ fun DashboardScreen(
                         AgeBand.OQYSHY -> MektepBlue
                     }
                     Card(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp).clickable {
+                            // Tap child card → switch to that child's view
+                            viewModel.activateChild(child)
+                            childModeOverride = true
+                        },
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(containerColor = bandColor.copy(alpha = 0.08f))
                     ) {

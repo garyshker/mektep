@@ -144,6 +144,18 @@ class DashboardViewModel @Inject constructor(
         )
     }
 
+    fun activateChild(child: ChildProfile) {
+        viewModelScope.launch {
+            // Save parent language before switching
+            val currentLang = tokenStore.language.first()
+            parentalPrefsStore.saveParentLanguage(currentLang)
+            parentalPrefsStore.setActiveChildId(child.id)
+            tokenStore.saveLanguage(child.language)
+            // Load recommendation for this child
+            recommendation.value = masteryEngine.getRecommendedLesson(child.id, child.gradeLevel)
+        }
+    }
+
     fun exitChildMode() {
         viewModelScope.launch {
             parentalPrefsStore.setActiveChildId(null)
