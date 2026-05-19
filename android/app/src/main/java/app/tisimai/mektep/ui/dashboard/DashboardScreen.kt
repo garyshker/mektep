@@ -148,7 +148,7 @@ fun DashboardScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
-            contentPadding = androidx.compose.foundation.layout.WindowInsets.Companion.navigationBars.asPaddingValues()
+            contentPadding = PaddingValues(bottom = 0.dp)
         ) {
             if (isParentView) {
                 // ── Parent View: show children's progress ──
@@ -433,6 +433,8 @@ fun DashboardScreen(
                 }
             }
 
+            // Bottom spacer to ensure content is scrollable past navigation bar
+            item { Spacer(Modifier.height(100.dp)) }
         }
     }
 }
