@@ -66,10 +66,10 @@
       "type": "match",
       "prompt": { "kk": "Түсті атымен сәйкестендір", "ru": "Сопоставь цвет с названием", "en": "Match the color to its name" },
       "pairs": [
-        { "left": "🔴", "right": "Red" },
-        { "left": "🟢", "right": "Green" },
-        { "left": "🔵", "right": "Blue" },
-        { "left": "🟡", "right": "Yellow" }
+        { "left": "🔴", "right": "Red (Қызыл)" },
+        { "left": "🟢", "right": "Green (Жасыл)" },
+        { "left": "🔵", "right": "Blue (Көк)" },
+        { "left": "🟡", "right": "Yellow (Сары)" }
       ],
       "correct_answer": null,
       "difficulty_score": 1
