@@ -87,9 +87,37 @@ class LessonLoader @Inject constructor(
         cachedLessons = allLessons.sortedWith(compareBy({ it.subjectId }, { it.gradeLevel }, { it.sortOrder }))
     }
 
+    fun subjectDisplayName(subject: Subject, gradeLevel: Int, lang: String): String {
+        if (gradeLevel <= 0) {
+            return when (subject.id) {
+                "math" -> mapOf("kk" to "Санайық!", "ru" to "Считаем!", "en" to "Let's count!")[lang] ?: "Let's count!"
+                "kazakh" -> mapOf("kk" to "Әріптер!", "ru" to "Буквы!", "en" to "Letters!")[lang] ?: "Letters!"
+                "english" -> mapOf("kk" to "ABC!", "ru" to "ABC!", "en" to "ABC!")[lang] ?: "ABC!"
+                "world" -> mapOf("kk" to "Жануарлар!", "ru" to "Животные!", "en" to "Animals!")[lang] ?: "Animals!"
+                else -> subject.name[lang] ?: subject.name["en"] ?: subject.id
+            }
+        }
+        return subject.name[lang] ?: subject.name["en"] ?: subject.id
+    }
+
+    companion object {
+        fun subjectDisplayNameStatic(subject: Subject, gradeLevel: Int, lang: String): String {
+            if (gradeLevel <= 0) {
+                return when (subject.id) {
+                    "math" -> mapOf("kk" to "Санайық!", "ru" to "Считаем!", "en" to "Let's count!")[lang] ?: "Let's count!"
+                    "kazakh" -> mapOf("kk" to "Әріптер!", "ru" to "Буквы!", "en" to "Letters!")[lang] ?: "Letters!"
+                    "english" -> mapOf("kk" to "ABC!", "ru" to "ABC!", "en" to "ABC!")[lang] ?: "ABC!"
+                    "world" -> mapOf("kk" to "Жануарлар!", "ru" to "Животные!", "en" to "Animals!")[lang] ?: "Animals!"
+                    else -> subject.name[lang] ?: subject.name["en"] ?: subject.id
+                }
+            }
+            return subject.name[lang] ?: subject.name["en"] ?: subject.id
+        }
+    }
+
     private fun subjectFromId(id: String): Subject = when (id) {
-        "math" -> Subject(id, mapOf("kk" to "Математика", "ru" to "Математика", "en" to "Math"), "📐", "math")
-        "kazakh" -> Subject(id, mapOf("kk" to "Қазақ тілі", "ru" to "Казахский язык", "en" to "Kazakh"), "🇰🇿", "kazakh")
+        "math" -> Subject(id, mapOf("kk" to "Математика", "ru" to "Математика", "en" to "Math"), "🔢", "math")
+        "kazakh" -> Subject(id, mapOf("kk" to "Қазақ тілі", "ru" to "Казахский язык", "en" to "Kazakh"), "📖", "kazakh")
         "english" -> Subject(id, mapOf("kk" to "Ағылшын тілі", "ru" to "Английский язык", "en" to "English"), "🇬🇧", "english")
         "world" -> Subject(id, mapOf("kk" to "Дүниетану", "ru" to "Познание мира", "en" to "World Studies"), "🌍", "world")
         else -> Subject(id, mapOf("en" to id.replaceFirstChar { it.uppercase() }), "📚", id)

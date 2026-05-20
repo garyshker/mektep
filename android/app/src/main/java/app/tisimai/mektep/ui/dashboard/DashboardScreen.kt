@@ -310,7 +310,7 @@ fun DashboardScreen(
 
             // 1. Subjects FIRST — child came to learn
             item {
-                Text(tr("subjects", language), fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.padding(vertical = 12.dp))
+                Spacer(Modifier.height(8.dp))
             }
 
             val subjects = state.subjects
@@ -332,7 +332,8 @@ fun DashboardScreen(
                                 visible = visible,
                                 enter = fadeIn(tween(300)) + scaleIn(initialScale = 0.8f, animationSpec = spring(dampingRatio = 0.6f))
                             ) {
-                                SubjectCard(item, language) { onSubjectClick(item.subject.id) }
+                                val gradeLevel = state.childProfile?.gradeLevel ?: state.profile?.gradeLevel ?: 1
+                                SubjectCard(item, language, gradeLevel) { onSubjectClick(item.subject.id) }
                             }
                         }
                     }
@@ -456,7 +457,7 @@ private fun StatChip(icon: ImageVector, label: String, sublabel: String, color: 
 }
 
 @Composable
-private fun SubjectCard(item: SubjectWithProgress, language: String, onClick: () -> Unit) {
+private fun SubjectCard(item: SubjectWithProgress, language: String, gradeLevel: Int = 1, onClick: () -> Unit) {
     val subjectColor = when (item.subject.colorKey) {
         "math" -> MathColor; "kazakh" -> KazakhColor; "english" -> EnglishColor; "world" -> WorldColor
         else -> MektepGreen
@@ -469,7 +470,7 @@ private fun SubjectCard(item: SubjectWithProgress, language: String, onClick: ()
     ) {
         Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.SpaceBetween) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(item.subject.emoji, fontSize = 28.sp)
+                Text(item.subject.emoji, fontSize = 36.sp)
                 // Star rating
                 if (item.bestStars > 0) {
                     Row {
@@ -483,7 +484,10 @@ private fun SubjectCard(item: SubjectWithProgress, language: String, onClick: ()
                 }
             }
             Column {
-                Text(item.subject.name[language] ?: item.subject.name["en"] ?: "", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(
+                    app.tisimai.mektep.data.local.LessonLoader.subjectDisplayNameStatic(item.subject, gradeLevel, language),
+                    fontWeight = FontWeight.Bold, fontSize = 16.sp
+                )
                 if (item.totalLessons > 0) {
                     Spacer(Modifier.height(4.dp))
                     LinearProgressIndicator(
