@@ -201,6 +201,7 @@ object Strings {
         "rec_next" to mapOf("en" to "Up Next", "ru" to "Следующий", "kk" to "Келесі"),
         "rec_practice" to mapOf("en" to "Practice", "ru" to "Практика", "kk" to "Жаттығу"),
         "start" to mapOf("en" to "Start", "ru" to "Начать", "kk" to "Бастау"),
+        "tap_to_select" to mapOf("en" to "Tap to select date", "ru" to "Нажмите для выбора", "kk" to "Таңдау үшін басыңыз"),
     )
 }
 

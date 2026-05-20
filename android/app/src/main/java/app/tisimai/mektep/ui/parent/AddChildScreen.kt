@@ -117,7 +117,18 @@ fun AddChildScreen(
     var selectedAvatar by remember { mutableStateOf("\uD83E\uDDD2") } // 🧒
     var selectedLanguage by remember { mutableStateOf("kk") }
     var selectedGrade by remember { mutableIntStateOf(0) }
+    var gradeManuallySet by remember { mutableStateOf(false) }
     var prefilled by remember { mutableStateOf(false) }
+    var showDatePicker by remember { mutableStateOf(false) }
+
+    // Auto-calculate grade from birth date (unless parent manually set it)
+    fun calculateGradeFromAge(birthDateStr: String): Int {
+        return try {
+            val birth = java.time.LocalDate.parse(birthDateStr)
+            val age = java.time.Period.between(birth, java.time.LocalDate.now()).years
+            (age - 5).coerceIn(0, 3) // age 4-5→0(Pre-K), 6→1, 7→2, 8+→3
+        } catch (_: Exception) { 0 }
+    }
 
     // Pre-fill when editing
     LaunchedEffect(existingChild) {
@@ -128,6 +139,7 @@ fun AddChildScreen(
                 selectedAvatar = child.avatarEmoji
                 selectedLanguage = child.language
                 selectedGrade = child.gradeLevel
+                gradeManuallySet = true
                 prefilled = true
             }
         }
@@ -172,15 +184,60 @@ fun AddChildScreen(
                 singleLine = true
             )
 
-            // Birth date field
+            // Birth date picker
             OutlinedTextField(
-                value = birthDate,
-                onValueChange = { birthDate = it },
+                value = if (birthDate.isNotEmpty()) {
+                    try {
+                        val d = java.time.LocalDate.parse(birthDate)
+                        val age = java.time.Period.between(d, java.time.LocalDate.now()).years
+                        "$birthDate ($age ${tr("age_years", lang)})"
+                    } catch (_: Exception) { birthDate }
+                } else "",
+                onValueChange = {},
                 label = { Text(tr("birth_date", lang)) },
-                placeholder = { Text("2018-03-15") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+                placeholder = { Text(tr("tap_to_select", lang)) },
+                modifier = Modifier.fillMaxWidth().clickable { showDatePicker = true },
+                singleLine = true,
+                readOnly = true,
+                enabled = false,
+                colors = OutlinedTextFieldDefaults.colors(
+                    disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                    disabledBorderColor = MaterialTheme.colorScheme.outline,
+                    disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             )
+
+            if (showDatePicker) {
+                val datePickerState = rememberDatePickerState(
+                    initialSelectedDateMillis = try {
+                        java.time.LocalDate.parse(birthDate).atStartOfDay(java.time.ZoneOffset.UTC).toInstant().toEpochMilli()
+                    } catch (_: Exception) {
+                        // Default: 5 years ago
+                        java.time.LocalDate.now().minusYears(5).atStartOfDay(java.time.ZoneOffset.UTC).toInstant().toEpochMilli()
+                    }
+                )
+                DatePickerDialog(
+                    onDismissRequest = { showDatePicker = false },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            datePickerState.selectedDateMillis?.let { millis ->
+                                val date = java.time.Instant.ofEpochMilli(millis).atZone(java.time.ZoneOffset.UTC).toLocalDate()
+                                birthDate = date.toString()
+                                // Auto-calculate grade
+                                if (!gradeManuallySet) {
+                                    selectedGrade = calculateGradeFromAge(birthDate)
+                                }
+                            }
+                            showDatePicker = false
+                        }) { Text("OK") }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showDatePicker = false }) { Text(tr("cancel", lang)) }
+                    }
+                ) {
+                    DatePicker(state = datePickerState)
+                }
+            }
 
             // Avatar picker
             Text(tr("avatar", lang), fontWeight = FontWeight.Bold, fontSize = 16.sp)
@@ -234,7 +291,7 @@ fun AddChildScreen(
                 (0..3).forEach { grade ->
                     FilterChip(
                         selected = selectedGrade == grade,
-                        onClick = { selectedGrade = grade },
+                        onClick = { selectedGrade = grade; gradeManuallySet = true },
                         label = { Text(if (grade == 0) "Pre-K" else "$grade") },
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = MektepGreen,
