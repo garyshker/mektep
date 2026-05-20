@@ -29,6 +29,7 @@ import app.tisimai.mektep.ui.components.ConfettiEffect
 import app.tisimai.mektep.ui.components.SoundPlayer
 import app.tisimai.mektep.ui.theme.MektepGreen
 import app.tisimai.mektep.ui.theme.MektepRed
+import app.tisimai.mektep.util.tr
 
 @Composable
 fun LessonRunnerScreen(
@@ -60,7 +61,7 @@ fun LessonRunnerScreen(
                 CircularProgressIndicator()
             }
             state.isCompleted -> {
-                CompletionScreen(state, onFinish, band)
+                CompletionScreen(state, onFinish, band, language)
                 ConfettiEffect(isActive = state.starsEarned > 0)
             }
             state.currentQuestion != null -> QuestionScreen(state, language, viewModel, band)
@@ -436,7 +437,7 @@ private fun MatchQuestion(state: LessonRunnerState, viewModel: LessonRunnerViewM
 }
 
 @Composable
-private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit, band: AgeBand) {
+private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit, band: AgeBand, language: String = "en") {
     // Animated entrance
     val titleScale by animateFloatAsState(
         targetValue = 1f, animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
@@ -450,7 +451,7 @@ private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit, ban
     ) {
         Text("🎉", fontSize = 64.sp, modifier = Modifier.scale(titleScale))
         Spacer(Modifier.height(16.dp))
-        Text("Lesson Complete!", fontSize = 28.sp, fontWeight = FontWeight.Bold, modifier = Modifier.scale(titleScale))
+        Text(tr("lesson_complete", language), fontSize = 28.sp, fontWeight = FontWeight.Bold, modifier = Modifier.scale(titleScale))
         Spacer(Modifier.height(24.dp))
 
         // Animated stars
@@ -498,10 +499,10 @@ private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit, ban
                         "+${state.earnedScreenTimeMinutes} min",
                         fontSize = 36.sp, fontWeight = FontWeight.Bold, color = MektepGreen
                     )
-                    Text("screen time earned", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(tr("screen_time_earned", language), fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        "${state.timeSpentMinutes} min learning × ${band.screenTimeRatio}",
+                        "${state.timeSpentMinutes} ${tr("min", language)} × ${band.screenTimeRatio}",
                         fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -521,8 +522,8 @@ private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit, ban
                 Column(Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                         StatItem("${state.xpEarned}", "XP", MektepGreen)
-                        StatItem("${state.accuracyPct.toInt()}%", "Accuracy", MaterialTheme.colorScheme.onSurface)
-                        StatItem("${state.score}/${state.totalQuestions}", "Correct", MaterialTheme.colorScheme.onSurface)
+                        StatItem("${state.accuracyPct.toInt()}%", tr("accuracy", language), MaterialTheme.colorScheme.onSurface)
+                        StatItem("${state.score}/${state.totalQuestions}", tr("correct", language), MaterialTheme.colorScheme.onSurface)
                     }
                 }
             }
@@ -534,7 +535,7 @@ private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit, ban
         LaunchedEffect(Unit) { kotlinx.coroutines.delay(1000); btnVisible = true }
         AnimatedVisibility(visible = btnVisible, enter = fadeIn(tween(300)) + scaleIn(spring(dampingRatio = 0.6f))) {
             Button(onClick = onFinish, Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(12.dp)) {
-                Text("Continue", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(tr("continue_btn", language), fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
         }
     }
