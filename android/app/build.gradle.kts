@@ -64,6 +64,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material:material-icons-extended")
+    implementation("androidx.compose.ui:ui-text-google-fonts")
     debugImplementation("androidx.compose.ui:ui-tooling")
 
     // Core

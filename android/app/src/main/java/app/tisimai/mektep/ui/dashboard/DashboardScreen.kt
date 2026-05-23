@@ -2,6 +2,7 @@ package app.tisimai.mektep.ui.dashboard
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,7 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.tisimai.mektep.data.models.AgeBand
-import app.tisimai.mektep.data.models.Lesson
+import app.tisimai.mektep.ui.components.BrandMark
+import app.tisimai.mektep.ui.components.CountPill
 import app.tisimai.mektep.ui.theme.*
 import app.tisimai.mektep.util.tr
 
@@ -114,14 +116,24 @@ fun DashboardScreen(
                             }
                         }
                     } else {
-                        Column {
-                            Text("BilimALL", fontWeight = FontWeight.Bold)
-                            state.profile?.let {
-                                Text(it.displayName, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            BrandMark(icon = Icons.Default.School, size = 40.dp)
+                            Spacer(Modifier.width(10.dp))
+                            Column {
+                                Text("Mektep", style = MaterialTheme.typography.titleLarge)
+                                Text(
+                                    state.profile?.displayName ?: tr("subjects", language),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
                             }
                         }
                     }
                 },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                ),
                 actions = {
                     if (effectiveChildMode) {
                         // Child mode: lock icon → PIN required to switch to parent
@@ -235,16 +247,26 @@ fun DashboardScreen(
                 item {
                     Card(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).clickable { onScreenTimeClick() },
+                        shape = MaterialTheme.shapes.large,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
                     ) {
-                        Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.Timer, null, Modifier.size(40.dp), tint = MaterialTheme.colorScheme.primary)
-                            Spacer(Modifier.width(16.dp))
-                            Column(Modifier.weight(1f)) {
-                                Text(tr("screen_time", language), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                                Text("${state.screenTimeMinutes} ${tr("minutes_available", language)}", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Row(modifier = Modifier.padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                Modifier.size(48.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(Icons.Default.Timer, null, Modifier.size(26.dp), tint = MaterialTheme.colorScheme.primary)
                             }
-                            Icon(Icons.Default.ChevronRight, null)
+                            Spacer(Modifier.width(14.dp))
+                            Column(Modifier.weight(1f)) {
+                                Text(tr("screen_time", language), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                                Text(
+                                    "${state.screenTimeMinutes} ${tr("minutes_available", language)}",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
+                                )
+                            }
+                            Icon(Icons.Default.ChevronRight, null, tint = MaterialTheme.colorScheme.onPrimaryContainer)
                         }
                     }
                 }
@@ -348,17 +370,22 @@ fun DashboardScreen(
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp).clickable { onQuickGame() },
-                    colors = CardDefaults.cardColors(containerColor = MektepOrange.copy(alpha = 0.15f)),
-                    shape = RoundedCornerShape(16.dp)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+                    shape = MaterialTheme.shapes.large
                 ) {
-                    Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text("⚡", fontSize = 28.sp)
-                        Spacer(Modifier.width(12.dp))
-                        Column(Modifier.weight(1f)) {
-                            Text(tr("quick_game", language), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                            Text(tr("quick_game_desc", language), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(modifier = Modifier.padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            Modifier.size(48.dp).clip(CircleShape).background(MaterialTheme.colorScheme.surface.copy(alpha = 0.6f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("⚡", fontSize = 26.sp)
                         }
-                        Icon(Icons.Default.ChevronRight, null, tint = MektepOrange)
+                        Spacer(Modifier.width(14.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(tr("quick_game", language), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSecondaryContainer)
+                            Text(tr("quick_game_desc", language), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f))
+                        }
+                        Icon(Icons.Default.ChevronRight, null, tint = MaterialTheme.colorScheme.onSecondaryContainer)
                     }
                 }
             }
@@ -367,15 +394,12 @@ fun DashboardScreen(
             if (state.quests.isNotEmpty()) {
                 item {
                     Row(
-                        Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                        Modifier.fillMaxWidth().padding(top = 16.dp, bottom = 8.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(tr("daily_quests", language), fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                        Text(
-                            "${state.questsCompletedCount}/${state.quests.size}",
-                            fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        Text(tr("daily_quests", language), style = MaterialTheme.typography.headlineSmall)
+                        CountPill("${state.questsCompletedCount}/${state.quests.size}")
                     }
                 }
                 itemsIndexed(state.quests) { idx, quest ->
@@ -442,42 +466,45 @@ fun DashboardScreen(
 
 @Composable
 private fun StatChip(icon: ImageVector, label: String, sublabel: String, color: Color) {
-    val scale by animateFloatAsState(
-        targetValue = 1f,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
-        label = "statScale"
-    )
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.scale(scale)) {
-        Box(Modifier.size(48.dp).clip(CircleShape).background(color.copy(alpha = 0.15f)), contentAlignment = Alignment.Center) {
-            Icon(icon, null, tint = color, modifier = Modifier.size(24.dp))
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            Modifier.size(52.dp).clip(CircleShape).background(color.copy(alpha = 0.14f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(icon, null, tint = color, modifier = Modifier.size(26.dp))
         }
-        Text(label, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-        Text(sublabel, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Spacer(Modifier.height(6.dp))
+        Text(label, style = MaterialTheme.typography.titleMedium)
+        Text(sublabel, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
 @Composable
 private fun SubjectCard(item: SubjectWithProgress, language: String, gradeLevel: Int = 1, onClick: () -> Unit) {
-    val subjectColor = when (item.subject.colorKey) {
-        "math" -> MathColor; "kazakh" -> KazakhColor; "english" -> EnglishColor; "world" -> WorldColor
-        else -> MektepGreen
-    }
+    val sc = SubjectPalette.forId(item.subject.colorKey)
 
     Card(
-        modifier = Modifier.fillMaxWidth().height(150.dp).clickable { onClick() },
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = subjectColor.copy(alpha = 0.1f))
+        modifier = Modifier.fillMaxWidth().height(166.dp).clickable { onClick() },
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.SpaceBetween) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(item.subject.emoji, fontSize = 36.sp)
-                // Star rating
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
+                Box(
+                    Modifier.size(52.dp).clip(MaterialTheme.shapes.medium).background(sc.container),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(item.subject.emoji, fontSize = 26.sp)
+                }
                 if (item.bestStars > 0) {
-                    Row {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         repeat(3) { i ->
-                            Text(
-                                if (i < item.bestStars) "⭐" else "☆",
-                                fontSize = if (i < item.bestStars) 14.sp else 12.sp
+                            Icon(
+                                Icons.Default.Star, null,
+                                tint = if (i < item.bestStars) MektepStar else MaterialTheme.colorScheme.outlineVariant,
+                                modifier = Modifier.size(15.dp)
                             )
                         }
                     }
@@ -489,13 +516,19 @@ private fun SubjectCard(item: SubjectWithProgress, language: String, gradeLevel:
                     fontWeight = FontWeight.Bold, fontSize = 16.sp
                 )
                 if (item.totalLessons > 0) {
-                    Spacer(Modifier.height(4.dp))
+                    Spacer(Modifier.height(6.dp))
                     LinearProgressIndicator(
                         progress = { item.completedLessons.toFloat() / item.totalLessons },
-                        modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(2.dp)),
-                        color = subjectColor,
+                        modifier = Modifier.fillMaxWidth().height(7.dp).clip(CircleShape),
+                        color = sc.content,
+                        trackColor = sc.container,
                     )
-                    Text("${item.completedLessons}/${item.totalLessons} ${tr("lessons", language)}", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        "${item.completedLessons}/${item.totalLessons} ${tr("lessons", language)}",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
         }
@@ -522,31 +555,40 @@ private fun QuestRow(quest: app.tisimai.mektep.data.models.DailyQuest, language:
     val isClaimed = quest.xpReward == 0
 
     Card(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp).clickable {
+        modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp).clickable {
             if (quest.completed && !isClaimed) onClaim()
             else if (!quest.completed) onTap()
         },
+        shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
             containerColor = when {
-                isClaimed -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                quest.completed -> MektepGreen.copy(alpha = 0.1f)
+                isClaimed -> MaterialTheme.colorScheme.surfaceContainer
+                quest.completed -> MektepGreen.copy(alpha = 0.10f)
                 else -> MaterialTheme.colorScheme.surface
             }
-        )
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
-            Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+            Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(questEmoji, fontSize = 20.sp)
-            Spacer(Modifier.width(10.dp))
+            Text(questEmoji, fontSize = 22.sp)
+            Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                Text(questText, fontSize = 14.sp, fontWeight = if (quest.completed) FontWeight.Bold else FontWeight.Normal)
+                Text(
+                    questText,
+                    style = if (quest.completed) MaterialTheme.typography.titleSmall else MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 if (!quest.completed && quest.targetValue > 1) {
+                    Spacer(Modifier.height(6.dp))
                     LinearProgressIndicator(
                         progress = { (quest.currentValue.toFloat() / quest.targetValue).coerceIn(0f, 1f) },
-                        modifier = Modifier.fillMaxWidth().height(3.dp).clip(RoundedCornerShape(2.dp)),
+                        modifier = Modifier.fillMaxWidth().height(5.dp).clip(CircleShape),
                         color = MektepGreen,
+                        trackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                     )
                 }
             }
@@ -555,10 +597,10 @@ private fun QuestRow(quest: app.tisimai.mektep.data.models.DailyQuest, language:
                 Text("✅", fontSize = 18.sp)
             } else if (quest.completed) {
                 TextButton(onClick = onClaim) {
-                    Text("+${quest.xpReward} XP", color = MektepGreen, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                    Text("+${quest.xpReward} XP", color = MektepGreen, style = MaterialTheme.typography.labelLarge)
                 }
             } else {
-                Text("+${quest.xpReward} XP", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("+${quest.xpReward} XP", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }

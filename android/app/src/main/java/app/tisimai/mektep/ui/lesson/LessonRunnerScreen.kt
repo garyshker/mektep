@@ -123,12 +123,15 @@ private fun QuestionScreen(state: LessonRunnerState, language: String, viewModel
             }
         }
 
+        Spacer(Modifier.height(16.dp))
+
         Text(
-            "Question ${state.questionIndex + 1} of ${state.totalQuestions}",
-            fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant
+            "Question ${state.questionIndex + 1} of ${state.totalQuestions}".uppercase(),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.primary
         )
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(20.dp))
 
         // Animated prompt entrance
         AnimatedContent(
@@ -153,14 +156,12 @@ private fun QuestionScreen(state: LessonRunnerState, language: String, viewModel
                     )
                     Spacer(Modifier.height(16.dp))
                 } else {
-                    // Extract emoji from prompt and show it large
                     val emojiRegex = Regex("[\\p{So}\\p{Cn}]+(\\uFE0F)?")
                     val emoji = emojiRegex.find(prompt)?.value
                     if (emoji != null) {
                         Text(emoji, fontSize = 100.sp, modifier = Modifier.padding(vertical = 8.dp))
                     }
                 }
-                // Show prompt text without the emoji (or full prompt if no emoji found)
                 val emojiRegex = Regex("[\\p{So}\\p{Cn}]+(\\uFE0F)?\\s*")
                 val cleanPrompt = prompt.replace(emojiRegex, "").trim()
                 Text(cleanPrompt, fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
@@ -187,15 +188,16 @@ private fun QuestionScreen(state: LessonRunnerState, language: String, viewModel
             enter = slideInVertically(initialOffsetY = { it }) + fadeIn(tween(200)),
             exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
         ) {
-            val bgColor = if (state.lastAnswerCorrect) Color(0xFFE8F5E9) else Color(0xFFFFEBEE)
-            val fgColor = if (state.lastAnswerCorrect) MektepGreen else MektepRed
+            val fgColor = if (state.lastAnswerCorrect) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+            val bgColor = fgColor.copy(alpha = 0.12f)
 
             Card(
                 Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = bgColor),
-                shape = RoundedCornerShape(16.dp)
+                shape = MaterialTheme.shapes.large,
+                border = BorderStroke(1.dp, fgColor.copy(alpha = 0.4f))
             ) {
-                Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(Modifier.padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
                     // Animated checkmark / X
                     val iconScale by animateFloatAsState(
                         targetValue = if (state.feedbackShown) 1f else 0f,
@@ -214,10 +216,10 @@ private fun QuestionScreen(state: LessonRunnerState, language: String, viewModel
                                 !band.heartsEnabled -> "Try again! You're doing great!"
                                 else -> "Incorrect"
                             },
-                            fontWeight = FontWeight.Bold, color = fgColor, fontSize = 16.sp
+                            style = MaterialTheme.typography.titleMedium, color = fgColor
                         )
                         if (state.lastAnswerCorrect) {
-                            Text("+5 XP", fontSize = 14.sp, color = fgColor.copy(alpha = 0.8f))
+                            Text("+5 XP", style = MaterialTheme.typography.bodyMedium, color = fgColor.copy(alpha = 0.8f))
                         }
                     }
                 }
@@ -235,10 +237,10 @@ private fun QuestionScreen(state: LessonRunnerState, language: String, viewModel
         Button(
             onClick = { if (state.feedbackShown) viewModel.nextQuestion() else viewModel.submitCurrentAnswer() },
             enabled = state.selectedAnswer.isNotEmpty() || state.feedbackShown,
-            modifier = Modifier.fillMaxWidth().height(50.dp).scale(buttonScale),
-            shape = RoundedCornerShape(12.dp)
+            modifier = Modifier.fillMaxWidth().height(54.dp).scale(buttonScale),
+            shape = MaterialTheme.shapes.small
         ) {
-            Text(if (state.feedbackShown) "Continue" else "Check", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(if (state.feedbackShown) "Continue" else "Check", style = MaterialTheme.typography.labelLarge)
         }
     }
 }
@@ -267,20 +269,27 @@ private fun McQuestion(state: LessonRunnerState, language: String, viewModel: Le
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp)
+                .padding(vertical = 5.dp)
                 .graphicsLayer { alpha = animatedAlpha; translationY = animatedOffset.value }
                 .clickable(enabled = !state.feedbackShown) { viewModel.selectAnswer(index.toString()) },
-            shape = RoundedCornerShape(12.dp),
+            shape = MaterialTheme.shapes.medium,
             colors = CardDefaults.cardColors(
                 containerColor = when {
                     isSelected -> MaterialTheme.colorScheme.primaryContainer
                     else -> MaterialTheme.colorScheme.surface
                 }
             ),
+            elevation = CardDefaults.cardElevation(defaultElevation = if (isSelected) 0.dp else 1.dp),
             border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
             else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
         ) {
-            Text(optionText, Modifier.fillMaxWidth().padding(16.dp), fontSize = 18.sp, textAlign = TextAlign.Center)
+            Text(
+                optionText,
+                Modifier.fillMaxWidth().padding(vertical = 18.dp, horizontal = 16.dp),
+                style = MaterialTheme.typography.titleMedium,
+                color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
@@ -471,7 +480,7 @@ private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit, ban
                 AnimatedVisibility(visible = visible, enter = scaleIn(spring(dampingRatio = 0.4f)) + fadeIn()) {
                     Icon(
                         Icons.Default.Star, null,
-                        tint = if (i < state.starsEarned) Color(0xFFFFD700) else Color(0xFFE0E0E0),
+                        tint = if (i < state.starsEarned) app.tisimai.mektep.ui.theme.MektepStar else MaterialTheme.colorScheme.outlineVariant,
                         modifier = Modifier.size(52.dp).scale(starScale)
                     )
                 }
@@ -497,7 +506,7 @@ private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit, ban
                     Spacer(Modifier.height(4.dp))
                     Text(
                         "+${state.earnedScreenTimeMinutes} min",
-                        fontSize = 36.sp, fontWeight = FontWeight.Bold, color = MektepGreen
+                        style = MaterialTheme.typography.displayMedium, color = MektepGreen
                     )
                     Text(tr("screen_time_earned", language), fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(4.dp))
@@ -534,7 +543,7 @@ private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit, ban
         var btnVisible by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) { kotlinx.coroutines.delay(1000); btnVisible = true }
         AnimatedVisibility(visible = btnVisible, enter = fadeIn(tween(300)) + scaleIn(spring(dampingRatio = 0.6f))) {
-            Button(onClick = onFinish, Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(12.dp)) {
+            Button(onClick = onFinish, Modifier.fillMaxWidth().height(54.dp), shape = RoundedCornerShape(12.dp)) {
                 Text(tr("continue_btn", language), fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
         }
@@ -544,7 +553,7 @@ private fun CompletionScreen(state: LessonRunnerState, onFinish: () -> Unit, ban
 @Composable
 private fun StatItem(value: String, label: String, color: Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(value, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = color)
-        Text(label, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(value, style = MaterialTheme.typography.headlineMedium, color = color)
+        Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

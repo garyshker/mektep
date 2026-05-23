@@ -144,6 +144,14 @@ const L = {
     multiTable: "Көбейту кестесі", multiTableSub: "2-ден 9-ға дейін",
     multiTablePick: "Санды таңда", multiTablePractice: "Жаттықтыру",
     logout: "Шығу",
+    tetrisTitle: "Тетрис",
+    tetrisScore: "Ұпай", tetrisLines: "Жол", tetrisLevel: "Деңгей",
+    tetrisHint: "Түрту — бұру  ·  Сырғыту — жылжыту  ·  Төмен — тастау",
+    tetrisOver: "ОЙЫН БІТТІ", tetrisRestart: "Қайтадан ойнау үшін басыңыз",
+    games: "Ойындар", tetrisDesc: "Блоктарды жинаңыз", playBtn: "Ойна →",
+    g2048Desc: "Бірдей сандарды бірлестіріңіз", g2048Hint: "Свайп — жылжыту  ·  2048-ге жет!",
+    bestScore: "Рекорд", memoryTitle: "Жад ойыны", memoryDesc: "Жұп карточкаларды тап",
+    snakeTitle: "Сандық жылан", snakeDesc: "Санды жинаңыз",
   },
   ru: {
     welcome: (n) => `Привет, ${n || 'Ученик'}!`,
@@ -204,6 +212,14 @@ const L = {
     multiTable: "Таблица умножения", multiTableSub: "от 2 до 9",
     multiTablePick: "Выбери число", multiTablePractice: "Тренировка",
     logout: "Выйти",
+    tetrisTitle: "Тетрис",
+    tetrisScore: "Счёт", tetrisLines: "Линии", tetrisLevel: "Уровень",
+    tetrisHint: "Тап — поворот  ·  Свайп — двигай  ·  Вниз — сброс",
+    tetrisOver: "ИГРА ОКОНЧЕНА", tetrisRestart: "Нажмите чтобы начать снова",
+    games: "Игры", tetrisDesc: "Складывай блоки", playBtn: "Играть →",
+    g2048Desc: "Объединяй одинаковые числа", g2048Hint: "Свайп — двигай  ·  Достигни 2048!",
+    bestScore: "Рекорд", memoryTitle: "Память", memoryDesc: "Найди пары карточек",
+    snakeTitle: "Математическая змейка", snakeDesc: "Собирай числа",
   },
   en: {
     welcome: (n) => `Hi, ${n || 'Student'}!`,
@@ -264,6 +280,14 @@ const L = {
     multiTable: "Times Table", multiTableSub: "from 2 to 9",
     multiTablePick: "Pick a number", multiTablePractice: "Practice",
     logout: "Log out",
+    tetrisTitle: "Tetris",
+    tetrisScore: "Score", tetrisLines: "Lines", tetrisLevel: "Level",
+    tetrisHint: "Tap — rotate  ·  Swipe — move  ·  Down — drop",
+    tetrisOver: "GAME OVER", tetrisRestart: "Tap to play again",
+    games: "Games", tetrisDesc: "Stack the blocks", playBtn: "Play →",
+    g2048Desc: "Merge matching numbers", g2048Hint: "Swipe to move  ·  Reach 2048!",
+    bestScore: "Best", memoryTitle: "Memory", memoryDesc: "Find the matching pairs",
+    snakeTitle: "Math Snake", snakeDesc: "Collect numbers in order",
   },
 };
 
@@ -629,62 +653,625 @@ function OnboardingScreen({ onDone }) {
     onDone(name.trim(), lang, grade);
   };
 
-  if (step === 1) return (
-    <div className="onboarding">
-      <img src="./otter.png" className="ob-mascot" alt="" />
-      <h1 className="ob-title">iМектеп</h1>
-      <p className="ob-sub">{t.obSub}</p>
-      <div className="ob-form">
-        <input
-          className="ob-input"
-          placeholder={t.obPlaceholder}
-          value={name}
-          onChange={e => setName(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && name.trim() && setStep(2)}
-          autoFocus
-          maxLength={30}
-        />
-        <div className="ob-langs">
-          {['kk','ru','en'].map(k => (
-            <button key={k} className={"ob-lang " + (lang === k ? "on" : "")} onClick={() => setLang(k)}>
-              {flags[k]} {labels[k]}
+  return (
+    <>
+      <MiniTetris />
+      {step === 1 ? (
+        <div className="onboarding">
+          <img src="./otter.png" className="ob-mascot" alt="" />
+          <h1 className="ob-title">iМектеп</h1>
+          <p className="ob-sub">{t.obSub}</p>
+          <div className="ob-form">
+            <input
+              className="ob-input"
+              placeholder={t.obPlaceholder}
+              value={name}
+              onChange={e => setName(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && name.trim() && setStep(2)}
+              autoFocus
+              maxLength={30}
+            />
+            <div className="ob-langs">
+              {['kk','ru','en'].map(k => (
+                <button key={k} className={"ob-lang " + (lang === k ? "on" : "")} onClick={() => setLang(k)}>
+                  {flags[k]} {labels[k]}
+                </button>
+              ))}
+            </div>
+            <button className="ob-start" disabled={!name.trim()} onClick={() => setStep(2)}>
+              {t.obStart}
             </button>
-          ))}
+          </div>
+          <p className="ob-copy">© 2025 iМектеп</p>
         </div>
-        <button className="ob-start" disabled={!name.trim()} onClick={() => setStep(2)}>
-          {t.obStart}
-        </button>
-      </div>
-      <p className="ob-copy">© 2025 iМектеп</p>
-    </div>
+      ) : (
+        <div className="onboarding">
+          <button className="ob-back" onClick={() => setStep(1)}>←</button>
+          <p className="ob-grade-label">{t.gradeLabel}</p>
+          <div className="ob-grades">
+            {[1,2,3,4].map(g => {
+              const gi = GRADE_INFO[g];
+              const sel = grade === g;
+              return (
+                <button key={g}
+                  className={"ob-grade-btn " + (sel ? "on" : "")}
+                  style={sel
+                    ? { background: gi.color, borderColor: gi.color }
+                    : { background: gi.bg, borderColor: gi.color + '28', '--gc': gi.color }
+                  }
+                  onClick={() => setGrade(g)}>
+                  <span className="ob-grade-num">{g}</span>
+                  <span className="ob-grade-name">{gi.label[lang]}</span>
+                </button>
+              );
+            })}
+          </div>
+          <button className="ob-start" disabled={!grade} onClick={submit}>
+            {t.obStart}
+          </button>
+          <p className="ob-copy">© 2025 iМектеп</p>
+        </div>
+      )}
+    </>
   );
+}
+
+// ─── Tetris Widget (home screen) ─────────────────────────────────
+const TW_COLS = 10, TW_ROWS = 14, TW_B = 28;
+const TW_XP   = [0, 10, 25, 50, 100]; // XP per 0/1/2/3/4 lines cleared
+
+function TetrisWidget({ t }) {
+  const cvs  = useRef(null);
+  const tRef = useRef(t);
+  tRef.current = t;
+
+  const [disp, setDisp] = useState({ score:0, xp:0, level:1, lines:0, over:false });
+
+  useEffect(() => {
+    const el = cvs.current;
+    if (!el) return;
+    el.width  = TW_COLS * TW_B;
+    el.height = TW_ROWS * TW_B;
+    const ctx = el.getContext('2d');
+
+    const g = {
+      board: Array.from({length: TW_ROWS}, () => Array(TW_COLS).fill(null)),
+      cur: null, cx: 0, cy: 0,
+      score: 0, xp: 0, level: 1, lines: 0,
+      over: false, raf: null, lastDrop: 0,
+    };
+
+    const sync = () => setDisp({ score:g.score, xp:g.xp, level:g.level, lines:g.lines, over:g.over });
+    const rot90 = s => s[0].map((_, c) => s.map(r => r[c]).reverse());
+    const fits = (s, x, y) => {
+      for (let r = 0; r < s.length; r++)
+        for (let c = 0; c < s[r].length; c++) {
+          if (!s[r][c]) continue;
+          const nx = x+c, ny = y+r;
+          if (nx < 0 || nx >= TW_COLS || ny >= TW_ROWS) return false;
+          if (ny >= 0 && g.board[ny][nx]) return false;
+        }
+      return true;
+    };
+
+    const spawn = () => {
+      const p = MT_PIECES[Math.floor(Math.random() * MT_PIECES.length)];
+      g.cur = { s: p.s.map(r=>[...r]), c: p.c };
+      g.cx  = Math.floor((TW_COLS - g.cur.s[0].length) / 2);
+      g.cy  = -g.cur.s.length;
+    };
+
+    const lockPiece = () => {
+      let overflow = false;
+      for (let r = 0; r < g.cur.s.length; r++)
+        for (let c = 0; c < g.cur.s[r].length; c++) {
+          if (!g.cur.s[r][c]) continue;
+          const ny = g.cy + r;
+          if (ny < 0) { overflow = true; continue; }
+          g.board[ny][g.cx + c] = g.cur.c;
+        }
+      if (overflow) { g.over = true; sync(); return; }
+      let cleared = 0;
+      for (let r = TW_ROWS-1; r >= 0; r--)
+        if (g.board[r].every(Boolean)) { g.board.splice(r,1); g.board.unshift(Array(TW_COLS).fill(null)); r++; cleared++; }
+      if (cleared) {
+        g.score += cleared * 100 * g.level;
+        g.xp    += TW_XP[Math.min(cleared,4)] * g.level;
+        g.lines += cleared;
+        g.level  = Math.min(10, 1 + Math.floor(g.lines / 5));
+        sync();
+      }
+      spawn();
+    };
+
+    const blk = (x, y, color, alpha=1) => {
+      const px=x*TW_B+1, py=y*TW_B+1, sz=TW_B-2;
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(px,py,sz,sz,5) : ctx.rect(px,py,sz,sz);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.24)';
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(px+1,py+1,sz-2,Math.floor(sz*.35),3) : ctx.rect(px+1,py+1,sz-2,Math.floor(sz*.35));
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    };
+
+    const draw = () => {
+      ctx.fillStyle = '#F3FAF6';
+      ctx.fillRect(0,0,el.width,el.height);
+      // subtle grid
+      ctx.strokeStyle='rgba(0,0,0,0.05)'; ctx.lineWidth=.5;
+      for (let r=0;r<=TW_ROWS;r++){ctx.beginPath();ctx.moveTo(0,r*TW_B);ctx.lineTo(el.width,r*TW_B);ctx.stroke();}
+      for (let c=0;c<=TW_COLS;c++){ctx.beginPath();ctx.moveTo(c*TW_B,0);ctx.lineTo(c*TW_B,el.height);ctx.stroke();}
+      // board
+      for (let r=0;r<TW_ROWS;r++) for (let c=0;c<TW_COLS;c++) if (g.board[r][c]) blk(c,r,g.board[r][c]);
+      // ghost
+      if (g.cur && !g.over) {
+        let gy = g.cy;
+        while (fits(g.cur.s,g.cx,gy+1)) gy++;
+        if (gy !== g.cy)
+          for (let r=0;r<g.cur.s.length;r++)
+            for (let c=0;c<g.cur.s[r].length;c++)
+              if (g.cur.s[r][c] && gy+r>=0) blk(g.cx+c,gy+r,g.cur.c,0.2);
+      }
+      // current piece
+      if (g.cur)
+        for (let r=0;r<g.cur.s.length;r++)
+          for (let c=0;c<g.cur.s[r].length;c++)
+            if (g.cur.s[r][c] && g.cy+r>=0) blk(g.cx+c,g.cy+r,g.cur.c);
+      // game over overlay
+      if (g.over) {
+        ctx.fillStyle='rgba(15,42,34,0.72)'; ctx.fillRect(0,0,el.width,el.height);
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.font=`900 20px Nunito,system-ui`; ctx.fillStyle='#fff';
+        ctx.fillText(tRef.current.tetrisOver||'GAME OVER', el.width/2, el.height/2-14);
+        ctx.font=`600 13px Nunito,system-ui`; ctx.fillStyle='rgba(255,255,255,.65)';
+        ctx.fillText(tRef.current.tetrisRestart||'Tap to play again', el.width/2, el.height/2+12);
+      }
+    };
+
+    const speed = () => Math.max(80, 650 - (g.level-1)*58);
+
+    const loop = ts => {
+      if (!g.over) {
+        if (ts - g.lastDrop > speed()) {
+          if (!g.cur) spawn();
+          fits(g.cur.s,g.cx,g.cy+1) ? g.cy++ : lockPiece();
+          g.lastDrop = ts;
+        }
+        draw();
+        g.raf = requestAnimationFrame(loop);
+      } else { draw(); }
+    };
+
+    const restart = () => {
+      g.board = Array.from({length:TW_ROWS},()=>Array(TW_COLS).fill(null));
+      g.cur=null; g.cx=0; g.cy=0; g.score=0; g.xp=0; g.level=1; g.lines=0;
+      g.over=false; g.lastDrop=0; sync(); spawn();
+      g.raf = requestAnimationFrame(loop);
+    };
+
+    el.addEventListener('click', () => { if (g.over) restart(); else el.focus(); });
+
+    const onKey = e => {
+      if (!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key)) return;
+      e.preventDefault();
+      if (!g.cur || g.over) return;
+      if (e.key==='ArrowLeft'  && fits(g.cur.s,g.cx-1,g.cy)) { g.cx--; draw(); }
+      if (e.key==='ArrowRight' && fits(g.cur.s,g.cx+1,g.cy)) { g.cx++; draw(); }
+      if (e.key==='ArrowDown')  { fits(g.cur.s,g.cx,g.cy+1)?g.cy++:lockPiece(); draw(); }
+      if (e.key==='ArrowUp')    { const r=rot90(g.cur.s); if(fits(r,g.cx,g.cy)){g.cur.s=r;draw();} }
+      if (e.key===' ')          { while(fits(g.cur.s,g.cx,g.cy+1))g.cy++; lockPiece(); draw(); }
+    };
+    el.addEventListener('keydown', onKey);
+
+    // Touch: tap = rotate · swipe left/right = move · swipe down = hard drop
+    let tx0=0, ty0=0, tMoved=false;
+    const onTS = e => { tx0=e.touches[0].clientX; ty0=e.touches[0].clientY; tMoved=false; };
+    const onTM = e => {
+      if (!g.cur || g.over) return;
+      const dx=e.touches[0].clientX-tx0, dy=e.touches[0].clientY-ty0;
+      if (Math.abs(dx) > 18) {
+        // real-time horizontal sliding
+        const steps = Math.round(dx / TW_B);
+        if (steps !== 0) {
+          const nx = g.cx + steps;
+          if (fits(g.cur.s, nx, g.cy)) { g.cx = nx; tx0 = e.touches[0].clientX; draw(); }
+        }
+        tMoved = true;
+      }
+      if (dy > 32) tMoved = true; // mark as moved so tap-rotate won't fire
+    };
+    const onTE = e => {
+      if (g.over) { restart(); return; }
+      if (!g.cur) return;
+      const dx=e.changedTouches[0].clientX-tx0, dy=e.changedTouches[0].clientY-ty0;
+      if (!tMoved && Math.abs(dx)<12 && Math.abs(dy)<12) {
+        // tap → rotate
+        const r=rot90(g.cur.s);
+        if(fits(r,g.cx,g.cy)){g.cur.s=r;draw();}
+      } else if (dy > 40) {
+        // swipe down → hard drop
+        while(fits(g.cur.s,g.cx,g.cy+1)) g.cy++;
+        lockPiece(); draw();
+      }
+    };
+    el.addEventListener('touchstart',onTS,{passive:true});
+    el.addEventListener('touchmove', onTM,{passive:true});
+    el.addEventListener('touchend',  onTE,{passive:true});
+
+    spawn(); g.raf = requestAnimationFrame(loop);
+    return () => { cancelAnimationFrame(g.raf); el.removeEventListener('keydown',onKey); el.removeEventListener('touchstart',onTS); el.removeEventListener('touchmove',onTM); el.removeEventListener('touchend',onTE); };
+  }, []);
 
   return (
-    <div className="onboarding">
-      <button className="ob-back" onClick={() => setStep(1)}>←</button>
-      <p className="ob-grade-label">{t.gradeLabel}</p>
-      <div className="ob-grades">
-        {[1,2,3,4].map(g => {
-          const gi = GRADE_INFO[g];
-          const sel = grade === g;
-          return (
-            <button key={g}
-              className={"ob-grade-btn " + (sel ? "on" : "")}
-              style={sel
-                ? { background: gi.color, borderColor: gi.color }
-                : { background: gi.bg, borderColor: gi.color + '28', '--gc': gi.color }
-              }
-              onClick={() => setGrade(g)}>
-              <span className="ob-grade-num">{g}</span>
-              <span className="ob-grade-name">{gi.label[lang]}</span>
-            </button>
-          );
-        })}
+    <div className="tetris-widget">
+      <div className="tetris-head">
+        <div className="tetris-name">
+          <div className="tetris-ico">◼</div>
+          {t.tetrisTitle}
+        </div>
+        <div className={"tetris-xp" + (disp.xp > 0 ? " has-xp" : "")}>
+          <span className="tetris-xp-bolt">⚡</span>
+          <span className="tetris-xp-num">{disp.xp}</span>
+          <span className="tetris-xp-lbl">XP</span>
+        </div>
       </div>
-      <button className="ob-start" disabled={!grade} onClick={submit}>
-        {t.obStart}
-      </button>
-      <p className="ob-copy">© 2025 iМектеп</p>
+      <div className="tetris-board-wrap">
+        <canvas ref={cvs} tabIndex={0} style={{ display:'block', borderRadius:'10px', cursor:'pointer' }} />
+      </div>
+      <div className="tetris-stats">
+        <div className="tetris-stat">
+          <div className="tetris-stat-n">{disp.score.toLocaleString()}</div>
+          <div className="tetris-stat-l">{t.tetrisScore}</div>
+        </div>
+        <div className="tetris-divider" />
+        <div className="tetris-stat">
+          <div className="tetris-stat-n">{disp.lines}</div>
+          <div className="tetris-stat-l">{t.tetrisLines}</div>
+        </div>
+        <div className="tetris-divider" />
+        <div className="tetris-stat">
+          <div className="tetris-stat-n">{disp.level}</div>
+          <div className="tetris-stat-l">{t.tetrisLevel}</div>
+        </div>
+      </div>
+      <div className="tetris-hint">{t.tetrisHint}</div>
+    </div>
+  );
+}
+
+// ─── Tetris block icon (for game card) ──────────────────────────
+const TetrisBlockIcon = ({ size=44 }) => (
+  <svg width={size} height={size} viewBox="0 0 44 44" fill="none">
+    <rect x="1"  y="31" width="9" height="9" rx="2.5" fill="#0E8C6B"/>
+    <rect x="12" y="31" width="9" height="9" rx="2.5" fill="#F97316"/>
+    <rect x="23" y="31" width="9" height="9" rx="2.5" fill="#8B5CF6"/>
+    <rect x="34" y="31" width="9" height="9" rx="2.5" fill="#0D9488"/>
+    <rect x="1"  y="20" width="9" height="9" rx="2.5" fill="#E11D48"/>
+    <rect x="12" y="20" width="9" height="9" rx="2.5" fill="#0E8C6B"/>
+    <rect x="23" y="20" width="9" height="9" rx="2.5" fill="#F97316"/>
+    <rect x="34" y="20" width="9" height="9" rx="2.5" fill="#2563EB"/>
+    <rect x="12" y="9"  width="9" height="9" rx="2.5" fill="#8B5CF6"/>
+    <rect x="23" y="9"  width="9" height="9" rx="2.5" fill="#D97706"/>
+    <rect x="12" y="1"  width="9" height="6" rx="2.5" fill="#E11D48" opacity=".5"/>
+  </svg>
+);
+
+// ─── Game card icons ─────────────────────────────────────────────
+const MemoryIcon = ({size=44}) => (
+  <svg width={size} height={size} viewBox="0 0 44 44" fill="none">
+    <rect x="2"  y="7" width="19" height="30" rx="5" fill="rgba(255,255,255,.22)" stroke="rgba(255,255,255,.5)" strokeWidth="1.5"/>
+    <path d="M9 17h5M11.5 14.5v5" stroke="rgba(255,255,255,.7)" strokeWidth="2" strokeLinecap="round"/>
+    <rect x="23" y="7" width="19" height="30" rx="5" fill="rgba(255,255,255,.92)"/>
+    <text x="32.5" y="27" textAnchor="middle" dominantBaseline="middle" fontSize="20" fill="#F59E0B">★</text>
+  </svg>
+);
+const MathSnakeIcon = ({size=44}) => (
+  <svg width={size} height={size} viewBox="0 0 44 44" fill="none">
+    <path d="M7 37 L7 25 L37 25 L37 13 L21 13" stroke="rgba(255,255,255,.65)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
+    <circle cx="21" cy="13" r="7" fill="rgba(255,255,255,.95)"/>
+    <circle cx="23" cy="11" r="1.8" fill="#1D4ED8"/>
+    <circle cx="7" cy="37" r="5.5" fill="rgba(255,255,255,.9)"/>
+    <text x="7"  y="40" textAnchor="middle" dominantBaseline="middle" fontSize="8" fontWeight="900" fill="#2563EB">3</text>
+    <circle cx="22" cy="25" r="5.5" fill="rgba(255,255,255,.7)"/>
+    <text x="22" y="28" textAnchor="middle" dominantBaseline="middle" fontSize="8" fontWeight="900" fill="#2563EB">7</text>
+  </svg>
+);
+
+// ─── 2048 Game ────────────────────────────────────────────────────
+function Game2048({ t, onBack }) {
+  const mkEmpty  = () => Array(4).fill(null).map(() => Array(4).fill(0));
+  const addRandom = b => {
+    const empty = [];
+    for (let r=0;r<4;r++) for (let c=0;c<4;c++) if (!b[r][c]) empty.push([r,c]);
+    if (!empty.length) return b;
+    const [r,c] = empty[Math.floor(Math.random()*empty.length)];
+    const nb = b.map(row=>[...row]); nb[r][c] = Math.random()<.9?2:4; return nb;
+  };
+  const initBoard = () => addRandom(addRandom(mkEmpty()));
+
+  const [board,  setBoard]  = useState(initBoard);
+  const [score,  setScore]  = useState(0);
+  const [best,   setBest]   = useState(() => { try{return parseInt(localStorage.getItem('imt_2048_best')||'0');}catch(e){return 0;} });
+  const [xp,     setXP]     = useState(0);
+  const [over,   setOver]   = useState(false);
+  const [won,    setWon]    = useState(false);
+  const [xpPop,  setXpPop]  = useState(false);
+  const [ts,     setTs]     = useState(null);
+
+  const applyMove = (b, dir) => {
+    const slide = row => {
+      let r=row.filter(v=>v>0), d=0;
+      for (let i=0;i<r.length-1;i++) if(r[i]===r[i+1]){r[i]*=2;d+=r[i];r[i+1]=0;}
+      r=r.filter(v=>v>0); while(r.length<4) r.push(0); return {r,d};
+    };
+    const tr = m => m[0].map((_,i)=>m.map(row=>row[i]));
+    let nb=b.map(row=>[...row]), delta=0;
+    if      (dir==='left')  nb=nb.map(row=>{const {r,d}=slide(row);delta+=d;return r;});
+    else if (dir==='right') nb=nb.map(row=>{const {r,d}=slide([...row].reverse());delta+=d;return r.reverse();});
+    else if (dir==='up')    nb=tr(tr(nb).map(col=>{const {r,d}=slide(col);delta+=d;return r;}));
+    else if (dir==='down')  nb=tr(tr(nb).map(col=>{const {r,d}=slide([...col].reverse());delta+=d;return r.reverse();}));
+    const changed = JSON.stringify(nb)!==JSON.stringify(b);
+    return {nb,delta,changed};
+  };
+
+  const isGameOver = b => {
+    for(let r=0;r<4;r++) for(let c=0;c<4;c++){
+      if(!b[r][c]) return false;
+      if(c<3&&b[r][c]===b[r][c+1]) return false;
+      if(r<3&&b[r][c]===b[r+1][c]) return false;
+    } return true;
+  };
+
+  const handleMove = useCallback(dir => {
+    if (over) return;
+    setBoard(prev => {
+      const {nb,delta,changed} = applyMove(prev,dir);
+      if (!changed) return prev;
+      const next = addRandom(nb);
+      if (delta>0) {
+        setScore(s => { const ns=s+delta; setBest(b=>{if(ns>b){try{localStorage.setItem('imt_2048_best',ns);}catch(e){}return ns;}return b;}); return ns; });
+        setXP(x => x + Math.floor(delta/4));
+        setXpPop(true); setTimeout(()=>setXpPop(false),350);
+      }
+      if (!won && next.flat().includes(2048)) setWon(true);
+      if (isGameOver(next)) setOver(true);
+      return next;
+    });
+  }, [over, won]);
+
+  const restart = () => { setBoard(initBoard()); setScore(0); setXP(0); setOver(false); setWon(false); };
+
+  useEffect(() => {
+    const MAP={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'};
+    const fn = e => { if(!MAP[e.key])return; e.preventDefault(); handleMove(MAP[e.key]); };
+    window.addEventListener('keydown',fn); return ()=>window.removeEventListener('keydown',fn);
+  }, [handleMove]);
+
+  const onTouchStart = e => setTs({x:e.touches[0].clientX,y:e.touches[0].clientY});
+  const onTouchEnd   = e => {
+    if(!ts) return;
+    const dx=e.changedTouches[0].clientX-ts.x, dy=e.changedTouches[0].clientY-ts.y;
+    if(Math.max(Math.abs(dx),Math.abs(dy))<28){setTs(null);return;}
+    Math.abs(dx)>Math.abs(dy) ? handleMove(dx>0?'right':'left') : handleMove(dy>0?'down':'up');
+    setTs(null);
+  };
+
+  const TILE_BG = {0:'#CDC1B4',2:'#EEE4DA',4:'#EDE0C8',8:'#F2B179',16:'#F59563',32:'#F67C5F',64:'#F65E3B',128:'#EDCF72',256:'#EDCC61',512:'#EDC850',1024:'#EDC53F',2048:'#EDC22E'};
+  const TILE_FG = {0:'transparent',2:'#776E65',4:'#776E65'};
+
+  return (
+    <div className="game-shell">
+      <div className="game-shell-inner">
+        <div className="games-topbar">
+          <button className="back-btn" onClick={onBack}>←</button>
+          <span className="games-topbar-title">2048</span>
+          <div style={{width:40}}/>
+        </div>
+        <div className="g2048-wrap">
+          <div className="g2048-stats-row">
+            <div className="g2048-stat-box"><div className="g2048-stat-n">{score.toLocaleString()}</div><div className="g2048-stat-l">{t.tetrisScore}</div></div>
+            <div className="g2048-stat-box"><div className="g2048-stat-n">{best.toLocaleString()}</div><div className="g2048-stat-l">{t.bestScore}</div></div>
+            <div className={"g2048-xp" + (xpPop?" pop":"")}>⚡ <b>{xp}</b> <span>XP</span></div>
+          </div>
+          <div className="g2048-board-outer" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+            <div className="g2048-board">
+              {board.flat().map((v,i)=>(
+                <div key={i} className="g2048-cell" style={{
+                  background: TILE_BG[v]||'#3C3A32',
+                  color: TILE_FG[v]||'#fff',
+                  fontSize: v>=1024?'clamp(13px,4vw,20px)':v>=128?'clamp(15px,4.5vw,24px)':'clamp(18px,5.5vw,30px)',
+                }}>{v||''}</div>
+              ))}
+            </div>
+            {over && !won && (
+              <div className="g2048-overlay">
+                <div className="g2048-over-title">{t.tetrisOver}</div>
+                <div className="g2048-over-score">{score.toLocaleString()}</div>
+                <button className="g2048-action-btn" onClick={restart}>{t.retry} ↺</button>
+              </div>
+            )}
+            {won && (
+              <div className="g2048-overlay g2048-won">
+                <div style={{fontSize:44}}>🎉</div>
+                <div className="g2048-over-title">2048!</div>
+                <div className="g2048-over-score">{score.toLocaleString()}</div>
+                <button className="g2048-action-btn" onClick={()=>setWon(false)}>{t.continueBtnShort}</button>
+              </div>
+            )}
+          </div>
+          <p className="g2048-hint">{t.g2048Hint}</p>
+          <button className="g2048-new-btn" onClick={restart}>{t.retry} ↺</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Tetris fullscreen wrapper ────────────────────────────────────
+function TetrisFullScreen({ t, onBack }) {
+  return (
+    <div className="game-shell">
+      <div className="game-shell-inner">
+        <div className="games-topbar">
+          <button className="back-btn" onClick={onBack}>←</button>
+          <span className="games-topbar-title">{t.tetrisTitle}</span>
+          <div style={{width:40}} />
+        </div>
+        <div className="tetris-fullscreen">
+          <TetrisWidget t={t} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Mini Tetris (login decoration) ──────────────────────────────
+const MT_COLS = 10, MT_ROWS = 6, MT_B = 26;
+const MT_PIECES = [
+  { s:[[1,1,1,1]],           c:'#0E8C6B' },
+  { s:[[1,1],[1,1]],         c:'#F97316' },
+  { s:[[0,1,0],[1,1,1]],     c:'#8B5CF6' },
+  { s:[[0,1,1],[1,1,0]],     c:'#0D9488' },
+  { s:[[1,1,0],[0,1,1]],     c:'#E11D48' },
+  { s:[[1,0,0],[1,1,1]],     c:'#2563EB' },
+  { s:[[0,0,1],[1,1,1]],     c:'#D97706' },
+];
+
+function MiniTetris() {
+  const cvs = useRef(null);
+  useEffect(() => {
+    const el = cvs.current;
+    if (!el) return;
+    el.width  = MT_COLS * MT_B;
+    el.height = MT_ROWS * MT_B;
+    const ctx = el.getContext('2d');
+    const board = Array.from({length: MT_ROWS}, () => Array(MT_COLS).fill(null));
+    let cur = null, cx = 0, cy = 0;
+
+    const rot90 = s => s[0].map((_, c) => s.map(r => r[c]).reverse());
+
+    const fits = (s, x, y) => {
+      for (let r = 0; r < s.length; r++)
+        for (let c = 0; c < s[r].length; c++) {
+          if (!s[r][c]) continue;
+          const nx = x + c, ny = y + r;
+          if (nx < 0 || nx >= MT_COLS || ny >= MT_ROWS) return false;
+          if (ny >= 0 && board[ny][nx]) return false;
+        }
+      return true;
+    };
+
+    const spawn = () => {
+      const p = MT_PIECES[Math.floor(Math.random() * MT_PIECES.length)];
+      cur = { s: p.s.map(r => [...r]), c: p.c };
+      cx = Math.floor((MT_COLS - cur.s[0].length) / 2);
+      cy = -cur.s.length;
+    };
+
+    const lock = () => {
+      let overflow = false;
+      for (let r = 0; r < cur.s.length; r++)
+        for (let c = 0; c < cur.s[r].length; c++) {
+          if (!cur.s[r][c]) continue;
+          const ny = cy + r;
+          if (ny < 0) { overflow = true; continue; }
+          board[ny][cx + c] = cur.c;
+        }
+      if (overflow) { for (let i = 0; i < MT_ROWS; i++) board[i].fill(null); }
+      for (let r = MT_ROWS - 1; r >= 0; r--)
+        if (board[r].every(Boolean)) { board.splice(r, 1); board.unshift(Array(MT_COLS).fill(null)); r++; }
+      spawn();
+    };
+
+    const blk = (x, y, color) => {
+      const px = x * MT_B + 1, py = y * MT_B + 1, sz = MT_B - 2;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(px, py, sz, sz, 4) : ctx.rect(px, py, sz, sz);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.22)';
+      ctx.beginPath();
+      ctx.roundRect
+        ? ctx.roundRect(px + 1, py + 1, sz - 2, Math.floor(sz * 0.38), 3)
+        : ctx.rect(px + 1, py + 1, sz - 2, Math.floor(sz * 0.38));
+      ctx.fill();
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, el.width, el.height);
+      for (let r = 0; r < MT_ROWS; r++)
+        for (let c = 0; c < MT_COLS; c++)
+          if (board[r][c]) blk(c, r, board[r][c]);
+      if (cur)
+        for (let r = 0; r < cur.s.length; r++)
+          for (let c = 0; c < cur.s[r].length; c++)
+            if (cur.s[r][c] && cy + r >= 0) blk(cx + c, cy + r, cur.c);
+    };
+
+    const drop = () => {
+      if (!cur) { spawn(); return; }
+      fits(cur.s, cx, cy + 1) ? cy++ : lock();
+      draw();
+    };
+
+    spawn(); draw();
+    const iv = setInterval(drop, 650);
+
+    const onKey = e => {
+      if (!cur) return;
+      if (e.key === 'ArrowLeft'  && fits(cur.s, cx - 1, cy)) { cx--; draw(); }
+      if (e.key === 'ArrowRight' && fits(cur.s, cx + 1, cy)) { cx++; draw(); }
+      if (e.key === 'ArrowDown')  { drop(); }
+      if (e.key === 'ArrowUp') {
+        const r = rot90(cur.s);
+        if (fits(r, cx, cy)) { cur.s = r; draw(); }
+      }
+    };
+    window.addEventListener('keydown', onKey);
+
+    let tx0 = 0, ty0 = 0;
+    const onTS = e => { tx0 = e.touches[0].clientX; ty0 = e.touches[0].clientY; };
+    const onTE = e => {
+      if (!cur) return;
+      const dx = e.changedTouches[0].clientX - tx0;
+      const dy = e.changedTouches[0].clientY - ty0;
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) {
+        const r = rot90(cur.s);
+        if (fits(r, cx, cy)) { cur.s = r; draw(); }
+      } else if (Math.abs(dx) > Math.abs(dy)) {
+        const nx = cx + Math.sign(dx) * Math.round(Math.abs(dx) / MT_B);
+        if (fits(cur.s, nx, cy)) { cx = nx; draw(); }
+      } else if (dy > 24) {
+        while (fits(cur.s, cx, cy + 1)) cy++;
+        lock(); draw();
+      }
+    };
+    el.addEventListener('touchstart', onTS, { passive: true });
+    el.addEventListener('touchend',   onTE, { passive: true });
+
+    return () => {
+      clearInterval(iv);
+      window.removeEventListener('keydown', onKey);
+      el.removeEventListener('touchstart', onTS);
+      el.removeEventListener('touchend',   onTE);
+    };
+  }, []);
+
+  return (
+    <div style={{
+      position:'fixed', bottom:0, left:0, right:0,
+      display:'flex', justifyContent:'center',
+      paddingBottom:'env(safe-area-inset-bottom,0px)',
+      zIndex:1, pointerEvents:'none',
+    }}>
+      <canvas ref={cvs} style={{
+        display:'block', borderRadius:'12px 12px 0 0',
+        opacity:0.75, pointerEvents:'all',
+      }} />
     </div>
   );
 }
@@ -1553,6 +2140,7 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
   const [open, setOpen] = useState(null);
   const [quickGame, setQuickGame] = useState(false);
   const [multiTable, setMultiTable] = useState(false);
+  const [activeGame, setActiveGame] = useState(null);
   const [userMenu, setUserMenu] = useState(false);
 
   const logout = () => {
@@ -1565,8 +2153,10 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
   const setQuests = (q) => setProgress(p => ({ ...p, questsDone: q }));
   const subject = (id) => subs.find(s => s.id === id);
 
-  if (quickGame) return <QuickGame t={t} onClose={() => setQuickGame(false)} grade={progress.grade || 2} />;
-  if (multiTable) return <MultiTableView t={t} onClose={() => setMultiTable(false)} />;
+  if (quickGame)           return <QuickGame         t={t} onClose={() => setQuickGame(false)} grade={progress.grade || 2} />;
+  if (multiTable)          return <MultiTableView    t={t} onClose={() => setMultiTable(false)} />;
+  if (activeGame==='tetris') return <TetrisFullScreen t={t} onBack={() => setActiveGame(null)} />;
+  if (activeGame==='2048')   return <Game2048         t={t} onBack={() => setActiveGame(null)} />;
 
   return (
     <div className="v2">
@@ -1737,6 +2327,53 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
         </div>
         <div className="friends-r">
           <button className="leaderboard-btn" onClick={() => showToast?.(t.leaderboardToast)}>🏆 {t.leaderboard}</button>
+        </div>
+      </div>
+
+      {/* ── games section ── */}
+      <div className="section-head">
+        <div><h2>{t.games}</h2></div>
+      </div>
+      <div className="games-grid">
+        <div className="game-card" onClick={() => setActiveGame('tetris')}>
+          <div className="game-card-banner" style={{background:'linear-gradient(135deg,#0A6E54,#0E8C6B,#22C55E)'}}>
+            <TetrisBlockIcon size={52}/>
+          </div>
+          <div className="game-card-body">
+            <div className="game-card-name">{t.tetrisTitle}</div>
+            <div className="game-card-desc">{t.tetrisDesc}</div>
+            <div className="game-card-cta">{t.playBtn}</div>
+          </div>
+        </div>
+        <div className="game-card" onClick={() => setActiveGame('2048')}>
+          <div className="game-card-banner" style={{background:'linear-gradient(135deg,#92400E,#D97706,#FCD34D)'}}>
+            <span style={{fontSize:48,lineHeight:1}}>🔢</span>
+          </div>
+          <div className="game-card-body">
+            <div className="game-card-name">2048</div>
+            <div className="game-card-desc">{t.g2048Desc}</div>
+            <div className="game-card-cta">{t.playBtn}</div>
+          </div>
+        </div>
+        <div className="game-card game-card-soon">
+          <div className="game-card-banner" style={{background:'linear-gradient(135deg,#831843,#DB2777,#F9A8D4)'}}>
+            <MemoryIcon size={52}/>
+          </div>
+          <div className="game-card-body">
+            <div className="game-card-name" style={{color:'var(--ink-soft)'}}>{t.memoryTitle}</div>
+            <div className="game-card-desc">{t.memoryDesc}</div>
+            <div className="game-card-soon-badge">{t.soon}</div>
+          </div>
+        </div>
+        <div className="game-card game-card-soon">
+          <div className="game-card-banner" style={{background:'linear-gradient(135deg,#1E3A8A,#2563EB,#60A5FA)'}}>
+            <MathSnakeIcon size={52}/>
+          </div>
+          <div className="game-card-body">
+            <div className="game-card-name" style={{color:'var(--ink-soft)'}}>{t.snakeTitle}</div>
+            <div className="game-card-desc">{t.snakeDesc}</div>
+            <div className="game-card-soon-badge">{t.soon}</div>
+          </div>
         </div>
       </div>
 

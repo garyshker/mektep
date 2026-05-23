@@ -3,7 +3,26 @@
     "allow": [
       "WebFetch(domain:github.com)",
       "Bash(git checkout *)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Read(//opt/homebrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home/bin/**)",
+      "Read(//Applications/Android Studio.app/**)",
+      "Read(//tmp/**)",
+      "Read(//private/tmp/**)",
+      "Bash(cd /Users/kaisar/Desktop/Kaisar/iMektep/android *)",
+      "Bash(export JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home)",
+      "Bash(export ANDROID_HOME=/opt/homebrew/share/android-commandlinetools)",
+      "Bash(./gradlew :app:compileDebugKotlin)",
+      "Bash(git add *)",
+      "Bash(GIT_EDITOR=true git rebase --continue)",
+      "Bash(git rebase *)",
+      "Bash(EDITOR=: git rebase --continue)",
+      "Bash(git -c core.editor=true rebase --continue)",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(git version *)",
+      "Bash(git -c advice.resolveConflict=false rebase --continue)",
+      "Bash(git rerere *)",
+      "Bash(python3 -c ' *)",
+      "Bash(git stash *)"
     ]
   }
 }
