@@ -143,7 +143,7 @@ const L = {
     lessBtn: "◀ Кіші", moreBtn: "Үлкен ▶",
     multiTable: "Көбейту кестесі", multiTableSub: "2-ден 9-ға дейін",
     multiTablePick: "Санды таңда", multiTablePractice: "Жаттықтыру",
-    logout: "Шығу",
+    logout: "Шығу", home: "Үй",
     tetrisTitle: "Тетрис",
     tetrisScore: "Ұпай", tetrisLines: "Жол", tetrisLevel: "Деңгей",
     tetrisHint: "Түрту — бұру  ·  Сырғыту — жылжыту  ·  Төмен — тастау",
@@ -211,7 +211,7 @@ const L = {
     lessBtn: "◀ Меньше", moreBtn: "Больше ▶",
     multiTable: "Таблица умножения", multiTableSub: "от 2 до 9",
     multiTablePick: "Выбери число", multiTablePractice: "Тренировка",
-    logout: "Выйти",
+    logout: "Выйти", home: "Главная",
     tetrisTitle: "Тетрис",
     tetrisScore: "Счёт", tetrisLines: "Линии", tetrisLevel: "Уровень",
     tetrisHint: "Тап — поворот  ·  Свайп — двигай  ·  Вниз — сброс",
@@ -279,7 +279,7 @@ const L = {
     lessBtn: "◀ Less", moreBtn: "More ▶",
     multiTable: "Times Table", multiTableSub: "from 2 to 9",
     multiTablePick: "Pick a number", multiTablePractice: "Practice",
-    logout: "Log out",
+    logout: "Log out", home: "Home",
     tetrisTitle: "Tetris",
     tetrisScore: "Score", tetrisLines: "Lines", tetrisLevel: "Level",
     tetrisHint: "Tap — rotate  ·  Swipe — move  ·  Down — drop",
@@ -655,10 +655,9 @@ function OnboardingScreen({ onDone }) {
 
   return (
     <>
-      <MiniTetris />
       {step === 1 ? (
         <div className="onboarding">
-          <img src="./otter.png" className="ob-mascot" alt="" />
+          <MascotSvg />
           <h1 className="ob-title">iМектеп</h1>
           <p className="ob-sub">{t.obSub}</p>
           <div className="ob-form">
@@ -942,6 +941,44 @@ function TetrisWidget({ t }) {
     </div>
   );
 }
+
+// ─── Mascot: geometric angular owl ──────────────────────────────
+const MascotSvg = () => (
+  <svg className="ob-mascot" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    {/* body */}
+    <polygon points="80,28 130,60 130,120 80,148 30,120 30,60" fill="#0E8C6B"/>
+    <polygon points="80,28 130,60 130,120 80,148 30,120 30,60" fill="url(#bodyGrad)"/>
+    {/* ear tufts */}
+    <polygon points="48,42 38,20 60,36" fill="#0A6E55"/>
+    <polygon points="112,42 122,20 100,36" fill="#0A6E55"/>
+    {/* face plate */}
+    <ellipse cx="80" cy="92" rx="34" ry="36" fill="#E8F5F1"/>
+    {/* left eye ring */}
+    <circle cx="64" cy="82" r="14" fill="#0E8C6B"/>
+    <circle cx="64" cy="82" r="10" fill="#fff"/>
+    <circle cx="66" cy="80" r="6" fill="#1A1A2E"/>
+    <circle cx="68" cy="78" r="2" fill="#fff"/>
+    {/* right eye ring */}
+    <circle cx="96" cy="82" r="14" fill="#0E8C6B"/>
+    <circle cx="96" cy="82" r="10" fill="#fff"/>
+    <circle cx="98" cy="80" r="6" fill="#1A1A2E"/>
+    <circle cx="100" cy="78" r="2" fill="#fff"/>
+    {/* beak */}
+    <polygon points="80,92 73,100 87,100" fill="#F97316"/>
+    {/* belly number π */}
+    <text x="80" y="128" fontSize="18" fontWeight="900" textAnchor="middle" fill="#0E8C6B" fontFamily="system-ui">π</text>
+    {/* wing left */}
+    <polygon points="30,60 8,90 30,100" fill="#0A6E55" opacity=".85"/>
+    {/* wing right */}
+    <polygon points="130,60 152,90 130,100" fill="#0A6E55" opacity=".85"/>
+    <defs>
+      <linearGradient id="bodyGrad" x1="80" y1="28" x2="80" y2="148" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stopColor="#fff" stopOpacity=".12"/>
+        <stop offset="1" stopColor="#000" stopOpacity=".08"/>
+      </linearGradient>
+    </defs>
+  </svg>
+);
 
 // ─── Tetris block icon (for game card) ──────────────────────────
 const TetrisBlockIcon = ({ size=44 }) => (
