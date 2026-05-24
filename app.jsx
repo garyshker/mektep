@@ -1756,7 +1756,7 @@ function MathSprintRound({ t, onBack, onRestart, grade }) {
               else if (!timedOut && opt === chosen) cls += " wrong";
             }
             return (
-              <button key={i} className={cls} disabled={chosen !== null} onClick={() => go(opt)}>{opt}</button>
+              <button key={`${idx}-${i}`} className={cls} disabled={chosen !== null} onClick={() => go(opt)}>{opt}</button>
             );
           })}
         </div>
@@ -1918,7 +1918,7 @@ function MissingNumberRound({ t, onBack, onRestart, grade }) {
               if (opt === cur.ans) cls += to ? " reveal" : " right";
               else if (!to && opt === chosen) cls += " wrong";
             }
-            return <button key={i} className={cls} disabled={chosen!==null} onClick={()=>go(opt)}>{opt}</button>;
+            return <button key={`${idx}-${i}`} className={cls} disabled={chosen!==null} onClick={()=>go(opt)}>{opt}</button>;
           })}
         </div>
       </div>
@@ -2074,7 +2074,7 @@ function NumberChainRound({ t, onBack, onRestart, grade }) {
               if (opt === cur.ans) cls += to ? " reveal" : " right";
               else if (!to && opt === chosen) cls += " wrong";
             }
-            return <button key={i} className={cls} disabled={chosen!==null} onClick={()=>go(opt)}>{opt}</button>;
+            return <button key={`${idx}-${i}`} className={cls} disabled={chosen!==null} onClick={()=>go(opt)}>{opt}</button>;
           })}
         </div>
       </div>
@@ -2167,7 +2167,7 @@ function WordProblemRound({ t, onBack, onRestart, grade, lang }) {
               if (opt === cur.ans) cls += " right";
               else if (opt === chosen) cls += " wrong";
             }
-            return <button key={i} className={cls} disabled={chosen !== null} onClick={() => go(opt)}>{opt}</button>;
+            return <button key={`${idx}-${i}`} className={cls} disabled={chosen !== null} onClick={() => go(opt)}>{opt}</button>;
           })}
         </div>
       </div>

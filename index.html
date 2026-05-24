@@ -1526,7 +1526,10 @@
     backdrop-filter:var(--glass-blur); -webkit-backdrop-filter:var(--glass-blur);
     box-shadow:0 4px 16px rgba(0,0,0,.06), 0 1px 0 rgba(255,255,255,.6) inset;
   }
-  .wp-opt:hover:not(:disabled){ background:rgba(255,255,255,0.88); border-color:var(--brand); transform:translateY(-2px); }
+  .wp-opt:hover:not(:disabled){ transform:translateY(-2px); }
+  @media (hover:hover) {
+    .wp-opt:hover:not(:disabled){ background:rgba(255,255,255,0.88); border-color:var(--brand); }
+  }
   .wp-opt:active:not(:disabled){ transform:scale(.95); }
   .wp-opt.right{ background:#d4f5e2 !important; border-color:#2D9D5C !important; color:#1a7a44 !important; }
   .wp-opt.wrong{ background:#ffe4e4 !important; border-color:#e14b4b !important; color:#b83333 !important; }
