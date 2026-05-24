@@ -1667,6 +1667,7 @@ function MathSprintRound({ t, onBack, onRestart, grade }) {
   const go = useCallback((picked) => {
     if (busy.current) return;
     busy.current = true;
+    document.activeElement?.blur();
     const ok = picked === curAns.current;
     if (ok) {
       window.soundCorrect?.();
@@ -1781,6 +1782,7 @@ function TrueFalseRound({ t, onBack, onRestart, grade }) {
   const go = useCallback((picked) => {
     if (busy.current) return;
     busy.current = true;
+    document.activeElement?.blur();
     const isTimeout = picked === '__timeout__';
     const ok = !isTimeout && picked === ansRef.current;
     if (ok) { window.soundCorrect?.(); setScore(s => s + 1); }
@@ -1875,6 +1877,7 @@ function MissingNumberRound({ t, onBack, onRestart, grade }) {
   const go = useCallback((picked) => {
     if (busy.current) return;
     busy.current = true;
+    document.activeElement?.blur();
     const ok = picked !== '__timeout__' && picked === ansRef.current;
     if (ok) { window.soundCorrect?.(); setScore(s => s+1); } else window.soundWrong?.();
     setChosen(picked);
@@ -1943,6 +1946,7 @@ function ComparisonRound({ t, onBack, onRestart, grade }) {
   const go = useCallback((picked) => {
     if (busy.current) return;
     busy.current = true;
+    document.activeElement?.blur();
     const ok = picked !== '__timeout__' && picked === ansRef.current;
     if (ok) { window.soundCorrect?.(); setScore(s => s+1); } else window.soundWrong?.();
     setChosen(picked);
@@ -2029,6 +2033,7 @@ function NumberChainRound({ t, onBack, onRestart, grade }) {
   const go = useCallback((picked) => {
     if (busy.current) return;
     busy.current = true;
+    document.activeElement?.blur();
     const ok = picked !== '__timeout__' && picked === ansRef.current;
     if (ok) { window.soundCorrect?.(); setScore(s => s+1); } else window.soundWrong?.();
     setChosen(picked);
@@ -2135,6 +2140,7 @@ function WordProblemRound({ t, onBack, onRestart, grade, lang }) {
   const go = useCallback((picked) => {
     if (busy.current || chosen !== null) return;
     busy.current = true;
+    document.activeElement?.blur();
     const ok = picked === cur.ans;
     if (ok) { SFX.correct(); setScore(s => s + 1); } else SFX.wrong();
     setChosen(picked);
@@ -2152,6 +2158,7 @@ function WordProblemRound({ t, onBack, onRestart, grade, lang }) {
         <div className="qgame-counter">{idx + 1}/{TOTAL}</div>
       </div>
       <div className="wp-body">
+        <div className="wp-num-badge">{idx + 1} / {TOTAL}</div>
         <div className="wp-text">{cur.text}</div>
         <div className="wp-opts">
           {cur.opts.map((opt, i) => {

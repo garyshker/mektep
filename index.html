@@ -1497,17 +1497,41 @@
     to  { stroke-dasharray: 0   113; }
   }
   .qgame-opt:disabled{ cursor:default }
+  .qgame-opt:focus:not(:focus-visible){ outline:none; }
 
   /* Word Problems */
-  .wp-body{ display:flex; flex-direction:column; gap:16px; padding:16px 20px 24px; flex:1; overflow-y:auto; }
-  .wp-text{ background:var(--glass); border-radius:16px; padding:20px; font-size:1.05rem; line-height:1.65; color:var(--ink); border:1.5px solid var(--glass-b); backdrop-filter:var(--glass-blur); -webkit-backdrop-filter:var(--glass-blur); box-shadow:var(--glass-shadow); }
-  .wp-opts{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .wp-opt { border-radius:14px; border:2px solid var(--glass-b); background:var(--glass); padding:16px 10px; font-size:1.15rem; font-weight:800; cursor:pointer; transition:background .15s, border-color .15s, transform .1s; color:var(--ink); backdrop-filter:var(--glass-blur); -webkit-backdrop-filter:var(--glass-blur); box-shadow:0 4px 16px rgba(0,0,0,.06); }
+  .wp-num-badge{
+    background:var(--brand-tint); color:var(--brand-deep);
+    border-radius:99px; padding:6px 18px; font-size:13px; font-weight:900;
+    letter-spacing:.04em;
+  }
+  .wp-body{
+    flex:1; min-height:0; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:clamp(10px,2.5vh,18px);
+    padding:0 clamp(16px,5vw,28px) clamp(12px,2vh,20px);
+  }
+  .wp-text{
+    background:var(--glass); border-radius:20px; padding:clamp(16px,3vh,24px) clamp(18px,4vw,26px);
+    font-size:clamp(15px,3.8vw,18px); line-height:1.65; color:var(--ink);
+    border:1.5px solid var(--glass-b); backdrop-filter:var(--glass-blur);
+    -webkit-backdrop-filter:var(--glass-blur); box-shadow:var(--glass-shadow);
+    width:100%; max-width:440px; text-align:center; font-weight:700;
+  }
+  .wp-opts{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(8px,2vw,12px); width:100%; max-width:440px; }
+  .wp-opt{
+    border-radius:16px; border:2px solid var(--glass-b); background:var(--glass);
+    padding:clamp(14px,2.5vh,20px) 8px; font-size:clamp(20px,5vw,26px);
+    font-weight:900; cursor:pointer; color:var(--ink);
+    transition:background .15s, border-color .15s, transform .1s;
+    backdrop-filter:var(--glass-blur); -webkit-backdrop-filter:var(--glass-blur);
+    box-shadow:0 4px 16px rgba(0,0,0,.06), 0 1px 0 rgba(255,255,255,.6) inset;
+  }
   .wp-opt:hover:not(:disabled){ background:rgba(255,255,255,0.88); border-color:var(--brand); transform:translateY(-2px); }
   .wp-opt:active:not(:disabled){ transform:scale(.95); }
   .wp-opt.right{ background:#d4f5e2 !important; border-color:#2D9D5C !important; color:#1a7a44 !important; }
   .wp-opt.wrong{ background:#ffe4e4 !important; border-color:#e14b4b !important; color:#b83333 !important; }
   .wp-opt:disabled{ cursor:default; }
+  .wp-opt:focus:not(:focus-visible){ outline:none; }
 
   .qgame-done{
     flex:1; display:flex; flex-direction:column; align-items:center;
