@@ -188,9 +188,10 @@ const L = {
     combo: (n) => `${n} қатарынан 🔥`,
     trueBtn: "✓ Дұрыс",
     falseBtn: "✗ Қате",
-    missingNum: "Санды тап", missingNumSub: "?-ді тап",
+    missingNum: "Санды тап", missingNumSub: "Жоғалған санды тап",
     compareRush: "Салыстыр", compareRushSub: "< немесе > таңда",
     numChain: "Сан тізбегі", numChainSub: "Қадамдарды орында",
+    wordProb: "Есеп", wordProbSub: "Мәтінді оқы, жауап тап",
     lessBtn: "◀ Кіші", moreBtn: "Үлкен ▶",
     multiTable: "Көбейту кестесі", multiTableSub: "2-ден 9-ға дейін",
     multiTablePick: "Санды таңда", multiTablePractice: "Жаттықтыру",
@@ -199,10 +200,10 @@ const L = {
     tetrisScore: "Ұпай", tetrisLines: "Жол", tetrisLevel: "Деңгей",
     tetrisHint: "Түрту — бұру  ·  Сырғыту — жылжыту  ·  Төмен — тастау",
     tetrisOver: "ОЙЫН БІТТІ", tetrisRestart: "Қайтадан ойнау үшін басыңыз",
-    games: "Ойындар", tetrisDesc: "Блоктарды жинаңыз", playBtn: "Ойна →",
-    g2048Desc: "Бірдей сандарды бірлестіріңіз", g2048Hint: "Свайп — жылжыту  ·  2048-ге жет!",
+    games: "Ойындар", tetrisDesc: "Блоктарды тер", playBtn: "Ойна →",
+    g2048Desc: "Бірдей сандарды біріктір", g2048Hint: "Свайп — жылжыту  ·  2048-ге жет!",
     bestScore: "Рекорд", memoryTitle: "Жад ойыны", memoryDesc: "Жұп карточкаларды тап",
-    snakeTitle: "Сандық жылан", snakeDesc: "Санды жинаңыз",
+    snakeTitle: "Сандық жылан", snakeDesc: "Сандарды жина",
     moves: "қадам", memoryPairs: "жұп", memoryWin: "Жеңдіңіз! 🎉", memoryPreview: "Жаттап ал!",
   },
   ru: {
@@ -260,6 +261,7 @@ const L = {
     missingNum: "Найди число", missingNumSub: "Что вместо ?",
     compareRush: "Сравни", compareRushSub: "Выбери < или >",
     numChain: "Цепочка чисел", numChainSub: "Считай по шагам",
+    wordProb: "Задачи", wordProbSub: "Читай текст, найди ответ",
     lessBtn: "◀ Меньше", moreBtn: "Больше ▶",
     multiTable: "Таблица умножения", multiTableSub: "от 2 до 9",
     multiTablePick: "Выбери число", multiTablePractice: "Тренировка",
@@ -329,6 +331,7 @@ const L = {
     missingNum: "Missing Number", missingNumSub: "What replaces ?",
     compareRush: "Compare Rush", compareRushSub: "Pick < or >",
     numChain: "Number Chain", numChainSub: "Follow the steps",
+    wordProb: "Word Problems", wordProbSub: "Read and solve",
     lessBtn: "◀ Less", moreBtn: "More ▶",
     multiTable: "Times Table", multiTableSub: "from 2 to 9",
     multiTablePick: "Pick a number", multiTablePractice: "Practice",
@@ -1369,6 +1372,73 @@ function MiniTetris() {
 
 // ─── Quick Game ────────────────────────────────────────────────────
 
+const _WPN = { kk:['Аяй','Нұрбол','Темір','Дина','Асыл','Жансая','Болат','Айгүл'], ru:['Айбек','Нургуль','Темир','Дина','Асыл','Жанна','Болат','Айгуль'], en:['Aibek','Nurgul','Temir','Dina','Asyl','Zhanna','Bolat','Aigul'] };
+const _wpk = arr => arr[Math.floor(Math.random() * arr.length)];
+
+// Kazakh vowel-harmony suffix helpers
+function _kzFront(w) {
+  const F='еіүөЕІҮӨ', B='аоұыАОҰЫ';
+  for (let i=w.length-1; i>=0; i--) { if(F.includes(w[i]))return true; if(B.includes(w[i]))return false; }
+  return false;
+}
+function kzLoc(w) { // locative: -да/-де/-та/-те
+  const f=_kzFront(w), hard='пткқсшхфцч'.includes(w[w.length-1].toLowerCase());
+  return hard ? (f?'те':'та') : (f?'де':'да');
+}
+function kzGen(w) { // genitive: -ның/-нің/-тың/-тің/-дың/-дің
+  const f=_kzFront(w), l=w[w.length-1].toLowerCase();
+  // vowels + soft-vowel letters (я/ю/ё = end in vowel sound in loanword names)
+  if('аеіоөұүыйяюёАЕІОӨҰҮЫ'.includes(l)) return f?'нің':'ның';
+  if('пткқсшхфцч'.includes(l)) return f?'тің':'тың';
+  return f?'дің':'дың';
+}
+
+const WP_GENERATORS = {
+  1: [
+    (L) => { const n=_wpk(_WPN[L]),a=2+Math.floor(Math.random()*7),b=1+Math.floor(Math.random()*(10-a)),ans=a+b; return { ans, text:{kk:`${n}-${kzLoc(n)} ${a} алма болды. Досы тағы ${b} алма берді. Барлығы қанша алма болды?`,ru:`У ${n} было ${a} яблок. Друг дал ещё ${b}. Сколько стало?`,en:`${n} had ${a} apples. A friend gave ${b} more. How many now?`}[L] }; },
+    (L) => { const n=_wpk(_WPN[L]),total=7+Math.floor(Math.random()*8),eaten=2+Math.floor(Math.random()*(total-3)),ans=total-eaten; return { ans, text:{kk:`${n}-${kzLoc(n)} ${total} печенье болды. Ол ${eaten} жеді. Қанша қалды?`,ru:`У ${n} было ${total} печенек. Съел(а) ${eaten}. Сколько осталось?`,en:`${n} had ${total} cookies and ate ${eaten}. How many are left?`}[L] }; },
+    (L) => { const a=2+Math.floor(Math.random()*5),b=1+Math.floor(Math.random()*5),c=1+Math.floor(Math.random()*5),ans=a+b+c; return { ans, text:{kk:`Себетте ${a} қызыл, ${b} сары және ${c} жасыл алма бар. Барлығы қанша?`,ru:`В корзине ${a} красных, ${b} жёлтых и ${c} зелёных яблок. Сколько всего?`,en:`A basket has ${a} red, ${b} yellow, and ${c} green apples. Total?`}[L] }; },
+    (L) => { const n=_wpk(_WPN[L]),total=8+Math.floor(Math.random()*8),given=3+Math.floor(Math.random()*(total-4)),ans=total-given; return { ans, text:{kk:`${n}-${kzLoc(n)} ${total} бояу қалам болды. Ол ${given} қаламды досына берді. Қанша қалды?`,ru:`У ${n} было ${total} карандашей. Отдал(а) ${given}. Сколько осталось?`,en:`${n} had ${total} pencils and gave ${given} away. How many are left?`}[L] }; },
+  ],
+  2: [
+    (L) => { const n=_wpk(_WPN[L]),rows=2+Math.floor(Math.random()*4),cols=2+Math.floor(Math.random()*4),ans=rows*cols; return { ans, text:{kk:`${n} ${rows} қатарда, әр қатарда ${cols} гүл отырғызды. Барлығы қанша гүл?`,ru:`${n} посадил(а) цветы в ${rows} ряда по ${cols}. Сколько всего?`,en:`${n} planted flowers in ${rows} rows of ${cols}. How many total?`}[L] }; },
+    (L) => { const n=_wpk(_WPN[L]),boxes=3+Math.floor(Math.random()*5),perBox=2+Math.floor(Math.random()*6),ans=boxes*perBox; return { ans, text:{kk:`${n} ${boxes} қорапқа, әр қорапқа ${perBox} кітап салды. Барлығы қанша кітап?`,ru:`${n} разложил(а) по ${boxes} коробкам по ${perBox} книг. Сколько книг?`,en:`${n} packed ${boxes} boxes with ${perBox} books each. Total books?`}[L] }; },
+    (L) => { const g=[2,3,4,5][Math.floor(Math.random()*4)],ans=2+Math.floor(Math.random()*5),total=ans*g; return { ans, text:{kk:`${total} бадам ${g} баланың арасында тең бөлінді. Әрқайсысына қанша тиді?`,ru:`${total} орехов поровну разделили между ${g} детьми. Сколько каждому?`,en:`${total} nuts shared equally among ${g} children. How many each?`}[L] }; },
+    (L) => { const n=_wpk(_WPN[L]),price=3+Math.floor(Math.random()*6),count=3+Math.floor(Math.random()*5),ans=price*count; return { ans, text:{kk:`Бір шоколад ${price} теңге тұрады. ${n} ${count} шоколад сатып алды. Барлығы қанша теңге?`,ru:`Шоколад стоит ${price} тенге. ${n} купил(а) ${count} штуки. Сколько заплатил(а)?`,en:`One chocolate costs ${price} tenge. ${n} bought ${count}. Total cost?`}[L] }; },
+  ],
+  3: [
+    (L) => { const n=_wpk(_WPN[L]),s=3+Math.floor(Math.random()*7),ans=4*s; return { ans, text:{kk:`${n}-${kzGen(n)} бөлмесі шаршы пішінді, бір жағы ${s} м. Периметрі қанша?`,ru:`Комната ${n} квадратная, сторона ${s} м. Найди периметр.`,en:`${n}'s room is a square with side ${s} m. What is the perimeter?`}[L] }; },
+    (L) => { const n=_wpk(_WPN[L]),w=3+Math.floor(Math.random()*7),h=3+Math.floor(Math.random()*7),ans=2*(w+h); return { ans, text:{kk:`${n}-${kzGen(n)} бақшасы тіктөртбұрышты: ені ${w} м, ұзындығы ${h} м. Периметрі қанша?`,ru:`Огород ${n}: ширина ${w} м, длина ${h} м. Найди периметр.`,en:`${n}'s garden is ${w} m wide and ${h} m long. Perimeter?`}[L] }; },
+    (L) => { const n=_wpk(_WPN[L]),ans=(2+Math.floor(Math.random()*6))*4,total=ans*2; return { ans, text:{kk:`${n}-${kzLoc(n)} ${total} кәмпит бар. Ол жартысын берді. Қанша берді?`,ru:`У ${n} есть ${total} конфет. Отдал(а) половину. Сколько отдал(а)?`,en:`${n} has ${total} candies and gives away half. How many?`}[L] }; },
+    (L) => { const n=_wpk(_WPN[L]),ans=(2+Math.floor(Math.random()*5))*8,total=ans*4; return { ans, text:{kk:`${n}-${kzGen(n)} дәптерінде ${total} бет бар. Ол төрттен бірін толтырды. Қанша бет?`,ru:`У ${n} тетрадь на ${total} страниц. Заполнил(а) четверть. Сколько страниц?`,en:`${n} has a ${total}-page notebook and filled one quarter. How many pages?`}[L] }; },
+  ],
+  4: [
+    (L) => { const n=_wpk(_WPN[L]),w=3+Math.floor(Math.random()*7),h=2+Math.floor(Math.random()*7),ans=w*h; return { ans, text:{kk:`${n}-${kzGen(n)} бақшасы тіктөртбұрышты: ені ${w} м, ұзындығы ${h} м. Ауданы қанша?`,ru:`Участок ${n}: ширина ${w} м, длина ${h} м. Найди площадь.`,en:`${n}'s plot is ${w} m × ${h} m. What is the area?`}[L] }; },
+    (L) => { const b=4+Math.floor(Math.random()*8),x=2+Math.floor(Math.random()*9),ans=x,a=x+b; return { ans, text:{kk:`x + ${b} = ${a}. x-ті тап.`,ru:`x + ${b} = ${a}. Найди x.`,en:`x + ${b} = ${a}. Find x.`}[L] }; },
+    (L) => { const n=_wpk(_WPN[L]),spd=3+Math.floor(Math.random()*5),time=2+Math.floor(Math.random()*4),ans=spd*time; return { ans, text:{kk:`${n} сағатына ${spd} км жылдамдықпен жүрді. ${time} сағатта қанша км жүрді?`,ru:`${n} шёл со скоростью ${spd} км/ч в течение ${time} часов. Какое расстояние?`,en:`${n} walked at ${spd} km/h for ${time} hours. Distance covered?`}[L] }; },
+    (L) => { const n=_wpk(_WPN[L]),price=5+Math.floor(Math.random()*10),count=2+Math.floor(Math.random()*7),total=price*count,paid=total+10+Math.floor(Math.random()*20),ans=paid-total; return { ans, text:{kk:`${n} ${count} дәптер сатып алды, әрқайсысы ${price} теңге. ${paid} теңге берді. Қайтарымы қанша?`,ru:`${n} купил(а) ${count} тетради по ${price} тенге. Дал(а) ${paid} тенге. Сдача?`,en:`${n} bought ${count} notebooks at ${price} tenge each and paid ${paid}. Change?`}[L] }; },
+  ],
+};
+
+function makeWpOpts(ans) {
+  const opts = new Set([ans]);
+  for (const v of [ans+1, ans-1, ans+2, ans-2, ans+3, ans-3, ans+5, ans*2, Math.max(1, ans-10)]) {
+    if (v > 0 && v !== ans) opts.add(v);
+    if (opts.size === 4) break;
+  }
+  let d = 6;
+  while (opts.size < 4) { opts.add(ans + d); d++; }
+  return [...opts].sort(() => Math.random() - 0.5);
+}
+
+function makeWordProblems(grade, lang, count = 10) {
+  const gens = WP_GENERATORS[grade] || WP_GENERATORS[2];
+  return Array.from({ length: count }, (_, i) => {
+    const { text, ans } = gens[i % gens.length](lang);
+    return { text, ans, opts: makeWpOpts(ans) };
+  });
+}
+
 function makeQ(difficulty, grade) {
   grade = grade || 2;
   // Grade 1: addition and subtraction within 20
@@ -2045,6 +2115,63 @@ const IcoChain = () => (
     <path d="M14 7l5 5-5 5"/>
   </svg>
 );
+const IcoWord = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="4"/>
+    <path d="M7 8h10M7 12h7M7 16h5"/>
+  </svg>
+);
+
+function WordProblemRound({ t, onBack, onRestart, grade, lang }) {
+  const TOTAL = 10;
+  const [qs] = useState(() => makeWordProblems(grade || 2, lang || 'kk', TOTAL));
+  const [idx, setIdx] = useState(0);
+  const [score, setScore] = useState(0);
+  const [chosen, setChosen] = useState(null);
+  const busy = useRef(false);
+  const isDone = idx >= TOTAL;
+  const cur = qs[Math.min(idx, TOTAL - 1)];
+
+  const go = useCallback((picked) => {
+    if (busy.current || chosen !== null) return;
+    busy.current = true;
+    const ok = picked === cur.ans;
+    if (ok) { SFX.correct(); setScore(s => s + 1); } else SFX.wrong();
+    setChosen(picked);
+    setTimeout(() => { setIdx(i => i + 1); setChosen(null); busy.current = false; }, 800);
+  }, [chosen, cur]);
+
+  if (isDone) return <GameResult score={score} total={TOTAL} t={t} onBack={onBack} onRestart={onRestart} />;
+  return (
+    <div className="qgame-shell">
+      <div className="qgame-top">
+        <button className="lt-close" onClick={onBack}>✕</button>
+        <div className="qgame-dots">{qs.map((_, i) => (
+          <div key={i} className={"qgd" + (i < idx ? " done" : i === idx ? " cur" : "")} />
+        ))}</div>
+        <div className="qgame-counter">{idx + 1}/{TOTAL}</div>
+      </div>
+      <div className="wp-body">
+        <div className="wp-text">{cur.text}</div>
+        <div className="wp-opts">
+          {cur.opts.map((opt, i) => {
+            let cls = "wp-opt";
+            if (chosen !== null) {
+              if (opt === cur.ans) cls += " right";
+              else if (opt === chosen) cls += " wrong";
+            }
+            return <button key={i} className={cls} disabled={chosen !== null} onClick={() => go(opt)}>{opt}</button>;
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WordProblemGame({ t, onBack, grade, lang }) {
+  const [key, setKey] = useState(0);
+  return <WordProblemRound key={key} t={t} onBack={onBack} onRestart={() => setKey(k => k + 1)} grade={grade} lang={lang} />;
+}
 
 function GamePicker({ t, onPick, onClose }) {
   const games = [
@@ -2053,6 +2180,7 @@ function GamePicker({ t, onPick, onClose }) {
     { id:'missing', Icon:IcoMissing, color:'#0D9488', bg:'#F0FDFA', name:t.missingNum,  sub:t.missingNumSub },
     { id:'compare', Icon:IcoCompare, color:'#2563EB', bg:'#EFF6FF', name:t.compareRush, sub:t.compareRushSub },
     { id:'chain',   Icon:IcoChain,   color:'#E11D48', bg:'#FFF1F2', name:t.numChain,    sub:t.numChainSub },
+    { id:'word',    Icon:IcoWord,    color:'#059669', bg:'#ECFDF5', name:t.wordProb,    sub:t.wordProbSub },
   ];
   return (
     <div className="qgame-shell picker-shell">
@@ -2064,7 +2192,7 @@ function GamePicker({ t, onPick, onClose }) {
       <div className="picker-grid">
         {games.map((g, i) => (
           <div key={g.id}
-            className={"picker-card" + (i === 4 ? " picker-wide" : "")}
+            className="picker-card"
             style={{ '--pc': g.color, '--pb': g.bg }}
             onClick={() => onPick(g.id)}>
             <div className="picker-icon-wrap"><g.Icon/></div>
@@ -2211,15 +2339,16 @@ function MultiTableView({ t, onClose }) {
   return <MultiTablePractice t={t} num={num} onBack={() => setNum(null)} />;
 }
 
-function QuickGame({ t, onClose, grade }) {
+function QuickGame({ t, onClose, grade, lang }) {
   const [mode, setMode] = useState(null);
   const back = () => setMode(null);
-  if (!mode)          return <GamePicker       t={t} onPick={setMode} onClose={onClose} />;
-  if (mode==='sprint') return <MathSprintGame   t={t} onBack={back} grade={grade} />;
-  if (mode==='tf')     return <TrueFalseGame    t={t} onBack={back} grade={grade} />;
-  if (mode==='missing')return <MissingNumberGame t={t} onBack={back} grade={grade} />;
-  if (mode==='compare')return <ComparisonGame   t={t} onBack={back} grade={grade} />;
-  if (mode==='chain')  return <NumberChainGame  t={t} onBack={back} grade={grade} />;
+  if (!mode)           return <GamePicker        t={t} onPick={setMode} onClose={onClose} />;
+  if (mode==='sprint')  return <MathSprintGame    t={t} onBack={back} grade={grade} />;
+  if (mode==='tf')      return <TrueFalseGame     t={t} onBack={back} grade={grade} />;
+  if (mode==='missing') return <MissingNumberGame t={t} onBack={back} grade={grade} />;
+  if (mode==='compare') return <ComparisonGame    t={t} onBack={back} grade={grade} />;
+  if (mode==='chain')   return <NumberChainGame   t={t} onBack={back} grade={grade} />;
+  if (mode==='word')    return <WordProblemGame   t={t} onBack={back} grade={grade} lang={lang} />;
   return null;
 }
 
@@ -2561,7 +2690,7 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
   const setQuests = (q) => setProgress(p => ({ ...p, questsDone: q }));
   const subject = (id) => subs.find(s => s.id === id);
 
-  if (quickGame)           return <QuickGame         t={t} onClose={() => setQuickGame(false)} grade={progress.grade || 2} />;
+  if (quickGame)           return <QuickGame         t={t} onClose={() => setQuickGame(false)} grade={progress.grade || 2} lang={tweaks.language} />;
   if (multiTable)          return <MultiTableView    t={t} onClose={() => setMultiTable(false)} />;
   if (activeGame==='tetris') return <TetrisFullScreen t={t} onBack={() => setActiveGame(null)} />;
   if (activeGame==='2048')   return <Game2048         t={t} onBack={() => setActiveGame(null)} />;
