@@ -82,6 +82,57 @@ const Star = ({ on }) => (
   </svg>
 );
 
+// ─── Sound effects (Web Audio API, no external files) ──────────────
+const SFX = (() => {
+  let ctx = null;
+  const ac = () => {
+    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  };
+  const tone = (freq, dur, type='sine', vol=0.13, startFreq=null, endFreq=null) => {
+    try {
+      const c = ac(), o = c.createOscillator(), g = c.createGain();
+      o.type = type;
+      if (startFreq && endFreq) {
+        o.frequency.setValueAtTime(startFreq, c.currentTime);
+        o.frequency.exponentialRampToValueAtTime(endFreq, c.currentTime + dur);
+      } else { o.frequency.value = freq; }
+      g.gain.setValueAtTime(vol, c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+      o.connect(g); g.connect(c.destination);
+      o.start(); o.stop(c.currentTime + dur);
+    } catch(e) {}
+  };
+  const seq = (notes) => notes.forEach(([f, t, d, tp, v]) => {
+    try {
+      const c = ac(), o = c.createOscillator(), g = c.createGain();
+      o.type = tp || 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(v || 0.13, c.currentTime + t);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + t + d);
+      o.connect(g); g.connect(c.destination);
+      o.start(c.currentTime + t); o.stop(c.currentTime + t + d);
+    } catch(e) {}
+  });
+  const sfx = {
+    flip:    () => tone(520, 0.07, 'sine', 0.09),
+    match:   () => seq([[523,.0,.15],[659,.1,.15],[784,.2,.25]]),
+    wrong:   () => tone(0, 0.18, 'sawtooth', 0.09, 260, 160),
+    win:     () => seq([[523,.0,.2],[659,.1,.2],[784,.2,.2],[1047,.32,.4]]),
+    eat:     () => tone(0, 0.1, 'sine', 0.1, 550, 880),
+    die:     () => tone(0, 0.5, 'sawtooth', 0.12, 380, 90),
+    correct: () => tone(0, 0.12, 'sine', 0.1, 440, 660),
+    tick:    () => tone(880, 0.05, 'sine', 0.07),
+    complete:() => seq([[523,.0,.18],[659,.12,.18],[784,.24,.18],[1047,.38,.35]]),
+  };
+  // wire up window.sound* used by QuickGame
+  window.soundCorrect  = sfx.correct;
+  window.soundWrong    = sfx.wrong;
+  window.soundComplete = sfx.complete;
+  window.soundTick     = sfx.tick;
+  return sfx;
+})();
+
 // ─── UI strings (3 languages) ──────────────────────────────────────
 
 const L = {
@@ -152,7 +203,7 @@ const L = {
     g2048Desc: "Бірдей сандарды бірлестіріңіз", g2048Hint: "Свайп — жылжыту  ·  2048-ге жет!",
     bestScore: "Рекорд", memoryTitle: "Жад ойыны", memoryDesc: "Жұп карточкаларды тап",
     snakeTitle: "Сандық жылан", snakeDesc: "Санды жинаңыз",
-    moves: "қадам", memoryPairs: "жұп", memoryWin: "Жеңдіңіз! 🎉",
+    moves: "қадам", memoryPairs: "жұп", memoryWin: "Жеңдіңіз! 🎉", memoryPreview: "Жаттап ал!",
   },
   ru: {
     welcome: (n) => `Привет, ${n || 'Ученик'}!`,
@@ -221,7 +272,7 @@ const L = {
     g2048Desc: "Объединяй одинаковые числа", g2048Hint: "Свайп — двигай  ·  Достигни 2048!",
     bestScore: "Рекорд", memoryTitle: "Память", memoryDesc: "Найди пары карточек",
     snakeTitle: "Математическая змейка", snakeDesc: "Собирай числа",
-    moves: "ходов", memoryPairs: "пар", memoryWin: "Победа! 🎉",
+    moves: "ходов", memoryPairs: "пар", memoryWin: "Победа! 🎉", memoryPreview: "Запомни!",
   },
   en: {
     welcome: (n) => `Hi, ${n || 'Student'}!`,
@@ -290,7 +341,7 @@ const L = {
     g2048Desc: "Merge matching numbers", g2048Hint: "Swipe to move  ·  Reach 2048!",
     bestScore: "Best", memoryTitle: "Memory", memoryDesc: "Find the matching pairs",
     snakeTitle: "Math Snake", snakeDesc: "Collect numbers in order",
-    moves: "moves", memoryPairs: "pairs", memoryWin: "You win! 🎉",
+    moves: "moves", memoryPairs: "pairs", memoryWin: "You win! 🎉", memoryPreview: "Memorize!",
   },
 };
 
@@ -2202,10 +2253,17 @@ function MemoryGame({ t, onBack, grade = 2 }) {
   const [won, setWon] = useState(false);
   const [xp, setXp] = useState(0);
   const [xpPop, setXpPop] = useState(false);
+  const [preview, setPreview] = useState(true);
   const lock = useRef(false);
 
+  useEffect(() => {
+    const t = setTimeout(() => setPreview(false), 1500);
+    return () => clearTimeout(t);
+  }, []);
+
   const flip = (idx) => {
-    if (lock.current || matched.has(deck[idx].pairId) || flipped.includes(idx) || flipped.length === 2) return;
+    if (preview || lock.current || matched.has(deck[idx].pairId) || flipped.includes(idx) || flipped.length === 2) return;
+    SFX.flip();
     const next = [...flipped, idx];
     setFlipped(next);
     if (next.length === 2) {
@@ -2216,21 +2274,22 @@ function MemoryGame({ t, onBack, grade = 2 }) {
         setTimeout(() => {
           setMatched(prev => {
             const s = new Set(prev); s.add(deck[a].pairId);
-            if (s.size === pairs.length) setWon(true);
+            if (s.size === pairs.length) { setWon(true); SFX.win(); } else SFX.match();
             return s;
           });
           setXp(x => { setXpPop(true); setTimeout(() => setXpPop(false), 350); return x + 20; });
           setFlipped([]); lock.current = false;
         }, 500);
       } else {
-        setTimeout(() => { setFlipped([]); lock.current = false; }, 900);
+        setTimeout(() => { SFX.wrong(); setFlipped([]); lock.current = false; }, 600);
       }
     }
   };
 
   const restart = () => {
     setDeck(makeDeck()); setFlipped([]); setMatched(new Set());
-    setMoves(0); setWon(false); setXp(0);
+    setMoves(0); setWon(false); setXp(0); setPreview(true);
+    setTimeout(() => setPreview(false), 1500);
   };
 
   return (
@@ -2241,10 +2300,15 @@ function MemoryGame({ t, onBack, grade = 2 }) {
           <span className="games-topbar-title">{t.memoryTitle}</span>
           <div className={`g2048-xp${xpPop ? ' pop' : ''}`} style={{fontSize:13,fontWeight:900,color:'#D97706'}}>+{xp} XP</div>
         </div>
-        <div style={{display:'flex',gap:16,justifyContent:'center',padding:'6px 16px 12px',fontSize:13,fontWeight:800,color:'var(--ink-mute)'}}>
+        <div style={{display:'flex',gap:16,justifyContent:'center',padding:'6px 16px 4px',fontSize:13,fontWeight:800,color:'var(--ink-mute)'}}>
           <span>🎯 {matched.size}/{pairs.length} {t.memoryPairs||'жұп'}</span>
           <span>🔄 {moves} {t.moves||'қадам'}</span>
         </div>
+        {preview && (
+          <div style={{textAlign:'center',padding:'4px 16px 8px',fontSize:13,fontWeight:800,color:'var(--brand)',letterSpacing:'.02em'}}>
+            👁 {t.memoryPreview||'Жаттап ал!'}
+          </div>
+        )}
         {won ? (
           <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16,padding:24}}>
             <div style={{fontSize:64}}>🎉</div>
@@ -2257,19 +2321,21 @@ function MemoryGame({ t, onBack, grade = 2 }) {
         ) : (
           <div style={{padding:'0 16px 24px',display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:8,flex:1,alignContent:'start'}}>
             {deck.map((card, idx) => {
-              const isFlipped = flipped.includes(idx) || matched.has(card.pairId);
               const isMatched = matched.has(card.pairId);
+              const isFlipped = preview || flipped.includes(idx) || isMatched;
               return (
                 <div key={card.id} onClick={() => flip(idx)} style={{
                   aspectRatio:'1', borderRadius:14, display:'flex', alignItems:'center', justifyContent:'center',
-                  fontSize: card.text.length > 2 ? 15 : 22, fontWeight:900, cursor: isMatched ? 'default' : 'pointer',
+                  fontSize: card.text.length > 2 ? 15 : 22, fontWeight:900,
+                  cursor: preview || isMatched ? 'default' : 'pointer',
                   transition:'all .25s',
                   background: isMatched ? '#D1FAE5' : isFlipped ? 'var(--card)' : 'var(--brand)',
                   border: `2px solid ${isMatched ? '#6EE7B7' : isFlipped ? 'var(--line)' : 'transparent'}`,
                   color: isFlipped || isMatched ? 'var(--ink)' : 'transparent',
                   boxShadow: isFlipped && !isMatched ? '0 4px 14px rgba(0,0,0,.12)' : 'none',
-                  transform: isFlipped && !isMatched ? 'scale(1.05)' : 'scale(1)',
+                  transform: preview && !isMatched ? 'scale(1.02)' : 'scale(1)',
                   userSelect:'none',
+                  outline: preview ? '2px solid rgba(14,140,107,.3)' : 'none',
                 }}>{card.text}</div>
               );
             })}
@@ -2327,12 +2393,13 @@ function MathSnake({ t, onBack }) {
     ctx.strokeStyle = 'rgba(14,140,107,.08)'; ctx.lineWidth = 1;
     for (let x=0;x<=SN_COLS;x++){ctx.beginPath();ctx.moveTo(x*SN_B,0);ctx.lineTo(x*SN_B,H);ctx.stroke();}
     for (let y=0;y<=SN_ROWS;y++){ctx.beginPath();ctx.moveTo(0,y*SN_B);ctx.lineTo(W,y*SN_B);ctx.stroke();}
+    const rr = (x,y,w,h,r) => { ctx.beginPath(); if(ctx.roundRect){ctx.roundRect(x,y,w,h,r);}else{ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();} };
     // food
     g.food.forEach(f => {
       const isTarget = f.val === g.target;
       ctx.fillStyle = isTarget ? '#F97316' : '#CBD5E1';
-      ctx.beginPath(); ctx.roundRect(f.x*SN_B+2,f.y*SN_B+2,SN_B-4,SN_B-4,7); ctx.fill();
-      if (isTarget) { ctx.strokeStyle='#EA580C'; ctx.lineWidth=2; ctx.beginPath(); ctx.roundRect(f.x*SN_B+2,f.y*SN_B+2,SN_B-4,SN_B-4,7); ctx.stroke(); }
+      rr(f.x*SN_B+2,f.y*SN_B+2,SN_B-4,SN_B-4,7); ctx.fill();
+      if (isTarget) { ctx.strokeStyle='#EA580C'; ctx.lineWidth=2; rr(f.x*SN_B+2,f.y*SN_B+2,SN_B-4,SN_B-4,7); ctx.stroke(); }
       ctx.fillStyle = isTarget ? '#fff' : '#64748B';
       ctx.font = `bold ${Math.round(SN_B*0.46)}px system-ui`;
       ctx.textAlign='center'; ctx.textBaseline='middle';
@@ -2342,7 +2409,7 @@ function MathSnake({ t, onBack }) {
     g.snake.forEach((s, i) => {
       const alpha = Math.max(0.25, 1 - i*0.06);
       ctx.fillStyle = i===0 ? '#0E8C6B' : `rgba(14,140,107,${alpha})`;
-      ctx.beginPath(); ctx.roundRect(s.x*SN_B+1,s.y*SN_B+1,SN_B-2,SN_B-2,i===0?8:5); ctx.fill();
+      rr(s.x*SN_B+1,s.y*SN_B+1,SN_B-2,SN_B-2,i===0?8:5); ctx.fill();
       if (i===0) {
         ctx.fillStyle='#fff';
         [[6,6],[SN_B-6,6]].forEach(([ex,ey])=>{ctx.beginPath();ctx.arc(s.x*SN_B+ex,s.y*SN_B+ey,2.5,0,Math.PI*2);ctx.fill();});
@@ -2369,7 +2436,7 @@ function MathSnake({ t, onBack }) {
         G.current.dir = G.current.nextDir;
         const h = { x: G.current.snake[0].x + G.current.dir.x, y: G.current.snake[0].y + G.current.dir.y };
         if (h.x<0||h.x>=SN_COLS||h.y<0||h.y>=SN_ROWS||G.current.snake.some(s=>s.x===h.x&&s.y===h.y)) {
-          G.current.over = true; draw(G.current);
+          G.current.over = true; SFX.die(); draw(G.current);
           setDisp(d=>({...d,over:true})); return;
         }
         G.current.snake.unshift(h);
@@ -2377,11 +2444,13 @@ function MathSnake({ t, onBack }) {
         if (fi !== -1) {
           const eaten = G.current.food[fi];
           if (eaten.val === G.current.target) {
+            SFX.eat();
             G.current.food.splice(fi,1); G.current.target++; G.current.score++;
             G.current.xp += 15; G.current.speed = Math.max(80, G.current.speed-6);
             spawnFood(G.current);
             setDisp({score:G.current.score,target:G.current.target,over:false,xp:G.current.xp});
           } else {
+            SFX.wrong();
             G.current.snake.pop(); G.current.snake.pop();
           }
         } else {
@@ -2430,30 +2499,19 @@ function MathSnake({ t, onBack }) {
     else setDir({x:0,y:dy>0?1:-1});
   };
 
+  const dpBtn = (label, dir) => (
+    <button onPointerDown={e=>{e.preventDefault();setDir(dir);}} style={{
+      width:50,height:50,borderRadius:13,border:'1.5px solid var(--line)',
+      background:'var(--card)',fontSize:20,cursor:'pointer',touchAction:'none',
+      display:'flex',alignItems:'center',justifyContent:'center',
+      boxShadow:'0 2px 8px rgba(0,0,0,.09)',userSelect:'none',WebkitUserSelect:'none',
+    }}>{label}</button>
+  );
   const DPad = () => (
-    <div style={{display:'grid',gridTemplateColumns:'repeat(3,48px)',gridTemplateRows:'repeat(3,48px)',gap:4,margin:'10px auto 0',width:'fit-content'}}>
-      {[null,{x:0,y:-1},'↑',null,null,
-        {x:-1,y:0},'←',null,{x:1,y:0},'→',
-        null,{x:0,y:1},'↓',null,null
-      ].reduce((acc, _, idx) => {
-        const positions = [
-          [null,null],[{x:0,y:-1},'↑'],[null,null],
-          [{x:-1,y:0},'←'],[null,null],[{x:1,y:0},'→'],
-          [null,null],[{x:0,y:1},'↓'],[null,null],
-        ];
-        const [dir, label] = positions[idx];
-        acc.push(dir
-          ? <button key={idx} onPointerDown={()=>setDir(dir)} style={{
-              width:48,height:48,borderRadius:12,border:'1.5px solid var(--line)',
-              background:'var(--card)',fontSize:18,fontWeight:900,cursor:'pointer',
-              display:'flex',alignItems:'center',justifyContent:'center',
-              boxShadow:'0 2px 6px rgba(0,0,0,.08)',transition:'transform .1s',
-              userSelect:'none', WebkitUserSelect:'none',
-            }}>{label}</button>
-          : <div key={idx}/>
-        );
-        return acc;
-      }, [])}
+    <div style={{display:'grid',gridTemplateColumns:'54px 54px 54px',gridTemplateRows:'54px 54px 54px',gap:4,margin:'8px auto 0',width:'fit-content'}}>
+      <div/>{dpBtn('↑',{x:0,y:-1})}<div/>
+      {dpBtn('←',{x:-1,y:0})}<div/>{dpBtn('→',{x:1,y:0})}
+      <div/>{dpBtn('↓',{x:0,y:1})}<div/>
     </div>
   );
 
