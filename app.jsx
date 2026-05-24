@@ -2583,7 +2583,7 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
           {progress.grade && (
             <div className="grade-badge">
               <span>{GRADE_INFO[progress.grade]?.emoji}</span>
-              <span>{GRADE_INFO[progress.grade]?.label[tweaks.language]}</span>
+              <span className="grade-label">{GRADE_INFO[progress.grade]?.label[tweaks.language]}</span>
             </div>
           )}
           <div className="chip streak"><div className="flame">🔥</div>{progress.streak}</div>

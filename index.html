@@ -680,8 +680,11 @@
     .brand-mark svg{ width: 18px; height: 18px; }
     .brand-name{ font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .brand-sub{ font-size: 9px; letter-spacing: .1em; }
-    .topbar-right{ gap: 6px; flex-shrink: 0; }
-    .chip{ padding: 7px 10px; font-size: 13px; }
+    .topbar-right{ gap: 5px; flex-shrink: 0; }
+    /* grade badge: emoji only on mobile */
+    .grade-badge{ padding: 5px 7px; gap: 2px; }
+    .grade-badge .grade-label{ display: none; }
+    .chip{ padding: 7px 9px; font-size: 13px; }
     .chip.streak .flame{ width: 18px; height: 18px; border-radius: 6px; font-size: 10px; }
     /* hide level chip on phone — XP chip is enough */
     .chip.xp{ display: none; }
