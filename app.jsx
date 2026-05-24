@@ -152,6 +152,7 @@ const L = {
     g2048Desc: "Бірдей сандарды бірлестіріңіз", g2048Hint: "Свайп — жылжыту  ·  2048-ге жет!",
     bestScore: "Рекорд", memoryTitle: "Жад ойыны", memoryDesc: "Жұп карточкаларды тап",
     snakeTitle: "Сандық жылан", snakeDesc: "Санды жинаңыз",
+    moves: "қадам", memoryPairs: "жұп", memoryWin: "Жеңдіңіз! 🎉",
   },
   ru: {
     welcome: (n) => `Привет, ${n || 'Ученик'}!`,
@@ -220,6 +221,7 @@ const L = {
     g2048Desc: "Объединяй одинаковые числа", g2048Hint: "Свайп — двигай  ·  Достигни 2048!",
     bestScore: "Рекорд", memoryTitle: "Память", memoryDesc: "Найди пары карточек",
     snakeTitle: "Математическая змейка", snakeDesc: "Собирай числа",
+    moves: "ходов", memoryPairs: "пар", memoryWin: "Победа! 🎉",
   },
   en: {
     welcome: (n) => `Hi, ${n || 'Student'}!`,
@@ -288,6 +290,7 @@ const L = {
     g2048Desc: "Merge matching numbers", g2048Hint: "Swipe to move  ·  Reach 2048!",
     bestScore: "Best", memoryTitle: "Memory", memoryDesc: "Find the matching pairs",
     snakeTitle: "Math Snake", snakeDesc: "Collect numbers in order",
+    moves: "moves", memoryPairs: "pairs", memoryWin: "You win! 🎉",
   },
 };
 
@@ -2169,6 +2172,316 @@ function QuickGame({ t, onClose, grade }) {
   return null;
 }
 
+// ─── Memory Game ───────────────────────────────────────────────────
+const MEMORY_PAIRS = {
+  1: [['1+2','3'],['2+2','4'],['2+3','5'],['3+3','6'],['3+4','7'],['4+4','8'],['4+5','9'],['5+5','10']],
+  2: [['2×3','6'],['3×3','9'],['3×4','12'],['4×4','16'],['3×5','15'],['4×5','20'],['4×6','24'],['5×5','25']],
+  3: [['6×7','42'],['7×7','49'],['8×6','48'],['9×6','54'],['7×8','56'],['9×7','63'],['8×8','64'],['9×8','72']],
+  4: [['24÷4','6'],['35÷5','7'],['48÷6','8'],['63÷7','9'],['80÷8','10'],['66÷6','11'],['72÷6','12'],['91÷7','13']],
+};
+
+function MemoryGame({ t, onBack, grade = 2 }) {
+  const pairs = MEMORY_PAIRS[grade] || MEMORY_PAIRS[2];
+
+  const makeDeck = () => {
+    const cards = pairs.flatMap(([q, a], i) => [
+      { id: i*2,   pairId: i, text: q },
+      { id: i*2+1, pairId: i, text: a },
+    ]);
+    for (let i = cards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
+    return cards;
+  };
+
+  const [deck, setDeck] = useState(makeDeck);
+  const [flipped, setFlipped] = useState([]);
+  const [matched, setMatched] = useState(new Set());
+  const [moves, setMoves] = useState(0);
+  const [won, setWon] = useState(false);
+  const [xp, setXp] = useState(0);
+  const [xpPop, setXpPop] = useState(false);
+  const lock = useRef(false);
+
+  const flip = (idx) => {
+    if (lock.current || matched.has(deck[idx].pairId) || flipped.includes(idx) || flipped.length === 2) return;
+    const next = [...flipped, idx];
+    setFlipped(next);
+    if (next.length === 2) {
+      setMoves(m => m + 1);
+      lock.current = true;
+      const [a, b] = next;
+      if (deck[a].pairId === deck[b].pairId) {
+        setTimeout(() => {
+          setMatched(prev => {
+            const s = new Set(prev); s.add(deck[a].pairId);
+            if (s.size === pairs.length) setWon(true);
+            return s;
+          });
+          setXp(x => { setXpPop(true); setTimeout(() => setXpPop(false), 350); return x + 20; });
+          setFlipped([]); lock.current = false;
+        }, 500);
+      } else {
+        setTimeout(() => { setFlipped([]); lock.current = false; }, 900);
+      }
+    }
+  };
+
+  const restart = () => {
+    setDeck(makeDeck()); setFlipped([]); setMatched(new Set());
+    setMoves(0); setWon(false); setXp(0);
+  };
+
+  return (
+    <div className="game-shell">
+      <div className="game-shell-inner">
+        <div className="games-topbar">
+          <button className="back-btn" onClick={onBack}>←</button>
+          <span className="games-topbar-title">{t.memoryTitle}</span>
+          <div className={`g2048-xp${xpPop ? ' pop' : ''}`} style={{fontSize:13,fontWeight:900,color:'#D97706'}}>+{xp} XP</div>
+        </div>
+        <div style={{display:'flex',gap:16,justifyContent:'center',padding:'6px 16px 12px',fontSize:13,fontWeight:800,color:'var(--ink-mute)'}}>
+          <span>🎯 {matched.size}/{pairs.length} {t.memoryPairs||'жұп'}</span>
+          <span>🔄 {moves} {t.moves||'қадам'}</span>
+        </div>
+        {won ? (
+          <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16,padding:24}}>
+            <div style={{fontSize:64}}>🎉</div>
+            <div style={{fontSize:24,fontWeight:900}}>{t.memoryWin||'Жеңдіңіз!'}</div>
+            <div style={{fontSize:15,color:'var(--ink-mute)',fontWeight:700}}>{moves} {t.moves||'қадам'} · +{xp} XP</div>
+            <button className="play-btn" onClick={restart} style={{background:'var(--brand)',color:'#fff',marginTop:8}}>
+              🔄 {t.tetrisRestart}
+            </button>
+          </div>
+        ) : (
+          <div style={{padding:'0 16px 24px',display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:8,flex:1,alignContent:'start'}}>
+            {deck.map((card, idx) => {
+              const isFlipped = flipped.includes(idx) || matched.has(card.pairId);
+              const isMatched = matched.has(card.pairId);
+              return (
+                <div key={card.id} onClick={() => flip(idx)} style={{
+                  aspectRatio:'1', borderRadius:14, display:'flex', alignItems:'center', justifyContent:'center',
+                  fontSize: card.text.length > 2 ? 15 : 22, fontWeight:900, cursor: isMatched ? 'default' : 'pointer',
+                  transition:'all .25s',
+                  background: isMatched ? '#D1FAE5' : isFlipped ? 'var(--card)' : 'var(--brand)',
+                  border: `2px solid ${isMatched ? '#6EE7B7' : isFlipped ? 'var(--line)' : 'transparent'}`,
+                  color: isFlipped || isMatched ? 'var(--ink)' : 'transparent',
+                  boxShadow: isFlipped && !isMatched ? '0 4px 14px rgba(0,0,0,.12)' : 'none',
+                  transform: isFlipped && !isMatched ? 'scale(1.05)' : 'scale(1)',
+                  userSelect:'none',
+                }}>{card.text}</div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Math Snake ────────────────────────────────────────────────────
+const SN_COLS = 12, SN_ROWS = 15, SN_B = 26;
+
+function MathSnake({ t, onBack }) {
+  const canvasRef = useRef(null);
+  const G = useRef(null);
+  const rafRef = useRef(null);
+  const [disp, setDisp] = useState({ score: 0, target: 1, over: false, xp: 0 });
+
+  const spawnFood = (g) => {
+    while (g.food.length < 4) {
+      const val = g.target + g.food.length;
+      let x, y, tries = 0;
+      do {
+        x = Math.floor(Math.random() * SN_COLS);
+        y = Math.floor(Math.random() * SN_ROWS);
+        tries++;
+      } while (tries < 100 && (
+        g.snake.some(s => s.x===x && s.y===y) ||
+        g.food.some(f => f.x===x && f.y===y)
+      ));
+      g.food.push({ x, y, val });
+    }
+  };
+
+  const initGame = () => {
+    const g = {
+      snake: [{x:5,y:7},{x:4,y:7},{x:3,y:7}],
+      dir:{x:1,y:0}, nextDir:{x:1,y:0},
+      food:[], target:1, score:0, xp:0,
+      over:false, speed:220, lastMove:0,
+    };
+    spawnFood(g);
+    return g;
+  };
+
+  const draw = (g) => {
+    const cv = canvasRef.current; if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = SN_COLS*SN_B, H = SN_ROWS*SN_B;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--bg-soft') || '#F0FDF4';
+    ctx.fillRect(0, 0, W, H);
+    // grid
+    ctx.strokeStyle = 'rgba(14,140,107,.08)'; ctx.lineWidth = 1;
+    for (let x=0;x<=SN_COLS;x++){ctx.beginPath();ctx.moveTo(x*SN_B,0);ctx.lineTo(x*SN_B,H);ctx.stroke();}
+    for (let y=0;y<=SN_ROWS;y++){ctx.beginPath();ctx.moveTo(0,y*SN_B);ctx.lineTo(W,y*SN_B);ctx.stroke();}
+    // food
+    g.food.forEach(f => {
+      const isTarget = f.val === g.target;
+      ctx.fillStyle = isTarget ? '#F97316' : '#CBD5E1';
+      ctx.beginPath(); ctx.roundRect(f.x*SN_B+2,f.y*SN_B+2,SN_B-4,SN_B-4,7); ctx.fill();
+      if (isTarget) { ctx.strokeStyle='#EA580C'; ctx.lineWidth=2; ctx.beginPath(); ctx.roundRect(f.x*SN_B+2,f.y*SN_B+2,SN_B-4,SN_B-4,7); ctx.stroke(); }
+      ctx.fillStyle = isTarget ? '#fff' : '#64748B';
+      ctx.font = `bold ${Math.round(SN_B*0.46)}px system-ui`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(f.val, f.x*SN_B+SN_B/2, f.y*SN_B+SN_B/2);
+    });
+    // snake
+    g.snake.forEach((s, i) => {
+      const alpha = Math.max(0.25, 1 - i*0.06);
+      ctx.fillStyle = i===0 ? '#0E8C6B' : `rgba(14,140,107,${alpha})`;
+      ctx.beginPath(); ctx.roundRect(s.x*SN_B+1,s.y*SN_B+1,SN_B-2,SN_B-2,i===0?8:5); ctx.fill();
+      if (i===0) {
+        ctx.fillStyle='#fff';
+        [[6,6],[SN_B-6,6]].forEach(([ex,ey])=>{ctx.beginPath();ctx.arc(s.x*SN_B+ex,s.y*SN_B+ey,2.5,0,Math.PI*2);ctx.fill();});
+        ctx.fillStyle='#000';
+        [[6,6],[SN_B-6,6]].forEach(([ex,ey])=>{ctx.beginPath();ctx.arc(s.x*SN_B+ex,s.y*SN_B+ey,1.2,0,Math.PI*2);ctx.fill();});
+      }
+    });
+    // game over overlay
+    if (g.over) {
+      ctx.fillStyle='rgba(0,0,0,.55)'; ctx.fillRect(0,0,W,H);
+      ctx.fillStyle='#fff'; ctx.font='bold 20px system-ui'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText('💀 GAME OVER', W/2, H/2-14);
+      ctx.font='bold 13px system-ui'; ctx.fillStyle='rgba(255,255,255,.75)';
+      ctx.fillText('Tap to restart', W/2, H/2+14);
+    }
+  };
+
+  const startLoop = (g) => {
+    cancelAnimationFrame(rafRef.current);
+    const loop = (ts) => {
+      if (!G.current || G.current.over) { draw(G.current); return; }
+      if (ts - G.current.lastMove >= G.current.speed) {
+        G.current.lastMove = ts;
+        G.current.dir = G.current.nextDir;
+        const h = { x: G.current.snake[0].x + G.current.dir.x, y: G.current.snake[0].y + G.current.dir.y };
+        if (h.x<0||h.x>=SN_COLS||h.y<0||h.y>=SN_ROWS||G.current.snake.some(s=>s.x===h.x&&s.y===h.y)) {
+          G.current.over = true; draw(G.current);
+          setDisp(d=>({...d,over:true})); return;
+        }
+        G.current.snake.unshift(h);
+        const fi = G.current.food.findIndex(f=>f.x===h.x&&f.y===h.y);
+        if (fi !== -1) {
+          const eaten = G.current.food[fi];
+          if (eaten.val === G.current.target) {
+            G.current.food.splice(fi,1); G.current.target++; G.current.score++;
+            G.current.xp += 15; G.current.speed = Math.max(80, G.current.speed-6);
+            spawnFood(G.current);
+            setDisp({score:G.current.score,target:G.current.target,over:false,xp:G.current.xp});
+          } else {
+            G.current.snake.pop(); G.current.snake.pop();
+          }
+        } else {
+          G.current.snake.pop();
+        }
+        draw(G.current);
+      }
+      rafRef.current = requestAnimationFrame(loop);
+    };
+    rafRef.current = requestAnimationFrame(loop);
+  };
+
+  useEffect(() => {
+    const cv = canvasRef.current;
+    cv.width = SN_COLS*SN_B; cv.height = SN_ROWS*SN_B;
+    G.current = initGame();
+    draw(G.current);
+    startLoop(G.current);
+
+    const onKey = (e) => {
+      if (!G.current) return;
+      if (G.current.over) { G.current = initGame(); setDisp({score:0,target:1,over:false,xp:0}); startLoop(G.current); return; }
+      const map = {ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0}};
+      const nd = map[e.key]; if (!nd) return;
+      if (nd.x !== -G.current.dir.x || nd.y !== -G.current.dir.y) G.current.nextDir = nd;
+      e.preventDefault();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => { cancelAnimationFrame(rafRef.current); window.removeEventListener('keydown', onKey); };
+  }, []);
+
+  const setDir = (nd) => {
+    if (!G.current) return;
+    if (G.current.over) { G.current = initGame(); setDisp({score:0,target:1,over:false,xp:0}); startLoop(G.current); return; }
+    if (nd.x !== -G.current.dir.x || nd.y !== -G.current.dir.y) G.current.nextDir = nd;
+  };
+
+  // swipe
+  const sw = useRef({});
+  const onTS = e => { sw.current = {x:e.touches[0].clientX,y:e.touches[0].clientY}; };
+  const onTE = e => {
+    const dx = e.changedTouches[0].clientX - sw.current.x;
+    const dy = e.changedTouches[0].clientY - sw.current.y;
+    if (Math.abs(dx)<20 && Math.abs(dy)<20) return;
+    if (Math.abs(dx) > Math.abs(dy)) setDir({x:dx>0?1:-1,y:0});
+    else setDir({x:0,y:dy>0?1:-1});
+  };
+
+  const DPad = () => (
+    <div style={{display:'grid',gridTemplateColumns:'repeat(3,48px)',gridTemplateRows:'repeat(3,48px)',gap:4,margin:'10px auto 0',width:'fit-content'}}>
+      {[null,{x:0,y:-1},'↑',null,null,
+        {x:-1,y:0},'←',null,{x:1,y:0},'→',
+        null,{x:0,y:1},'↓',null,null
+      ].reduce((acc, _, idx) => {
+        const positions = [
+          [null,null],[{x:0,y:-1},'↑'],[null,null],
+          [{x:-1,y:0},'←'],[null,null],[{x:1,y:0},'→'],
+          [null,null],[{x:0,y:1},'↓'],[null,null],
+        ];
+        const [dir, label] = positions[idx];
+        acc.push(dir
+          ? <button key={idx} onPointerDown={()=>setDir(dir)} style={{
+              width:48,height:48,borderRadius:12,border:'1.5px solid var(--line)',
+              background:'var(--card)',fontSize:18,fontWeight:900,cursor:'pointer',
+              display:'flex',alignItems:'center',justifyContent:'center',
+              boxShadow:'0 2px 6px rgba(0,0,0,.08)',transition:'transform .1s',
+              userSelect:'none', WebkitUserSelect:'none',
+            }}>{label}</button>
+          : <div key={idx}/>
+        );
+        return acc;
+      }, [])}
+    </div>
+  );
+
+  return (
+    <div className="game-shell">
+      <div className="game-shell-inner">
+        <div className="games-topbar">
+          <button className="back-btn" onClick={onBack}>←</button>
+          <span className="games-topbar-title">{t.snakeTitle}</span>
+          <div style={{fontSize:13,fontWeight:900,color:'#D97706'}}>+{disp.xp} XP</div>
+        </div>
+        <div style={{display:'flex',gap:16,justifyContent:'center',padding:'6px 16px 8px',fontSize:14,fontWeight:800}}>
+          <span style={{color:'#F97316'}}>→ {disp.target}</span>
+          <span style={{color:'var(--ink-mute)'}}>✅ {disp.score}</span>
+        </div>
+        <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',padding:'0 16px 8px'}}>
+          <canvas ref={canvasRef}
+            onTouchStart={onTS} onTouchEnd={onTE}
+            onClick={() => { if (G.current?.over) { G.current=initGame(); setDisp({score:0,target:1,over:false,xp:0}); startLoop(G.current); }}}
+            style={{borderRadius:14,maxWidth:'100%',border:'1.5px solid var(--line)',display:'block'}}
+          />
+          <DPad />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Home screen ───────────────────────────────────────────────────
 
 function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, showToast }) {
@@ -2194,6 +2507,8 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
   if (multiTable)          return <MultiTableView    t={t} onClose={() => setMultiTable(false)} />;
   if (activeGame==='tetris') return <TetrisFullScreen t={t} onBack={() => setActiveGame(null)} />;
   if (activeGame==='2048')   return <Game2048         t={t} onBack={() => setActiveGame(null)} />;
+  if (activeGame==='memory') return <MemoryGame       t={t} onBack={() => setActiveGame(null)} grade={progress.grade || 2} />;
+  if (activeGame==='snake')  return <MathSnake        t={t} onBack={() => setActiveGame(null)} />;
 
   return (
     <div className="v2">
@@ -2392,24 +2707,24 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
             <div className="game-card-cta">{t.playBtn}</div>
           </div>
         </div>
-        <div className="game-card game-card-soon">
+        <div className="game-card" onClick={() => setActiveGame('memory')}>
           <div className="game-card-banner" style={{background:'linear-gradient(135deg,#831843,#DB2777,#F9A8D4)'}}>
             <MemoryIcon size={52}/>
           </div>
           <div className="game-card-body">
-            <div className="game-card-name" style={{color:'var(--ink-soft)'}}>{t.memoryTitle}</div>
+            <div className="game-card-name">{t.memoryTitle}</div>
             <div className="game-card-desc">{t.memoryDesc}</div>
-            <div className="game-card-soon-badge">{t.soon}</div>
+            <div className="game-card-cta">{t.playBtn}</div>
           </div>
         </div>
-        <div className="game-card game-card-soon">
+        <div className="game-card" onClick={() => setActiveGame('snake')}>
           <div className="game-card-banner" style={{background:'linear-gradient(135deg,#1E3A8A,#2563EB,#60A5FA)'}}>
             <MathSnakeIcon size={52}/>
           </div>
           <div className="game-card-body">
-            <div className="game-card-name" style={{color:'var(--ink-soft)'}}>{t.snakeTitle}</div>
+            <div className="game-card-name">{t.snakeTitle}</div>
             <div className="game-card-desc">{t.snakeDesc}</div>
-            <div className="game-card-soon-badge">{t.soon}</div>
+            <div className="game-card-cta">{t.playBtn}</div>
           </div>
         </div>
       </div>
