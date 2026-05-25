@@ -1703,6 +1703,94 @@
   body.dark .qgl-title{ color:#FFD080 }
   body.dark .qgl-sub{ color:#C08040 }
   body.dark .qgl-arrow{ color:#FFD080 }
+
+  /* ── Subject card blob decoration ── */
+  .subj-blob{
+    position: absolute; top: -24px; right: -24px;
+    width: 90px; height: 90px; border-radius: 50%;
+    pointer-events: none;
+  }
+
+  /* ── Weekly progress bar ── */
+  .week-bar-wrap{
+    display:flex; align-items:center; gap:10px;
+    padding:0 20px 0; margin-top:-4px; margin-bottom: 8px;
+    max-width:760px; margin-left:auto; margin-right:auto;
+  }
+  .week-bar-label{ font-size:12px; font-weight:700; color:var(--ink-mute); white-space:nowrap }
+  .week-bar-count{ font-size:12px; font-weight:900; color:var(--ink-soft); white-space:nowrap }
+  .week-segs{ display:flex; gap:5px; flex:1 }
+  .week-seg{ flex:1; height:8px; border-radius:99px; background:#E2EDE7; transition:background .3s }
+  .week-seg.filled{ background:var(--brand) }
+
+  /* ── Lesson of the day tag ── */
+  .continue-lesson-tag{
+    font-size:10px; font-weight:900; letter-spacing:.12em; text-transform:uppercase;
+    color:rgba(255,255,255,.75); margin-bottom:4px;
+  }
+
+  /* ── Parent Cabinet view ── */
+  .parent-view{
+    position:fixed; inset:0; z-index:100; overflow-y:auto;
+    background: linear-gradient(160deg,#EAF5EE 0%,#F5F9FF 100%);
+    display:flex; flex-direction:column;
+  }
+  .parent-top{
+    display:flex; align-items:center; gap:16px;
+    padding:20px 24px; position:sticky; top:0;
+    background:rgba(234,245,238,.92); backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px); z-index:2;
+    border-bottom:1px solid var(--line);
+  }
+  .parent-title{ font-size:18px; font-weight:900; color:var(--ink); flex:1 }
+  .parent-body{ padding:20px 20px 40px; max-width:600px; margin:0 auto; width:100% }
+  .parent-child-card{
+    background:#fff; border-radius:20px; padding:20px;
+    display:flex; align-items:center; gap:16px;
+    border:1px solid var(--line); box-shadow:var(--shadow);
+    margin-bottom:24px;
+  }
+  .parent-avatar{
+    width:52px; height:52px; border-radius:50%;
+    background:var(--brand); color:#fff; display:grid; place-items:center;
+    font-size:22px; font-weight:900; flex:none;
+  }
+  .parent-name{ font-size:17px; font-weight:900; color:var(--ink) }
+  .parent-grade-line{ font-size:13px; color:var(--ink-soft); margin-top:2px }
+  .parent-xp-big{ margin-left:auto; text-align:center }
+  .parent-xp-num{ font-size:28px; font-weight:900; color:var(--brand); line-height:1 }
+  .parent-xp-label{ font-size:11px; font-weight:800; color:var(--ink-mute); letter-spacing:.08em }
+  .parent-section-title{ font-size:14px; font-weight:900; color:var(--ink-mute); letter-spacing:.08em; text-transform:uppercase; margin:0 0 12px }
+  .parent-subjects{ display:flex; flex-direction:column; gap:10px; margin-bottom:24px }
+  .parent-subj-row{ display:flex; align-items:center; gap:10px }
+  .parent-subj-dot{ width:10px; height:10px; border-radius:50%; flex:none }
+  .parent-subj-name{ font-size:14px; font-weight:700; color:var(--ink); width:90px; flex:none }
+  .parent-subj-bar{ flex:1; height:8px; background:#E2EDE7; border-radius:99px; overflow:hidden }
+  .parent-subj-fill{ height:100%; border-radius:99px; transition:width .4s }
+  .parent-subj-pct{ font-size:12px; font-weight:700; color:var(--ink-mute); width:32px; text-align:right; flex:none }
+  .parent-subj-stars{ font-size:14px; color:#F59E0B; width:52px; flex:none }
+  .parent-recs{ display:flex; flex-direction:column; gap:10px; margin-bottom:24px }
+  .parent-rec{
+    background:#fff; border-radius:14px; padding:14px 16px;
+    display:flex; align-items:flex-start; gap:12px;
+    border:1px solid var(--line); font-size:14px; font-weight:600; color:var(--ink);
+    line-height:1.45;
+  }
+  .parent-rec-icon{ font-size:20px; flex:none }
+  .parent-note{ font-size:11px; color:var(--ink-mute); text-align:center }
+
+  /* ── Parent entry card ── */
+  .parent-entry{
+    display:flex; align-items:center; gap:14px;
+    background:#fff; border-radius:18px; padding:16px 18px;
+    border:1px solid var(--line); box-shadow:var(--shadow);
+    cursor:pointer; margin:0 0 32px; transition: transform .1s;
+  }
+  .parent-entry:active{ transform:scale(.98) }
+  .parent-entry-ic{ font-size:28px; flex:none }
+  .parent-entry-title{ font-size:15px; font-weight:900; color:var(--ink) }
+  .parent-entry-sub{ font-size:12px; color:var(--ink-soft); margin-top:2px }
+  .parent-entry-arrow{ margin-left:auto; font-size:18px; color:var(--ink-mute) }
 </style>
 </head>
 <body>

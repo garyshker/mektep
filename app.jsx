@@ -205,6 +205,14 @@ const L = {
     bestScore: "Рекорд", memoryTitle: "Жад ойыны", memoryDesc: "Жұп карточкаларды тап",
     snakeTitle: "Сандық жылан", snakeDesc: "Сандарды жина",
     moves: "қадам", memoryPairs: "жұп", memoryWin: "Жеңдіңіз! 🎉", memoryPreview: "Жаттап ал!",
+    weekProgress: "Апта барысы",
+    lessonOfDay: "КҮН САБАҒЫ",
+    parentCabinet: "Ата-ана кабинеті",
+    parentCabinetSub: "Баланың есебі мен прогресі",
+    subjectProgress: "Пәндер бойынша прогресс",
+    recommendations: "Ұсыныстар",
+    streakDays: "күн қатарынан",
+    gradeWord: "Сынып",
   },
   ru: {
     welcome: (n) => `Привет, ${n || 'Ученик'}!`,
@@ -275,6 +283,14 @@ const L = {
     bestScore: "Рекорд", memoryTitle: "Память", memoryDesc: "Найди пары карточек",
     snakeTitle: "Математическая змейка", snakeDesc: "Собирай числа",
     moves: "ходов", memoryPairs: "пар", memoryWin: "Победа! 🎉", memoryPreview: "Запомни!",
+    weekProgress: "Прогресс недели",
+    lessonOfDay: "УРОК ДНЯ",
+    parentCabinet: "Кабинет родителя",
+    parentCabinetSub: "Отчёт и прогресс ребёнка",
+    subjectProgress: "Прогресс по предметам",
+    recommendations: "Рекомендации",
+    streakDays: "дней подряд",
+    gradeWord: "Класс",
   },
   en: {
     welcome: (n) => `Hi, ${n || 'Student'}!`,
@@ -345,6 +361,14 @@ const L = {
     bestScore: "Best", memoryTitle: "Memory", memoryDesc: "Find the matching pairs",
     snakeTitle: "Math Snake", snakeDesc: "Collect numbers in order",
     moves: "moves", memoryPairs: "pairs", memoryWin: "You win! 🎉", memoryPreview: "Memorize!",
+    weekProgress: "Week progress",
+    lessonOfDay: "LESSON OF THE DAY",
+    parentCabinet: "Parent Cabinet",
+    parentCabinetSub: "Child report & progress",
+    subjectProgress: "Subject progress",
+    recommendations: "Recommendations",
+    streakDays: "days in a row",
+    gradeWord: "Grade",
   },
 };
 
@@ -355,9 +379,9 @@ const SUB_CONTENT = {
     { id:"math", name:"Математика", tag:"Қосу, алу, көбейту, бөлу", color:"math", icon: IconMath, ready:true,
       lessonTitles:{ 1:"Қосу · 100 ішінде", 2:"Алу · 100 ішінде", 3:"Көбейту кестесі · 2-ге", 4:"Көбейту кестесі · 3-ке", 5:"Көбейту кестесі · 4-ке", 6:"Көбейту кестесі · 5-ке", 7:"Көбейту кестесі · 6-ға", 8:"Бөлу · 2-ге", 9:"Сандарды салыстыру · < > =", 10:"Ұзындық · см, дм, м", 11:"Көлем мен масса · литр, кг", 12:"Бөлу · 3-ке, 4-ке, 5-ке" } },
     { id:"kaz",  name:"Қазақ тілі", tag:"Әліпби, дыбыстар, сөздер", color:"kaz", icon: IconKaz, ready:true,
-      lessonTitles:{ 1:"Қазақ әліпбиі · ерекше әріптер", 2:"Буын · сөзді бөлу", 3:"Жануарлар · сөздік", 4:"Жуан және жіңішке дыбыстар", 5:"Сөз құрастыру", 6:"Түстер" } },
+      lessonTitles:{ 1:"Қазақ әліпбиі · ерекше әріптер", 2:"Буын · сөзді бөлу", 3:"Жануарлар · сөздік", 4:"Жуан және жіңішке дыбыстар", 5:"Сөз құрастыру", 6:"Түстер", 7:"Зат есім", 8:"Сын есім", 9:"Етістік", 10:"Мәтін оқу", 11:"Күндер мен айлар", 12:"Сөйлем" } },
     { id:"world", name:"Дүниетану", tag:"Табиғат, жануарлар", color:"world", icon: IconWorld, ready:true,
-      lessonTitles:{ 1:"Жыл мезгілдері", 2:"Жабайы жануарлар" } },
+      lessonTitles:{ 1:"Жыл мезгілдері", 2:"Жабайы жануарлар", 3:"Өсімдіктер", 4:"Адам денесі", 5:"Біздің қала", 6:"Су", 7:"Күн жүйесі", 8:"Қазақстан" } },
     { id:"eng",   name:"English",   tag:"Сөздер мен сөйлемдер", color:"eng", icon: IconEng, ready:true,
       lessonTitles:{ 1:"Ағылшынша сандар · 1-10", 2:"Ағылшынша түстер" } },
     { id:"logic", name:"Логикалық есептер", tag:"Ойын, жұмбақ, логика", color:"logic", icon: IconLogic, ready:false },
@@ -367,9 +391,9 @@ const SUB_CONTENT = {
     { id:"math", name:"Математика", tag:"Сложение, вычитание, умножение, деление", color:"math", icon: IconMath, ready:true,
       lessonTitles:{ 1:"Сложение · до 100", 2:"Вычитание · до 100", 3:"Таблица умножения · на 2", 4:"Таблица умножения · на 3", 5:"Таблица умножения · на 4", 6:"Таблица умножения · на 5", 7:"Таблица умножения · на 6", 8:"Деление · на 2", 9:"Сравнение чисел · < > =", 10:"Длина · см, дм, м", 11:"Объём и масса · литр, кг", 12:"Деление · на 3, 4, 5" } },
     { id:"kaz",  name:"Казахский",  tag:"Алфавит, звуки, слова", color:"kaz", icon: IconKaz, ready:true,
-      lessonTitles:{ 1:"Казахский алфавит · особые буквы", 2:"Слог · деление слова", 3:"Животные · словарь", 4:"Твёрдые и мягкие звуки", 5:"Составь слово", 6:"Цвета" } },
+      lessonTitles:{ 1:"Казахский алфавит · особые буквы", 2:"Слог · деление слова", 3:"Животные · словарь", 4:"Твёрдые и мягкие звуки", 5:"Составь слово", 6:"Цвета", 7:"Имя существительное", 8:"Имя прилагательное", 9:"Глагол", 10:"Чтение текста", 11:"Дни и месяцы", 12:"Предложение" } },
     { id:"world", name:"Дүниетану", tag:"Природа, животные", color:"world", icon: IconWorld, ready:true,
-      lessonTitles:{ 1:"Времена года", 2:"Дикие животные" } },
+      lessonTitles:{ 1:"Времена года", 2:"Дикие животные", 3:"Растения", 4:"Тело человека", 5:"Наш город", 6:"Вода", 7:"Солнечная система", 8:"Казахстан" } },
     { id:"eng",   name:"English",   tag:"Слова и предложения", color:"eng", icon: IconEng, ready:true,
       lessonTitles:{ 1:"Числа по-английски · 1–10", 2:"Цвета по-английски" } },
     { id:"logic", name:"Логические задачи", tag:"Игры, загадки, логика", color:"logic", icon: IconLogic, ready:false },
@@ -379,9 +403,9 @@ const SUB_CONTENT = {
     { id:"math", name:"Math",   tag:"Addition, subtraction, multiplication, division", color:"math", icon: IconMath, ready:true,
       lessonTitles:{ 1:"Addition · within 100", 2:"Subtraction · within 100", 3:"Times tables · ×2", 4:"Times tables · ×3", 5:"Times tables · ×4", 6:"Times tables · ×5", 7:"Times tables · ×6", 8:"Division · ÷2", 9:"Comparing numbers · < > =", 10:"Length · cm, dm, m", 11:"Volume & Mass · litre, kg", 12:"Division · ÷3, ÷4, ÷5" } },
     { id:"kaz",  name:"Kazakh", tag:"Alphabet, sounds, words", color:"kaz", icon: IconKaz, ready:true,
-      lessonTitles:{ 1:"Kazakh Alphabet · special letters", 2:"Syllables · splitting words", 3:"Animals · vocabulary", 4:"Hard & soft vowels", 5:"Build a word", 6:"Colors" } },
+      lessonTitles:{ 1:"Kazakh Alphabet · special letters", 2:"Syllables · splitting words", 3:"Animals · vocabulary", 4:"Hard & soft vowels", 5:"Build a word", 6:"Colors", 7:"Noun", 8:"Adjective", 9:"Verb", 10:"Reading Comprehension", 11:"Days and Months", 12:"Sentence" } },
     { id:"world", name:"World Studies", tag:"Nature, animals", color:"world", icon: IconWorld, ready:true,
-      lessonTitles:{ 1:"Seasons of the Year", 2:"Wild Animals" } },
+      lessonTitles:{ 1:"Seasons of the Year", 2:"Wild Animals", 3:"Plants", 4:"Human Body", 5:"Our City", 6:"Water", 7:"Solar System", 8:"Kazakhstan" } },
     { id:"eng",   name:"English",       tag:"Words and sentences", color:"eng", icon: IconEng, ready:true,
       lessonTitles:{ 1:"Numbers in English · 1–10", 2:"Colors in English" } },
     { id:"logic", name:"Logic Puzzles", tag:"Games, riddles & logic", color:"logic", icon: IconLogic, ready:false },
@@ -478,8 +502,8 @@ const DEFAULT_PROGRESS = {
   name: '',
   grade: null,
   math:  { lesson: 1, stars: 0, of: 12 },
-  kaz:   { lesson: 1, stars: 0, of: 6 },
-  world: { lesson: 1, stars: 0, of: 2 },
+  kaz:   { lesson: 1, stars: 0, of: 12 },
+  world: { lesson: 1, stars: 0, of: 8 },
   eng:   { lesson: 1, stars: 0, of: 2 },
   totalXP: 0,
   level: 1,
@@ -604,6 +628,11 @@ function LangChip({ lang, onChange }) {
   );
 }
 
+// ─── Subject card blob colors ──────────────────────────────────────
+
+const BLOB_COLORS = { math:'#DCFCE7', kaz:'#FEE2E2', world:'#DBEAFE', eng:'#EDE9FE' };
+function blobColorFor(id) { return BLOB_COLORS[id] || '#F3F4F6'; }
+
 // ─── Subject card ──────────────────────────────────────────────────
 
 function SubjectCard({ s, t, onOpen }) {
@@ -631,6 +660,7 @@ function SubjectCard({ s, t, onOpen }) {
   const pct = Math.round((s.lesson / s.of) * 100);
   return (
     <div className="subject" onClick={onOpen}>
+      <div className="subj-blob" style={{ background: blobColorFor(s.id) }} />
       <div className="subj-top">
         <div className="subj-ic" style={{ background: `var(--${s.color}-bg)`, color: `var(--${s.color}-ic)` }}><Icon /></div>
         <div className="subj-stars">{[0,1,2].map(i => <Star key={i} on={i < s.stars} />)}</div>
@@ -2676,6 +2706,83 @@ function MathSnake({ t, onBack }) {
   );
 }
 
+// ─── Parent Cabinet ────────────────────────────────────────────────
+
+function ParentView({ progress, lang, onClose }) {
+  const t = L[lang];
+  const subjects = [
+    { id:'math',  label:{ kk:'Математика', ru:'Математика', en:'Math' }, color:'#0E8C6B' },
+    { id:'kaz',   label:{ kk:'Қазақ тілі', ru:'Казахский', en:'Kazakh' }, color:'#2563EB' },
+    { id:'world', label:{ kk:'Дүниетану', ru:'Окр. мир', en:'World Studies' }, color:'#D97706' },
+    { id:'eng',   label:{ kk:'Ағылшын', ru:'Английский', en:'English' }, color:'#7C3AED' },
+  ];
+
+  return (
+    <div className="parent-view">
+      <div className="parent-top">
+        <button className="lt-close" onClick={onClose}>✕</button>
+        <h2 className="parent-title">{t.parentCabinet || 'Кабинет родителя'}</h2>
+      </div>
+
+      <div className="parent-body">
+        <div className="parent-child-card">
+          <div className="parent-avatar">{(progress.name||'А')[0].toUpperCase()}</div>
+          <div>
+            <div className="parent-name">{progress.name || '—'}</div>
+            <div className="parent-grade-line">{t.gradeWord || 'Класс'} {progress.grade || '—'} · {progress.streak} {t.streakDays || 'дней подряд'} 🔥</div>
+          </div>
+          <div className="parent-xp-big">
+            <div className="parent-xp-num">{progress.totalXP}</div>
+            <div className="parent-xp-label">XP</div>
+          </div>
+        </div>
+
+        <h3 className="parent-section-title">{t.subjectProgress || 'Прогресс по предметам'}</h3>
+        <div className="parent-subjects">
+          {subjects.map(s => {
+            const p = progress[s.id] || { lesson:1, of:12, stars:0 };
+            const pct = Math.min(100, Math.round(((p.lesson-1)/p.of)*100));
+            const stars = p.stars || 0;
+            return (
+              <div key={s.id} className="parent-subj-row">
+                <div className="parent-subj-dot" style={{background:s.color}} />
+                <div className="parent-subj-name">{s.label[lang] || s.label.ru}</div>
+                <div className="parent-subj-bar">
+                  <div className="parent-subj-fill" style={{width:pct+'%', background:s.color}} />
+                </div>
+                <div className="parent-subj-pct">{pct}%</div>
+                <div className="parent-subj-stars">{'★'.repeat(Math.min(stars,3))}{'☆'.repeat(Math.max(0,3-Math.min(stars,3)))}</div>
+              </div>
+            );
+          })}
+        </div>
+
+        <h3 className="parent-section-title">{t.recommendations || 'Рекомендации'}</h3>
+        <div className="parent-recs">
+          {(() => {
+            const recs = [];
+            subjects.forEach(s => {
+              const p = progress[s.id] || { lesson:1, of:12, stars:0 };
+              const pct = Math.min(100, Math.round(((p.lesson-1)/p.of)*100));
+              if (pct < 30) recs.push({ icon:'📚', text: lang==='kk' ? `${s.label.kk} бойынша тәжірибені арттырыңыз` : lang==='en' ? `Practise ${s.label.en} more` : `Больше занимайтесь: ${s.label.ru}` });
+            });
+            if (progress.streak < 3) recs.push({ icon:'🔥', text: lang==='kk' ? 'Күн сайын оқуды дағдыға айналдырыңыз' : lang==='en' ? 'Build a daily learning habit' : 'Занимайтесь каждый день' });
+            if (recs.length === 0) recs.push({ icon:'⭐', text: lang==='kk' ? 'Тамаша! Барлық нәтижелер жақсы.' : lang==='en' ? 'Excellent progress on all subjects!' : 'Отличный прогресс по всем предметам!' });
+            return recs.map((r,i) => (
+              <div key={i} className="parent-rec">
+                <span className="parent-rec-icon">{r.icon}</span>
+                <span>{r.text}</span>
+              </div>
+            ));
+          })()}
+        </div>
+
+        <div className="parent-note">{lang==='kk' ? '* Деректер осы құрылғыда сақталады' : lang==='en' ? '* Data is stored on this device' : '* Данные хранятся на этом устройстве'}</div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Home screen ───────────────────────────────────────────────────
 
 function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, showToast }) {
@@ -2686,6 +2793,7 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
   const [multiTable, setMultiTable] = useState(false);
   const [activeGame, setActiveGame] = useState(null);
   const [userMenu, setUserMenu] = useState(false);
+  const [showParent, setShowParent] = useState(false);
 
   const logout = () => {
     try { localStorage.removeItem(PROGRESS_KEY); } catch(e) {}
@@ -2697,6 +2805,7 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
   const setQuests = (q) => setProgress(p => ({ ...p, questsDone: q }));
   const subject = (id) => subs.find(s => s.id === id);
 
+  if (showParent)            return <ParentView        progress={progress} lang={tweaks.language} onClose={() => setShowParent(false)} />;
   if (quickGame)           return <QuickGame         t={t} onClose={() => setQuickGame(false)} grade={progress.grade || 2} lang={tweaks.language} />;
   if (multiTable)          return <MultiTableView    t={t} onClose={() => setMultiTable(false)} />;
   if (activeGame==='tetris') return <TetrisFullScreen t={t} onBack={() => setActiveGame(null)} />;
@@ -2752,6 +2861,17 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
         </div>
       </div>
 
+      {/* ── weekly progress bar ── */}
+      <div className="week-bar-wrap">
+        <span className="week-bar-label">{t.weekProgress || 'Прогресс недели'}</span>
+        <div className="week-segs">
+          {Array.from({length:7},(_,i) => (
+            <div key={i} className={"week-seg" + (i < Math.min(progress.streak,7) ? " filled" : "")} />
+          ))}
+        </div>
+        <span className="week-bar-count">{Math.min(progress.streak,7)}/7</span>
+      </div>
+
       {/* ── hero: continue + quests ── */}
       <div className="hero">
         {(() => {
@@ -2766,6 +2886,7 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
                 onStartLesson(lastSub.lessonId);
               }
             }}>
+              <div className="continue-lesson-tag">{t.lessonOfDay || 'УРОК ДНЯ'}</div>
               <div>
                 <div className="continue-eyebrow">{t.continueEyebrow} · {lastSub?.name}</div>
                 {allDone
@@ -2930,6 +3051,16 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
         </div>
       )}
 
+      {/* ── parent entry ── */}
+      <div className="parent-entry" onClick={() => setShowParent(true)}>
+        <div className="parent-entry-ic">👨‍👩‍👦</div>
+        <div>
+          <div className="parent-entry-title">{t.parentCabinet || 'Кабинет родителя'}</div>
+          <div className="parent-entry-sub">{t.parentCabinetSub || 'Отчёт и прогресс ребёнка'}</div>
+        </div>
+        <div className="parent-entry-arrow">→</div>
+      </div>
+
       {open && <LessonModal s={subject(open)} t={t} onClose={() => setOpen(null)} onStart={onStartLesson} />}
     </div>
   );
@@ -2975,7 +3106,7 @@ function App() {
     const subjectId = parts[0];
     const lessonNum = parseInt(parts[1], 10);
     setProgress(prev => {
-      const defaultOf = { math:12, kaz:6, world:2, eng:2 }[subjectId] ?? 12;
+      const defaultOf = { math:12, kaz:12, world:8, eng:2 }[subjectId] ?? 12;
       const subj = prev[subjectId] || { lesson: lessonNum, stars: 0, of: defaultOf };
       const advancing = lessonNum >= subj.lesson;
       const newLesson = advancing ? Math.min(subj.of, lessonNum + 1) : subj.lesson;
