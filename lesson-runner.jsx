@@ -836,12 +836,25 @@ const pickLang = (obj, lang) => obj?.[lang] ?? obj?.en ?? Object.values(obj || {
 // Question components
 // ────────────────────────────────────────────────────────────────────
 
+function BigMathPrompt({ text }) {
+  const parts = text.split(/( [+−×÷] )/);
+  return (
+    <div className="big-prompt">
+      {parts.map((p, i) =>
+        /^ [+−×÷] $/.test(p)
+          ? <span key={i} className="big-op">{p}</span>
+          : p
+      )}
+    </div>
+  );
+}
+
 function QMC({ q, lang, locked, picked, onPick }) {
   const prompt = q.promptByLang ? pickLang(q.promptByLang, lang) : q.prompt;
   return (
     <div className="qbody">
       {q.image && <div className="q-image">{q.image}</div>}
-      {q.big ? <div className="big-prompt">{prompt}</div> : <div className="text-prompt">{prompt}</div>}
+      {q.big ? <BigMathPrompt text={prompt} /> : <div className="text-prompt">{prompt}</div>}
       <div className={"opts " + (q.big ? "grid-2" : "stack")}>
         {q.options.map((o, i) => {
           let cls = "opt";
@@ -869,7 +882,7 @@ function QType({ q, lang, locked, value, onChange, correct }) {
   return (
     <div className="qbody">
       {q.image && <div className="q-image">{q.image}</div>}
-      <div className="big-prompt">{prompt}</div>
+      <BigMathPrompt text={prompt} />
       <div className="type-wrap">
         <input
           ref={inputRef}
@@ -1126,6 +1139,13 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
     setQKey(k => k + 1);
   };
 
+  const retryQuestion = () => {
+    setAns(undefined);
+    setCurrentMatch({ pairs: {}, pendingItem: null });
+    setLocked(false);
+    setFeedback(null);
+  };
+
   const retry = () => {
     clearResume();
     correctRef.current = 0;
@@ -1239,7 +1259,10 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
                 <div className="fb-explain">{q.explainByLang?.[lang] || q.explain}</div>
               )}
             </div>
-            <button className="fb-btn fb-btn-wrong" onClick={advance}>{rt.continue}</button>
+            <div className="fb-btns">
+              <button className="fb-btn fb-btn-retry" onClick={retryQuestion}>{rt.tryAgain}</button>
+              <button className="fb-btn fb-btn-wrong" onClick={advance}>{rt.next}</button>
+            </div>
           </div>
         )}
         {!feedback && (
