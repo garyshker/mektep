@@ -1842,14 +1842,30 @@
 
   /* done */
   .sprint-done{ display:flex; flex-direction:column; align-items:center; justify-content:center;
-    flex:1; padding:40px 24px; text-align:center; gap:14px }
+    flex:1; padding:40px 24px; text-align:center; gap:16px }
   .sprint-new-best{ font-size:14px; font-weight:900; color:var(--brand); background:var(--brand-tint);
     border-radius:99px; padding:5px 18px }
-  .sprint-done-emoji{ font-size:72px; line-height:1 }
-  .sprint-done-score{ font-size:clamp(72px,20vw,100px); font-weight:900; color:var(--ink); line-height:1 }
-  .sprint-done-sub{ font-size:17px; color:var(--ink-soft); font-weight:700 }
-  .sprint-done-acc{ font-size:14px; color:var(--ink-mute); font-weight:700 }
-  .sprint-done-btns{ display:flex; gap:12px; margin-top:16px; width:100%; max-width:320px }
+  .sprint-done-emoji{ font-size:68px; line-height:1 }
+
+  .sprint-stat-card{ display:flex; align-items:stretch; background:var(--card);
+    border-radius:24px; padding:22px 36px; gap:24px;
+    box-shadow:0 2px 0 rgba(15,42,34,.03), 0 12px 32px rgba(15,80,60,.09);
+    width:100%; max-width:300px }
+  .sprint-stat{ display:flex; flex-direction:column; align-items:center; gap:6px; flex:1 }
+  .sprint-stat-num{ font-size:clamp(48px,13vw,64px); font-weight:900; color:var(--ink); line-height:1 }
+  .sprint-stat-num.ok{ color:var(--brand) }
+  .sprint-stat-label{ font-size:12px; font-weight:800; color:var(--ink-mute);
+    text-transform:uppercase; letter-spacing:.08em }
+  .sprint-stat-div{ width:1.5px; background:var(--line); border-radius:1px; align-self:stretch; flex:none }
+
+  .sprint-done-sub{ font-size:15px; color:var(--ink-soft); font-weight:700 }
+  .sprint-acc-wrap{ display:flex; align-items:center; gap:10px; width:100%; max-width:260px }
+  .sprint-acc-bar{ flex:1; height:8px; background:var(--line); border-radius:99px; overflow:hidden }
+  .sprint-acc-fill{ height:100%; background:var(--brand); border-radius:99px;
+    transition:width .6s cubic-bezier(.4,0,.2,1) }
+  .sprint-acc-pct{ font-size:14px; font-weight:800; color:var(--brand); min-width:38px; text-align:right }
+
+  .sprint-done-btns{ display:flex; gap:12px; margin-top:8px; width:100%; max-width:300px }
   .sprint-done-btns .btn{ flex:1 }
 </style>
 </head>

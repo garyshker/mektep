@@ -1802,28 +1802,34 @@ function CompleteScreen({ lesson, lang, rt, stars, xp, accuracy, elapsed, correc
 const SPRINT_DURATION = 60;
 const SPRINT_LABELS = {
   kk: {
-    title: 'Математикалық спринт',
-    desc:  '60 секундта мүмкіндігінше\nкөп мысал шеш!',
-    start: 'Бастау →',
-    record: 'Рекорд',
-    newBest: 'Жаңа рекорд! 🎉',
-    done: (n) => `60 секундта ${n} мысал`,
+    title:    'Математикалық спринт',
+    desc:     '60 секундта мүмкіндігінше\nкөп мысал шеш!',
+    start:    'Бастау →',
+    record:   'Рекорд',
+    newBest:  'Жаңа рекорд! 🎉',
+    done:     (n) => `60 секундта ${n} мысал шешілді`,
+    correct:  'дұрыс',
+    attempted:'берілді',
   },
   ru: {
-    title:  'Математический спринт',
-    desc:   'Реши как можно больше примеров\nза 60 секунд!',
-    start:  'Старт →',
-    record: 'Рекорд',
-    newBest: 'Новый рекорд! 🎉',
-    done: (n) => `${n} примеров за 60 секунд`,
+    title:    'Математический спринт',
+    desc:     'Реши как можно больше примеров\nза 60 секунд!',
+    start:    'Старт →',
+    record:   'Рекорд',
+    newBest:  'Новый рекорд! 🎉',
+    done:     (n) => `${n} правильных за 60 секунд`,
+    correct:  'верно',
+    attempted:'предложено',
   },
   en: {
-    title:  'Math Sprint',
-    desc:   'Solve as many problems\nas you can in 60 seconds!',
-    start:  'Start →',
-    record: 'Best',
-    newBest: 'New Record! 🎉',
-    done: (n) => `${n} problems in 60 seconds`,
+    title:    'Math Sprint',
+    desc:     'Solve as many problems\nas you can in 60 seconds!',
+    start:    'Start →',
+    record:   'Best',
+    newBest:  'New Record! 🎉',
+    done:     (n) => `${n} correct in 60 seconds`,
+    correct:  'correct',
+    attempted:'total',
   },
 };
 
@@ -1940,11 +1946,31 @@ function MathSprintMinute({ grade, lang, onClose }) {
             <div className="sprint-new-best">{SL.newBest}</div>
           )}
           <div className="sprint-done-emoji">{emoji}</div>
-          <div className="sprint-done-score">{score}</div>
+
+          {/* ── Two-stat card ── */}
+          <div className="sprint-stat-card">
+            <div className="sprint-stat">
+              <div className="sprint-stat-num ok">{score}</div>
+              <div className="sprint-stat-label">{SL.correct}</div>
+            </div>
+            <div className="sprint-stat-div" />
+            <div className="sprint-stat">
+              <div className="sprint-stat-num">{total}</div>
+              <div className="sprint-stat-label">{SL.attempted}</div>
+            </div>
+          </div>
+
           <div className="sprint-done-sub">{SL.done(score)}</div>
+
           {total > 0 && (
-            <div className="sprint-done-acc">{pct}% {rt.accuracy}</div>
+            <div className="sprint-acc-wrap">
+              <div className="sprint-acc-bar">
+                <div className="sprint-acc-fill" style={{ width: pct + '%' }} />
+              </div>
+              <span className="sprint-acc-pct">{pct}%</span>
+            </div>
           )}
+
           <div className="sprint-done-btns">
             <button className="btn ghost" onClick={onClose}>{rt.quit}</button>
             <button className="btn prim" onClick={restart}>{rt.retry} ↺</button>
