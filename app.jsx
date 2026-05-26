@@ -217,6 +217,11 @@ const L = {
     gradeWord: "Сынып",
     practiceMode: "Математикалық спринт",
     practiceModeSub: "1 минутта мүмкіндігінше көп",
+    clockLesson: "Сағатты оқу",
+    clockLessonSub: "Аналогтік сағат · сағат және минут",
+    clockLessonBtn: "Сабақты бастау →",
+    questions: "сұрақ",
+    allGrades: "Барлық сыныптар",
   },
   ru: {
     welcome: (n) => `Привет, ${n || 'Ученик'}!`,
@@ -298,6 +303,11 @@ const L = {
     gradeWord: "Класс",
     practiceMode: "Математический спринт",
     practiceModeSub: "Сколько решишь за 1 минуту?",
+    clockLesson: "Читаем часы",
+    clockLessonSub: "Аналоговые часы · часы и минуты",
+    clockLessonBtn: "Начать урок →",
+    questions: "вопросов",
+    allGrades: "Все классы",
   },
   en: {
     welcome: (n) => `Hi, ${n || 'Student'}!`,
@@ -379,6 +389,11 @@ const L = {
     gradeWord: "Grade",
     practiceMode: "Math Sprint",
     practiceModeSub: "How many in 1 minute?",
+    clockLesson: "Reading Clocks",
+    clockLessonSub: "Analog clock · hours & minutes",
+    clockLessonBtn: "Start lesson →",
+    questions: "questions",
+    allGrades: "All grades",
   },
 };
 
@@ -3038,6 +3053,46 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
           </div>
           <div className="qgl-arrow">→</div>
         </div>
+      </div>
+
+      {/* ── clock lesson quick-access ── */}
+      <div className="clock-lesson-card" onClick={() => onStartLesson('math-time')}>
+        <div className="clc-left">
+          <div className="clc-face">
+            <svg viewBox="0 0 120 120" width="56" height="56">
+              <circle cx="60" cy="60" r="54" fill="#EFF6FF" stroke="#BFDBFE" strokeWidth="2"/>
+              <circle cx="60" cy="60" r="46" fill="white"/>
+              {[0,1,2,3,4,5,6,7,8,9,10,11].map(i=>{
+                const a=((i*30)-90)*Math.PI/180, isMaj=i%3===0, inner=46-(isMaj?9:5);
+                return <line key={i} x1={60+Math.cos(a)*44} y1={60+Math.sin(a)*44}
+                             x2={60+Math.cos(a)*inner} y2={60+Math.sin(a)*inner}
+                             stroke="#9CA3AF" strokeWidth={isMaj?2.2:1} strokeLinecap="round"/>;
+              })}
+              {[{n:12,i:0},{n:3,i:1},{n:6,i:2},{n:9,i:3}].map(({n,i})=>{
+                const a=((i*90)-90)*Math.PI/180;
+                return <text key={n} x={60+Math.cos(a)*30} y={60+Math.sin(a)*30+4}
+                             textAnchor="middle" fontSize="11" fontWeight="800" fill="#1E3A8A">{n}</text>;
+              })}
+              {/* hour hand ~10 o'clock */}
+              <line x1="60" y1="60" x2={60+Math.cos((-120)*Math.PI/180)*22} y2={60+Math.sin((-120)*Math.PI/180)*22}
+                    stroke="#1F2937" strokeWidth="4" strokeLinecap="round"/>
+              {/* minute hand ~2 o'clock */}
+              <line x1="60" y1="60" x2={60+Math.cos((-30)*Math.PI/180)*34} y2={60+Math.sin((-30)*Math.PI/180)*34}
+                    stroke="#2563EB" strokeWidth="3" strokeLinecap="round"/>
+              <circle cx="60" cy="60" r="4" fill="#F97316"/>
+            </svg>
+          </div>
+          <div className="clc-text">
+            <div className="clc-label">⏰ {t.clockLesson}</div>
+            <div className="clc-sub">{t.clockLessonSub}</div>
+            <div className="clc-tags">
+              <span>11 {t.questions || 'вопросов'}</span>
+              <span>·</span>
+              <span>{t.allGrades || 'Все классы'}</span>
+            </div>
+          </div>
+        </div>
+        <button className="clc-btn">{t.clockLessonBtn}</button>
       </div>
 
       {/* ── subject grid ── */}
