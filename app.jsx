@@ -196,6 +196,7 @@ const L = {
     lessBtn: "◀ Кіші", moreBtn: "Үлкен ▶",
     multiTable: "Көбейту кестесі", multiTableSub: "2-ден 9-ға дейін",
     multiTablePick: "Санды таңда", multiTablePractice: "Жаттықтыру",
+    multiTableStart: "Жаттығуды бастау →",
     logout: "Шығу", home: "Үй",
     tetrisTitle: "Тетрис",
     tetrisScore: "Ұпай", tetrisLines: "Жол", tetrisLevel: "Деңгей",
@@ -276,6 +277,7 @@ const L = {
     lessBtn: "◀ Меньше", moreBtn: "Больше ▶",
     multiTable: "Таблица умножения", multiTableSub: "от 2 до 9",
     multiTablePick: "Выбери число", multiTablePractice: "Тренировка",
+    multiTableStart: "Приступить →",
     logout: "Выйти", home: "Главная",
     tetrisTitle: "Тетрис",
     tetrisScore: "Счёт", tetrisLines: "Линии", tetrisLevel: "Уровень",
@@ -356,6 +358,7 @@ const L = {
     lessBtn: "◀ Less", moreBtn: "More ▶",
     multiTable: "Times Table", multiTableSub: "from 2 to 9",
     multiTablePick: "Pick a number", multiTablePractice: "Practice",
+    multiTableStart: "Start practice →",
     logout: "Log out", home: "Home",
     tetrisTitle: "Tetris",
     tetrisScore: "Score", tetrisLines: "Lines", tetrisLevel: "Level",
@@ -2254,20 +2257,47 @@ function GamePicker({ t, onPick, onClose }) {
 // ─── Times Table ───────────────────────────────────────────────────
 
 function MultiTablePicker({ t, onPick, onClose }) {
+  const [preview, setPreview] = useState(null);
+
+  const togglePreview = (n) => setPreview(p => p === n ? null : n);
+
   return (
     <div className="game-shell">
       <div className="game-shell-inner">
-      <div className="game-top">
-        <button className="back-btn" onClick={onClose}>←</button>
-        <div className="game-top-title">{t.multiTable}</div>
-        <div />
-      </div>
-      <div className="mt-pick-label">{t.multiTablePick}</div>
-      <div className="mt-grid">
-        {[2,3,4,5,6,7,8,9].map(n => (
-          <button key={n} className="mt-num-btn" onClick={() => onPick(n)}>×{n}</button>
-        ))}
-      </div>
+        <div className="game-top">
+          <button className="back-btn" onClick={onClose}>←</button>
+          <div className="game-top-title">{t.multiTable}</div>
+          <div />
+        </div>
+        <div className="mt-pick-label">{t.multiTablePick}</div>
+        <div className="mt-grid">
+          {[2,3,4,5,6,7,8,9].map(n => (
+            <button
+              key={n}
+              className={"mt-num-btn" + (preview === n ? " sel" : "")}
+              onClick={() => togglePreview(n)}
+            >
+              ×{n}
+            </button>
+          ))}
+        </div>
+
+        {preview !== null && (
+          <div key={preview} className="mt-table-preview">
+            <div className="mt-table-rows">
+              {Array.from({ length: 10 }, (_, i) => i + 1).map(factor => (
+                <div key={factor} className="mt-row">
+                  <span className="mt-row-expr">{preview} × {factor}</span>
+                  <span className="mt-row-eq">=</span>
+                  <span className="mt-row-result">{preview * factor}</span>
+                </div>
+              ))}
+            </div>
+            <button className="mt-table-start" onClick={() => onPick(preview)}>
+              {t.multiTableStart}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

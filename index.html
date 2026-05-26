@@ -1400,6 +1400,46 @@
     -webkit-tap-highlight-color:transparent; min-height:64px;
   }
   .mt-num-btn:active{ transform:scale(.94); border-bottom-width:2px }
+  .mt-num-btn.sel{
+    background:linear-gradient(145deg,#0E8C6B,#0A6E54); color:#fff;
+    border-color:transparent; border-bottom-color:#085c46;
+    box-shadow:0 4px 16px rgba(14,140,107,.35);
+  }
+
+  /* table preview */
+  .mt-table-preview{
+    padding:14px clamp(16px,4vw,24px) 28px;
+    animation:mt-fade-up .22s ease;
+  }
+  @keyframes mt-fade-up{ from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+  .mt-table-rows{
+    background:var(--card); border-radius:20px; overflow:hidden;
+    box-shadow:0 1px 0 rgba(15,42,34,.04), 0 10px 28px rgba(15,80,60,.09);
+  }
+  .mt-row{
+    display:flex; align-items:center; padding:11px 20px;
+    border-bottom:1px solid var(--line);
+  }
+  .mt-row:last-child{ border-bottom:none }
+  .mt-row:nth-child(even){ background:var(--card-soft) }
+  .mt-row-expr{
+    flex:1; font-family:'JetBrains Mono',monospace;
+    font-size:16px; font-weight:500; color:var(--ink); letter-spacing:.01em;
+  }
+  .mt-row-eq{ font-size:15px; font-weight:700; color:var(--ink-mute); padding:0 12px; }
+  .mt-row-result{
+    font-size:20px; font-weight:900; color:var(--brand);
+    min-width:44px; text-align:right;
+  }
+  .mt-table-start{
+    display:block; width:100%; margin-top:14px; padding:16px;
+    border-radius:18px; background:var(--brand); color:#fff;
+    font-size:16px; font-weight:900; font-family:inherit;
+    border:none; cursor:pointer;
+    box-shadow:0 4px 16px rgba(14,140,107,.3);
+    transition:transform .1s;
+  }
+  .mt-table-start:active{ transform:scale(.98) }
 
   /* times table practice */
   .mt-prog-bar{
