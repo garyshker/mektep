@@ -1172,6 +1172,116 @@ const LESSONS = {
         options:["Хабарлы / Повествовательное","Сұраулы / Вопросительное","Лепті / Восклицательное","Бұйрықты / Побудительное"], answer:2 },
     ]
   },
+  // ─── Math · Clocks & Time (Grade 3 Lesson 6) ───────────────────────
+  "math-time": {
+    id:"math-time", subjectId:"math",
+    titleByLang:{ kk:"Уақыт · сағат, минут", ru:"Время · часы и минуты", en:"Time · hours & minutes" },
+    introByLang:{ kk:"Аналогтік сағатты оқуды үйренеміз!", ru:"Учимся читать аналоговые часы!", en:"Let's learn to read analog clocks!" },
+    questions:[
+      // ── Clock 1: 3:00 (whole hour, easy) ──
+      { kind:"clock", clockH:3, clockM:0,
+        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
+        options:["3:00","6:00","9:00"], answer:0,
+        stepsByLang:{
+          kk:["Қысқа стрелка 3-ке бағытталған","Ұзын стрелка 12-де — бұл 0 минут","Оқимыз: 3:00 ✓"],
+          ru:["Короткая стрелка указывает на 3","Длинная стрелка на 12 — это 0 минут","Читаем: 3:00 ✓"],
+          en:["Short hand points to 3","Long hand at 12 — that is 0 minutes","We read: 3:00 ✓"],
+        }
+      },
+      // ── Clock 2: 7:30 (half-hour) ──
+      { kind:"clock", clockH:7, clockM:30,
+        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
+        options:["7:00","7:30","8:00"], answer:1,
+        stepsByLang:{
+          kk:["Қысқа стрелка 7 мен 8 арасында","Ұзын стрелка 6-да — бұл 30 минут","Оқимыз: 7:30 ✓"],
+          ru:["Короткая стрелка между 7 и 8","Длинная стрелка на 6 — это 30 минут","Читаем: 7:30 ✓"],
+          en:["Short hand between 7 and 8","Long hand at 6 — that is 30 minutes","We read: 7:30 ✓"],
+        }
+      },
+      // ── Fact: minutes in an hour ──
+      { kind:"mc",
+        promptByLang:{ kk:"Бір сағатта қанша минут бар?", ru:"Сколько минут в одном часе?", en:"How many minutes are in one hour?" },
+        options:["30","50","60","100"], answer:2,
+        explainByLang:{ kk:"1 сағат = 60 минут ✓", ru:"1 час = 60 минут ✓", en:"1 hour = 60 minutes ✓" }
+      },
+      // ── Clock 3: 11:15 (quarter-past) ──
+      { kind:"clock", clockH:11, clockM:15,
+        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
+        options:["11:05","11:15","11:45"], answer:1,
+        stepsByLang:{
+          kk:["Қысқа стрелка 11-ге жуық","Ұзын стрелка 3-те — бұл 15 минут","Оқимыз: 11:15 ✓"],
+          ru:["Короткая стрелка около 11","Длинная стрелка на 3 — это 15 минут","Читаем: 11:15 ✓"],
+          en:["Short hand near 11","Long hand at 3 — that is 15 minutes","We read: 11:15 ✓"],
+        }
+      },
+      // ── Clock 4: 5:45 (quarter-to) ──
+      { kind:"clock", clockH:5, clockM:45,
+        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
+        options:["5:15","5:45","6:15"], answer:1,
+        stepsByLang:{
+          kk:["Қысқа стрелка 5 мен 6 арасында (6-ға жуық)","Ұзын стрелка 9-да — бұл 45 минут","Оқимыз: 5:45 ✓"],
+          ru:["Короткая стрелка между 5 и 6 (ближе к 6)","Длинная стрелка на 9 — это 45 минут","Читаем: 5:45 ✓"],
+          en:["Short hand between 5 and 6 (closer to 6)","Long hand at 9 — that is 45 minutes","We read: 5:45 ✓"],
+        }
+      },
+      // ── Clock 5: 9:20 (5-min interval) ──
+      { kind:"clock", clockH:9, clockM:20,
+        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
+        options:["9:10","9:20","9:40"], answer:1,
+        stepsByLang:{
+          kk:["Қысқа стрелка 9-ға жуық","Ұзын стрелка 4-те — бұл 20 минут","Оқимыз: 9:20 ✓"],
+          ru:["Короткая стрелка около 9","Длинная стрелка на 4 — это 20 минут","Читаем: 9:20 ✓"],
+          en:["Short hand near 9","Long hand at 4 — that is 20 minutes","We read: 9:20 ✓"],
+        }
+      },
+      // ── Word problem: time arithmetic ──
+      { kind:"word", image:"⏰",
+        storyByLang:{
+          kk:"Сабақ сағат 8:00-де басталды және 45 минут жүрді. Сабақ қашан аяқталады?",
+          ru:"Урок начался в 8:00 и длился 45 минут. Когда закончился урок?",
+          en:"Class started at 8:00 and lasted 45 minutes. When did it end?",
+        },
+        options:["8:35","8:45","9:00","9:15"], answer:1
+      },
+      // ── Clock 6: 2:50 (near top of hour) ──
+      { kind:"clock", clockH:2, clockM:50,
+        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
+        options:["2:40","2:50","3:10"], answer:1,
+        stepsByLang:{
+          kk:["Қысқа стрелка 2 мен 3 арасында (3-ке жуық)","Ұзын стрелка 10-да — бұл 50 минут","Оқимыз: 2:50 ✓"],
+          ru:["Короткая стрелка между 2 и 3 (ближе к 3)","Длинная стрелка на 10 — это 50 минут","Читаем: 2:50 ✓"],
+          en:["Short hand between 2 and 3 (closer to 3)","Long hand at 10 — that is 50 minutes","We read: 2:50 ✓"],
+        }
+      },
+      // ── Fact: hours in a day ──
+      { kind:"mc",
+        promptByLang:{ kk:"Тәулікте қанша сағат бар?", ru:"Сколько часов в сутках?", en:"How many hours are in a day?" },
+        options:["12","20","24","48"], answer:2,
+        explainByLang:{ kk:"Тәулік = 24 сағат ✓", ru:"Сутки = 24 часа ✓", en:"A day = 24 hours ✓" }
+      },
+      // ── Clock 7: 1:35 (between marks, tricky) ──
+      { kind:"clock", clockH:1, clockM:35,
+        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
+        options:["1:25","1:35","2:05"], answer:1,
+        stepsByLang:{
+          kk:["Қысқа стрелка 1 мен 2 арасында","Ұзын стрелка 7-де — бұл 35 минут","Оқимыз: 1:35 ✓"],
+          ru:["Короткая стрелка между 1 и 2","Длинная стрелка на 7 — это 35 минут","Читаем: 1:35 ✓"],
+          en:["Short hand between 1 and 2","Long hand at 7 — that is 35 minutes","We read: 1:35 ✓"],
+        }
+      },
+      // ── Tap: which clocks show an exact hour? ──
+      { kind:"tap",
+        promptByLang:{
+          kk:"Дәл сағатты (минутсыз) көрсететін уақыттарды тап",
+          ru:"Найди время, где показаны ровные часы (без минут)",
+          en:"Tap the times that show an exact hour (no minutes)",
+        },
+        words:["3:00","4:15","7:00","9:30","12:00","6:45","2:00","8:20"],
+        correctIdxs:[0,2,4,6]
+      },
+    ]
+  },
+
 };
 
 // ────────────────────────────────────────────────────────────────────
@@ -1461,6 +1571,98 @@ function QMatch({ q, lang, locked, state, setState }) {
 }
 
 // ────────────────────────────────────────────────────────────────────
+// Analog clock SVG
+// ────────────────────────────────────────────────────────────────────
+
+function ClockFace({ h, m, size = 180 }) {
+  const cx = 60, cy = 60, r = 50;
+  const minAngle = (m / 60) * 360;
+  const hrAngle  = ((h % 12) / 12) * 360 + (m / 60) * 30;
+  const hand = (angle, len, w, color) => {
+    const rad = ((angle - 90) * Math.PI) / 180;
+    return <line x1={cx} y1={cy}
+                 x2={cx + Math.cos(rad)*len} y2={cy + Math.sin(rad)*len}
+                 stroke={color} strokeWidth={w} strokeLinecap="round" />;
+  };
+  const ticks = Array.from({ length: 12 }, (_, i) => {
+    const a     = ((i * 30) - 90) * Math.PI / 180;
+    const isMaj = i % 3 === 0;
+    const inner = r - (isMaj ? 10 : 6);
+    return <line key={i}
+                 x1={cx + Math.cos(a)*(r-2)} y1={cy + Math.sin(a)*(r-2)}
+                 x2={cx + Math.cos(a)*inner}  y2={cy + Math.sin(a)*inner}
+                 stroke="#9CA3AF" strokeWidth={isMaj ? 2.5 : 1.2} strokeLinecap="round" />;
+  });
+  const nums = [12,3,6,9].map((num, i) => {
+    const a = ((i * 90) - 90) * Math.PI / 180;
+    return <text key={num}
+                 x={cx + Math.cos(a)*(r-17)} y={cy + Math.sin(a)*(r-17) + 4}
+                 textAnchor="middle" fontSize="11" fontWeight="800" fill="#111827">{num}</text>;
+  });
+  return (
+    <svg viewBox="0 0 120 120" width={size} height={size} style={{display:'block'}}>
+      <circle cx={cx} cy={cy} r={r+8} fill="white" stroke="#E5E7EB" strokeWidth="2"
+              style={{filter:'drop-shadow(0 2px 8px rgba(0,0,0,.08))'}} />
+      <circle cx={cx} cy={cy} r={r} fill="#FAFAFA" />
+      {ticks}
+      {nums}
+      {hand(hrAngle, 24, 4.5, '#1F2937')}
+      {hand(minAngle, 36, 3,   '#2563EB')}
+      <circle cx={cx} cy={cy} r={4.5} fill="#F97316" />
+    </svg>
+  );
+}
+
+// Animated step-by-step hint (like Lovable's AIThinking — shows steps sequentially)
+function StepHint({ steps }) {
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    setActive(0);
+    if (steps.length <= 1) return;
+    const id = setInterval(() => setActive(i => i + 1 < steps.length ? i + 1 : i), 900);
+    return () => clearInterval(id);
+  }, [steps]);
+  return (
+    <div className="step-hint">
+      {steps.map((s, i) => (
+        <div key={i} className={'sh-step ' + (i < active ? 'past' : i === active ? 'current' : 'future')}>
+          <span className={'sh-num ' + (i <= active ? 'lit' : '')}>{i + 1}</span>
+          <span className="sh-text">{s}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Clock-reading multiple choice question
+function QClock({ q, lang, locked, picked, onPick }) {
+  const prompt = q.promptByLang ? pickLang(q.promptByLang, lang) : q.prompt;
+  return (
+    <div className="qbody">
+      <div className="text-prompt" style={{fontSize:18, paddingBottom:4}}>{prompt}</div>
+      <div className="clock-wrap">
+        <ClockFace h={q.clockH} m={q.clockM} />
+      </div>
+      <div className="opts grid-2">
+        {q.options.map((o, i) => {
+          let cls = 'opt clock-time-opt';
+          if (locked) {
+            if (i === q.answer)  cls += ' right';
+            else if (i === picked) cls += ' wrong';
+            else                 cls += ' dim';
+          } else if (i === picked) cls += ' sel';
+          return (
+            <button key={i} className={cls} onClick={() => !locked && onPick(i)}>
+              {o}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────
 // LessonRunner
 // ────────────────────────────────────────────────────────────────────
 
@@ -1681,6 +1883,7 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
             }} />}
           {q.kind === 'match' && <QMatch q={q} lang={lang} locked={locked}
             state={currentMatch} setState={setCurrentMatch} />}
+          {q.kind === 'clock' && <QClock q={q} lang={lang} locked={locked} picked={current} onPick={pickAndCheck} />}
         </div>
       </div>
 
@@ -1704,9 +1907,11 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
                 <span className="fb-ans-label">{rt.rightAnswer}</span>
                 <span className="fb-ans-value">{rightAnswerText(q, lang)}</span>
               </div>
-              {(q.explain || q.explainByLang?.[lang]) && (
-                <div className="fb-explain">{q.explainByLang?.[lang] || q.explain}</div>
-              )}
+              {q.stepsByLang
+                ? <StepHint key={`${q.clockH}-${q.clockM}`} steps={pickLang(q.stepsByLang, lang)} />
+                : (q.explain || q.explainByLang?.[lang]) &&
+                  <div className="fb-explain">{q.explainByLang?.[lang] || q.explain}</div>
+              }
             </div>
             <div className="fb-btns">
               <button className="fb-btn fb-btn-retry" onClick={retryQuestion}>{rt.tryAgain}</button>
@@ -1742,7 +1947,7 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
 }
 
 function rightAnswerText(q, lang) {
-  if (q.kind === 'mc' || q.kind === 'word') return String(q.options[q.answer]);
+  if (q.kind === 'mc' || q.kind === 'word' || q.kind === 'clock') return String(q.options[q.answer]);
   if (q.kind === 'type') return String(q.answer);
   if (q.kind === 'tap') return q.correctIdxs.map(i=>q.words[i]).join(", ");
   if (q.kind === 'match') return "—";

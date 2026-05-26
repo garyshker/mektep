@@ -498,8 +498,11 @@ const GRADE_SUBJECTS = {
   },
 };
 
-const LESSON_FOR = (subjectId, lessonNum) => {
-  if (subjectId === 'math')  return `math-${lessonNum}`;
+const LESSON_FOR = (subjectId, lessonNum, grade) => {
+  if (subjectId === 'math') {
+    if (grade === 3 && lessonNum === 6) return 'math-time';
+    return `math-${lessonNum}`;
+  }
   if (subjectId === 'kaz')   return `kaz-${lessonNum}`;
   if (subjectId === 'world') return `world-${lessonNum}`;
   if (subjectId === 'eng')   return `eng-${lessonNum}`;
@@ -603,7 +606,7 @@ function subjectsFor(lang, progress) {
     const safeNum = Math.min(lessonNum, of);
     const nextTitle = lessonTitles[safeNum] || lessonTitles[1];
     return { ...s, lessonTitles, lesson: lessonNum, of, stars: p?.stars ?? 0, next: nextTitle,
-             lessonId: allDone ? null : LESSON_FOR(s.id, lessonNum), allDone };
+             lessonId: allDone ? null : LESSON_FOR(s.id, lessonNum, grade), allDone };
   });
 }
 
