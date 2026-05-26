@@ -1756,7 +1756,7 @@ function LessonRunner({ lessonId, lang, onClose, onComplete }) {
 
   const pickAndCheck = (v) => {
     setAns(v);
-    const right = (q.kind === 'mc' || q.kind === 'word') ? v === q.answer : false;
+    const right = (q.kind === 'mc' || q.kind === 'word' || q.kind === 'clock') ? v === q.answer : false;
     setLocked(true);
     setFeedback(right ? 'right' : 'wrong');
     if (right) {
