@@ -1796,123 +1796,201 @@ function CompleteScreen({ lesson, lang, rt, stars, xp, accuracy, elapsed, correc
 }
 
 // ────────────────────────────────────────────────────────────────────
-// PracticeRunner — infinite math practice, grade-adaptive
+// MathSprintMinute — 1-minute timed math sprint
 // ────────────────────────────────────────────────────────────────────
 
-const PRACTICE_TOTAL = 10;
+const SPRINT_DURATION = 60;
+const SPRINT_LABELS = {
+  kk: {
+    title: 'Математикалық спринт',
+    desc:  '60 секундта мүмкіндігінше\nкөп мысал шеш!',
+    start: 'Бастау →',
+    record: 'Рекорд',
+    newBest: 'Жаңа рекорд! 🎉',
+    done: (n) => `60 секундта ${n} мысал`,
+  },
+  ru: {
+    title:  'Математический спринт',
+    desc:   'Реши как можно больше примеров\nза 60 секунд!',
+    start:  'Старт →',
+    record: 'Рекорд',
+    newBest: 'Новый рекорд! 🎉',
+    done: (n) => `${n} примеров за 60 секунд`,
+  },
+  en: {
+    title:  'Math Sprint',
+    desc:   'Solve as many problems\nas you can in 60 seconds!',
+    start:  'Start →',
+    record: 'Best',
+    newBest: 'New Record! 🎉',
+    done: (n) => `${n} problems in 60 seconds`,
+  },
+};
 
-function PracticeRunner({ grade, lang, onClose, onRestart }) {
-  const rt = RT[lang] || RT.en;
-  const [questions] = useState(() =>
-    Array.from({ length: PRACTICE_TOTAL }, () => generateMathProblem(grade || 2))
+function MathSprintMinute({ grade, lang, onClose }) {
+  const rt  = RT[lang] || RT.en;
+  const SL  = SPRINT_LABELS[lang] || SPRINT_LABELS.en;
+
+  const [phase,      setPhase]      = useState('start');
+  const [tLeft,      setTLeft]      = useState(SPRINT_DURATION);
+  const [score,      setScore]      = useState(0);
+  const [total,      setTotal]      = useState(0);
+  const [idx,        setIdx]        = useState(0);
+  const [questions,  setQuestions]  = useState(() =>
+    Array.from({ length: 40 }, () => generateMathProblem(grade || 2))
   );
-  const [idx,      setIdx]      = useState(0);
-  const [score,    setScore]    = useState(0);
-  const [locked,   setLocked]   = useState(false);
-  const [feedback, setFeedback] = useState(null);
-  const [picked,   setPicked]   = useState(null);
-  const [done,     setDone]     = useState(false);
-  const [qKey,     setQKey]     = useState(0);
+  const [chosen,     setChosen]     = useState(null);
+  const [isNewBest,  setIsNewBest]  = useState(false);
+  const [best,       setBest]       = useState(() => {
+    try { return parseInt(localStorage.getItem('mektep_sprint1m_best') || '0'); } catch(e) { return 0; }
+  });
 
-  const q = questions[Math.min(idx, PRACTICE_TOTAL - 1)];
-  const progressPct = ((idx + (locked ? 1 : 0)) / PRACTICE_TOTAL) * 100;
+  const scoreRef = useRef(0);
+  const totalRef = useRef(0);
+  const busyRef  = useRef(false);
 
-  const pickAndCheck = (i) => {
-    if (locked) return;
-    setPicked(i);
-    const right = i === q.answer;
-    setLocked(true);
-    setFeedback(right ? 'right' : 'wrong');
-    if (right) { soundCorrect(); setScore(s => s + 1); } else soundWrong();
+  const q = questions[idx % questions.length];
+
+  // Refill question pool when running low
+  useEffect(() => {
+    if (idx > questions.length - 15) {
+      setQuestions(prev => [
+        ...prev,
+        ...Array.from({ length: 20 }, () => generateMathProblem(grade || 2)),
+      ]);
+    }
+  }, [idx, grade]);
+
+  // Global countdown
+  useEffect(() => {
+    if (phase !== 'play') return;
+    if (tLeft <= 0) {
+      const fs = scoreRef.current;
+      soundComplete();
+      const stored = parseInt(localStorage.getItem('mektep_sprint1m_best') || '0');
+      if (fs > stored) {
+        setIsNewBest(true);
+        setBest(fs);
+        try { localStorage.setItem('mektep_sprint1m_best', String(fs)); } catch(e) {}
+      }
+      setPhase('done');
+      return;
+    }
+    if (tLeft <= 5) soundTick();
+    const id = setTimeout(() => setTLeft(n => n - 1), 1000);
+    return () => clearTimeout(id);
+  }, [tLeft, phase]);
+
+  const go = (picked) => {
+    if (phase !== 'play' || busyRef.current) return;
+    busyRef.current = true;
+    document.activeElement?.blur();
+    const ok = picked === q.answer;
+    setChosen(picked);
+    totalRef.current++;
+    setTotal(n => n + 1);
+    if (ok) { soundCorrect(); scoreRef.current++; setScore(n => n + 1); }
+    else soundWrong();
+    setTimeout(() => {
+      setIdx(i => i + 1);
+      setChosen(null);
+      busyRef.current = false;
+    }, ok ? 260 : 680);
   };
 
-  const advance = () => {
-    if (idx + 1 >= PRACTICE_TOTAL) { soundComplete(); setDone(true); return; }
-    setIdx(i => i + 1);
-    setPicked(null); setLocked(false); setFeedback(null);
-    setQKey(k => k + 1);
+  const restart = () => {
+    scoreRef.current = 0; totalRef.current = 0; busyRef.current = false;
+    setScore(0); setTotal(0); setIdx(0); setChosen(null);
+    setTLeft(SPRINT_DURATION); setIsNewBest(false);
+    setQuestions(Array.from({ length: 40 }, () => generateMathProblem(grade || 2)));
+    setPhase('start');
   };
 
-  const retry = () => {
-    setPicked(null); setLocked(false); setFeedback(null);
-    setQKey(k => k + 1);
-  };
-
-  if (done) {
-    const pct = Math.round((score / PRACTICE_TOTAL) * 100);
-    const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '⭐' : pct >= 50 ? '👍' : '💪';
-    const msg = pct >= 90 ? rt.perfect : pct >= 70 ? rt.great : pct >= 50 ? rt.good : rt.tryAgain;
+  // ── Start screen ────────────────────────────────────────────────
+  if (phase === 'start') {
     return (
-      <div className="lesson-shell">
-        <div className="practice-done">
-          <div className="pd-emoji">{emoji}</div>
-          <div className="pd-score">{score}<span>/{PRACTICE_TOTAL}</span></div>
-          <div className="pd-msg">{msg}</div>
-          <div className="pd-pct">{pct}%</div>
-          <div className="pd-btns">
+      <div className="sprint-shell">
+        <button className="lt-close sprint-close" onClick={onClose}>✕</button>
+        <div className="sprint-start">
+          <div className="sprint-start-icon">⏱</div>
+          <h2 className="sprint-title">{SL.title}</h2>
+          <p className="sprint-desc">
+            {SL.desc.split('\n').map((l, i) => <span key={i}>{l}{i===0?<br/>:''}</span>)}
+          </p>
+          <div className="sprint-big-num">60<span>s</span></div>
+          {best > 0 && (
+            <div className="sprint-best-chip">🏆 {SL.record}: {best}</div>
+          )}
+          <button className="sprint-start-btn" onClick={() => setPhase('play')}>
+            {SL.start}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Done screen ─────────────────────────────────────────────────
+  if (phase === 'done') {
+    const pct   = total > 0 ? Math.round(score / total * 100) : 0;
+    const emoji = score >= 25 ? '🏆' : score >= 16 ? '⭐' : score >= 8 ? '👍' : '💪';
+    return (
+      <div className="sprint-shell">
+        <div className="sprint-done">
+          {isNewBest && score > 0 && (
+            <div className="sprint-new-best">{SL.newBest}</div>
+          )}
+          <div className="sprint-done-emoji">{emoji}</div>
+          <div className="sprint-done-score">{score}</div>
+          <div className="sprint-done-sub">{SL.done(score)}</div>
+          {total > 0 && (
+            <div className="sprint-done-acc">{pct}% {rt.accuracy}</div>
+          )}
+          <div className="sprint-done-btns">
             <button className="btn ghost" onClick={onClose}>{rt.quit}</button>
-            <button className="btn prim" onClick={onRestart}>{rt.retry} ↺</button>
+            <button className="btn prim" onClick={restart}>{rt.retry} ↺</button>
           </div>
         </div>
       </div>
     );
   }
 
-  const title = lang === 'en' ? 'Practice' : 'Тренировка';
+  // ── Play screen ─────────────────────────────────────────────────
+  const isLow    = tLeft <= 10;
+  const timerPct = (tLeft / SPRINT_DURATION) * 100;
 
   return (
-    <div className="lesson-shell">
-      <div className="lesson-top">
-        <button className="lt-close" onClick={onClose} aria-label="Quit">✕</button>
-        <div className="lt-bar">
-          <div className="lt-bar-fill" style={{ width: progressPct + '%' }} />
-        </div>
-        <div className="lt-score-chip">{score} ✓</div>
+    <div className="sprint-shell">
+      <div className="sprint-top">
+        <div className={"sprint-timer" + (isLow ? " low" : "")}>{tLeft}</div>
+        <div className="sprint-score-live">{score} <span>✓</span></div>
       </div>
-
-      <div className="lesson-stage">
-        <div className="lesson-title-row">
-          <div className="lt-eyebrow">{title}</div>
-          <div className="lt-counter">{idx + 1} / {PRACTICE_TOTAL}</div>
-        </div>
-        <div key={qKey}>
-          <QMC q={q} lang={lang} locked={locked} picked={picked} onPick={pickAndCheck} />
-        </div>
+      <div className="sprint-progress">
+        <div className="sprint-progress-fill"
+          style={{ width: timerPct + '%', background: isLow ? '#EF4444' : 'var(--brand)' }} />
       </div>
-
-      <div className={"feedback " + (feedback || "")}>
-        {feedback === 'right' && (
-          <div className="fb-inner">
-            <div className="fb-ic ok">✓</div>
-            <div className="fb-msg">
-              <div className="fb-title">{rt.correct}</div>
-              <div className="fb-sub">+5 XP</div>
-            </div>
-            <button className="fb-btn" onClick={advance}>{rt.continue}</button>
-          </div>
-        )}
-        {feedback === 'wrong' && (
-          <div className="fb-inner">
-            <div className="fb-ic no">✕</div>
-            <div className="fb-msg">
-              <div className="fb-title">{rt.wrong}</div>
-              <div className="fb-sub">
-                <span className="fb-ans-label">{rt.rightAnswer}</span>
-                <span className="fb-ans-value">{q.options[q.answer]}</span>
-              </div>
-            </div>
-            <div className="fb-btns">
-              <button className="fb-btn fb-btn-retry" onClick={retry}>{rt.tryAgain}</button>
-              <button className="fb-btn fb-btn-wrong" onClick={advance}>{rt.next}</button>
-            </div>
-          </div>
-        )}
-        {!feedback && <div className="fb-inner" />}
+      <div className="sprint-body">
+        <BigMathPrompt text={q.prompt} />
+        <div className="sprint-opts">
+          {q.options.map((opt, i) => {
+            let cls = 'sprint-opt';
+            if (chosen !== null) {
+              if (i === q.answer)            cls += ' correct';
+              else if (i === chosen)         cls += ' wrong';
+              else                           cls += ' dim';
+            }
+            return (
+              <button key={`${idx}-${i}`} className={cls}
+                disabled={chosen !== null} onClick={() => go(i)}>
+                {opt}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 }
 
 // Expose to sequential loader
-Object.assign(window, { LessonRunner, PracticeRunner, LESSONS, RT_LESSON: RT, pickLang,
+Object.assign(window, { LessonRunner, MathSprintMinute, LESSONS, RT_LESSON: RT, pickLang,
   soundCorrect, soundWrong, soundComplete, soundTick });

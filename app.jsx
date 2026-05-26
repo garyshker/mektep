@@ -10,7 +10,7 @@ const { useState, useEffect, useRef, useMemo, useCallback } = React;
 // already set by the time this file executes.
 const {
   LessonRunner,
-  PracticeRunner,
+  MathSprintMinute,
   pickLang,
 } = window;
 
@@ -214,8 +214,8 @@ const L = {
     recommendations: "Ұсыныстар",
     streakDays: "күн қатарынан",
     gradeWord: "Сынып",
-    practiceMode: "Математика тренингі",
-    practiceModeSub: "Кез келген кезде жаттығу",
+    practiceMode: "Математикалық спринт",
+    practiceModeSub: "1 минутта мүмкіндігінше көп",
   },
   ru: {
     welcome: (n) => `Привет, ${n || 'Ученик'}!`,
@@ -294,8 +294,8 @@ const L = {
     recommendations: "Рекомендации",
     streakDays: "дней подряд",
     gradeWord: "Класс",
-    practiceMode: "Тренировка по математике",
-    practiceModeSub: "Бесконечная практика",
+    practiceMode: "Математический спринт",
+    practiceModeSub: "Сколько решишь за 1 минуту?",
   },
   en: {
     welcome: (n) => `Hi, ${n || 'Student'}!`,
@@ -374,8 +374,8 @@ const L = {
     recommendations: "Recommendations",
     streakDays: "days in a row",
     gradeWord: "Grade",
-    practiceMode: "Math Practice",
-    practiceModeSub: "Infinite practice, any time",
+    practiceMode: "Math Sprint",
+    practiceModeSub: "How many in 1 minute?",
   },
 };
 
@@ -2799,7 +2799,6 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
   const [quickGame, setQuickGame] = useState(false);
   const [multiTable, setMultiTable] = useState(false);
   const [showPractice, setShowPractice] = useState(false);
-  const [practiceKey, setPracticeKey] = useState(0);
   const [activeGame, setActiveGame] = useState(null);
   const [userMenu, setUserMenu] = useState(false);
   const [showParent, setShowParent] = useState(false);
@@ -2815,9 +2814,8 @@ function HomeView({ tweaks, setTweak, progress, setProgress, onStartLesson, show
   const subject = (id) => subs.find(s => s.id === id);
 
   if (showParent)    return <ParentView     progress={progress} lang={tweaks.language} onClose={() => setShowParent(false)} />;
-  if (showPractice)  return <PracticeRunner key={practiceKey} grade={progress.grade || 2} lang={tweaks.language}
-                              onClose={() => setShowPractice(false)}
-                              onRestart={() => setPracticeKey(k => k + 1)} />;
+  if (showPractice)  return <MathSprintMinute grade={progress.grade || 2} lang={tweaks.language}
+                              onClose={() => setShowPractice(false)} />;
   if (quickGame)     return <QuickGame      t={t} onClose={() => setQuickGame(false)} grade={progress.grade || 2} lang={tweaks.language} />;
   if (multiTable)          return <MultiTableView    t={t} onClose={() => setMultiTable(false)} />;
   if (activeGame==='tetris') return <TetrisFullScreen t={t} onBack={() => setActiveGame(null)} />;

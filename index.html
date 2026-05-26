@@ -1792,22 +1792,65 @@
   .parent-entry-sub{ font-size:12px; color:var(--ink-soft); margin-top:2px }
   .parent-entry-arrow{ margin-left:auto; font-size:18px; color:var(--ink-mute) }
 
-  /* ── Practice Mode ──────────────────────────────────────────── */
+  /* ── Math Sprint ────────────────────────────────────────────── */
   .practice-launcher{ background:linear-gradient(135deg,#FFF7ED,#FFFBEB); border:1.5px solid #FDE68A !important; }
   .practice-launcher .qgl-icon{ background:#FEF3C7; color:#D97706 }
-  .lt-score-chip{ min-width:44px; text-align:right; font-size:13px; font-weight:800; color:var(--brand) }
-  .practice-done{
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    flex:1; padding:32px 24px; text-align:center; gap:14px;
-  }
-  .pd-emoji{ font-size:72px; line-height:1; margin-bottom:4px }
-  .pd-score{ font-size:clamp(56px,15vw,80px); font-weight:900; color:var(--ink); line-height:1 }
-  .pd-score span{ font-size:.42em; color:var(--ink-mute); font-weight:700 }
-  .pd-msg{ font-size:22px; font-weight:800; color:var(--ink) }
-  .pd-pct{ font-size:15px; font-weight:800; color:var(--brand); background:var(--brand-tint);
-    border-radius:99px; padding:4px 16px; display:inline-block }
-  .pd-btns{ display:flex; gap:10px; margin-top:20px; width:100%; max-width:320px }
-  .pd-btns .btn{ flex:1 }
+
+  .sprint-shell{ display:flex; flex-direction:column; min-height:100svh; background:var(--bg); position:relative; }
+  .sprint-close{ position:absolute; top:16px; left:20px; z-index:10 }
+
+  /* start */
+  .sprint-start{ display:flex; flex-direction:column; align-items:center; justify-content:center;
+    flex:1; padding:40px 24px; text-align:center; gap:16px; }
+  .sprint-start-icon{ font-size:64px; line-height:1 }
+  .sprint-title{ font-size:26px; font-weight:900; color:var(--ink); margin:0 }
+  .sprint-desc{ font-size:15px; color:var(--ink-soft); font-weight:700; line-height:1.6; margin:0 }
+  .sprint-big-num{ font-size:clamp(72px,20vw,96px); font-weight:900; color:var(--brand); line-height:1 }
+  .sprint-big-num span{ font-size:.4em; color:var(--ink-mute); font-weight:700 }
+  .sprint-best-chip{ font-size:14px; font-weight:800; background:#FEF3C7; color:#92400E;
+    padding:5px 16px; border-radius:99px }
+  .sprint-start-btn{ margin-top:8px; padding:17px 52px; border-radius:20px;
+    background:var(--brand); color:#fff; font-size:18px; font-weight:900; font-family:inherit;
+    border:none; cursor:pointer; box-shadow:0 6px 20px rgba(14,140,107,.35); }
+  .sprint-start-btn:active{ transform:scale(.97) }
+
+  /* play top bar */
+  .sprint-top{ display:flex; align-items:center; justify-content:space-between; padding:20px 24px 8px }
+  .sprint-timer{ font-size:clamp(52px,14vw,68px); font-weight:900; color:var(--brand); line-height:1; transition:color .3s }
+  .sprint-timer.low{ color:#EF4444; animation:sprint-pulse .45s ease infinite alternate }
+  @keyframes sprint-pulse{ from{transform:scale(1)} to{transform:scale(1.08)} }
+  .sprint-score-live{ font-size:clamp(28px,7vw,36px); font-weight:900; color:var(--ink); display:flex; align-items:baseline; gap:4px }
+  .sprint-score-live span{ font-size:.7em; color:var(--brand); font-weight:800 }
+
+  /* progress bar under top */
+  .sprint-progress{ height:5px; background:var(--line); margin:0 0 4px }
+  .sprint-progress-fill{ height:100%; border-radius:0 3px 3px 0; transition:width .98s linear, background .3s }
+
+  /* body */
+  .sprint-body{ flex:1; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; padding:0 20px 32px; gap:28px }
+  .sprint-body .big-prompt{ font-size:clamp(38px,11vw,58px) }
+  .sprint-opts{ display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; max-width:380px }
+  .sprint-opt{ padding:22px 12px; border-radius:20px; font-size:clamp(18px,5vw,24px); font-weight:900;
+    font-family:inherit; background:var(--card); border:2px solid var(--line);
+    color:var(--ink); cursor:pointer; transition:transform .1s, background .15s, border-color .15s; }
+  .sprint-opt:active:not([disabled]){ transform:scale(.95) }
+  .sprint-opt.correct{ background:#DCFCE7; border-color:#22C55E; color:#166534 }
+  .sprint-opt.wrong{   background:#FEE2E2; border-color:#EF4444; color:#991B1B }
+  .sprint-opt.dim{     opacity:.45 }
+  .sprint-opt[disabled]{ cursor:default }
+
+  /* done */
+  .sprint-done{ display:flex; flex-direction:column; align-items:center; justify-content:center;
+    flex:1; padding:40px 24px; text-align:center; gap:14px }
+  .sprint-new-best{ font-size:14px; font-weight:900; color:var(--brand); background:var(--brand-tint);
+    border-radius:99px; padding:5px 18px }
+  .sprint-done-emoji{ font-size:72px; line-height:1 }
+  .sprint-done-score{ font-size:clamp(72px,20vw,100px); font-weight:900; color:var(--ink); line-height:1 }
+  .sprint-done-sub{ font-size:17px; color:var(--ink-soft); font-weight:700 }
+  .sprint-done-acc{ font-size:14px; color:var(--ink-mute); font-weight:700 }
+  .sprint-done-btns{ display:flex; gap:12px; margin-top:16px; width:100%; max-width:320px }
+  .sprint-done-btns .btn{ flex:1 }
 </style>
 </head>
 <body>
