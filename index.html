@@ -1791,6 +1791,23 @@
   .parent-entry-title{ font-size:15px; font-weight:900; color:var(--ink) }
   .parent-entry-sub{ font-size:12px; color:var(--ink-soft); margin-top:2px }
   .parent-entry-arrow{ margin-left:auto; font-size:18px; color:var(--ink-mute) }
+
+  /* ── Practice Mode ──────────────────────────────────────────── */
+  .practice-launcher{ background:linear-gradient(135deg,#FFF7ED,#FFFBEB); border:1.5px solid #FDE68A !important; }
+  .practice-launcher .qgl-icon{ background:#FEF3C7; color:#D97706 }
+  .lt-score-chip{ min-width:44px; text-align:right; font-size:13px; font-weight:800; color:var(--brand) }
+  .practice-done{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    flex:1; padding:32px 24px; text-align:center; gap:14px;
+  }
+  .pd-emoji{ font-size:72px; line-height:1; margin-bottom:4px }
+  .pd-score{ font-size:clamp(56px,15vw,80px); font-weight:900; color:var(--ink); line-height:1 }
+  .pd-score span{ font-size:.42em; color:var(--ink-mute); font-weight:700 }
+  .pd-msg{ font-size:22px; font-weight:800; color:var(--ink) }
+  .pd-pct{ font-size:15px; font-weight:800; color:var(--brand); background:var(--brand-tint);
+    border-radius:99px; padding:4px 16px; display:inline-block }
+  .pd-btns{ display:flex; gap:10px; margin-top:20px; width:100%; max-width:320px }
+  .pd-btns .btn{ flex:1 }
 </style>
 </head>
 <body>

@@ -1175,6 +1175,54 @@ const LESSONS = {
 };
 
 // ────────────────────────────────────────────────────────────────────
+// Math Practice Generator
+// ────────────────────────────────────────────────────────────────────
+
+function generateMathProblem(grade) {
+  const r = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+  const ops = grade <= 1 ? ['+', '−']
+             : grade <= 2 ? ['+', '−']
+             : grade === 3 ? ['+', '−', '×']
+             : ['+', '−', '×', '÷'];
+  const op = ops[r(0, ops.length - 1)];
+
+  let a, b, answer;
+  if (op === '+') {
+    const max = grade === 1 ? 9 : grade === 2 ? 50 : grade === 3 ? 500 : 5000;
+    a = r(1, max); b = r(1, max);
+    answer = a + b;
+  } else if (op === '−') {
+    const max = grade === 1 ? 9 : grade === 2 ? 99 : grade === 3 ? 999 : 9999;
+    a = r(2, max); b = r(1, Math.max(1, a - 1));
+    answer = a - b;
+  } else if (op === '×') {
+    a = r(2, grade >= 4 ? 99 : 12);
+    b = r(2, grade >= 4 ? 12 : 9);
+    answer = a * b;
+  } else {
+    b = r(2, 12);
+    answer = r(1, grade >= 4 ? 99 : 12);
+    a = b * answer;
+  }
+
+  const wrongs = new Set();
+  const spread = Math.max(3, Math.ceil(answer * 0.15));
+  for (let tries = 0; tries < 60 && wrongs.size < 3; tries++) {
+    const w = answer + r(-spread, spread);
+    if (w > 0 && w !== answer) wrongs.add(w);
+  }
+  for (let d = 1; wrongs.size < 3; d++) wrongs.add(answer + d);
+
+  const options = [answer, ...[...wrongs].slice(0, 3)];
+  for (let i = options.length - 1; i > 0; i--) {
+    const j = r(0, i);
+    [options[i], options[j]] = [options[j], options[i]];
+  }
+  return { kind: 'mc', big: true, prompt: `${a} ${op} ${b}`,
+           options: options.map(String), answer: options.indexOf(answer) };
+}
+
+// ────────────────────────────────────────────────────────────────────
 // Localization
 // ────────────────────────────────────────────────────────────────────
 const RT = {
@@ -1747,6 +1795,124 @@ function CompleteScreen({ lesson, lang, rt, stars, xp, accuracy, elapsed, correc
   );
 }
 
+// ────────────────────────────────────────────────────────────────────
+// PracticeRunner — infinite math practice, grade-adaptive
+// ────────────────────────────────────────────────────────────────────
+
+const PRACTICE_TOTAL = 10;
+
+function PracticeRunner({ grade, lang, onClose, onRestart }) {
+  const rt = RT[lang] || RT.en;
+  const [questions] = useState(() =>
+    Array.from({ length: PRACTICE_TOTAL }, () => generateMathProblem(grade || 2))
+  );
+  const [idx,      setIdx]      = useState(0);
+  const [score,    setScore]    = useState(0);
+  const [locked,   setLocked]   = useState(false);
+  const [feedback, setFeedback] = useState(null);
+  const [picked,   setPicked]   = useState(null);
+  const [done,     setDone]     = useState(false);
+  const [qKey,     setQKey]     = useState(0);
+
+  const q = questions[Math.min(idx, PRACTICE_TOTAL - 1)];
+  const progressPct = ((idx + (locked ? 1 : 0)) / PRACTICE_TOTAL) * 100;
+
+  const pickAndCheck = (i) => {
+    if (locked) return;
+    setPicked(i);
+    const right = i === q.answer;
+    setLocked(true);
+    setFeedback(right ? 'right' : 'wrong');
+    if (right) { soundCorrect(); setScore(s => s + 1); } else soundWrong();
+  };
+
+  const advance = () => {
+    if (idx + 1 >= PRACTICE_TOTAL) { soundComplete(); setDone(true); return; }
+    setIdx(i => i + 1);
+    setPicked(null); setLocked(false); setFeedback(null);
+    setQKey(k => k + 1);
+  };
+
+  const retry = () => {
+    setPicked(null); setLocked(false); setFeedback(null);
+    setQKey(k => k + 1);
+  };
+
+  if (done) {
+    const pct = Math.round((score / PRACTICE_TOTAL) * 100);
+    const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '⭐' : pct >= 50 ? '👍' : '💪';
+    const msg = pct >= 90 ? rt.perfect : pct >= 70 ? rt.great : pct >= 50 ? rt.good : rt.tryAgain;
+    return (
+      <div className="lesson-shell">
+        <div className="practice-done">
+          <div className="pd-emoji">{emoji}</div>
+          <div className="pd-score">{score}<span>/{PRACTICE_TOTAL}</span></div>
+          <div className="pd-msg">{msg}</div>
+          <div className="pd-pct">{pct}%</div>
+          <div className="pd-btns">
+            <button className="btn ghost" onClick={onClose}>{rt.quit}</button>
+            <button className="btn prim" onClick={onRestart}>{rt.retry} ↺</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const title = lang === 'en' ? 'Practice' : 'Тренировка';
+
+  return (
+    <div className="lesson-shell">
+      <div className="lesson-top">
+        <button className="lt-close" onClick={onClose} aria-label="Quit">✕</button>
+        <div className="lt-bar">
+          <div className="lt-bar-fill" style={{ width: progressPct + '%' }} />
+        </div>
+        <div className="lt-score-chip">{score} ✓</div>
+      </div>
+
+      <div className="lesson-stage">
+        <div className="lesson-title-row">
+          <div className="lt-eyebrow">{title}</div>
+          <div className="lt-counter">{idx + 1} / {PRACTICE_TOTAL}</div>
+        </div>
+        <div key={qKey}>
+          <QMC q={q} lang={lang} locked={locked} picked={picked} onPick={pickAndCheck} />
+        </div>
+      </div>
+
+      <div className={"feedback " + (feedback || "")}>
+        {feedback === 'right' && (
+          <div className="fb-inner">
+            <div className="fb-ic ok">✓</div>
+            <div className="fb-msg">
+              <div className="fb-title">{rt.correct}</div>
+              <div className="fb-sub">+5 XP</div>
+            </div>
+            <button className="fb-btn" onClick={advance}>{rt.continue}</button>
+          </div>
+        )}
+        {feedback === 'wrong' && (
+          <div className="fb-inner">
+            <div className="fb-ic no">✕</div>
+            <div className="fb-msg">
+              <div className="fb-title">{rt.wrong}</div>
+              <div className="fb-sub">
+                <span className="fb-ans-label">{rt.rightAnswer}</span>
+                <span className="fb-ans-value">{q.options[q.answer]}</span>
+              </div>
+            </div>
+            <div className="fb-btns">
+              <button className="fb-btn fb-btn-retry" onClick={retry}>{rt.tryAgain}</button>
+              <button className="fb-btn fb-btn-wrong" onClick={advance}>{rt.next}</button>
+            </div>
+          </div>
+        )}
+        {!feedback && <div className="fb-inner" />}
+      </div>
+    </div>
+  );
+}
+
 // Expose to sequential loader
-Object.assign(window, { LessonRunner, LESSONS, RT_LESSON: RT, pickLang,
+Object.assign(window, { LessonRunner, PracticeRunner, LESSONS, RT_LESSON: RT, pickLang,
   soundCorrect, soundWrong, soundComplete, soundTick });
