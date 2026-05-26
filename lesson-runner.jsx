@@ -1172,116 +1172,102 @@ const LESSONS = {
         options:["Хабарлы / Повествовательное","Сұраулы / Вопросительное","Лепті / Восклицательное","Бұйрықты / Побудительное"], answer:2 },
     ]
   },
-  // ─── Math · Clocks & Time (Grade 3 Lesson 6) ───────────────────────
-  "math-time": {
-    id:"math-time", subjectId:"math",
-    titleByLang:{ kk:"Уақыт · сағат, минут", ru:"Время · часы и минуты", en:"Time · hours & minutes" },
-    introByLang:{ kk:"Аналогтік сағатты оқуды үйренеміз!", ru:"Учимся читать аналоговые часы!", en:"Let's learn to read analog clocks!" },
-    questions:[
-      // ── Clock 1: 3:00 (whole hour, easy) ──
-      { kind:"clock", clockH:3, clockM:0,
-        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
-        options:["3:00","6:00","9:00"], answer:0,
-        stepsByLang:{
-          kk:["Қысқа стрелка 3-ке бағытталған","Ұзын стрелка 12-де — бұл 0 минут","Оқимыз: 3:00 ✓"],
-          ru:["Короткая стрелка указывает на 3","Длинная стрелка на 12 — это 0 минут","Читаем: 3:00 ✓"],
-          en:["Short hand points to 3","Long hand at 12 — that is 0 minutes","We read: 3:00 ✓"],
-        }
-      },
-      // ── Clock 2: 7:30 (half-hour) ──
-      { kind:"clock", clockH:7, clockM:30,
-        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
-        options:["7:00","7:30","8:00"], answer:1,
-        stepsByLang:{
-          kk:["Қысқа стрелка 7 мен 8 арасында","Ұзын стрелка 6-да — бұл 30 минут","Оқимыз: 7:30 ✓"],
-          ru:["Короткая стрелка между 7 и 8","Длинная стрелка на 6 — это 30 минут","Читаем: 7:30 ✓"],
-          en:["Short hand between 7 and 8","Long hand at 6 — that is 30 minutes","We read: 7:30 ✓"],
-        }
-      },
-      // ── Fact: minutes in an hour ──
-      { kind:"mc",
-        promptByLang:{ kk:"Бір сағатта қанша минут бар?", ru:"Сколько минут в одном часе?", en:"How many minutes are in one hour?" },
-        options:["30","50","60","100"], answer:2,
-        explainByLang:{ kk:"1 сағат = 60 минут ✓", ru:"1 час = 60 минут ✓", en:"1 hour = 60 minutes ✓" }
-      },
-      // ── Clock 3: 11:15 (quarter-past) ──
-      { kind:"clock", clockH:11, clockM:15,
-        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
-        options:["11:05","11:15","11:45"], answer:1,
-        stepsByLang:{
-          kk:["Қысқа стрелка 11-ге жуық","Ұзын стрелка 3-те — бұл 15 минут","Оқимыз: 11:15 ✓"],
-          ru:["Короткая стрелка около 11","Длинная стрелка на 3 — это 15 минут","Читаем: 11:15 ✓"],
-          en:["Short hand near 11","Long hand at 3 — that is 15 minutes","We read: 11:15 ✓"],
-        }
-      },
-      // ── Clock 4: 5:45 (quarter-to) ──
-      { kind:"clock", clockH:5, clockM:45,
-        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
-        options:["5:15","5:45","6:15"], answer:1,
-        stepsByLang:{
-          kk:["Қысқа стрелка 5 мен 6 арасында (6-ға жуық)","Ұзын стрелка 9-да — бұл 45 минут","Оқимыз: 5:45 ✓"],
-          ru:["Короткая стрелка между 5 и 6 (ближе к 6)","Длинная стрелка на 9 — это 45 минут","Читаем: 5:45 ✓"],
-          en:["Short hand between 5 and 6 (closer to 6)","Long hand at 9 — that is 45 minutes","We read: 5:45 ✓"],
-        }
-      },
-      // ── Clock 5: 9:20 (5-min interval) ──
-      { kind:"clock", clockH:9, clockM:20,
-        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
-        options:["9:10","9:20","9:40"], answer:1,
-        stepsByLang:{
-          kk:["Қысқа стрелка 9-ға жуық","Ұзын стрелка 4-те — бұл 20 минут","Оқимыз: 9:20 ✓"],
-          ru:["Короткая стрелка около 9","Длинная стрелка на 4 — это 20 минут","Читаем: 9:20 ✓"],
-          en:["Short hand near 9","Long hand at 4 — that is 20 minutes","We read: 9:20 ✓"],
-        }
-      },
-      // ── Word problem: time arithmetic ──
-      { kind:"word", image:"⏰",
-        storyByLang:{
-          kk:"Сабақ сағат 8:00-де басталды және 45 минут жүрді. Сабақ қашан аяқталады?",
-          ru:"Урок начался в 8:00 и длился 45 минут. Когда закончился урок?",
-          en:"Class started at 8:00 and lasted 45 minutes. When did it end?",
-        },
-        options:["8:35","8:45","9:00","9:15"], answer:1
-      },
-      // ── Clock 6: 2:50 (near top of hour) ──
-      { kind:"clock", clockH:2, clockM:50,
-        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
-        options:["2:40","2:50","3:10"], answer:1,
-        stepsByLang:{
-          kk:["Қысқа стрелка 2 мен 3 арасында (3-ке жуық)","Ұзын стрелка 10-да — бұл 50 минут","Оқимыз: 2:50 ✓"],
-          ru:["Короткая стрелка между 2 и 3 (ближе к 3)","Длинная стрелка на 10 — это 50 минут","Читаем: 2:50 ✓"],
-          en:["Short hand between 2 and 3 (closer to 3)","Long hand at 10 — that is 50 minutes","We read: 2:50 ✓"],
-        }
-      },
-      // ── Fact: hours in a day ──
-      { kind:"mc",
-        promptByLang:{ kk:"Тәулікте қанша сағат бар?", ru:"Сколько часов в сутках?", en:"How many hours are in a day?" },
-        options:["12","20","24","48"], answer:2,
-        explainByLang:{ kk:"Тәулік = 24 сағат ✓", ru:"Сутки = 24 часа ✓", en:"A day = 24 hours ✓" }
-      },
-      // ── Clock 7: 1:35 (between marks, tricky) ──
-      { kind:"clock", clockH:1, clockM:35,
-        promptByLang:{ kk:"Сағат нешені көрсетіп тұр?", ru:"Сколько времени показывают часы?", en:"What time does the clock show?" },
-        options:["1:25","1:35","2:05"], answer:1,
-        stepsByLang:{
-          kk:["Қысқа стрелка 1 мен 2 арасында","Ұзын стрелка 7-де — бұл 35 минут","Оқимыз: 1:35 ✓"],
-          ru:["Короткая стрелка между 1 и 2","Длинная стрелка на 7 — это 35 минут","Читаем: 1:35 ✓"],
-          en:["Short hand between 1 and 2","Long hand at 7 — that is 35 minutes","We read: 1:35 ✓"],
-        }
-      },
-      // ── Tap: which clocks show an exact hour? ──
-      { kind:"tap",
-        promptByLang:{
-          kk:"Дәл сағатты (минутсыз) көрсететін уақыттарды тап",
-          ru:"Найди время, где показаны ровные часы (без минут)",
-          en:"Tap the times that show an exact hour (no minutes)",
-        },
-        words:["3:00","4:15","7:00","9:30","12:00","6:45","2:00","8:20"],
-        correctIdxs:[0,2,4,6]
-      },
-    ]
-  },
+};
 
+// ────────────────────────────────────────────────────────────────────
+// Clock Lesson Generator  (fresh random questions each session)
+// ────────────────────────────────────────────────────────────────────
+
+function generateClockLesson() {
+  const ri = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+  const fmt = (h, m) => `${h}:${String(m).padStart(2, '0')}`;
+  // minute → clock-face number the long hand points to
+  const minPos = m => m === 0 ? 12 : m / 5;
+  const MINS = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+  const shuffle = arr => { for (let i = arr.length - 1; i > 0; i--) { const j = ri(0, i); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; };
+
+  // Build 8 unique random clock questions
+  const used = new Set();
+  const clocks = [];
+  while (clocks.length < 8) {
+    const h = ri(1, 12);
+    const m = MINS[ri(0, MINS.length - 1)];
+    const key = `${h}:${m}`;
+    if (used.has(key)) continue;
+    used.add(key);
+
+    const correctStr = fmt(h, m);
+    const nextH = (h % 12) + 1;
+    const pos = minPos(m);
+
+    // 2 distractors: prefer same-hour/diff-minute and diff-hour/same-minute
+    const dSet = new Set([correctStr]);
+    for (const off of [15, -15, 30, 10, -10, 20, -20, 5, -5]) {
+      if (dSet.size >= 3) break;
+      const dm = ((m + off) % 60 + 60) % 60;
+      if (MINS.includes(dm)) dSet.add(fmt(h, dm));
+    }
+    for (let dh = 1; dSet.size < 3; dh++) {
+      dSet.add(fmt(((h - 1 + dh) % 12) + 1, m));
+    }
+
+    const opts = shuffle([...dSet]);
+    clocks.push({
+      kind: 'clock', clockH: h, clockM: m,
+      promptByLang: {
+        kk: 'Сағат нешені көрсетіп тұр?',
+        ru: 'Сколько времени показывают часы?',
+        en: 'What time does the clock show?',
+      },
+      options: opts,
+      answer: opts.indexOf(correctStr),
+      stepsByLang: {
+        kk: [
+          m >= 5 ? `Қысқа стрелка ${h} мен ${nextH} арасында` : `Қысқа стрелка ${h}-де`,
+          m === 0 ? `Ұзын стрелка 12-де — 0 минут` : `Ұзын стрелка ${pos}-де — ${m} минут`,
+          `Оқимыз: ${correctStr} ✓`,
+        ],
+        ru: [
+          m >= 5 ? `Короткая стрелка между ${h} и ${nextH}` : `Короткая стрелка на ${h}`,
+          m === 0 ? `Длинная стрелка на 12 — 0 минут` : `Длинная стрелка на ${pos} — ${m} минут`,
+          `Читаем: ${correctStr} ✓`,
+        ],
+        en: [
+          m >= 5 ? `Short hand between ${h} and ${nextH}` : `Short hand at ${h}`,
+          m === 0 ? `Long hand at 12 — 0 minutes` : `Long hand at ${pos} — ${m} minutes`,
+          `We read: ${correctStr} ✓`,
+        ],
+      },
+    });
+  }
+
+  // 2 time-fact MC questions inserted at positions 3 and 7
+  const facts = [
+    { kind:'mc', promptByLang:{ kk:'Бір сағатта қанша минут бар?', ru:'Сколько минут в одном часе?', en:'How many minutes are in one hour?' },
+      options:['30','50','60','100'], answer:2,
+      explainByLang:{ kk:'1 сағат = 60 минут ✓', ru:'1 час = 60 минут ✓', en:'1 hour = 60 minutes ✓' } },
+    { kind:'mc', promptByLang:{ kk:'Тәулікте қанша сағат бар?', ru:'Сколько часов в сутках?', en:'How many hours are in a day?' },
+      options:['12','20','24','48'], answer:2,
+      explainByLang:{ kk:'Тәулік = 24 сағат ✓', ru:'Сутки = 24 часа ✓', en:'A day = 24 hours ✓' } },
+    { kind:'word', image:'⏰',
+      storyByLang:{ kk:'Сабақ сағат 8:00-де басталды және 45 минут жүрді. Қашан аяқталады?', ru:'Урок начался в 8:00 и длился 45 минут. Когда закончился?', en:'Class started at 8:00 and lasted 45 minutes. When did it end?' },
+      options:['8:35','8:45','9:00','9:15'], answer:1 },
+  ];
+  shuffle(facts);
+  clocks.splice(3, 0, facts[0]);
+  clocks.splice(7, 0, facts[1]);
+
+  return {
+    id: 'math-time', subjectId: 'math',
+    titleByLang: { kk:'Уақыт · сағат, минут', ru:'Время · часы и минуты', en:'Time · hours & minutes' },
+    introByLang: { kk:'Аналогтік сағатты оқуды үйренеміз!', ru:'Учимся читать аналоговые часы!', en:"Let's learn to read analog clocks!" },
+    questions: clocks,
+  };
+}
+
+// Lessons that are generated fresh each session (factory functions)
+const LESSON_FACTORIES = {
+  'math-time': generateClockLesson,
 };
 
 // ────────────────────────────────────────────────────────────────────
@@ -1691,7 +1677,10 @@ function IntroScreen({ lesson, lang, rt, total, onStart, onClose }) {
 }
 
 function LessonRunner({ lessonId, lang, onClose, onComplete }) {
-  const lesson = LESSONS[lessonId];
+  const lesson = useMemo(() => {
+    const factory = LESSON_FACTORIES[lessonId];
+    return factory ? factory() : LESSONS[lessonId];
+  }, [lessonId]);
   const rt = RT[lang] || RT.en;
 
   const resume = loadResume(lessonId);
