@@ -956,6 +956,7 @@
 
   .opts.stack{ display:flex; flex-direction:column; gap: 10px }
   .opts.grid-2{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 12px }
+  .opts.grid-3{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px }
   .opt{
     background:#fff; border: 2px solid var(--line); border-bottom: 4px solid #D8E0DA;
     border-radius: 16px;
@@ -1057,9 +1058,9 @@
     padding: 8px 0 20px;
   }
   .clock-time-opt{
-    justify-content:center; font-size: 22px; font-weight: 900;
+    justify-content:center; font-size: clamp(16px, 4vw, 22px); font-weight: 900;
     font-variant-numeric: tabular-nums; letter-spacing: .02em;
-    padding: 20px 8px;
+    padding: 18px 6px;
   }
   .clock-time-opt .opt-key{ display:none }
 

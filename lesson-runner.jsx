@@ -1643,7 +1643,7 @@ function QClock({ q, lang, locked, picked, onPick }) {
       <div className="clock-wrap">
         <ClockFace h={q.clockH} m={q.clockM} />
       </div>
-      <div className="opts grid-2">
+      <div className="opts grid-3">
         {q.options.map((o, i) => {
           let cls = 'opt clock-time-opt';
           if (locked) {
