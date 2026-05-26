@@ -611,28 +611,50 @@ function subjectsFor(lang, progress) {
 
 function LangChip({ lang, onChange }) {
   const [open, setOpen] = useState(false);
+  const [pos,  setPos]  = useState({ top: 0, right: 0 });
+  const btnRef = useRef(null);
   const flags  = { kk: '🇰🇿', ru: '🇷🇺', en: '🇬🇧' };
   const names  = { kk: 'Қазақша', ru: 'Русский', en: 'English' };
   const shorts = { kk: 'ҚАЗ', ru: 'РУС', en: 'ENG' };
+
+  const toggle = (e) => {
+    e.stopPropagation();
+    if (!open && btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setPos({ top: r.bottom + 6, right: window.innerWidth - r.right });
+    }
+    setOpen(o => !o);
+  };
+
   return (
-    <div className="lang-chip" onClick={() => setOpen(!open)} style={{ cursor: 'pointer', position: 'relative' }}>
+    <div ref={btnRef} className="lang-chip" onClick={toggle}>
       <span className="lang-flag">{flags[lang]}</span>
       <span className="lang-full">{names[lang]}</span>
       <span className="lang-short">{shorts[lang]}</span>
       <span className="caret">▼</span>
       {open && (
-        <div style={{ position: 'absolute', top: 'calc(100% + 6px)', right: 0, background: '#fff',
-          borderRadius: 14, padding: 6, boxShadow: '0 10px 30px rgba(0,0,0,.12)',
-          border: '1px solid var(--line)', minWidth: 160, zIndex: 10 }}>
-          {Object.keys(names).map(k => (
-            <div key={k} onClick={(e) => { e.stopPropagation(); onChange(k); setOpen(false); }}
-              style={{ padding: '10px 12px', borderRadius: 10, display: 'flex', alignItems: 'center',
-                gap: 8, background: k === lang ? 'var(--card-soft)' : 'transparent', cursor: 'pointer' }}>
-              <span className="lang-flag">{flags[k]}</span>
-              <span>{names[k]}</span>
-            </div>
-          ))}
-        </div>
+        <>
+          {/* backdrop closes on outside tap */}
+          <div style={{ position:'fixed', inset:0, zIndex:999 }}
+               onClick={(e) => { e.stopPropagation(); setOpen(false); }} />
+          {/* dropdown — position:fixed escapes any overflow:hidden parent */}
+          <div style={{ position:'fixed', top: pos.top, right: pos.right,
+            background:'var(--card)', borderRadius:16, padding:6,
+            boxShadow:'0 8px 32px rgba(0,0,0,.14)', border:'1px solid var(--line)',
+            minWidth:168, zIndex:1000 }}>
+            {Object.keys(names).map(k => (
+              <div key={k}
+                onClick={(e) => { e.stopPropagation(); onChange(k); setOpen(false); }}
+                style={{ padding:'11px 14px', borderRadius:11, display:'flex', alignItems:'center',
+                  gap:10, background: k === lang ? 'var(--card-soft)' : 'transparent',
+                  cursor:'pointer', fontWeight: k === lang ? 800 : 600 }}>
+                <span className="lang-flag">{flags[k]}</span>
+                <span>{names[k]}</span>
+                {k === lang && <span style={{ marginLeft:'auto', color:'var(--brand)', fontSize:16 }}>✓</span>}
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
