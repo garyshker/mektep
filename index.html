@@ -682,6 +682,8 @@
         var(--bg);
     }
     .v2{ padding: 14px 14px 100px; }
+    /* launcher row: pull left/right to screen edges, add equal internal padding */
+    .game-launchers{ margin-left:-14px; margin-right:-14px; padding-left:14px; padding-right:14px; }
     /* compare pill — smaller, below status bar */
     .compare{
       top: max(8px, env(safe-area-inset-top));
@@ -1335,9 +1337,13 @@
 
   /* ── Quick Game Launcher Card ── */
   /* ── Game launchers row ── */
-  .game-launchers{ display:flex; flex-direction:row; gap:10px; margin-bottom:4px }
+  .game-launchers{
+    display:flex; flex-direction:row; gap:10px; margin-bottom:4px;
+    overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  }
+  .game-launchers::-webkit-scrollbar{ display:none }
   .qgame-launcher{
-    flex:1; display:flex; flex-direction:column; align-items:flex-start; gap:6px;
+    flex:0 0 auto; min-width:155px; display:flex; flex-direction:column; align-items:flex-start; gap:6px;
     background:linear-gradient(135deg,#FFE4A0,#FFB347);
     border-radius:20px; padding:16px 16px 14px; cursor:pointer;
     box-shadow:0 4px 16px rgba(255,140,0,.2);
